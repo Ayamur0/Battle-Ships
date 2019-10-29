@@ -1,4 +1,4 @@
-package Engine.Rendering.Entities;
+package com.battleships.gui.Engine.Rendering.Entities;
 
 import org.joml.Vector3f;
 import org.lwjgl.glfw.GLFW;

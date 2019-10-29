@@ -1,4 +1,4 @@
-package Game.Assets;
+package com.battleships.gui.Game.Assets;
 
 import Engine.Rendering.Entities.CameraOld;
 import Engine.Rendering.Entities.EntityOld;

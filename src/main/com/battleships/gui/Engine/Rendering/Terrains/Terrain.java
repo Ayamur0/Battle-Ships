@@ -1,4 +1,4 @@
-package Engine.Rendering.Terrains;
+package com.battleships.gui.Engine.Rendering.Terrains;
 
 public class Terrain {
 

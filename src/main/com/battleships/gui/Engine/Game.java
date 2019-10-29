@@ -1,4 +1,4 @@
-package Engine;
+package com.battleships.gui.Engine;
 
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWErrorCallback;

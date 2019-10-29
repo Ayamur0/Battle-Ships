@@ -1,6 +1,6 @@
-package Engine.Toolbox;
+package com.battleships.gui.Engine.Toolbox;
 
-import Engine.Rendering.Entities.Camera;
+import com.battleships.gui.Engine.Rendering.Entities.Camera;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 

@@ -1,4 +1,4 @@
-package Engine.Rendering.Shaders;
+package com.battleships.gui.Engine.Rendering.Shaders;
 
 import Engine.Rendering.Entities.CameraOld;
 import Engine.Rendering.Entities.EntityOld;

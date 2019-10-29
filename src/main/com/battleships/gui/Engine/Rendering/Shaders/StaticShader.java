@@ -1,7 +1,7 @@
-package Engine.Rendering.Shaders;
+package com.battleships.gui.Engine.Rendering.Shaders;
 
-import Engine.Rendering.Entities.Camera;
-import Engine.Toolbox.Maths;
+import com.battleships.gui.Engine.Rendering.Entities.Camera;
+import com.battleships.gui.Engine.Toolbox.Maths;
 import org.joml.Matrix4f;
 
 public class StaticShader extends ShaderProgram {

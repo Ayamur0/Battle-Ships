@@ -1,4 +1,4 @@
-package Engine.Rendering.Entities;
+package com.battleships.gui.Engine.Rendering.Entities;
 
 import Engine.Rendering.Models.Mesh;
 import org.joml.Matrix4f;

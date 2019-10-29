@@ -1,8 +1,8 @@
-package Engine.Rendering.Models;
+package com.battleships.gui.Engine.Rendering.Models;
 
-import Engine.Rendering.Entities.Entity;
-import Engine.Rendering.Shaders.StaticShader;
-import Engine.Toolbox.Maths;
+import com.battleships.gui.Engine.Rendering.Entities.Entity;
+import com.battleships.gui.Engine.Rendering.Shaders.StaticShader;
+import com.battleships.gui.Engine.Toolbox.Maths;
 import org.joml.Matrix4f;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;

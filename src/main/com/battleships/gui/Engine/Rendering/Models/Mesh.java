@@ -1,4 +1,4 @@
-package Engine.Rendering.Models;
+package com.battleships.gui.Engine.Rendering.Models;
 
 import Engine.Rendering.Shaders.GLSLProgram;
 import org.lwjgl.opengl.*;

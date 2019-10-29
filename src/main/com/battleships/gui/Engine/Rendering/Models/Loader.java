@@ -1,4 +1,4 @@
-package Engine.Rendering.Models;
+package com.battleships.gui.Engine.Rendering.Models;
 
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;

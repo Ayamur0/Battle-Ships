@@ -1,6 +1,6 @@
-package Engine.Rendering.Entities;
+package com.battleships.gui.Engine.Rendering.Entities;
 
-import Engine.Rendering.Models.TexturedModel;
+import com.battleships.gui.Engine.Rendering.Models.TexturedModel;
 import org.joml.Vector3f;
 
 public class Entity {
