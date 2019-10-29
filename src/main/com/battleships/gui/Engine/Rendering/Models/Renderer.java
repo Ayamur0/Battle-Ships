@@ -49,6 +49,7 @@ public class Renderer {
     }
 
     private void createProjectionMatrix(){
+        projectionMatrix = new Matrix4f();
         projectionMatrix.setPerspective((float)Math.toRadians(FOV), 800f / 600f, NEAR_PLANE, FAR_PLANE);
     }
 }

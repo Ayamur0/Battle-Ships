@@ -2,11 +2,12 @@
 
 //converts per vertex data to per pixel data for screen to display
 
-in vec2 pass_textureCoords //get textureCoords from vertexShader
+in vec3 color;
+in vec2 pass_textureCoords; //get textureCoords from vertexShader
 
 out vec4 out_Color;
 
-uniform sampler2d textureSampler;
+uniform sampler2D textureSampler;
 
 void main(){
 
