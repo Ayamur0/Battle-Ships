@@ -15,17 +15,17 @@ public class Camera {
         this.window = window;
     }
 
-    public void move(){
-        if(GLFW.glfwGetKey(W)){
+    public void move(long window){
+        if(GLFW.glfwGetKey(window, GLFW.GLFW_KEY_W) == GLFW.GLFW_PRESS){
             position.z -= 0.02f;
         }
-        if(GLFW.glfwGetKey(S)){
+        if(GLFW.glfwGetKey(window, GLFW.GLFW_KEY_S) == GLFW.GLFW_PRESS){
             position.z += 0.02f;
         }
-        if(GLFW.glfwGetKey(D)){
+        if(GLFW.glfwGetKey(window, GLFW.GLFW_KEY_D) == GLFW.GLFW_PRESS){
             position.x += 0.02f;
         }
-        if(GLFW.glfwGetKey(A)){
+        if(GLFW.glfwGetKey(window, GLFW.GLFW_KEY_A) == GLFW.GLFW_PRESS){
             position.x -= 0.02f;
         }
     }

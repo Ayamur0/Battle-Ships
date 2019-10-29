@@ -54,7 +54,7 @@ public class SchiffeVersenken extends Game {
 
         while (!GLFW.glfwWindowShouldClose(window)){
 
-            camera.move();
+            camera.move(window);
             renderer.prepare();
             shader.start();
             shader.loadViewMatrix(camera);

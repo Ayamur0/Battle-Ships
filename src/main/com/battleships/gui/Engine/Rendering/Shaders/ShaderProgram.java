@@ -99,7 +99,7 @@ public abstract class ShaderProgram {
     private static int loadShader(String file, int type){
         try{
             //convert Shader from file to String
-            BufferedReader reader = new BufferedReader(new InputStreamReader(GLSLProgram.class.getResourceAsStream(file)));
+            BufferedReader reader = new BufferedReader(new InputStreamReader(ShaderProgram.class.getResourceAsStream(file)));
             StringBuilder builder = new StringBuilder();
             while(reader.ready()){
                 builder.append(reader.readLine() + System.lineSeparator());
