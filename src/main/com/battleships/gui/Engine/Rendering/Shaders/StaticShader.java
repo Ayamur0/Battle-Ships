@@ -6,8 +6,8 @@ import org.joml.Matrix4f;
 
 public class StaticShader extends ShaderProgram {
 
-    private static final String VERTEX_FILE = "/Game/res/shaders/vertexShader.txt";
-    private static final String FRAGMENT_FILE = "/Game/res/shaders/fragmentShader.txt";
+    private static final String VERTEX_FILE = "/com/battleships/gui/Game/res/shaders/vertexShader.txt";
+    private static final String FRAGMENT_FILE = "/com/battleships/gui/Game/res/shaders/fragmentShader.txt";
 
     private int location_transformationMatrix;
     private int location_projectionMatrix;
