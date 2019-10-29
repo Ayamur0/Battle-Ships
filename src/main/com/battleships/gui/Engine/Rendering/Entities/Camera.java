@@ -5,7 +5,7 @@ import org.lwjgl.glfw.GLFW;
 
 public class Camera {
 
-    private static final Vector3f UP_VECTOR = new Vector3f(0, 1, 0); //Vector looking straight up
+
 
     private long window;
     private Vector3f position = new Vector3f(0,0,0);

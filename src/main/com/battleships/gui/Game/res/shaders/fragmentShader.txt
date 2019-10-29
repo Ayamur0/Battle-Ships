@@ -7,9 +7,9 @@ in vec2 pass_textureCoords; //get textureCoords from vertexShader
 
 out vec4 out_Color;
 
-uniform sampler2D textureSampler;
+uniform sampler2D modelTexture;
 
 void main(){
 
-    out_Color = texture(textureSampler, pass_textureCoords); //return color of pixel at coordinates
+    out_Color = texture(modelTexture, pass_textureCoords); //return color of pixel at coordinates
 }
