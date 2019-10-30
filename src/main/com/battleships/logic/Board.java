@@ -1,8 +1,8 @@
 package com.battleships.logic;
 
-import static com.praktikum.logic.GridCell.WATER;
-import static com.praktikum.logic.Ship.HORIZONTAL;
-import static com.praktikum.logic.Ship.VERTICAL;
+import static com.battleships.logic.Ship.HORIZONTAL;
+import static com.battleships.logic.GridCell.WATER;
+import static com.battleships.logic.Ship.VERTICAL;
 
 public class Board {
   private GridCell[][] board;

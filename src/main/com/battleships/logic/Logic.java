@@ -1,9 +1,9 @@
-package com.praktikum.logic;
+package com.battleships.logic;
 
 import java.io.*;
 import java.util.ArrayList;
 
-import static com.praktikum.logic.Ship.*;
+import static com.battleships.logic.Ship.*;
 
 public class Logic {
   private final int TEST_SIZE = 10;

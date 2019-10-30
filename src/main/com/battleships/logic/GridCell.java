@@ -1,4 +1,4 @@
-package com.praktikum.logic;
+package com.battleships.logic;
 
 public class GridCell {
   public static final int SHIP = 1;
