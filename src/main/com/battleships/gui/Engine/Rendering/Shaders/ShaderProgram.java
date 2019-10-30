@@ -1,7 +1,5 @@
 package com.battleships.gui.Engine.Rendering.Shaders;
 
-import com.battleships.gui.Engine.Rendering.Models.ModelTexture;
-import com.battleships.gui.Engine.Rendering.Models.TextureLoader;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 import org.lwjgl.BufferUtils;

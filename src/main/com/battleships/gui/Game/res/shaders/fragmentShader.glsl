@@ -21,8 +21,8 @@ void main(){
     vec3 unitLightVector = normalize(toLightVector);
 
     float nDot1 = dot(unitNormal, unitLightVector);  //calculate dot product (scalar product) of the two normalized vectors
-    float brightness = max(nDot1, 0.0); //convert negative dot products to 0, because there is no negative light
-    vec3 diffuse = brightness * lightColor;
+    float brightness = max(nDot1, 0.1); //convert negative dot products to 0.2, because there is no negative light and normally no completely black spots which would be near 0
+    vec3 diffuse = brightness * lightColor;  //add color to light
 
     vec3 unitVectorToCamera = normalize(toCameraVector);
     vec3 lightDirection = -unitLightVector; //vector to the light is opposite of vector from the light

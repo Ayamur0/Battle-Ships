@@ -1,5 +1,6 @@
-package com.battleships.gui.Engine.Rendering.Models;
+package com.battleships.gui.Engine.Rendering.RenderingEngine;
 
+import com.battleships.gui.Engine.Rendering.Models.ModelTexture;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.stb.STBImage;

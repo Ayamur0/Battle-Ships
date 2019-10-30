@@ -5,10 +5,12 @@ import com.battleships.gui.Engine.Rendering.Entities.Camera;
 import com.battleships.gui.Engine.Rendering.Entities.Entity;
 import com.battleships.gui.Engine.Rendering.Entities.Light;
 import com.battleships.gui.Engine.Rendering.Models.*;
+import com.battleships.gui.Engine.Rendering.RenderingEngine.Loader;
+import com.battleships.gui.Engine.Rendering.RenderingEngine.MasterRenderer;
+import com.battleships.gui.Engine.Rendering.RenderingEngine.Renderer;
 import com.battleships.gui.Engine.Rendering.Shaders.StaticShader;
 import org.joml.Vector3f;
 import org.lwjgl.glfw.GLFW;
-import org.lwjgl.opengl.GL11;
 
 public class SchiffeVersenken extends Game {
 
@@ -53,8 +55,7 @@ public class SchiffeVersenken extends Game {
                 0.5f, 0.5f, 0f,     //V3
         };
         Loader loader = new Loader();
-        StaticShader shader = new StaticShader();
-        Renderer renderer = new Renderer(shader);
+        MasterRenderer renderer = new MasterRenderer();
         RawModel model = loader.loadToVAO(vertices, textureCoords, normals, indices);
 //        ModelTexture texture = Loader.loadTexture("Brick.jpg");
         TexturedModel texturedModel = new TexturedModel(model, new ModelTexture(loader.loadTexture("Brick.jpg")));
@@ -64,26 +65,24 @@ public class SchiffeVersenken extends Game {
 
         Camera camera = new Camera(window);
 
-        Entity ship = loader.loadEntityfromOBJ("4Ship", "4ShipTex.tga", 10, 1);
+        Entity ship = loader.loadEntityfromOBJ("test", "4ShipTex.tga", 10, 1);
+        ship.setPosition(new Vector3f(0,0,-40));
 
         while (!GLFW.glfwWindowShouldClose(window)){
 
             camera.move(window);
-            renderer.prepare();
-            shader.start();
-            shader.loadLight(light);
-            shader.loadViewMatrix(camera);
-            renderer.render(entity,shader);
-            renderer.render(ship, shader);
-            shader.stop();
+            renderer.processEntity(ship);
+            renderer.render(light,camera);
+            ship.getRotation().y += 0.1f;
+
 
             GLFW.glfwSwapBuffers(window);
 
             //allow mouse and keyboard inputs
             GLFW.glfwPollEvents();
         }
+        renderer.cleanUp();
         loader.cleanUp();
-        shader.cleanUp();
     }
 
     //release resources

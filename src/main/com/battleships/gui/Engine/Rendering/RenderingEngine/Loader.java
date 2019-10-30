@@ -1,6 +1,11 @@
-package com.battleships.gui.Engine.Rendering.Models;
+package com.battleships.gui.Engine.Rendering.RenderingEngine;
 
 import com.battleships.gui.Engine.Rendering.Entities.Entity;
+import com.battleships.gui.Engine.Rendering.Models.ModelTexture;
+import com.battleships.gui.Engine.Rendering.Models.RawModel;
+import com.battleships.gui.Engine.Rendering.Models.TexturedModel;
+import com.battleships.gui.Engine.Rendering.RenderingEngine.OBJLoader;
+import com.battleships.gui.Engine.Rendering.RenderingEngine.TextureLoader;
 import org.joml.Vector3f;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;

@@ -1,6 +1,7 @@
-package com.battleships.gui.Engine.Rendering.Models;
+package com.battleships.gui.Engine.Rendering.RenderingEngine;
 
 
+import com.battleships.gui.Engine.Rendering.Models.RawModel;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 
