@@ -12,7 +12,7 @@ public class OBJLoader {
 
     public static RawModel loadObjModel(String fileName){
 
-        InputStream is = OBJLoader.class.getResourceAsStream("/Game/res/models/"+ fileName +".obj");  //read file with file reader
+        InputStream is = OBJLoader.class.getResourceAsStream("/com/battleships/gui/Game/res/models/"+ fileName +".obj");  //read file with file reader
         if (is == null)
             throw new RuntimeException("Resource not found: " + fileName);
 
@@ -90,9 +90,9 @@ public class OBJLoader {
             indicesArray[i] = indices.get(i);
         }
 
-        //return mesh
+        //return new RawModel
         Loader loader = new Loader();
-        return loader.loadToVAO(verticesArray, textureArray, indicesArray);
+        return loader.loadToVAO(verticesArray, textureArray, normalsArray, indicesArray);
     }
 
     //sort vertex, texture and normals in array in right order by giving indices to the element in the lists

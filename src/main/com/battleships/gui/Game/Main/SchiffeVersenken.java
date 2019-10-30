@@ -3,6 +3,7 @@ package com.battleships.gui.Game.Main;
 import com.battleships.gui.Engine.Game;
 import com.battleships.gui.Engine.Rendering.Entities.Camera;
 import com.battleships.gui.Engine.Rendering.Entities.Entity;
+import com.battleships.gui.Engine.Rendering.Entities.Light;
 import com.battleships.gui.Engine.Rendering.Models.*;
 import com.battleships.gui.Engine.Rendering.Shaders.StaticShader;
 import org.joml.Vector3f;
@@ -44,24 +45,36 @@ public class SchiffeVersenken extends Game {
                 1,1, //V2
                 1,0 //V3
         };
+
+        float[] normals = {
+                -0.5f, 0.5f, 0f,    //V0
+                -0.5f, -0.5f, 0f,   //V1
+                0.5f, -0.5f, 0f,    //V2
+                0.5f, 0.5f, 0f,     //V3
+        };
         Loader loader = new Loader();
         StaticShader shader = new StaticShader();
         Renderer renderer = new Renderer(shader);
-        RawModel model = loader.loadToVAO(vertices, textureCoords, indices);
+        RawModel model = loader.loadToVAO(vertices, textureCoords, normals, indices);
 //        ModelTexture texture = Loader.loadTexture("Brick.jpg");
         TexturedModel texturedModel = new TexturedModel(model, new ModelTexture(loader.loadTexture("Brick.jpg")));
 
         Entity entity = new Entity(texturedModel, new Vector3f(0,0,-1), new Vector3f(0,0,0), new Vector3f(1,1,1));
+        Light light = new Light(new Vector3f(5,0,5), new Vector3f(1,1,1));
 
         Camera camera = new Camera(window);
+
+        Entity ship = loader.loadEntityfromOBJ("4Ship", "4ShipTex.tga", 10, 1);
 
         while (!GLFW.glfwWindowShouldClose(window)){
 
             camera.move(window);
             renderer.prepare();
             shader.start();
+            shader.loadLight(light);
             shader.loadViewMatrix(camera);
             renderer.render(entity,shader);
+            renderer.render(ship, shader);
             shader.stop();
 
             GLFW.glfwSwapBuffers(window);

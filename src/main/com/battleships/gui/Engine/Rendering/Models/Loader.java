@@ -1,5 +1,7 @@
 package com.battleships.gui.Engine.Rendering.Models;
 
+import com.battleships.gui.Engine.Rendering.Entities.Entity;
+import org.joml.Vector3f;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL15;
@@ -17,11 +19,12 @@ public class Loader {
     private List<Integer> vbos = new ArrayList<>();
     private List<Integer> textures = new ArrayList<>();
 
-    public RawModel loadToVAO(float[] positions, float[] textureCoords, int[] indices){
+    public RawModel loadToVAO(float[] positions, float[] textureCoords, float[] normals, int[] indices){
         int vaoID = createVAO();
         bindIndicesBuffer(indices);
         storeDataInAttributeList(0,3, positions);
         storeDataInAttributeList(1,2, textureCoords);
+        storeDataInAttributeList(2, 3, normals);
         unbindVAO();
         return new RawModel(vaoID, indices.length); //3 coords per vertex
     }
@@ -30,6 +33,21 @@ public class Loader {
         ModelTexture texture = TextureLoader.loadTexture(fileName);
         textures.add(texture.getID());
         return texture.getID();
+    }
+
+    public Entity loadEntityfromOBJ(String objPath, String texturePath){
+        RawModel model = OBJLoader.loadObjModel(objPath);
+        TexturedModel texturedModel = new TexturedModel(model, new ModelTexture(loadTexture(texturePath)));
+        return new Entity(texturedModel, new Vector3f(0,0,-1), new Vector3f(0,0,0), new Vector3f(1,1,1));
+    }
+
+    public Entity loadEntityfromOBJ(String objPath, String texturePath, float shineDamper, float reflectivity){
+        RawModel model = OBJLoader.loadObjModel(objPath);
+        TexturedModel texturedModel = new TexturedModel(model, new ModelTexture(loadTexture(texturePath)));
+        ModelTexture texture = texturedModel.getTexture();
+        texture.setReflectivity(reflectivity);
+        texture.setShineDamper(shineDamper);
+        return new Entity(texturedModel, new Vector3f(0,0,-1), new Vector3f(0,0,0), new Vector3f(1,1,1));
     }
 
     public void cleanUp(){

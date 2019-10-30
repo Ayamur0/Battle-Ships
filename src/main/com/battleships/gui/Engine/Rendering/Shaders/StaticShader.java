@@ -1,6 +1,7 @@
 package com.battleships.gui.Engine.Rendering.Shaders;
 
 import com.battleships.gui.Engine.Rendering.Entities.Camera;
+import com.battleships.gui.Engine.Rendering.Entities.Light;
 import com.battleships.gui.Engine.Toolbox.Maths;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
@@ -9,12 +10,16 @@ public class StaticShader extends ShaderProgram {
 
     private static final Vector3f UP_VECTOR = new Vector3f(0, 1, 0); //Vector looking straight up
 
-    private static final String VERTEX_FILE = "/com/battleships/gui/Game/res/shaders/vertexShader.txt";
-    private static final String FRAGMENT_FILE = "/com/battleships/gui/Game/res/shaders/fragmentShader.txt";
+    private static final String VERTEX_FILE = "/com/battleships/gui/Game/res/shaders/vertexShader.glsl";
+    private static final String FRAGMENT_FILE = "/com/battleships/gui/Game/res/shaders/fragmentShader.glsl";
 
     private int location_transformationMatrix;
     private int location_projectionMatrix;
     private int location_viewMatrix;
+    private int location_lightPosition;
+    private int location_lightColor;
+    private int location_shineDamper;
+    private int location_reflectivity;
 
     public StaticShader() {
         super(VERTEX_FILE, FRAGMENT_FILE);
@@ -24,6 +29,7 @@ public class StaticShader extends ShaderProgram {
     protected void bindAttributes() {
         super.bindAttribute(0, "position");
         super.bindAttribute(1, "textureCoords");
+        super.bindAttribute(2, "normal");
     }
 
     @Override
@@ -31,6 +37,21 @@ public class StaticShader extends ShaderProgram {
         location_transformationMatrix = super.getUniformLocation("transformationMatrix");
         location_projectionMatrix = super.getUniformLocation("projectionMatrix");
         location_viewMatrix = super.getUniformLocation("viewMatrix");
+        location_lightPosition = super.getUniformLocation("lightPosition");
+        location_lightColor = super.getUniformLocation("lightColor");
+        location_shineDamper = super.getUniformLocation("shineDamper");
+        location_reflectivity = super.getUniformLocation("reflectivity");
+    }
+
+    public void loadShineVariables(float damper, float reflectivity){
+        super.loadFloat(location_shineDamper, damper);
+        super.loadFloat(location_reflectivity, reflectivity);
+    }
+
+    //load light Position and Color vectors into shader uniforms
+    public void loadLight(Light light){
+        super.loadVector(location_lightPosition, light.getPosition());
+        super.loadVector(location_lightColor, light.getColor());
     }
 
     //load matrix needed to process scaling, moving or rotating a model
