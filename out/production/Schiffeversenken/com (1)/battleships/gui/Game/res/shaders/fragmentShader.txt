@@ -1,0 +1,15 @@
+#version 400 core
+
+//converts per vertex data to per pixel data for screen to display
+
+in vec3 color;
+in vec2 pass_textureCoords; //get textureCoords from vertexShader
+
+out vec4 out_Color;
+
+uniform sampler2D modelTexture;
+
+void main(){
+
+    out_Color = texture(modelTexture, pass_textureCoords); //return color of pixel at coordinates
+}
