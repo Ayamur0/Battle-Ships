@@ -53,13 +53,6 @@ public abstract class ShaderProgram {
         GL20.glUseProgram(0);
     }
 
-    public int loadTexture(String fileName){
-        ModelTexture texture = TextureLoader.loadTexture(fileName);
-
-        int textureID = texture.getID();
-        return textureID;
-    }
-
     public void cleanUp(){
         //stop shaders, detach them and delete shaders and this program
         stop();
@@ -97,27 +90,49 @@ public abstract class ShaderProgram {
     }
 
     private static int loadShader(String file, int type){
+        StringBuilder shaderSource = new StringBuilder();
         try{
-            //convert Shader from file to String
-            BufferedReader reader = new BufferedReader(new InputStreamReader(GLSLProgram.class.getResourceAsStream(file)));
-            StringBuilder builder = new StringBuilder();
-            while(reader.ready()){
-                builder.append(reader.readLine() + System.lineSeparator());
+            BufferedReader reader = new BufferedReader(new InputStreamReader(ShaderProgram.class.getResourceAsStream(file)));
+            String line;
+            while((line = reader.readLine())!=null){
+                shaderSource.append(line).append("//\n");
             }
             reader.close();
-
-            //compile shader
-            int shaderID = GL20.glCreateShader(type);
-            GL20.glShaderSource(shaderID, builder);
-            GL20.glCompileShader(shaderID);
-            if(GL20.glGetShaderi(shaderID, GL20.GL_COMPILE_STATUS) == GL11.GL_FALSE){
-                throw new RuntimeException("Failed to compile shader: " + System.lineSeparator() + GL20.glGetShaderInfoLog(shaderID));
-            }
-
-            return shaderID;
+        }catch(IOException e){
+            e.printStackTrace();
+            System.exit(-1);
         }
-        catch(IOException e){
-            throw new RuntimeException(e);
+        int shaderID = GL20.glCreateShader(type);
+        GL20.glShaderSource(shaderID, shaderSource);
+        GL20.glCompileShader(shaderID);
+        if(GL20.glGetShaderi(shaderID, GL20.GL_COMPILE_STATUS )== GL11.GL_FALSE){
+            System.out.println(GL20.glGetShaderInfoLog(shaderID, 500));
+            System.err.println("Could not compile shader!");
+            System.exit(-1);
         }
+        return shaderID;
     }
+//        try{
+//            //convert Shader from file to String
+//            BufferedReader reader = new BufferedReader(new InputStreamReader(ShaderProgram.class.getResourceAsStream(file)));
+//            StringBuilder builder = new StringBuilder();
+//            while(reader.ready()){
+//                builder.append(reader.readLine() + System.lineSeparator());
+//            }
+//            reader.close();
+//
+//            //compile shader
+//            int shaderID = GL20.glCreateShader(type);
+//            GL20.glShaderSource(shaderID, builder);
+//            GL20.glCompileShader(shaderID);
+//            if(GL20.glGetShaderi(shaderID, GL20.GL_COMPILE_STATUS) == GL11.GL_FALSE){
+//                throw new RuntimeException("Failed to compile shader: " + System.lineSeparator() + GL20.glGetShaderInfoLog(shaderID));
+//            }
+//
+//            return shaderID;
+//        }
+//        catch(IOException e){
+//            throw new RuntimeException(e);
+//        }
+//    }
 }

@@ -10,7 +10,7 @@ import java.util.List;
 
 public class OBJLoader {
 
-    public static Mesh loadObjModel(String fileName){
+    public static RawModel loadObjModel(String fileName){
 
         InputStream is = OBJLoader.class.getResourceAsStream("/Game/res/models/"+ fileName +".obj");  //read file with file reader
         if (is == null)
@@ -91,7 +91,8 @@ public class OBJLoader {
         }
 
         //return mesh
-        return new Mesh(indicesArray, verticesArray, textureArray);
+        Loader loader = new Loader();
+        return loader.loadToVAO(verticesArray, textureArray, indicesArray);
     }
 
     //sort vertex, texture and normals in array in right order by giving indices to the element in the lists

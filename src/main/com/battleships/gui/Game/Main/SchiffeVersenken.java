@@ -7,10 +7,12 @@ import com.battleships.gui.Engine.Rendering.Models.*;
 import com.battleships.gui.Engine.Rendering.Shaders.StaticShader;
 import org.joml.Vector3f;
 import org.lwjgl.glfw.GLFW;
+import org.lwjgl.opengl.GL11;
 
 public class SchiffeVersenken extends Game {
 
     private static SchiffeVersenken instance;
+    private static long window;
 //    private float yOffset = -0.5f; //for 2D objects
 
     public static void main(String[] args){
@@ -21,7 +23,7 @@ public class SchiffeVersenken extends Game {
     //initialize resources then render resources in while
     @Override
     public void mainGameLoop(long window) {
-
+        this.window = window;
 
         float[] vertices = {
                 -0.5f, 0.5f, 0f,    //V0
@@ -29,6 +31,7 @@ public class SchiffeVersenken extends Game {
                 0.5f, -0.5f, 0f,    //V2
                 0.5f, 0.5f, 0f,     //V3
         };
+
 
         int[] indices = {
                 0,1,3, //Top left triangle (V0,V1,V3)
@@ -45,16 +48,16 @@ public class SchiffeVersenken extends Game {
         StaticShader shader = new StaticShader();
         Renderer renderer = new Renderer(shader);
         RawModel model = loader.loadToVAO(vertices, textureCoords, indices);
-        ModelTexture texture = TextureLoader.loadTexture("Brick.jpg");
-        TexturedModel texturedModel = new TexturedModel(model, texture);
+//        ModelTexture texture = Loader.loadTexture("Brick.jpg");
+        TexturedModel texturedModel = new TexturedModel(model, new ModelTexture(loader.loadTexture("Brick.jpg")));
 
-        Entity entity = new Entity(texturedModel, new Vector3f(-1,0,0), new Vector3f(0,0,0), new Vector3f(0,0,0));
+        Entity entity = new Entity(texturedModel, new Vector3f(0,0,-1), new Vector3f(0,0,0), new Vector3f(1,1,1));
 
         Camera camera = new Camera(window);
 
         while (!GLFW.glfwWindowShouldClose(window)){
 
-            camera.move();
+            camera.move(window);
             renderer.prepare();
             shader.start();
             shader.loadViewMatrix(camera);
@@ -79,4 +82,6 @@ public class SchiffeVersenken extends Game {
     public static SchiffeVersenken getInstance() {
         return instance;
     }
+
+    public static long getWindow(){return window;}
 }

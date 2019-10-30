@@ -14,10 +14,10 @@ import java.nio.channels.ReadableByteChannel;
 public class TextureLoader {
 
 
-    public static ModelTexture loadTexture(String filename){
+    static ModelTexture loadTexture(String filename){
 
         //create usable TextureLoader for OpenGl from image
-        InputStream is = TextureLoader.class.getResourceAsStream("/Game/res/textures/" + filename);
+        InputStream is = TextureLoader.class.getResourceAsStream("/com/battleships/gui/Game/res/textures/" + filename);
         if (is == null)
             throw new RuntimeException("Resource not found: " + filename);
         ByteBuffer rawBytes;
