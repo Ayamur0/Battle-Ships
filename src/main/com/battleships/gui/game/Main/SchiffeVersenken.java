@@ -11,6 +11,8 @@ import com.battleships.gui.engine.renderingEngine.Loader;
 import com.battleships.gui.engine.renderingEngine.MasterRenderer;
 import com.battleships.gui.engine.renderingEngine.OBJLoader;
 import com.battleships.gui.engine.terrains.Terrain;
+import com.battleships.gui.engine.terrains.TerrainTexture;
+import com.battleships.gui.engine.terrains.TerrainTexturePack;
 import org.joml.Vector3f;
 import org.lwjgl.glfw.GLFW;
 
@@ -69,8 +71,19 @@ public class SchiffeVersenken extends Game {
         Entity entity = new Entity(texturedModel, new Vector3f(0,0,-1), new Vector3f(0,0,0), 1);
         Light light = new Light(new Vector3f(5,5,5), new Vector3f(1,1,1));
 
-        Terrain terrain = new Terrain(0,-1, loader, new ModelTexture(loader.loadTexture("Water.jpg")));
-        Terrain terrain2 = new Terrain(-1,-1, loader, new ModelTexture(loader.loadTexture("Water.jpg")));
+        TerrainTexture texture0 = new TerrainTexture(loader.loadTexture("Water.jpg"));
+        TerrainTexture texture1 = new TerrainTexture(loader.loadTexture("path.jpg"));
+        TerrainTexture texture2 = new TerrainTexture(loader.loadTexture("Gravel.jpg"));
+        TerrainTexture texture3 = new TerrainTexture(loader.loadTexture("Grass.jpg"));
+        TerrainTexture texture4 = new TerrainTexture(loader.loadTexture("WetSand.jpg"));
+        TerrainTexture texture5 = new TerrainTexture(loader.loadTexture("Sand.jpg"));
+
+        TerrainTexturePack texturePack = new TerrainTexturePack(texture0, texture1, texture2, texture3, texture4, texture5);
+
+        TerrainTexture blendMap = new TerrainTexture(loader.loadTexture("BlendMap.tga"));
+
+        Terrain terrain = new Terrain(0,-1, loader, texturePack, blendMap);
+        Terrain terrain2 = new Terrain(-1,-1, loader, texturePack, blendMap);
 
         TexturedModel fern = new TexturedModel(OBJLoader.loadObjModel("fern"), new ModelTexture(loader.loadTexture("fern.tga")));
         fern.getTexture().setHasTransparency(true);

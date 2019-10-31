@@ -6,6 +6,9 @@ import com.battleships.gui.engine.toolbox.Maths;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class TerrainShader extends ShaderProgram {
 
     private static final Vector3f UP_VECTOR = new Vector3f(0, 1, 0); //Vector looking straight up
@@ -20,6 +23,9 @@ public class TerrainShader extends ShaderProgram {
     private int location_lightColor;
     private int location_shineDamper;
     private int location_reflectivity;
+    private int location_skyColor;
+    private Map<String, Integer> uniformLocations;
+
 
     public TerrainShader() {
         super(VERTEX_FILE, FRAGMENT_FILE);
@@ -34,34 +40,55 @@ public class TerrainShader extends ShaderProgram {
 
     @Override
     protected void getAllUniformLocations() {
-        location_transformationMatrix = super.getUniformLocation("transformationMatrix");
-        location_projectionMatrix = super.getUniformLocation("projectionMatrix");
-        location_viewMatrix = super.getUniformLocation("viewMatrix");
-        location_lightPosition = super.getUniformLocation("lightPosition");
-        location_lightColor = super.getUniformLocation("lightColor");
-        location_shineDamper = super.getUniformLocation("shineDamper");
-        location_reflectivity = super.getUniformLocation("reflectivity");
+        String[] uniformNames = {"transformationMatrix", "projectionMatrix", "viewMatrix", "lightPosition", "lightColor", "shineDamper",
+                "reflectivity", "skyColor", "waterTexture", "pathTexture", "gravelTexture", "grassTexture", "wetSandTexture", "sandTexture", "blendMap"};
+        uniformLocations = new HashMap<>();
+        for(String s : uniformNames){
+            uniformLocations.put(s, super.getUniformLocation(s));
+        }
+//        location_transformationMatrix = super.getUniformLocation("transformationMatrix");
+//        location_projectionMatrix = super.getUniformLocation("projectionMatrix");
+//        location_viewMatrix = super.getUniformLocation("viewMatrix");
+//        location_lightPosition = super.getUniformLocation("lightPosition");
+//        location_lightColor = super.getUniformLocation("lightColor");
+//        location_shineDamper = super.getUniformLocation("shineDamper");
+//        location_reflectivity = super.getUniformLocation("reflectivity");
+//        location_skyColor = super.getUniformLocation("skyColor");
+    }
+
+    public void connectTextureUnits(){
+        super.loadInt(uniformLocations.get("waterTexture"), 0);
+        super.loadInt(uniformLocations.get("pathTexture"), 1);
+        super.loadInt(uniformLocations.get("gravelTexture"), 2);
+        super.loadInt(uniformLocations.get("grassTexture"), 3);
+        super.loadInt(uniformLocations.get("wetSandTexture"), 4);
+        super.loadInt(uniformLocations.get("sandTexture"), 5);
+        super.loadInt(uniformLocations.get("blendMap"), 6);
+    }
+
+    public void loadSkyColor(float r, float g, float b){
+        super.loadVector(uniformLocations.get("skyColor"), new Vector3f(r,g,b));
     }
 
     public void loadShineVariables(float damper, float reflectivity){
-        super.loadFloat(location_shineDamper, damper);
-        super.loadFloat(location_reflectivity, reflectivity);
+        super.loadFloat(uniformLocations.get("shineDamper"), damper);
+        super.loadFloat(uniformLocations.get("reflectivity"), reflectivity);
     }
 
     //load light Position and Color vectors into shader uniforms
     public void loadLight(Light light){
-        super.loadVector(location_lightPosition, light.getPosition());
-        super.loadVector(location_lightColor, light.getColor());
+        super.loadVector(uniformLocations.get("lightPosition"), light.getPosition());
+        super.loadVector(uniformLocations.get("lightColor"), light.getColor());
     }
 
     //load matrix needed to process scaling, moving or rotating a model
     public void loadTransformationMatrix(Matrix4f matrix){
-        super.loadMatrix(location_transformationMatrix, matrix);
+        super.loadMatrix(uniformLocations.get("transformationMatrix"), matrix);
     }
 
     public void loadViewMatrix(Camera camera){
         Matrix4f viewMatrix = Maths.createViewMatrix(camera);
-        super.loadMatrix(location_viewMatrix, viewMatrix);
+        super.loadMatrix(uniformLocations.get("viewMatrix"), viewMatrix);
 //        Matrix4f viewMatrix = new Matrix4f();
 //        Vector3f position = new Vector3f(0,0,0);
 //        Vector3f direction = new Vector3f(0,0,0);
@@ -80,6 +107,6 @@ public class TerrainShader extends ShaderProgram {
     }
 
     public void loadProjectionMatrix(Matrix4f projection){
-        super.loadMatrix(location_projectionMatrix, projection);
+        super.loadMatrix(uniformLocations.get("projectionMatrix"), projection);
     }
 }

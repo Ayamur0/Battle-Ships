@@ -6,6 +6,8 @@ import com.battleships.gui.engine.models.RawModel;
 import com.battleships.gui.engine.models.TexturedModel;
 import com.battleships.gui.engine.shaders.TerrainShader;
 import com.battleships.gui.engine.terrains.Terrain;
+import com.battleships.gui.engine.terrains.TerrainTexture;
+import com.battleships.gui.engine.terrains.TerrainTexturePack;
 import com.battleships.gui.engine.toolbox.Maths;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
@@ -24,6 +26,7 @@ public class TerrainRenderer {
         this.shader = shader;
         shader.start();
         shader.loadProjectionMatrix(projectionMatrix);
+        shader.connectTextureUnits();
         shader.stop();
     }
 
@@ -45,10 +48,21 @@ public class TerrainRenderer {
         GL20.glEnableVertexAttribArray(0); //enable vao at index 0 (positions)
         GL20.glEnableVertexAttribArray(1);//enable vao at index 1 (textureCoords)
         GL20.glEnableVertexAttribArray(2);//enable vao at index 2 (normals)
-        ModelTexture texture = terrain.getTexture();
-        shader.loadShineVariables(texture.getShineDamper(), texture.getReflectivity()); //pass the shineDamper and reflectivity values from the texture to the shader
-        GL13.glActiveTexture(GL13.GL_TEXTURE0); //activate texture bank 0
-        GL13.glBindTexture(GL11.GL_TEXTURE_2D, texture.getID()); //bind texture from model to render
+        bindTextures(terrain);
+        shader.loadShineVariables(1, 0); //pass the shineDamper and reflectivity values from the texture to the shader
+    }
+
+    private void bindTextures(Terrain terrain){
+        TerrainTexturePack texturePack = terrain.getTexturePack();
+        int i = 0;
+        //activate texture banks and bind textures from terrain to render
+        for(TerrainTexture texture : texturePack.getTextures()) {
+            GL13.glActiveTexture(GL13.GL_TEXTURE0 + i);
+            GL13.glBindTexture(GL11.GL_TEXTURE_2D, texture.getTextureID());
+            i++;
+        }
+        GL13.glActiveTexture(GL13.GL_TEXTURE0 + i);
+        GL13.glBindTexture(GL11.GL_TEXTURE_2D, terrain.getBlendMap().getTextureID());
     }
 
     //disable currently loaded model vaos and then unbind them

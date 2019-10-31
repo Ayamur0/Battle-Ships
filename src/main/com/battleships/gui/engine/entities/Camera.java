@@ -15,24 +15,34 @@ public class Camera {
         this.window = window;
     }
 
-    public void move(long window){
+    public void move(long window){ //TODO make movement relative to Camera
+        int sprint = 1;
+        if(GLFW.glfwGetKey(window, GLFW.GLFW_KEY_LEFT_CONTROL) == GLFW.GLFW_PRESS){
+            sprint = 6;
+        }
         if(GLFW.glfwGetKey(window, GLFW.GLFW_KEY_W) == GLFW.GLFW_PRESS){
-            position.z -= 0.2f;
+            position.z -= 0.2f * sprint;
         }
         if(GLFW.glfwGetKey(window, GLFW.GLFW_KEY_S) == GLFW.GLFW_PRESS){
-            position.z += 0.2f;
+            position.z += 0.2f * sprint;
         }
         if(GLFW.glfwGetKey(window, GLFW.GLFW_KEY_D) == GLFW.GLFW_PRESS){
-            position.x += 0.2f;
+            position.x += 0.2f * sprint;
         }
         if(GLFW.glfwGetKey(window, GLFW.GLFW_KEY_A) == GLFW.GLFW_PRESS){
-            position.x -= 0.2f;
+            position.x -= 0.2f * sprint;
         }
         if(GLFW.glfwGetKey(window, GLFW.GLFW_KEY_SPACE) == GLFW.GLFW_PRESS){
             position.y += 0.2f;
         }
         if(GLFW.glfwGetKey(window, GLFW.GLFW_KEY_LEFT_SHIFT) == GLFW.GLFW_PRESS || GLFW.glfwGetKey(window, GLFW.GLFW_KEY_RIGHT_SHIFT) == GLFW.GLFW_PRESS){
             position.y -= 0.2f;
+        }
+        if(GLFW.glfwGetKey(window, GLFW.GLFW_KEY_Q) == GLFW.GLFW_PRESS){
+            yaw -= 0.6f;
+        }
+        if(GLFW.glfwGetKey(window, GLFW.GLFW_KEY_E) == GLFW.GLFW_PRESS){
+            yaw += 0.6f;
         }
     }
 
