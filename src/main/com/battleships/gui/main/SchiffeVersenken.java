@@ -81,7 +81,7 @@ public class SchiffeVersenken {
 
         GuiClickCallback guiClickCallback = new GuiClickCallback();
         guiClickCallback.addClickableGui(gui);
-        WindowManager.setCallbacks(camera);
+        WindowManager.setCallbacks(camera, guiClickCallback);
 
         while (!GLFW.glfwWindowShouldClose(window)){
             camera.move(window, terrain);
