@@ -1,10 +1,8 @@
 package com.battleships.gui.window;
 
 import com.battleships.gui.entities.Camera;
-import org.lwjgl.glfw.GLFW;
-import org.lwjgl.glfw.GLFWErrorCallback;
-import org.lwjgl.glfw.GLFWScrollCallback;
-import org.lwjgl.glfw.GLFWVidMode;
+import com.battleships.gui.guis.GuiClickCallback;
+import org.lwjgl.glfw.*;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GL11;
 
@@ -60,7 +58,8 @@ public class WindowManager {
         return window;
     }
 
-    static public void setCallbacks(Camera camera){
+    static public void setCallbacks(Camera camera, GuiClickCallback guiClickCallback){
+        GLFW.glfwSetMouseButtonCallback(window, guiClickCallback.guiClick);
         GLFW.glfwSetScrollCallback(window, camera.scrollCallback);
     }
 

@@ -3,6 +3,7 @@ package com.battleships.gui.main;
 import com.battleships.gui.entities.Camera;
 import com.battleships.gui.entities.Entity;
 import com.battleships.gui.entities.Light;
+import com.battleships.gui.guis.GuiClickCallback;
 import com.battleships.gui.guis.GuiRenderer;
 import com.battleships.gui.guis.GuiTexture;
 import com.battleships.gui.models.ModelTexture;
@@ -78,6 +79,8 @@ public class SchiffeVersenken {
         Entity ship = loader.loadEntityfromOBJ("test", "4ShipTex.tga", 10, 1);
         ship.setPosition(new Vector3f(0,0,-40));
 
+        GuiClickCallback guiClickCallback = new GuiClickCallback();
+        guiClickCallback.addClickableGui(gui);
         WindowManager.setCallbacks(camera);
 
         while (!GLFW.glfwWindowShouldClose(window)){
