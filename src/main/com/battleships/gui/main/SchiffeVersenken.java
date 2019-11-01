@@ -3,6 +3,8 @@ package com.battleships.gui.main;
 import com.battleships.gui.entities.Camera;
 import com.battleships.gui.entities.Entity;
 import com.battleships.gui.entities.Light;
+import com.battleships.gui.guis.GuiRenderer;
+import com.battleships.gui.guis.GuiTexture;
 import com.battleships.gui.models.ModelTexture;
 import com.battleships.gui.models.RawModel;
 import com.battleships.gui.models.TexturedModel;
@@ -13,6 +15,7 @@ import com.battleships.gui.terrains.Terrain;
 import com.battleships.gui.terrains.TerrainTexture;
 import com.battleships.gui.terrains.TerrainTexturePack;
 import com.battleships.gui.window.WindowManager;
+import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.lwjgl.glfw.GLFW;
 
@@ -32,39 +35,15 @@ public class SchiffeVersenken {
 
     //initialize resources then render resources in while
 
-        float[] vertices = {
-                -0.5f, 0.5f, 0f,    //V0
-                -0.5f, -0.5f, 0f,   //V1
-                0.5f, -0.5f, 0f,    //V2
-                0.5f, 0.5f, 0f,     //V3
-        };
-
-
-        int[] indices = {
-                0,1,3, //Top left triangle (V0,V1,V3)
-                3,1,2  //Bottom right triangle (V3,V1,V2)
-        };
-
-        float[] textureCoords = {
-                0,0, //V0 (0,0 is top left corner of texture) -> map to vertex V0
-                0,1, //V1  (bottom left corner of texture) -> map to vertex V1
-                1,1, //V2
-                1,0 //V3
-        };
-
-        float[] normals = {
-                -0.5f, 0.5f, 0f,    //V0
-                -0.5f, -0.5f, 0f,   //V1
-                0.5f, -0.5f, 0f,    //V2
-                0.5f, 0.5f, 0f,     //V3
-        };
         Loader loader = new Loader();
         MasterRenderer renderer = new MasterRenderer();
-        RawModel model = loader.loadToVAO(vertices, textureCoords, normals, indices);
-//        ModelTexture texture = Loader.loadTexture("Brick.jpg");
-        TexturedModel texturedModel = new TexturedModel(model, new ModelTexture(loader.loadTexture("Brick.jpg")));
 
-        Entity entity = new Entity(texturedModel, new Vector3f(0,0,-1), new Vector3f(0,0,0), 1);
+        List<GuiTexture> guis = new ArrayList<>();
+        GuiTexture gui = new GuiTexture(loader.loadTexture("Brick.jpg"), new Vector2f(0.5f, 0.5f), new Vector2f(0.25f,0.25f));
+        guis.add(gui);
+
+        GuiRenderer guiRenderer = new GuiRenderer(loader);
+
         Light light = new Light(new Vector3f(20000,20000,2000), new Vector3f(1,1,1));
 
         TerrainTexture texture0 = new TerrainTexture(loader.loadTexture("Water.jpg"));
@@ -104,13 +83,6 @@ public class SchiffeVersenken {
         while (!GLFW.glfwWindowShouldClose(window)){
             camera.move(window, terrain);
 
-
-
-//            a += deltaTime * speed;
-//
-//            x = sin( a ) * 0.8f;
-//            y = cos( a ) * 0.8f;
-
             for (Entity e : ferns)
                 renderer.processEntity(e);
             renderer.processEntity(ship);
@@ -120,10 +92,13 @@ public class SchiffeVersenken {
 
             renderer.render(light,camera);
 
+            guiRenderer.render(guis);
+
             ship.getRotation().y += 0.1f;
 
             WindowManager.updateWindow();
         }
+        guiRenderer.cleanUp();
         renderer.cleanUp();
         loader.cleanUp();
         //unload GLFW on window close

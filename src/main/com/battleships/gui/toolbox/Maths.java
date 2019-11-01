@@ -16,6 +16,13 @@ public class Maths {
         return l1 * p1.y + l2 * p2.y + l3 * p3.y;
     }
 
+    public static Matrix4f createTransformationMatrix(Vector2f translation, Vector2f scale) {
+        Matrix4f matrix = new Matrix4f();
+        matrix.identity();
+        matrix.translate(new Vector3f(translation.x, translation.y, 1.0f), matrix);
+        matrix.scale(new Vector3f(scale.x, scale.y, 1f), matrix);
+        return matrix;
+    }
 
     public static Matrix4f createTransformationMatrix(Vector3f translation, Vector3f rotation, float scale){
         Matrix4f matrix = new Matrix4f();

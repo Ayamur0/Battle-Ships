@@ -29,6 +29,14 @@ public class Loader {
         return new RawModel(vaoID, indices.length); //3 coords per vertex
     }
 
+    //model for guis that has only 4 vertices, so no need for normals etc.
+    public RawModel loadToVAO(float[] positions){
+        int vaoID = createVAO();
+        this.storeDataInAttributeList(0, 2, positions);
+        unbindVAO();
+        return new RawModel(vaoID, positions.length / 2);
+    }
+
     public int loadTexture(String fileName){
         ModelTexture texture = TextureLoader.loadTexture(fileName);
         //use mipmap to render textures that are further away in lower resolution
