@@ -78,8 +78,8 @@ public class SchiffeVersenken {
 
         TerrainTexture blendMap = new TerrainTexture(loader.loadTexture("BlendMap.tga"));
 
-        Terrain terrain = new Terrain(0,-1, loader, texturePack, blendMap);
-        Terrain terrain2 = new Terrain(-1,-1, loader, texturePack, blendMap);
+        Terrain terrain = new Terrain(0,-1, loader, texturePack, blendMap, "HeightMap.jpg");
+//        Terrain terrain2 = new Terrain(-1,-1, loader, texturePack, blendMap, "HeightMap.jpg");
 
         TexturedModel fern = new TexturedModel(OBJLoader.loadObjModel("fern"), new ModelTexture(loader.loadTexture("fern.tga")));
         fern.getTexture().setHasTransparency(true);
@@ -88,7 +88,9 @@ public class SchiffeVersenken {
         List<Entity> ferns = new ArrayList<>();
         Random random = new Random();
         for(int i = 0; i < 500; i++){
-            ferns.add(new Entity(fern, new Vector3f(random.nextFloat() * 800 - 400, 0, random.nextFloat() * -600), new Vector3f(), 0.6f));
+            float x = random.nextFloat() * 800 - 400;
+            float z = random.nextFloat() * -600;
+            ferns.add(new Entity(fern, new Vector3f(x, terrain.getHeightOfTerrain(x,z),z ), new Vector3f(), 0.6f));
         }
 
         Camera camera = new Camera();
@@ -99,7 +101,7 @@ public class SchiffeVersenken {
         WindowManager.setCallbacks(camera);
 
         while (!GLFW.glfwWindowShouldClose(window)){
-            camera.move(window);
+            camera.move(window, terrain);
 
 
 
@@ -112,7 +114,7 @@ public class SchiffeVersenken {
                 renderer.processEntity(e);
             renderer.processEntity(ship);
             renderer.processTerrain(terrain);
-            renderer.processTerrain(terrain2);
+//            renderer.processTerrain(terrain2);
 
 
             renderer.render(light,camera);

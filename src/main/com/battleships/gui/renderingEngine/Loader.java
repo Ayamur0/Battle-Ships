@@ -6,10 +6,7 @@ import com.battleships.gui.models.RawModel;
 import com.battleships.gui.models.TexturedModel;
 import org.joml.Vector3f;
 import org.lwjgl.BufferUtils;
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL15;
-import org.lwjgl.opengl.GL20;
-import org.lwjgl.opengl.GL30;
+import org.lwjgl.opengl.*;
 
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
@@ -34,6 +31,10 @@ public class Loader {
 
     public int loadTexture(String fileName){
         ModelTexture texture = TextureLoader.loadTexture(fileName);
+        //use mipmap to render textures that are further away in lower resolution
+        GL30.glGenerateMipmap(GL11.GL_TEXTURE_2D);
+        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR_MIPMAP_LINEAR);
+        GL11.glTexParameterf(GL11.GL_TEXTURE_2D, GL14.GL_TEXTURE_LOD_BIAS, -1.5f);
         textures.add(texture.getID());
         return texture.getID();
     }

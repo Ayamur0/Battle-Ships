@@ -1,5 +1,6 @@
 package com.battleships.gui.entities;
 
+import com.battleships.gui.terrains.Terrain;
 import com.battleships.gui.window.WindowManager;
 import org.joml.Vector3f;
 import org.lwjgl.BufferUtils;
@@ -35,7 +36,7 @@ public class Camera {
     };
 
 
-    public void move(long window){ //TODO limit zoom and pitch amount, keep movement in game area
+    public void move(long window, Terrain terrain){ //TODO limit zoom and pitch amount, keep movement in game area
         calculatePitch(window);
         calculatePosition(window);
         pitch %= 360;
@@ -70,6 +71,12 @@ public class Camera {
         currentSidewaysSpeed = 0;
         currentUpwardsSpeed = 0;
         zoom = 0;
+
+        //don't allow to get under terrain
+        float terrainHeight = terrain.getHeightOfTerrain(position.x, position.z);
+        if(position.y < terrainHeight + 1){
+            position.y = terrainHeight + 1;
+        }
     }
 
     //set speeds in the directions based in inputs
@@ -105,6 +112,9 @@ public class Camera {
     }
 
     private void calculatePitch(long window){
+        //hide cursor while holding right mouse button
+        //center mouse and keep mouse in window
+        //mouse moves camera while holding right mouse button
         if(GLFW.glfwGetMouseButton(window, GLFW.GLFW_MOUSE_BUTTON_RIGHT) == GLFW.GLFW_PRESS && !mouseLocked) {
             GLFW.glfwSetInputMode(window, GLFW.GLFW_CURSOR, GLFW.GLFW_CURSOR_DISABLED);
             GLFW.glfwSetCursorPos(window, WindowManager.getWIDTH() / 2f, WindowManager.getHEIGHT() / 2f);
@@ -128,6 +138,7 @@ public class Camera {
 
             GLFW.glfwSetCursorPos(window, WindowManager.getWIDTH() / 2f, WindowManager.getHEIGHT() / 2f);
         }
+        //enable cursor on release of right mouse button and disable mouse moving camera
         if(GLFW.glfwGetMouseButton(window, GLFW.GLFW_MOUSE_BUTTON_RIGHT) == GLFW.GLFW_RELEASE) {
             GLFW.glfwSetInputMode(window, GLFW.GLFW_CURSOR, GLFW.GLFW_CURSOR_NORMAL);
             mouseLocked = false;
