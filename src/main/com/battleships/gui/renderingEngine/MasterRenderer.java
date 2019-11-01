@@ -6,6 +6,7 @@ import com.battleships.gui.entities.Light;
 import com.battleships.gui.models.TexturedModel;
 import com.battleships.gui.shaders.StaticShader;
 import com.battleships.gui.shaders.TerrainShader;
+import com.battleships.gui.skybox.SkyboxRenderer;
 import com.battleships.gui.terrains.Terrain;
 import com.battleships.gui.main.SchiffeVersenken;
 import com.battleships.gui.window.WindowManager;
@@ -41,11 +42,14 @@ public class MasterRenderer {
     private Map<TexturedModel, List<Entity>> entities = new HashMap<>(); //list all entities in one entry, that use the same texture
     private List<Terrain> terrains = new ArrayList<>();
 
-    public MasterRenderer(){
+    private SkyboxRenderer skyboxRenderer;
+
+    public MasterRenderer(Loader loader){
         enableCulling();
         createProjectionMatrix();
         renderer = new EntityRenderer(shader, projectionMatrix);
         terrainRenderer = new TerrainRenderer(terrainShader, projectionMatrix);
+        skyboxRenderer = new SkyboxRenderer(loader, projectionMatrix);
     }
 
     public static void enableCulling(){
@@ -74,6 +78,7 @@ public class MasterRenderer {
         terrainShader.loadViewMatrix(camera);
         terrainRenderer.render(terrains);
         terrainShader.stop();
+        skyboxRenderer.render(camera);
         //clear stuff that has been rendered or it would be added another time next frame and render on top of each other
         terrains.clear();
         entities.clear();
@@ -108,6 +113,7 @@ public class MasterRenderer {
     public void cleanUp(){
         shader.cleanUp();
         terrainShader.cleanUp();
+        skyboxRenderer.cleanUp();
     }
 
     private void createProjectionMatrix(){

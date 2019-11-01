@@ -15,5 +15,6 @@
     <orderEntry type="library" name="lwjgl-opengl" level="project" />
     <orderEntry type="library" name="lwjgl-glfw" level="project" />
     <orderEntry type="library" name="lwjgl-stb-natives-windows" level="project" />
+    <orderEntry type="library" name="PNGDecoder" level="project" />
   </component>
 </module>

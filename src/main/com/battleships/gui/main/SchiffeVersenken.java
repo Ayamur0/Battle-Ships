@@ -37,7 +37,7 @@ public class SchiffeVersenken {
     //initialize resources then render resources in while
 
         Loader loader = new Loader();
-        MasterRenderer renderer = new MasterRenderer();
+        MasterRenderer renderer = new MasterRenderer(loader);
 
         List<GuiTexture> guis = new ArrayList<>();
         GuiTexture gui = new GuiTexture(loader.loadTexture("Brick.jpg"), new Vector2f(0.5f, 0.5f), new Vector2f(0.25f,0.25f));
@@ -101,6 +101,7 @@ public class SchiffeVersenken {
 
             WindowManager.updateWindow();
         }
+
         guiRenderer.cleanUp();
         renderer.cleanUp();
         loader.cleanUp();

@@ -3,6 +3,7 @@ package com.battleships.gui.renderingEngine;
 import com.battleships.gui.entities.Entity;
 import com.battleships.gui.models.ModelTexture;
 import com.battleships.gui.models.RawModel;
+import com.battleships.gui.models.TextureData;
 import com.battleships.gui.models.TexturedModel;
 import org.joml.Vector3f;
 import org.lwjgl.BufferUtils;
@@ -30,11 +31,11 @@ public class Loader {
     }
 
     //model for guis that has only 4 vertices, so no need for normals etc.
-    public RawModel loadToVAO(float[] positions){
+    public RawModel loadToVAO(float[] positions, int dimensions){
         int vaoID = createVAO();
-        this.storeDataInAttributeList(0, 2, positions);
+        this.storeDataInAttributeList(0, dimensions, positions);
         unbindVAO();
-        return new RawModel(vaoID, positions.length / 2);
+        return new RawModel(vaoID, positions.length / dimensions);
     }
 
     public int loadTexture(String fileName){
@@ -45,6 +46,25 @@ public class Loader {
         GL11.glTexParameterf(GL11.GL_TEXTURE_2D, GL14.GL_TEXTURE_LOD_BIAS, -1.5f);
         textures.add(texture.getID());
         return texture.getID();
+    }
+
+    //load texture for skybox
+    public int loadCubeMap(String[] textureFiles){
+        //activate and bind texture bank
+        int texID = GL11.glGenTextures();
+        GL13.glActiveTexture(GL13.GL_TEXTURE0);
+        GL11.glBindTexture(GL13.GL_TEXTURE_CUBE_MAP, texID);
+
+        //load all images to opengl
+        for(int i = 0; i < textureFiles.length; i++){
+            TextureData data = TextureLoader.loadTextureData("/com/battleships/gui/res/textures/skybox/" + textureFiles[i] + ".png");
+            GL11.glTexImage2D(GL13.GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL11.GL_RGBA,
+                    data.getWidth(), data.getHeight(), 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, data.getBuffer());
+        }
+        GL11.glTexParameteri(GL13.GL_TEXTURE_CUBE_MAP, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
+        GL11.glTexParameteri(GL13.GL_TEXTURE_CUBE_MAP, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR);
+        textures.add(texID);
+        return texID;
     }
 
     public Entity loadEntityfromOBJ(String objPath, String texturePath){

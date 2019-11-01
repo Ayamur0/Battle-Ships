@@ -1,12 +1,17 @@
 package com.battleships.gui.renderingEngine;
 
 import com.battleships.gui.models.ModelTexture;
+import com.battleships.gui.models.TextureData;
+import de.matthiasmann.twl.utils.PNGDecoder;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.stb.STBImage;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 import java.nio.channels.Channels;
@@ -37,7 +42,7 @@ public class TextureLoader {
 
         //add texture to OpenGL
         int width = w.get();
-        int height = h.get();
+        int height =h.get();
         int id = GL11.glGenTextures();
         GL11.glBindTexture(GL11.GL_TEXTURE_2D, id);
         GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA, width, height, 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, decodedImage);
@@ -47,6 +52,29 @@ public class TextureLoader {
 
         STBImage.stbi_image_free(decodedImage);
         return new ModelTexture(id);
+    }
+
+    static TextureData loadTextureData(String fileName){
+
+        int width = 0;
+        int height = 0;
+        ByteBuffer buffer = null;
+        try {
+            URL resource = TextureLoader.class.getResource(fileName);
+            FileInputStream in = new FileInputStream(new File(resource.toURI()));
+            PNGDecoder decoder = new PNGDecoder(in);
+            width = decoder.getWidth();
+            height = decoder.getHeight();
+            buffer = ByteBuffer.allocateDirect(4 * width * height);
+            decoder.decode(buffer, width * 4, PNGDecoder.Format.RGBA);
+            buffer.flip();
+            in.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.err.println("Tried to load texture " + fileName + ", didn't work");
+            System.exit(-1);
+        }
+        return new TextureData(buffer, width, height);
     }
 
     private static ByteBuffer ioResourceToByteBuffer(InputStream source, int bufferSize) throws IOException {

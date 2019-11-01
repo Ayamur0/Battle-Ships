@@ -15,7 +15,7 @@ public class Camera {
     private static final int RUN_MULTIPLIER = 5;
 
     private float zoom = 0;
-    private float angleAroundField = 0;
+
 
     private Vector3f position = new Vector3f(0,4,0);
     private float pitch, yaw, roll;
@@ -24,9 +24,6 @@ public class Camera {
     private float currentUpwardsSpeed;
 
     private boolean mouseLocked = false;
-    private double lastMousePositionX;
-    private double lastMousePositionY;
-
 
     public GLFWScrollCallback scrollCallback = new GLFWScrollCallback(){
         @Override
