@@ -1,4 +1,4 @@
-#version 150
+#version 400 core
 
 //makes per vertex data
 
@@ -19,6 +19,9 @@ uniform vec3 lightPosition;
 
 uniform float useFakeLighting;
 
+uniform float numberOfRows;
+uniform vec2 offset;
+
 const float density = 0.0035; //density of fog
 const float gradient = 3.0; //how far away objects start getting foggy
 
@@ -27,7 +30,7 @@ void main(){
     vec4 worldPosition = transformationMatrix * vec4(position, 1.0);  //convert vec3 position into vec4 and calculate new position with transfMatrix
     vec4 positionRelativeToCam = viewMatrix * worldPosition;
     gl_Position = projectionMatrix * positionRelativeToCam;  //convert position of model in 3D space to a displayable form on a 2D screen
-    pass_textureCoords = textureCoords; //pass textureCoords to fragment shader
+    pass_textureCoords = (textureCoords/numberOfRows) + offset; //pass textureCoords to fragment shader after calculating right spot if texture atlas is used
 
     vec3 actualNormal = normal; //if fake lighting is used make all normals point upwards
     if(useFakeLighting > 0.5){

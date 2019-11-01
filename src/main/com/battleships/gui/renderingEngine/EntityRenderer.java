@@ -51,6 +51,7 @@ public class EntityRenderer {
         GL20.glEnableVertexAttribArray(1);//enable vao at index 1 (textureCoords)
         GL20.glEnableVertexAttribArray(2);//enable vao at index 2 (normals)
         ModelTexture texture = texturedModel.getTexture();
+        shader.loadNumberOfRows(texture.getNumberOfRows());
         if(texture.isHasTransparency()){ //Render backside of faces for transparent models
             MasterRenderer.disableCulling();
         }
@@ -73,6 +74,7 @@ public class EntityRenderer {
         //create transfMatrix with current position rotation and scale of entity
         Matrix4f transformationMatrix = Maths.createTransformationMatrix(entity.getPosition(), entity.getRotation(), entity.getScale());
         shader.loadTransformationMatrix(transformationMatrix); //pass transfMatrix to shader
+        shader.loadOffset(entity.getTextureXOffset(), entity.getTextureYOffset());
     }
 
 }

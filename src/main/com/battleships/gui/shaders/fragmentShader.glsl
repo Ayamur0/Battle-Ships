@@ -1,4 +1,4 @@
-#version 150
+#version 400 core
 
 //converts per vertex data to per pixel data for screen to display
 

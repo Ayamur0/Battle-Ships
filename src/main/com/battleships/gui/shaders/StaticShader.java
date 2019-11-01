@@ -4,6 +4,7 @@ import com.battleships.gui.entities.Camera;
 import com.battleships.gui.entities.Light;
 import com.battleships.gui.toolbox.Maths;
 import org.joml.Matrix4f;
+import org.joml.Vector2f;
 import org.joml.Vector3f;
 
 import java.util.HashMap;
@@ -16,15 +17,6 @@ public class StaticShader extends ShaderProgram {
     private static final String VERTEX_FILE = "/com/battleships/gui/shaders/vertexShader.glsl";
     private static final String FRAGMENT_FILE = "/com/battleships/gui/shaders/fragmentShader.glsl";
 
-    private int location_transformationMatrix;
-    private int location_projectionMatrix;
-    private int location_viewMatrix;
-    private int location_lightPosition;
-    private int location_lightColor;
-    private int location_shineDamper;
-    private int location_reflectivity;
-    private int location_useFakeLighting;
-    private int location_skyColor;
     private Map<String, Integer> uniformLocations;
 
 
@@ -42,21 +34,22 @@ public class StaticShader extends ShaderProgram {
     @Override
     protected void getAllUniformLocations() {
         String[] uniformNames = {"transformationMatrix", "projectionMatrix", "viewMatrix", "lightPosition", "lightColor", "shineDamper",
-                "reflectivity","useFakeLighting", "skyColor"};
+                "reflectivity","useFakeLighting", "skyColor", "numberOfRows", "offset"};
         uniformLocations = new HashMap<>();
-//        location_transformationMatrix = super.getUniformLocation("transformationMatrix");
-//        location_projectionMatrix = super.getUniformLocation("projectionMatrix");
-//        location_viewMatrix = super.getUniformLocation("viewMatrix");
-//        location_lightPosition = super.getUniformLocation("lightPosition");
-//        location_lightColor = super.getUniformLocation("lightColor");
-//        location_shineDamper = super.getUniformLocation("shineDamper");
-//        location_reflectivity = super.getUniformLocation("reflectivity");
-//        location_useFakeLighting = super.getUniformLocation("useFakeLighting");
-//        location_skyColor = super.getUniformLocation("skyColor");
+
         for(String s : uniformNames){
             uniformLocations.put(s, super.getUniformLocation(s));
         }
     }
+
+    public void loadNumberOfRows(int numberOfRows){
+        super.loadFloat(uniformLocations.get("numberOfRows"), numberOfRows);
+    }
+
+    public void loadOffset(float x, float y){
+        super.load2DVector(uniformLocations.get("offset"), new Vector2f(x, y));
+    }
+
     public void loadSkyColor(float r, float g, float b){
         super.loadVector(uniformLocations.get("skyColor"), new Vector3f(r,g,b));
     }

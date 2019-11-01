@@ -81,7 +81,8 @@ public class SchiffeVersenken {
         Terrain terrain = new Terrain(0,-1, loader, texturePack, blendMap, "HeightMap.jpg");
 //        Terrain terrain2 = new Terrain(-1,-1, loader, texturePack, blendMap, "HeightMap.jpg");
 
-        TexturedModel fern = new TexturedModel(OBJLoader.loadObjModel("fern"), new ModelTexture(loader.loadTexture("fern.tga")));
+        TexturedModel fern = new TexturedModel(OBJLoader.loadObjModel("fern"), new ModelTexture(loader.loadTexture("FernAtlas.tga")));
+        fern.getTexture().setNumberOfRows(2);
         fern.getTexture().setHasTransparency(true);
         fern.getTexture().setUseFakeLighting(true);
 
@@ -90,7 +91,7 @@ public class SchiffeVersenken {
         for(int i = 0; i < 500; i++){
             float x = random.nextFloat() * 800 - 400;
             float z = random.nextFloat() * -600;
-            ferns.add(new Entity(fern, new Vector3f(x, terrain.getHeightOfTerrain(x,z),z ), new Vector3f(), 0.6f));
+            ferns.add(new Entity(fern, random.nextInt(4), new Vector3f(x, terrain.getHeightOfTerrain(x,z),z ), new Vector3f(), 0.6f));
         }
 
         Camera camera = new Camera();

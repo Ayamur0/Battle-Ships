@@ -9,11 +9,33 @@ public class Entity {
     private Vector3f position, rotation;
     private float scale;
 
+    private int textureIndex = 0;
+
     public Entity(TexturedModel model, Vector3f position, Vector3f rotation, float scale) {
         this.model = model;
         this.position = position;
         this.rotation = rotation;
         this.scale = scale;
+    }
+
+    public Entity(TexturedModel model, int index, Vector3f position, Vector3f rotation, float scale) {
+        this.textureIndex = index;
+        this.model = model;
+        this.position = position;
+        this.rotation = rotation;
+        this.scale = scale;
+    }
+
+    //factor that textureCoord x needs to be multiplied with to be on the right coordinate in a texture atlas
+    public float getTextureXOffset(){
+        int column = textureIndex % model.getTexture().getNumberOfRows();
+        return (float)column / (float) model.getTexture().getNumberOfRows();
+    }
+
+    //factor that textureCoord y needs to be multiplied with to be on the right coordinate in a texture atlas
+    public float getTextureYOffset(){
+        int row = textureIndex / model.getTexture().getNumberOfRows();
+        return (float)row/(float)model.getTexture().getNumberOfRows();
     }
 
     public void increasePosition(float dx, float dy, float dz){
