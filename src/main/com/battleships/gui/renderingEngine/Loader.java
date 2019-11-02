@@ -9,10 +9,12 @@ import org.joml.Vector3f;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.*;
 
+import java.io.File;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class Loader {
 
@@ -36,6 +38,28 @@ public class Loader {
         this.storeDataInAttributeList(0, dimensions, positions);
         unbindVAO();
         return new RawModel(vaoID, positions.length / dimensions);
+    }
+
+    public int loadToVAO(float[] positions, float[] textureCoords){
+        int vaoID = createVAO();
+        storeDataInAttributeList(0,2, positions);
+        storeDataInAttributeList(1,2, textureCoords);
+        unbindVAO();
+        return vaoID;
+    }
+
+    public File loadFontFile(String filename){
+//        return new File(Objects.requireNonNull(getClass().getClassLoader().getResource("/com/battleships/gui/res/textures/font/" + filename + ".fnt")).getFile());
+        return new File(Loader.class.getResource("/com/battleships/gui/res/textures/font/" + filename + ".fnt").getFile());
+    }
+
+    public int loadFontTexture(String fileName){
+        ModelTexture texture = TextureLoader.loadPNGTexture(fileName);
+        GL30.glGenerateMipmap(GL11.GL_TEXTURE_2D);
+        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR_MIPMAP_LINEAR);
+        GL11.glTexParameterf(GL11.GL_TEXTURE_2D, GL14.GL_TEXTURE_LOD_BIAS, 0);
+        textures.add(texture.getID());
+        return texture.getID();
     }
 
     public int loadTexture(String fileName){

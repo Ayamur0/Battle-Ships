@@ -5,6 +5,8 @@ import com.battleships.gui.models.TextureData;
 import de.matthiasmann.twl.utils.PNGDecoder;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL14;
+import org.lwjgl.opengl.GL30;
 import org.lwjgl.stb.STBImage;
 
 import java.io.File;
@@ -75,6 +77,15 @@ public class TextureLoader {
             System.exit(-1);
         }
         return new TextureData(buffer, width, height);
+    }
+
+    public static ModelTexture loadPNGTexture(String fileName){
+        TextureData data = loadTextureData("/com/battleships/gui/res/textures/font/" + fileName + ".png");
+        int id = GL11.glGenTextures();
+        GL11.glBindTexture(GL11.GL_TEXTURE_2D, id);
+        GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA, data.getWidth(), data.getHeight(), 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, data.getBuffer());
+
+        return new ModelTexture(id);
     }
 
     private static ByteBuffer ioResourceToByteBuffer(InputStream source, int bufferSize) throws IOException {
