@@ -9,7 +9,7 @@ import org.lwjgl.opengl.GL11;
 public class WindowManager {
 
     private static long window;
-    private static int WIDTH = 800, HEIGHT = 600; //get Width + Height from Settings
+    private static int WIDTH = 1280, HEIGHT = 720; //get Width + Height from Settings
     private final int StandardWIDTH = 800, StandardHEIGHT = 600; //To reset Width + Height to standard
 
     private static double lastFrame;

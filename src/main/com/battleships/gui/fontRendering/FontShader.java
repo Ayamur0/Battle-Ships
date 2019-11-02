@@ -11,6 +11,10 @@ public class FontShader extends ShaderProgram {
 
     private int location_color;
     private int location_translation;
+    private int location_borderWidth;
+    private int location_borderEdge;
+    private int location_outlineColor;
+    private int location_offset;
 
     /**
      * Load shader files used for font shader program
@@ -26,6 +30,10 @@ public class FontShader extends ShaderProgram {
     protected void getAllUniformLocations() {
         location_color = super.getUniformLocation("color");
         location_translation = super.getUniformLocation("translation");
+        location_borderWidth = super.getUniformLocation("borderWidth");
+        location_borderEdge = super.getUniformLocation("borderEdge");
+        location_outlineColor = super.getUniformLocation("outlineColor");
+        location_offset = super.getUniformLocation("offset");
     }
 
     /**
@@ -54,5 +62,33 @@ public class FontShader extends ShaderProgram {
         super.load2DVector(location_translation, translation);
     }
 
+    /**
+     * Upload width for the outline of the font to the shader code
+     * @param width - width of the character outline, 0 for no outline
+     */
+    protected void loadBorderWidth(float width){
+        super.loadFloat(location_borderWidth, width);
+    }
+
+    /**
+     * Upload size of the edge of the font outline to the shader code
+     * @param edge - size of the smooth transition at the edge of the character outline, to prevent sharp edges
+     *             keep at 0.1 when no border is used
+     */
+    protected void loadBorderEdge(float edge){
+        super.loadFloat(location_borderEdge, edge);
+    }
+
+    /**
+     * Upload color of the font outline to the shader code
+     * @param color - color of the font outline in r,g,b with values between 0 and 1
+     */
+    protected void loadOutlineColor(Vector3f color){
+        super.loadVector(location_outlineColor, color);
+    }
+
+    protected void loadOffset(Vector2f offset){
+        super.load2DVector(location_offset, offset);
+    }
 
 }

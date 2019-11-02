@@ -57,9 +57,15 @@ public class SchiffeVersenken {
 
         TextMaster.init(loader);
 
-        FontType font = new FontType(loader.loadFontTexture("Pixel"), loader.loadFontFile("Pixel"));
-        GUIText text = new GUIText("Test", 1, font, new Vector2f(0.5f,0.5f), 1f, false);
+        FontType font = new FontType(loader.loadFontTexture("PixelDistance"), "PixelDistance");
+        GUIText text = new GUIText("Testing text rendering!", 1, font, new Vector2f(0f,0.4f), 1f, true, 0.0f, 0.1f, new Vector3f(1.0f,0.0f,0.0f), new Vector2f());
         text.setColor(1,1,1);
+        GUIText text2 = new GUIText("Text with outline!", 1, font, new Vector2f(0f,0.5f), 1f, true, 0.7f, 0.1f, new Vector3f(1.0f,0.0f,0.0f), new Vector2f());
+        text2.setColor(1,1,1);
+        GUIText text3 = new GUIText("Glowing Text!", 1, font, new Vector2f(0f,0.6f), 1f, true, 0.5f, 0.4f, new Vector3f(1.0f,0.0f,0.0f), new Vector2f());
+        text3.setColor(1,1,1);
+        GUIText text4 = new GUIText("Text with shadow!", 1, font, new Vector2f(0f,0.7f), 1f, true, 0.7f, 0.1f, new Vector3f(0.0f,0.0f,0.0f), new Vector2f(-0.006f, -0.006f));
+        text4.setColor(1,1,1);
 
         // *******************Camera initialization*******************
 

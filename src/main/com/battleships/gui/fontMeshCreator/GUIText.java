@@ -20,6 +20,10 @@ public class GUIText {
     private FontType font;
 
     private boolean centerText = false;
+    private float outlineWidth;
+    private float outlineEdge;
+    private Vector3f outlineColor;
+    private Vector2f outlineOffset;
 
     /**
      * Creates a new text, loads the text's quads into a VAO, and adds the text
@@ -39,15 +43,27 @@ public class GUIText {
      *            If a word in a line exceeds this limit the word is put into a new line
      * @param centered
      *            - whether the text should be centered or not
+     * @param outlineWidth
+     *            - width of the outline of the text, 0 for no outline
+     * @param outlineEdge
+     *            - size of the smooth transition edge around the outline
+     * @param outlineColor
+     *            - color of the outline
+     * @param outlineOffset
+     *            - offset of the outline to create a shadow effect
      */
     public GUIText(String text, float fontSize, FontType font, Vector2f position, float maxLineLength,
-                   boolean centered) {
+                   boolean centered, float outlineWidth, float outlineEdge, Vector3f outlineColor, Vector2f outlineOffset) {
         this.textString = text;
         this.fontSize = fontSize;
         this.font = font;
         this.position = position;
         this.lineMaxSize = maxLineLength;
         this.centerText = centered;
+        this.outlineWidth = outlineWidth;
+        this.outlineEdge = outlineEdge;
+        this.outlineColor = outlineColor;
+        this.outlineOffset = outlineOffset;
         TextMaster.loadText(this);
     }
 
@@ -166,4 +182,35 @@ public class GUIText {
         return textString;
     }
 
+    /**
+     *
+     * @return The width of the outline
+     */
+    public float getOutlineWidth() {
+        return outlineWidth;
+    }
+
+    /**
+     *
+     * @return The size of the edge around the outline
+     */
+    public float getOutlineEdge() {
+        return outlineEdge;
+    }
+
+    /**
+     *
+     * @return The color of the outline as rgb values between 0 and 1
+     */
+    public Vector3f getOutlineColor() {
+        return outlineColor;
+    }
+
+    /**
+     *
+     * @return The offset of the outline for this text
+     */
+    public Vector2f getOutlineOffset() {
+        return outlineOffset;
+    }
 }

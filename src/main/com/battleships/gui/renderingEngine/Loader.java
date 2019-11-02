@@ -49,7 +49,6 @@ public class Loader {
     }
 
     public File loadFontFile(String filename){
-//        return new File(Objects.requireNonNull(getClass().getClassLoader().getResource("/com/battleships/gui/res/textures/font/" + filename + ".fnt")).getFile());
         return new File(Loader.class.getResource("/com/battleships/gui/res/textures/font/" + filename + ".fnt").getFile());
     }
 

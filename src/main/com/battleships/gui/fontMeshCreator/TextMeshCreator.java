@@ -15,7 +15,7 @@ public class TextMeshCreator {
      * @param metaFile - {@link MetaFile} containing all the information about the font and it's characters
      */
 
-    protected TextMeshCreator(File metaFile) {
+    protected TextMeshCreator(String metaFile) {
         metaData = new MetaFile(metaFile);
     }
 
