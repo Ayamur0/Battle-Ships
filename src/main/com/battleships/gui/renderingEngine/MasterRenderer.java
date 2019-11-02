@@ -138,4 +138,7 @@ public class MasterRenderer {
 //        projectionMatrix.setPerspective((float)Math.toRadians(FOV), 800f / 600f, NEAR_PLANE, FAR_PLANE);
     }
 
+    public Matrix4f getProjectionMatrix() {
+        return projectionMatrix;
+    }
 }

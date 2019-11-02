@@ -130,7 +130,14 @@ public class Camera {
             double deltaX = newX - WindowManager.getWIDTH() / 2f;
             double deltaY = newY - WindowManager.getHEIGHT() / 2f;
 
+
             pitch += deltaY * 0.1f;
+            //prevent camera looping around x axis
+            if(pitch > 90)
+                pitch = 90;
+            if(pitch < -90)
+                pitch = -90;
+
             yaw += deltaX * 0.1f;
 
             GLFW.glfwSetCursorPos(window, WindowManager.getWIDTH() / 2f, WindowManager.getHEIGHT() / 2f);

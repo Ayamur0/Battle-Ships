@@ -15,6 +15,7 @@ import com.battleships.gui.renderingEngine.OBJLoader;
 import com.battleships.gui.terrains.Terrain;
 import com.battleships.gui.terrains.TerrainTexture;
 import com.battleships.gui.terrains.TerrainTexturePack;
+import com.battleships.gui.toolbox.MousePicker;
 import com.battleships.gui.window.WindowManager;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
@@ -83,8 +84,12 @@ public class SchiffeVersenken {
         guiClickCallback.addClickableGui(gui);
         WindowManager.setCallbacks(camera, guiClickCallback);
 
+        MousePicker picker = new MousePicker(renderer.getProjectionMatrix(), camera);
+
         while (!GLFW.glfwWindowShouldClose(window)){
             camera.move(window, terrain);
+            picker.update();
+            System.out.println("[X: " + picker.getCurrentRay().x + ", Y: " + picker.getCurrentRay().y + ", Z: " + picker.getCurrentRay().z + "]");
 
             for (Entity e : ferns)
                 renderer.processEntity(e);
