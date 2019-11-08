@@ -11,6 +11,9 @@ import com.battleships.gui.guis.GuiRenderer;
 import com.battleships.gui.guis.GuiTexture;
 import com.battleships.gui.models.ModelTexture;
 import com.battleships.gui.models.TexturedModel;
+import com.battleships.gui.particles.Particle;
+import com.battleships.gui.particles.ParticleMaster;
+import com.battleships.gui.particles.ParticleSystem;
 import com.battleships.gui.renderingEngine.Loader;
 import com.battleships.gui.renderingEngine.MasterRenderer;
 import com.battleships.gui.renderingEngine.OBJLoader;
@@ -22,6 +25,8 @@ import com.battleships.gui.window.WindowManager;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.lwjgl.glfw.GLFW;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL13;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -109,6 +114,10 @@ public class SchiffeVersenken {
         Entity ship = loader.loadEntityfromOBJ("test", "4ShipTex.tga", 10, 1);
         ship.setPosition(new Vector3f(0,0,-40));
 
+        // *******************Particle initialization*******************
+        ParticleMaster.init(loader, renderer.getProjectionMatrix());
+        ParticleSystem system = new ParticleSystem(50, 25, 0.3f, 4);
+
         // *******************Callbacks initialization*******************
 
         WindowManager.setCallbacks(camera, guiClickCallback);
@@ -123,25 +132,31 @@ public class SchiffeVersenken {
             camera.move(window, terrain);
             picker.update();
 
+//            system.generateParticles(new Vector3f(camera.getPosition()));
+            new Particle(new Vector3f(camera.getPosition().x , camera.getPosition().y, camera.getPosition().z), new Vector3f(0, 30, 0), 1 ,4 ,0 ,1);
+            ParticleMaster.update();
+
+            ship.getRotation().y += 0.1f;
+
             for (Entity e : ferns)
                 renderer.processEntity(e);
             renderer.processEntity(ship);
             renderer.processTerrain(terrain);
 //            renderer.processTerrain(terrain2);
 
-
             renderer.render(light,camera);
 
+            ParticleMaster.renderParticles(camera);
+
             guiRenderer.render(guis);
-
-
-            ship.getRotation().y += 0.1f;
             TextMaster.render();
+
             WindowManager.updateWindow();
         }
 
         // *******************Clean up*******************
 
+        ParticleMaster.cleanUp();
         TextMaster.cleanUp();
         guiRenderer.cleanUp();
         renderer.cleanUp();
