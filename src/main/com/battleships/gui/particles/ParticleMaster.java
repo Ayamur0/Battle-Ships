@@ -36,7 +36,8 @@ public class ParticleMaster {
     public static void update(Camera camera){
         Iterator<Map.Entry<ParticleTexture, List<Particle>>> mapIterator = particles.entrySet().iterator();
         while (mapIterator.hasNext()){
-            List<Particle> list = mapIterator.next().getValue();
+            Map.Entry<ParticleTexture, List<Particle>> entry = mapIterator.next();
+            List<Particle> list = entry.getValue();
             Iterator<Particle> iterator = list.iterator();
             while (iterator.hasNext()){
                 Particle p = iterator.next();
@@ -48,7 +49,8 @@ public class ParticleMaster {
                     }
                 }
             }
-            InsertionSort.sortHighToLow(list);
+            if(!entry.getKey().isAdditive())
+                InsertionSort.sortHighToLow(list);
         }
     }
 
@@ -58,7 +60,7 @@ public class ParticleMaster {
      * @param mode - mode to use for rendering 1 = add color of particles, 771 = render particles over each other
      */
     public static void renderParticles(Camera camera, int mode){
-        renderer.render(particles, camera, mode);
+        renderer.render(particles, camera);
     }
 
     public static void cleanUp(){
@@ -72,11 +74,7 @@ public class ParticleMaster {
      * @param particle - Particle to add
      */
     public static void addParticle(Particle particle){
-        List<Particle> list = particles.get(particle.getTexture());
-        if(list == null){
-            list = new ArrayList<>();
-            particles.put(particle.getTexture(), list);
-        }
+        List<Particle> list = particles.computeIfAbsent(particle.getTexture(), k -> new ArrayList<>());
         list.add(particle);
     }
 }

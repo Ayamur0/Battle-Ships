@@ -9,12 +9,8 @@ public class ParticleShader extends ShaderProgram {
     private static final String VERTEX_FILE = "/com/battleships/gui/particles/particleVertexShader.glsl";
     private static final String FRAGMENT_FILE = "/com/battleships/gui/particles/particleFragmentShader.glsl";
 
-    private int location_modelViewMatrix;
+    private int location_numberOfRows;
     private int location_projectionMatrix;
-    private int location_texOffset1;
-    private int location_texOffset2;
-    private int location_texCoordInfo;
-
 
     public ParticleShader(){
         super(VERTEX_FILE, FRAGMENT_FILE);
@@ -27,11 +23,8 @@ public class ParticleShader extends ShaderProgram {
 
     @Override
     protected void getAllUniformLocations() {
-        location_modelViewMatrix = super.getUniformLocation("modelViewMatrix");
         location_projectionMatrix = super.getUniformLocation("projectionMatrix");
-        location_texOffset1 = super.getUniformLocation("texOffset1");
-        location_texOffset2 = super.getUniformLocation("texOffset2");
-        location_texCoordInfo = super.getUniformLocation("texCoordInfo");
+        location_numberOfRows = super.getUniformLocation("numberOfRows");
     }
 
     /**
@@ -41,6 +34,9 @@ public class ParticleShader extends ShaderProgram {
     @Override
     protected void bindAttributes() {
         super.bindAttribute(0, "position");
+        super.bindAttribute(1, "modelViewMatrix");
+        super.bindAttribute(5, "texOffsets");
+        super.bindAttribute(6, "blendFactor");
     }
 
     /**
@@ -50,19 +46,14 @@ public class ParticleShader extends ShaderProgram {
      * @param numRows - number of rows in the textureAtlas
      * @param blend - how much to blend in the next texture into the current one
      */
-    protected void loadTextureCoordInfo(Vector2f offset1, Vector2f offset2, float numRows, float blend){
-        super.load2DVector(location_texOffset1, offset1);
-        super.load2DVector(location_texOffset2, offset2);
-        super.load2DVector(location_texCoordInfo, new Vector2f(numRows, blend));
-    }
 
     /**
-     * Load a matrix as viewMatrix for the shader.
-     * @param modelView - Matrix to be loaded, is used to convert world space to eye space
+     * Load number of rows to shader.
+     * @param numberOfRows - number of rows of the current texture atlas
      */
 
-    protected void loadModelViewMatrix(Matrix4f modelView){
-        super.loadMatrix(location_modelViewMatrix, modelView);
+    protected void loadNumberOfRows(float numberOfRows){
+        super.loadFloat(location_numberOfRows, numberOfRows);
     }
 
     /**

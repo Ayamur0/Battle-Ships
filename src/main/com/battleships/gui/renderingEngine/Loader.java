@@ -22,6 +22,64 @@ public class Loader {
     private List<Integer> vbos = new ArrayList<>();
     private List<Integer> textures = new ArrayList<>();
 
+    /**
+     * Create empty vbo.
+     * Size is corresponding to amount of floats that should be saved in vbo.
+     * @param floatCount - the amount of float values that should be later stored int the vbo
+     * @return - the id of the created vbo
+     */
+    public int createEmptyVbo(int floatCount){
+        int vbo = GL15.glGenBuffers();
+        vbos.add(vbo);
+        GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vbo);
+        GL15.glBufferData(GL15.GL_ARRAY_BUFFER, floatCount * 4, GL15.GL_STREAM_DRAW);
+        GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0);
+        return vbo;
+    }
+
+    /**
+     * Adds data to a vbo, all data that was in that vbo before is lost.
+     * @param vbo - vbo the data should be added to
+     * @param data - the data to add
+     * @param buffer - a float buffer needed to write data into vbo
+     */
+    public void updateVbo(int vbo, float[] data, FloatBuffer buffer){
+        buffer.clear();
+        //add data to float buffer
+        buffer.put(data);
+        //flip buffer to read mode
+        buffer.flip();
+        //bind vbo to write to
+        GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vbo);
+        //add data to vbo
+        GL15.glBufferData(GL15.GL_ARRAY_BUFFER, buffer.capacity(), GL15.GL_STREAM_DRAW);
+        GL15.glBufferSubData(GL15.GL_ARRAY_BUFFER, 0, buffer);
+        //unbind vbo
+        GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0);
+    }
+
+    /**
+     * Add a instance float attribute to a vbo with divisor 1 so it changes each time the vbo it's stored in gets used.
+     * @param vao - the vao that contains the vbo
+     * @param vbo - the vbo the attribute should be added to
+     * @param attribute - the attribute id that should be added
+     * @param dataSize - the size of each data in the attribute
+     * @param instancedDataLength - length of the data in the attribute (amount of float values)
+     * @param offset - offset at which this attribute begins for each instance in the vbo
+     */
+    public void addInstancedAttribute(int vao, int vbo, int attribute, int dataSize, int instancedDataLength, int offset){
+        //bin vao and vbo
+        GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vbo);
+        GL30.glBindVertexArray(vao);
+        //create pointer for attribute to add
+        GL20.glVertexAttribPointer(attribute, dataSize, GL15.GL_FLOAT, false, instancedDataLength * 4, offset * 4);
+        //set attribute as instance attribute with divisor 1, so it changes each time the vao gets rendered, to the next attribute
+        GL33.glVertexAttribDivisor(attribute, 1);
+        //unbind vao and vbo
+        GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0);
+        GL30.glBindVertexArray(0);
+    }
+
     public RawModel loadToVAO(float[] positions, float[] textureCoords, float[] normals, int[] indices){
         int vaoID = createVAO();
         bindIndicesBuffer(indices);

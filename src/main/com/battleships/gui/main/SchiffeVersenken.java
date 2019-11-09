@@ -112,7 +112,7 @@ public class SchiffeVersenken {
 
         // *******************Particle initialization*******************
         ParticleMaster.init(loader, renderer.getProjectionMatrix());
-        ParticleTexture fire = new ParticleTexture(loader.loadTexture("particles/fire.png"), 8);
+        ParticleTexture fire = new ParticleTexture(loader.loadTexture("particles/fire.png"), 8, true);
         ParticleSystemComplex system = new ParticleSystemComplex(fire,20, 3.5f, -0.05f, 2f, 17);
         system.setLifeError(0.3f);
         system.setScaleError(0.3f);
