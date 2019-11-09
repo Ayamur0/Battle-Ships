@@ -80,7 +80,7 @@ public class TextureLoader {
     }
 
     public static ModelTexture loadPNGTexture(String fileName){
-        TextureData data = loadTextureData("/com/battleships/gui/res/textures/font/" + fileName + ".png");
+        TextureData data = loadTextureData("/com/battleships/gui/res/textures/" + fileName );
         int id = GL11.glGenTextures();
         GL11.glBindTexture(GL11.GL_TEXTURE_2D, id);
         GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA, data.getWidth(), data.getHeight(), 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, data.getBuffer());

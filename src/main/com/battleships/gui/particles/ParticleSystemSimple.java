@@ -3,13 +3,16 @@ package com.battleships.gui.particles;
 import com.battleships.gui.window.WindowManager;
 import org.joml.Vector3f;
 
-public class ParticleSystem {
+public class ParticleSystemSimple {
     private float pps;
     private float speed;
     private float gravityComplient;
     private float lifeLength;
 
-    public ParticleSystem(float pps, float speed, float gravityComplient, float lifeLength) {
+    private ParticleTexture texture;
+
+    public ParticleSystemSimple(ParticleTexture texture, float pps, float speed, float gravityComplient, float lifeLength) {
+        this.texture = texture;
         this.pps = pps;
         this.speed = speed;
         this.gravityComplient = gravityComplient;
@@ -35,6 +38,6 @@ public class ParticleSystem {
         Vector3f velocity = new Vector3f(dirX, 1, dirZ);
         velocity.normalize();
         velocity.mul(speed);
-        new Particle(new Vector3f(center), velocity, gravityComplient, lifeLength, 0, 1);
+        new Particle(texture, new Vector3f(center), velocity, gravityComplient, lifeLength, 0, 1);
     }
 }

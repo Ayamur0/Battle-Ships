@@ -2,6 +2,7 @@ package com.battleships.gui.particles;
 
 import com.battleships.gui.shaders.ShaderProgram;
 import org.joml.Matrix4f;
+import org.joml.Vector2f;
 
 public class ParticleShader extends ShaderProgram {
 
@@ -10,6 +11,9 @@ public class ParticleShader extends ShaderProgram {
 
     private int location_modelViewMatrix;
     private int location_projectionMatrix;
+    private int location_texOffset1;
+    private int location_texOffset2;
+    private int location_texCoordInfo;
 
 
     public ParticleShader(){
@@ -25,6 +29,9 @@ public class ParticleShader extends ShaderProgram {
     protected void getAllUniformLocations() {
         location_modelViewMatrix = super.getUniformLocation("modelViewMatrix");
         location_projectionMatrix = super.getUniformLocation("projectionMatrix");
+        location_texOffset1 = super.getUniformLocation("texOffset1");
+        location_texOffset2 = super.getUniformLocation("texOffset2");
+        location_texCoordInfo = super.getUniformLocation("texCoordInfo");
     }
 
     /**
@@ -34,6 +41,19 @@ public class ParticleShader extends ShaderProgram {
     @Override
     protected void bindAttributes() {
         super.bindAttribute(0, "position");
+    }
+
+    /**
+     * Load info for how to use the textureAtlas for the current particle to the shader.
+     * @param offset1 - offset in textureAtlas for the current texture
+     * @param offset2 - offset in textureAtlas for the next texture (needed to blend)
+     * @param numRows - number of rows in the textureAtlas
+     * @param blend - how much to blend in the next texture into the current one
+     */
+    protected void loadTextureCoordInfo(Vector2f offset1, Vector2f offset2, float numRows, float blend){
+        super.load2DVector(location_texOffset1, offset1);
+        super.load2DVector(location_texOffset2, offset2);
+        super.load2DVector(location_texCoordInfo, new Vector2f(numRows, blend));
     }
 
     /**

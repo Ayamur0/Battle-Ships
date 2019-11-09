@@ -62,7 +62,13 @@ public class Loader {
     }
 
     public int loadTexture(String fileName){
-        ModelTexture texture = TextureLoader.loadTexture(fileName);
+        ModelTexture texture;
+
+        if(fileName.contains("png"))
+            texture = TextureLoader.loadPNGTexture(fileName);
+        else
+            texture = TextureLoader.loadTexture(fileName);
+
         //use mipmap to render textures that are further away in lower resolution
         GL30.glGenerateMipmap(GL11.GL_TEXTURE_2D);
         GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR_MIPMAP_LINEAR);

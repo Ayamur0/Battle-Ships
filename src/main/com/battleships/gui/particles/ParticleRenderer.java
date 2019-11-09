@@ -7,10 +7,12 @@ import com.battleships.gui.toolbox.Maths;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
 
 import java.util.List;
+import java.util.Map;
 
 public class ParticleRenderer {
 
@@ -35,15 +37,24 @@ public class ParticleRenderer {
 
     /**
      * Render particles to the screen.
-     * @param particles - List of particles to be rendered on screen
+     * Loop through hashMap to render all particles with the same texture
+     * together, so texture only needs to be changed once for each particle group, for better performance.
+     * Bind texture and loop through list of particles with that texture and render them.
+     * @param particles - HashMap of textures and their corresponding list of particles to be rendered on screen
      * @param camera - camera that displays particles
+     * @param mode - mode to use for rendering 1 = add color of particles, 771 = render particles over each other
      */
-    protected void render(List<Particle> particles, Camera camera){
+    protected void render(Map<ParticleTexture, List<Particle>> particles, Camera camera, int mode){
         Matrix4f viewMatrix = Maths.createViewMatrix(camera);
-        prepare();
-        for(Particle particle : particles){
-            updateModelViewMatrix(particle.getPosition(), particle.getRotation(), particle.getScale(), viewMatrix);
-            GL11.glDrawArrays(GL11.GL_TRIANGLE_STRIP, 0, quad.getVertexCount());
+        prepare(mode);
+        for(ParticleTexture texture : particles.keySet()) {
+            GL13.glActiveTexture(GL13.GL_TEXTURE0);
+            GL11.glBindTexture(GL11.GL_TEXTURE_2D, texture.getTextureID());
+            for (Particle particle : particles.get(texture)) {
+                updateModelViewMatrix(particle.getPosition(), particle.getRotation(), particle.getScale(), viewMatrix);
+                shader.loadTextureCoordInfo(particle.getTexOffset1(), particle.getTexOffset2(), texture.getNumberOfRows(), particle.getBlend());
+                GL11.glDrawArrays(GL11.GL_TRIANGLE_STRIP, 0, quad.getVertexCount());
+            }
         }
         finishRendering();
     }
@@ -70,32 +81,24 @@ public class ParticleRenderer {
         //0 0 1
         //which means no rotation because particle rotation cancels out camera rotation, so particle is always facing camera
         viewMatrix.transpose3x3(modelMatrix);
-//        modelMatrix._m00(viewMatrix.m00());
-//        modelMatrix._m01(viewMatrix.m10());
-//        modelMatrix._m02(viewMatrix.m20());
-//        modelMatrix._m10(viewMatrix.m01());
-//        modelMatrix._m11(viewMatrix.m11());
-//        modelMatrix._m12(viewMatrix.m21());
-//        modelMatrix._m20(viewMatrix.m02());
-//        modelMatrix._m21(viewMatrix.m12());
-//        modelMatrix._m22(viewMatrix.m22());
-//        modelMatrix.rotationZ(float)Math.toRadians(rotation), new Vector3f(0, 0, 1)); //TODO Z Rotation not working, is resetting x and y rotation
         modelMatrix.scale(new Vector3f(scale, scale, scale));
         Matrix4f modelViewMatrix = new Matrix4f();
         viewMatrix.mul(modelMatrix, modelViewMatrix);
+        modelViewMatrix.rotate((float)Math.toRadians(rotation), new Vector3f(0, 0, 1));
         shader.loadModelViewMatrix(modelViewMatrix);
     }
 
     /**
      * Bind and enable vao of quad and position vbo.
      * Prepare OpenGl for rendering 2D particles.
+     * @param mode - mode to use for rendering 1 = add color of particles, 771 = render particles over each other
      */
-    private void prepare(){
+    private void prepare(int mode){
         shader.start();
         GL30.glBindVertexArray(quad.getVaoID());
         GL20.glEnableVertexAttribArray(0);
         GL11.glEnable(GL11.GL_BLEND);
-        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, mode);
         //stop particles from being rendered to depth buffer
         GL11.glDepthMask(false);
     }

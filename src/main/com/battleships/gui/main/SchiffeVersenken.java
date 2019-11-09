@@ -11,9 +11,7 @@ import com.battleships.gui.guis.GuiRenderer;
 import com.battleships.gui.guis.GuiTexture;
 import com.battleships.gui.models.ModelTexture;
 import com.battleships.gui.models.TexturedModel;
-import com.battleships.gui.particles.Particle;
-import com.battleships.gui.particles.ParticleMaster;
-import com.battleships.gui.particles.ParticleSystem;
+import com.battleships.gui.particles.*;
 import com.battleships.gui.renderingEngine.Loader;
 import com.battleships.gui.renderingEngine.MasterRenderer;
 import com.battleships.gui.renderingEngine.OBJLoader;
@@ -25,8 +23,6 @@ import com.battleships.gui.window.WindowManager;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.lwjgl.glfw.GLFW;
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL13;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -62,7 +58,7 @@ public class SchiffeVersenken {
 
         TextMaster.init(loader);
 
-        FontType font = new FontType(loader.loadFontTexture("PixelDistance"), "PixelDistance");
+        FontType font = new FontType(loader.loadFontTexture("font/PixelDistance.png"), "PixelDistance");
         GUIText text = new GUIText("Testing text rendering!", 1, font, new Vector2f(0f,0.4f), 1f, true, 0.0f, 0.1f, new Vector3f(1.0f,0.0f,0.0f), new Vector2f());
         text.setColor(1,1,1);
         GUIText text2 = new GUIText("Text with outline!", 1, font, new Vector2f(0f,0.5f), 1f, true, 0.7f, 0.1f, new Vector3f(1.0f,0.0f,0.0f), new Vector2f());
@@ -116,7 +112,13 @@ public class SchiffeVersenken {
 
         // *******************Particle initialization*******************
         ParticleMaster.init(loader, renderer.getProjectionMatrix());
-        ParticleSystem system = new ParticleSystem(50, 25, 0.3f, 4);
+        ParticleTexture fire = new ParticleTexture(loader.loadTexture("particles/fire.png"), 8);
+        ParticleSystemComplex system = new ParticleSystemComplex(fire,20, 3.5f, -0.05f, 2f, 17);
+        system.setLifeError(0.3f);
+        system.setScaleError(0.3f);
+        system.setSpeedError(0.15f);
+        system.randomizeRotation();
+        system.setDirection(new Vector3f(0.1f,1, 0.1f), -0.15f);
 
         // *******************Callbacks initialization*******************
 
@@ -132,9 +134,9 @@ public class SchiffeVersenken {
             camera.move(window, terrain);
             picker.update();
 
-//            system.generateParticles(new Vector3f(camera.getPosition()));
-            new Particle(new Vector3f(camera.getPosition().x , camera.getPosition().y, camera.getPosition().z), new Vector3f(0, 30, 0), 1 ,4 ,0 ,1);
-            ParticleMaster.update();
+            system.generateParticles(new Vector3f());
+//            new Particle(star, new Vector3f(camera.getPosition().x , camera.getPosition().y, camera.getPosition().z), new Vector3f(0, 30, 0), 1 ,4 ,0 ,1);
+            ParticleMaster.update(camera);
 
             ship.getRotation().y += 0.1f;
 
@@ -146,7 +148,7 @@ public class SchiffeVersenken {
 
             renderer.render(light,camera);
 
-            ParticleMaster.renderParticles(camera);
+            ParticleMaster.renderParticles(camera, 1);
 
             guiRenderer.render(guis);
             TextMaster.render();
