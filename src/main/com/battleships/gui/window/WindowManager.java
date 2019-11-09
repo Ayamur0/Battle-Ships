@@ -5,6 +5,7 @@ import com.battleships.gui.guis.GuiClickCallback;
 import org.lwjgl.glfw.*;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL13;
 
 public class WindowManager {
 
@@ -22,6 +23,8 @@ public class WindowManager {
         GLFWErrorCallback.createPrint(System.err).set();
         GLFW.glfwInit();
 
+        GLFW.glfwWindowHint(GLFW.GLFW_SAMPLES, 4);
+
         //create centered window
         window = GLFW.glfwCreateWindow(WIDTH, HEIGHT, "Schiffe Versenken", 0, 0);
         GLFWVidMode vidMode = GLFW.glfwGetVideoMode(GLFW.glfwGetPrimaryMonitor());
@@ -36,6 +39,7 @@ public class WindowManager {
         //set color of empty window to white
         GL11.glClearColor(0.5f,0.5f,0.5f, 1);
         GLFW.glfwSetInputMode(window, GLFW.GLFW_STICKY_MOUSE_BUTTONS, GLFW.GLFW_TRUE);
+        GL13.glEnable(GL13.GL_MULTISAMPLE);
         lastFrame = GLFW.glfwGetTime();
     }
 
