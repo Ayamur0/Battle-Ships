@@ -28,7 +28,10 @@ import com.battleships.gui.water.WaterTile;
 import com.battleships.gui.window.WindowManager;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
+import org.joml.Vector4f;
 import org.lwjgl.glfw.GLFW;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL30;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -123,15 +126,13 @@ public class SchiffeVersenken {
         entities.add(ship);
 
         // *******************Water initialization*******************
+        WaterFrameBuffers waterFbos = new WaterFrameBuffers();
 
         WaterShader waterShader = new WaterShader();
-        WaterRenderer waterRenderer = new WaterRenderer(loader, waterShader, renderer.getProjectionMatrix());
+        WaterRenderer waterRenderer = new WaterRenderer(loader, waterShader, renderer.getProjectionMatrix(), waterFbos);
         List<WaterTile> waterTiles = new ArrayList<>();
         waterTiles.add(new WaterTile(250, -250, -3));
 
-        WaterFrameBuffers waterFbos = new WaterFrameBuffers();
-        GuiTexture water = new GuiTexture(waterFbos.getReflectionTexture(), new Vector2f(-0.5f,0.5f), new Vector2f(0.5f, 0.5f));
-        guis.add(water);
 
         // *******************Particle initialization*******************
         ParticleMaster.init(loader, renderer.getProjectionMatrix());
@@ -163,9 +164,24 @@ public class SchiffeVersenken {
             camera.move(window, terrain);
             picker.update();
 
+            GL11.glEnable(GL30.GL_CLIP_DISTANCE0);
+
+            //render reflection texture
             waterFbos.bindReflectionFrameBuffer();
-            renderer.renderScene(entities, terrain, light, camera);
+            //move camera under water to get right reflection
+            float distance = 2 * (camera.getPosition().y - waterTiles.get(0).getHeight());
+            camera.getPosition().y -= distance;
+            camera.invertPitch();
+            renderer.renderScene(entities, terrain, light, camera, new Vector4f(0, 1, 0, -waterTiles.get(0).getHeight()));
+            //move camera back to normal
+            camera.getPosition().y += distance;
+            camera.invertPitch();
+
+            //render refraction texture
+            waterFbos.bindRefractionFrameBuffer();
+            renderer.renderScene(entities, terrain, light, camera, new Vector4f(0, -1, 0, waterTiles.get(0).getHeight()));
             waterFbos.unbindCurrentFrameBuffer();
+            GL11.glDisable(GL30.GL_CLIP_DISTANCE0); //not all drivers support disabling, if it doesn't work set clipPlane when rendering to screen high enough so nothing gets clipped
 
             system.generateParticles(new Vector3f());
 //            new Particle(star, new Vector3f(camera.getPosition().x , camera.getPosition().y, camera.getPosition().z), new Vector3f(0, 30, 0), 1 ,4 ,0 ,1);
@@ -181,11 +197,11 @@ public class SchiffeVersenken {
 
             fbo.bindFrameBuffer();
 
-            renderer.renderScene(entities, terrain, light, camera);
+            renderer.renderScene(entities, terrain, light, camera, new Vector4f(0, -1, 0, 10000));
 //            renderer.render(light,camera);
             ParticleMaster.renderParticles(camera, 1);
 
-            waterRenderer.render(waterTiles, camera);
+            waterRenderer.render(waterTiles, camera, light);
 
             fbo.unbindFrameBuffer();
             PostProcessing.doPostProcessing(fbo.getColorTexture());

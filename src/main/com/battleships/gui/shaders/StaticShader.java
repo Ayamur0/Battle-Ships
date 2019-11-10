@@ -6,6 +6,7 @@ import com.battleships.gui.toolbox.Maths;
 import org.joml.Matrix4f;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
+import org.joml.Vector4f;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -34,12 +35,22 @@ public class StaticShader extends ShaderProgram {
     @Override
     protected void getAllUniformLocations() {
         String[] uniformNames = {"transformationMatrix", "projectionMatrix", "viewMatrix", "lightPosition", "lightColor", "shineDamper",
-                "reflectivity","useFakeLighting", "skyColor", "numberOfRows", "offset"};
+                "reflectivity","useFakeLighting", "skyColor", "numberOfRows", "offset", "plane"};
         uniformLocations = new HashMap<>();
 
         for(String s : uniformNames){
             uniformLocations.put(s, super.getUniformLocation(s));
         }
+    }
+
+    /**
+     * Load ClipPlane vector to shader.
+     * All vertices of entities that are on the opposite site the normal vector of the clip plane is
+     * facing, will not be rendered.
+     * @param plane - the vector for the clip plane
+     */
+    public void loadClipPlane(Vector4f plane){
+        super.loadVector(uniformLocations.get("plane"), plane);
     }
 
     public void loadNumberOfRows(int numberOfRows){

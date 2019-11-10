@@ -11,6 +11,7 @@ import com.battleships.gui.terrains.Terrain;
 import com.battleships.gui.main.SchiffeVersenken;
 import com.battleships.gui.window.WindowManager;
 import org.joml.Matrix4f;
+import org.joml.Vector4f;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL11;
@@ -63,23 +64,25 @@ public class MasterRenderer {
         GL11.glDisable(GL11.GL_CULL_FACE);
     }
 
-    public void renderScene(List<Entity> entities, Terrain terrain, Light light, Camera camera){
+    public void renderScene(List<Entity> entities, Terrain terrain, Light light, Camera camera, Vector4f clipPlane){
         processTerrain(terrain);
         for(Entity entity : entities)
             processEntity(entity);
-        render(light, camera);
+        render(light, camera, clipPlane);
     }
 
     //load things needed for rendering and then render all entities
-    public void render(Light light, Camera camera){
+    public void render(Light light, Camera camera , Vector4f clipPlane){
         prepare();
         shader.start();
+        shader.loadClipPlane(clipPlane);
         shader.loadSkyColor(RED, GREEN, BLUE);
         shader.loadLight(light);
         shader.loadViewMatrix(camera);
         renderer.render(entities);
         shader.stop();
         terrainShader.start();
+        terrainShader.loadClipPlane(clipPlane);
         terrainShader.loadSkyColor(RED,GREEN,BLUE);
         terrainShader.loadLight(light);
         terrainShader.loadViewMatrix(camera);

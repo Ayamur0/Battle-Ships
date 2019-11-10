@@ -20,9 +20,14 @@ uniform vec3 lightPosition;
 const float density = 0.0035; //density of fog
 const float gradient = 3.0; //how far away objects start getting foggy
 
+uniform vec4 plane;
+
 void main(){
 
     vec4 worldPosition = transformationMatrix * vec4(position, 1.0);  //convert vec3 position into vec4 and calculate new position with transfMatrix
+
+    gl_ClipDistance[0] = dot(worldPosition, plane);
+
     vec4 positionRelativeToCam = viewMatrix * worldPosition;
     gl_Position = projectionMatrix * positionRelativeToCam;  //convert position of model in 3D space to a displayable form on a 2D screen
     pass_textureCoords = textureCoords; //pass textureCoords to fragment shader

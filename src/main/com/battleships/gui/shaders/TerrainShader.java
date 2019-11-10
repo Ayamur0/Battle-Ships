@@ -5,6 +5,7 @@ import com.battleships.gui.entities.Light;
 import com.battleships.gui.toolbox.Maths;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
+import org.joml.Vector4f;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -41,7 +42,7 @@ public class TerrainShader extends ShaderProgram {
     @Override
     protected void getAllUniformLocations() {
         String[] uniformNames = {"transformationMatrix", "projectionMatrix", "viewMatrix", "lightPosition", "lightColor", "shineDamper",
-                "reflectivity", "skyColor", "waterTexture", "pathTexture", "gravelTexture", "grassTexture", "wetSandTexture", "sandTexture", "blendMap"};
+                "reflectivity", "skyColor", "waterTexture", "pathTexture", "gravelTexture", "grassTexture", "wetSandTexture", "sandTexture", "blendMap", "plane"};
         uniformLocations = new HashMap<>();
         for(String s : uniformNames){
             uniformLocations.put(s, super.getUniformLocation(s));
@@ -64,6 +65,16 @@ public class TerrainShader extends ShaderProgram {
         super.loadInt(uniformLocations.get("wetSandTexture"), 4);
         super.loadInt(uniformLocations.get("sandTexture"), 5);
         super.loadInt(uniformLocations.get("blendMap"), 6);
+    }
+
+    /**
+     * Load ClipPlane vector to shader.
+     * All vertices of entities that are on the opposite site the normal vector of the clip plane is
+     * facing, will not be rendered.
+     * @param plane - the vector for the clip plane
+     */
+    public void loadClipPlane(Vector4f plane){
+        super.loadVector(uniformLocations.get("plane"), plane);
     }
 
     public void loadSkyColor(float r, float g, float b){
