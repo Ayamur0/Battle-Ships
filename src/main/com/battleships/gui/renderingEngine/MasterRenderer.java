@@ -63,6 +63,13 @@ public class MasterRenderer {
         GL11.glDisable(GL11.GL_CULL_FACE);
     }
 
+    public void renderScene(List<Entity> entities, Terrain terrain, Light light, Camera camera){
+        processTerrain(terrain);
+        for(Entity entity : entities)
+            processEntity(entity);
+        render(light, camera);
+    }
+
     //load things needed for rendering and then render all entities
     public void render(Light light, Camera camera){
         prepare();

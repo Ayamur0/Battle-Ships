@@ -21,8 +21,11 @@ import com.battleships.gui.terrains.Terrain;
 import com.battleships.gui.terrains.TerrainTexture;
 import com.battleships.gui.terrains.TerrainTexturePack;
 import com.battleships.gui.toolbox.MousePicker;
+import com.battleships.gui.water.WaterFrameBuffers;
+import com.battleships.gui.water.WaterRenderer;
+import com.battleships.gui.water.WaterShader;
+import com.battleships.gui.water.WaterTile;
 import com.battleships.gui.window.WindowManager;
-import javafx.geometry.Pos;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.lwjgl.glfw.GLFW;
@@ -97,6 +100,8 @@ public class SchiffeVersenken {
 
         // *******************Entity initialization*******************
 
+        List<Entity> entities = new ArrayList<>();
+
         TexturedModel fern = new TexturedModel(OBJLoader.loadObjModel("fern"), new ModelTexture(loader.loadTexture("FernAtlas.tga")));
         fern.getTexture().setNumberOfRows(2);
         fern.getTexture().setHasTransparency(true);
@@ -110,8 +115,23 @@ public class SchiffeVersenken {
             ferns.add(new Entity(fern, random.nextInt(4), new Vector3f(x, terrain.getHeightOfTerrain(x,z),z ), new Vector3f(), 0.6f));
         }
 
+        entities.addAll(ferns);
+
         Entity ship = loader.loadEntityfromOBJ("test", "4ShipTex.tga", 10, 1);
         ship.setPosition(new Vector3f(0,0,-40));
+
+        entities.add(ship);
+
+        // *******************Water initialization*******************
+
+        WaterShader waterShader = new WaterShader();
+        WaterRenderer waterRenderer = new WaterRenderer(loader, waterShader, renderer.getProjectionMatrix());
+        List<WaterTile> waterTiles = new ArrayList<>();
+        waterTiles.add(new WaterTile(250, -250, -3));
+
+        WaterFrameBuffers waterFbos = new WaterFrameBuffers();
+        GuiTexture water = new GuiTexture(waterFbos.getReflectionTexture(), new Vector2f(-0.5f,0.5f), new Vector2f(0.5f, 0.5f));
+        guis.add(water);
 
         // *******************Particle initialization*******************
         ParticleMaster.init(loader, renderer.getProjectionMatrix());
@@ -143,22 +163,29 @@ public class SchiffeVersenken {
             camera.move(window, terrain);
             picker.update();
 
+            waterFbos.bindReflectionFrameBuffer();
+            renderer.renderScene(entities, terrain, light, camera);
+            waterFbos.unbindCurrentFrameBuffer();
+
             system.generateParticles(new Vector3f());
 //            new Particle(star, new Vector3f(camera.getPosition().x , camera.getPosition().y, camera.getPosition().z), new Vector3f(0, 30, 0), 1 ,4 ,0 ,1);
             ParticleMaster.update(camera);
 
             ship.getRotation().y += 0.1f;
 
-            for (Entity e : ferns)
-                renderer.processEntity(e);
-            renderer.processEntity(ship);
-            renderer.processTerrain(terrain);
+//            for (Entity e : ferns)
+//                renderer.processEntity(e);
+//            renderer.processEntity(ship);
+//            renderer.processTerrain(terrain);
 //            renderer.processTerrain(terrain2);
 
             fbo.bindFrameBuffer();
 
-            renderer.render(light,camera);
+            renderer.renderScene(entities, terrain, light, camera);
+//            renderer.render(light,camera);
             ParticleMaster.renderParticles(camera, 1);
+
+            waterRenderer.render(waterTiles, camera);
 
             fbo.unbindFrameBuffer();
             PostProcessing.doPostProcessing(fbo.getColorTexture());
@@ -171,6 +198,8 @@ public class SchiffeVersenken {
 
         // *******************Clean up*******************
 
+        waterFbos.cleanUp();
+        waterShader.cleanUp();
         PostProcessing.cleanUp();
         fbo.cleanUp();
         ParticleMaster.cleanUp();
