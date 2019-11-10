@@ -12,6 +12,8 @@ import com.battleships.gui.guis.GuiTexture;
 import com.battleships.gui.models.ModelTexture;
 import com.battleships.gui.models.TexturedModel;
 import com.battleships.gui.particles.*;
+import com.battleships.gui.postProcessing.Fbo;
+import com.battleships.gui.postProcessing.PostProcessing;
 import com.battleships.gui.renderingEngine.Loader;
 import com.battleships.gui.renderingEngine.MasterRenderer;
 import com.battleships.gui.renderingEngine.OBJLoader;
@@ -20,6 +22,7 @@ import com.battleships.gui.terrains.TerrainTexture;
 import com.battleships.gui.terrains.TerrainTexturePack;
 import com.battleships.gui.toolbox.MousePicker;
 import com.battleships.gui.window.WindowManager;
+import javafx.geometry.Pos;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.lwjgl.glfw.GLFW;
@@ -120,6 +123,12 @@ public class SchiffeVersenken {
         system.randomizeRotation();
         system.setDirection(new Vector3f(0.1f,1, 0.1f), -0.15f);
 
+        // *******************Post Processing initialization*******************
+
+        Fbo fbo = new Fbo(WindowManager.getWIDTH(), WindowManager.getHEIGHT(), Fbo.DEPTH_RENDER_BUFFER);
+        PostProcessing.init(loader);
+
+
         // *******************Callbacks initialization*******************
 
         WindowManager.setCallbacks(camera, guiClickCallback);
@@ -146,9 +155,13 @@ public class SchiffeVersenken {
             renderer.processTerrain(terrain);
 //            renderer.processTerrain(terrain2);
 
-            renderer.render(light,camera);
+            fbo.bindFrameBuffer();
 
+            renderer.render(light,camera);
             ParticleMaster.renderParticles(camera, 1);
+
+            fbo.unbindFrameBuffer();
+            PostProcessing.doPostProcessing(fbo.getColorTexture());
 
             guiRenderer.render(guis);
             TextMaster.render();
@@ -158,6 +171,8 @@ public class SchiffeVersenken {
 
         // *******************Clean up*******************
 
+        PostProcessing.cleanUp();
+        fbo.cleanUp();
         ParticleMaster.cleanUp();
         TextMaster.cleanUp();
         guiRenderer.cleanUp();
