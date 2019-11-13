@@ -7,7 +7,6 @@ import java.io.PrintWriter;
 import java.net.Socket;
 
 public class NetzwerkClient {
-
     private static final int PORT = 50000;
 
     private BufferedReader getInputFromHost;
@@ -19,34 +18,41 @@ public class NetzwerkClient {
     // private String clientAdress;
     // private int clientPort;
 
-    public NetzwerkClient(String adress, int port) throws IOException {
 
-        startClient(adress,port);
-        waitinForImput();
+    /**
+    *Der Client soll aufgerufen werden mit einer IP Adresse (in Form eines Strings)
+    */
+    public NetzwerkClient(String adress) throws IOException {
+        startClient(adress);
+        waitingForInput();
     }
 
-    private void waitinForImput() throws  IOException{
+    private void waitingForInput() throws  IOException{
         while(true) {
             getData(getInputFromHost.readLine());
             out.println(sendToHost.readLine());
         }
     }
 
-    public void getData(String data){
+    private void getData(String data){
         System.out.println(data);
     }
 
-    private void startClient(String adress, int port) throws IOException {
-        System.out.println("Startin Client...");
-        clientSocket = new Socket(adress, port);
+
+    /**
+    * startet Client
+    */
+    private void startClient(String adress) throws IOException {
+        System.out.println("Starting Client...");
+        clientSocket = new Socket(adress, PORT);
         getInputFromHost = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
         sendToHost = new BufferedReader(new InputStreamReader(System.in));
-        out = new PrintWriter(clientSocket.getOutputStream(), true);
+        out = new PrintWriter(clientSocket.getOutputStream(),true);
     }
 
     public static void main(String[] args) {
         try {
-            new NetzwerkClient("Localhost", PORT);
+            new NetzwerkClient("Localhost");
         } catch (Exception e) {
             e.printStackTrace();
         }

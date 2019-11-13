@@ -1,0 +1,6 @@
+Grass 0 255 0
+Weg 0 0 255
+Sand 255 255 0
+Dunkler Sand 255 105 0
+Wasser 0 0 0
+Kies 180 180 180
