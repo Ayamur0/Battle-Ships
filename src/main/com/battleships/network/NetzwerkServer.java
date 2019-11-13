@@ -8,7 +8,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 public class NetzwerkServer {
-    public static final int PORT = 6666;
+    public static final int PORT = 50000;
 
     private PrintWriter toClient;
     private BufferedReader sendClient;
@@ -16,6 +16,10 @@ public class NetzwerkServer {
 
     private ServerSocket serverSocket;
     private Socket clientSocket;
+
+    private String shot = "shoot";
+    private String start = "start";
+    private String confirmed = "confirmed";
 
     public NetzwerkServer(){
         startServer();
@@ -26,12 +30,23 @@ public class NetzwerkServer {
             e.printStackTrace();
         }
     }
+    //TBH will ich des nicht so machen aber bleibt mir eine andere Möglichkeit??? Send Help pls
+    private void whatKindOfStringIsThis(String text){
+        if(text.contains(shot)){
+            text = text.replace(shot, "");
+        }else if(text.contains(start)){
+            text = text.replace(start, "");
+        }else if(text.contains(confirmed)){
+
+        }else if(false);
+    }
 
 
     private void sendData() throws IOException{
         while(true) {
             toClient.println(sendClient.readLine());
-            System.out.println(fromClient.readLine());
+            whatKindOfStringIsThis(fromClient.readLine());
+            //System.out.println(fromClient.readLine());
         }
     }
 
@@ -57,7 +72,7 @@ public class NetzwerkServer {
         }
     }
 
-
+    //Main
     public static void main(String[] args) {
         new NetzwerkServer();
     }

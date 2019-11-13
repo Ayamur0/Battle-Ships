@@ -8,14 +8,16 @@ import java.net.Socket;
 
 public class NetzwerkClient {
 
+    private static final int PORT = 50000;
+
     private BufferedReader getInputFromHost;
     private BufferedReader sendToHost;
 
     private PrintWriter out;
 
     private Socket clientSocket;
-   // private String clientAdress;
-   // private int clientPort;
+    // private String clientAdress;
+    // private int clientPort;
 
     public NetzwerkClient(String adress, int port) throws IOException {
 
@@ -44,7 +46,7 @@ public class NetzwerkClient {
 
     public static void main(String[] args) {
         try {
-            new NetzwerkClient("Localhost", 6666);
+            new NetzwerkClient("Localhost", PORT);
         } catch (Exception e) {
             e.printStackTrace();
         }
