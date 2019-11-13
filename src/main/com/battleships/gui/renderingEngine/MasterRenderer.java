@@ -32,7 +32,7 @@ public class MasterRenderer {
     private static final float GREEN = 0.5f;
     private static final float BLUE = 0.8f;
 
-    private Matrix4f projectionMatrix;
+    private static Matrix4f projectionMatrix;
 
     private StaticShader shader = new StaticShader();
     private EntityRenderer renderer;
@@ -47,7 +47,7 @@ public class MasterRenderer {
 
     public MasterRenderer(Loader loader){
         enableCulling();
-        createProjectionMatrix();
+        updateProjectionMatrix();
         renderer = new EntityRenderer(shader, projectionMatrix);
         terrainRenderer = new TerrainRenderer(terrainShader, projectionMatrix);
         skyboxRenderer = new SkyboxRenderer(loader, projectionMatrix);
@@ -126,7 +126,7 @@ public class MasterRenderer {
         skyboxRenderer.cleanUp();
     }
 
-    private void createProjectionMatrix(){
+    public void updateProjectionMatrix(){
         IntBuffer w = BufferUtils.createIntBuffer(1);
         IntBuffer h = BufferUtils.createIntBuffer(1);
         GLFW.glfwGetWindowSize(WindowManager.getWindow(), w, h);
@@ -148,7 +148,15 @@ public class MasterRenderer {
 //        projectionMatrix.setPerspective((float)Math.toRadians(FOV), 800f / 600f, NEAR_PLANE, FAR_PLANE);
     }
 
-    public Matrix4f getProjectionMatrix() {
+    public static float getNearPlane() {
+        return NEAR_PLANE;
+    }
+
+    public static float getFarPlane() {
+        return FAR_PLANE;
+    }
+
+    public static Matrix4f getProjectionMatrix() {
         return projectionMatrix;
     }
 }

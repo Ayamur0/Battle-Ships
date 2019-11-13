@@ -38,7 +38,7 @@ public class MetaFile {
      * @param file - font file
      */
     protected MetaFile(String file) {
-        this.aspectRatio = (double) WindowManager.getWIDTH() / (double) WindowManager.getHEIGHT();
+        this.aspectRatio = (double) WindowManager.getWidth() / (double) WindowManager.getHeight();
         try {
             reader = new BufferedReader(new InputStreamReader(MetaFile.class.getResourceAsStream("/com/battleships/gui/res/textures/font/" + file + ".fnt")));
         } catch (Exception e) {

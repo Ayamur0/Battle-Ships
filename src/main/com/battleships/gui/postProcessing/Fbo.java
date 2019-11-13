@@ -14,8 +14,10 @@ public class Fbo {
     public static final int DEPTH_TEXTURE = 1;
     public static final int DEPTH_RENDER_BUFFER = 2;
 
-    private final int width;
-    private final int height;
+    private int width;
+    private int height;
+
+    private int type;
 
     private int frameBuffer;
 
@@ -36,7 +38,14 @@ public class Fbo {
     public Fbo(int width, int height, int depthBufferType) {
         this.width = width;
         this.height = height;
-        initialiseFrameBuffer(depthBufferType);
+        this.type = depthBufferType;
+        initializeFrameBuffer(depthBufferType);
+    }
+
+    public void updateSize(){
+        this.width = WindowManager.getWidth();
+        this.height = WindowManager.getHeight();
+        initializeFrameBuffer(type);
     }
 
     /**
@@ -66,7 +75,7 @@ public class Fbo {
      */
     public void unbindFrameBuffer() {
         GL30.glBindFramebuffer(GL30.GL_FRAMEBUFFER, 0);
-        GL11.glViewport(0, 0, WindowManager.getWIDTH(), WindowManager.getHEIGHT());
+        GL11.glViewport(0, 0, WindowManager.getWidth(), WindowManager.getHeight());
     }
 
     /**
@@ -98,7 +107,7 @@ public class Fbo {
      *
      * @param type - the type of depth buffer attachment to be attached to the FBO (0-2).
      */
-    private void initialiseFrameBuffer(int type) {
+    private void initializeFrameBuffer(int type) {
         createFrameBuffer();
         createTextureAttachment();
         if (type == DEPTH_RENDER_BUFFER) {

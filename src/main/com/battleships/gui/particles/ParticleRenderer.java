@@ -3,6 +3,7 @@ package com.battleships.gui.particles;
 import com.battleships.gui.entities.Camera;
 import com.battleships.gui.models.RawModel;
 import com.battleships.gui.renderingEngine.Loader;
+import com.battleships.gui.renderingEngine.MasterRenderer;
 import com.battleships.gui.toolbox.Maths;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
@@ -185,6 +186,7 @@ public class ParticleRenderer {
      */
     private void prepare(){
         shader.start();
+        shader.loadProjectionMatrix(MasterRenderer.getProjectionMatrix());
         GL30.glBindVertexArray(quad.getVaoID());
         for(int i = 0; i <= 6; i++)
             GL20.glEnableVertexAttribArray(i);

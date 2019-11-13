@@ -5,6 +5,7 @@ import com.battleships.gui.window.WindowManager;
 import org.joml.Vector3f;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.GLFW;
+import org.lwjgl.glfw.GLFWKeyCallback;
 import org.lwjgl.glfw.GLFWScrollCallback;
 
 import java.nio.DoubleBuffer;
@@ -29,6 +30,14 @@ public class Camera {
         @Override
         public void invoke(long window, double xOffset, double yOffset) {
             zoom = (float)yOffset;
+        }
+    };
+
+    public GLFWKeyCallback keyCallback = new GLFWKeyCallback() {
+        @Override
+        public void invoke(long window, int key, int scanCode, int action, int mods) {
+            if(key == GLFW.GLFW_KEY_ESCAPE && action == GLFW.GLFW_PRESS)
+                WindowManager.setFullScreen(!WindowManager.isFullscreen());
         }
     };
 
@@ -114,7 +123,7 @@ public class Camera {
         //mouse moves camera while holding right mouse button
         if(GLFW.glfwGetMouseButton(window, GLFW.GLFW_MOUSE_BUTTON_RIGHT) == GLFW.GLFW_PRESS && !mouseLocked) {
             GLFW.glfwSetInputMode(window, GLFW.GLFW_CURSOR, GLFW.GLFW_CURSOR_DISABLED);
-            GLFW.glfwSetCursorPos(window, WindowManager.getWIDTH() / 2f, WindowManager.getHEIGHT() / 2f);
+            GLFW.glfwSetCursorPos(window, WindowManager.getWidth() / 2f, WindowManager.getHeight() / 2f);
             mouseLocked = true;
         }
         if(mouseLocked){
@@ -127,8 +136,8 @@ public class Camera {
             double newX = x.get();
             double newY = y.get();
 
-            double deltaX = newX - WindowManager.getWIDTH() / 2f;
-            double deltaY = newY - WindowManager.getHEIGHT() / 2f;
+            double deltaX = newX - WindowManager.getWidth() / 2f;
+            double deltaY = newY - WindowManager.getHeight() / 2f;
 
 
             pitch += deltaY * 0.1f;
@@ -140,7 +149,7 @@ public class Camera {
 
             yaw += deltaX * 0.1f;
 
-            GLFW.glfwSetCursorPos(window, WindowManager.getWIDTH() / 2f, WindowManager.getHEIGHT() / 2f);
+            GLFW.glfwSetCursorPos(window, WindowManager.getWidth() / 2f, WindowManager.getHeight() / 2f);
         }
         //enable cursor on release of right mouse button and disable mouse moving camera
         if(GLFW.glfwGetMouseButton(window, GLFW.GLFW_MOUSE_BUTTON_RIGHT) == GLFW.GLFW_RELEASE) {

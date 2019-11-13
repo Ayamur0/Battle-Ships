@@ -1,6 +1,7 @@
 package com.battleships.gui.water;
 
 import com.battleships.gui.window.WindowManager;
+import org.lwjgl.glfw.GLFWWindowSizeCallback;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL14;
 import org.lwjgl.opengl.GL30;
@@ -10,11 +11,11 @@ import java.nio.ByteBuffer;
 
 public class WaterFrameBuffers {
 
-    protected static final int REFLECTION_WIDTH = 320;
-    private static final int REFLECTION_HEIGHT = 180;
+    protected static int REFLECTION_WIDTH = 320;
+    private static int REFLECTION_HEIGHT = 180;
 
-    protected static final int REFRACTION_WIDTH = 1280;
-    private static final int REFRACTION_HEIGHT = 720;
+    protected static int REFRACTION_WIDTH = 1280;
+    private static int REFRACTION_HEIGHT = 720;
 
     private int reflectionFrameBuffer;
     private int reflectionTexture;
@@ -28,8 +29,17 @@ public class WaterFrameBuffers {
      * Initialize water fbos reflection and refraction.
      */
     public WaterFrameBuffers() {//call when loading the game
-        initialiseReflectionFrameBuffer();
-        initialiseRefractionFrameBuffer();
+        initializeReflectionFrameBuffer();
+        initializeRefractionFrameBuffer();
+    }
+
+    public void updateFrameBuffers(){
+        REFLECTION_WIDTH = WindowManager.getWidth() / 4;
+        REFLECTION_HEIGHT = WindowManager.getHeight() / 4;
+        REFRACTION_WIDTH = WindowManager.getWidth();
+        REFRACTION_HEIGHT = WindowManager.getHeight();
+        initializeReflectionFrameBuffer();
+        initializeRefractionFrameBuffer();
     }
 
     /**
@@ -67,7 +77,7 @@ public class WaterFrameBuffers {
      */
     public void unbindCurrentFrameBuffer() {//call to switch to default frame buffer
         GL30.glBindFramebuffer(GL30.GL_FRAMEBUFFER, 0);
-        GL11.glViewport(0, 0, WindowManager.getWIDTH(), WindowManager.getHEIGHT());
+        GL11.glViewport(0, 0, WindowManager.getWidth(), WindowManager.getHeight());
     }
 
     /**
@@ -95,7 +105,7 @@ public class WaterFrameBuffers {
      * Creates the Reflection FBO along with a color buffer texture attachment, and
      *  a depth buffer attachment.
      */
-    private void initialiseReflectionFrameBuffer() {
+    private void initializeReflectionFrameBuffer() {
         reflectionFrameBuffer = createFrameBuffer();
         reflectionTexture = createTextureAttachment(REFLECTION_WIDTH,REFLECTION_HEIGHT);
         reflectionDepthBuffer = createDepthBufferAttachment(REFLECTION_WIDTH,REFLECTION_HEIGHT);
@@ -106,7 +116,7 @@ public class WaterFrameBuffers {
      * Creates the Refraction FBO along with a color buffer texture attachment, and
      *  a depth texture attachment.
      */
-    private void initialiseRefractionFrameBuffer() {
+    private void initializeRefractionFrameBuffer() {
         refractionFrameBuffer = createFrameBuffer();
         refractionTexture = createTextureAttachment(REFRACTION_WIDTH,REFRACTION_HEIGHT);
         refractionDepthTexture = createDepthTextureAttachment(REFRACTION_WIDTH,REFRACTION_HEIGHT);
@@ -186,5 +196,12 @@ public class WaterFrameBuffers {
         GL30.glFramebufferRenderbuffer(GL30.GL_FRAMEBUFFER, GL30.GL_DEPTH_ATTACHMENT, GL30.GL_RENDERBUFFER, depthBuffer);
         return depthBuffer;
     }
+
+    public GLFWWindowSizeCallback sizeCallback = new GLFWWindowSizeCallback() {
+        @Override
+        public void invoke(long window, int width, int height) {
+            updateFrameBuffers();
+        }
+    };
 
 }

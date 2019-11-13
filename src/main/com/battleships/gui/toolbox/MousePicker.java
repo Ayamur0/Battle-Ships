@@ -65,8 +65,8 @@ public class MousePicker {
 
     private Vector2f getNormalizedDeviceCoords(float mouseX, float mouseY){
         //convert cursor position from pixel (top left corner = (0,0) bottom right = (Width, Height) to openGL coordinates (top left = (-1,-1) bottom right = (1,-1))
-        float x = (2f * mouseX) / WindowManager.getWIDTH() - 1;
-        float y = (2f * mouseY) / WindowManager.getHEIGHT() - 1;
+        float x = (2f * mouseX) / WindowManager.getWidth() - 1;
+        float y = (2f * mouseY) / WindowManager.getHeight() - 1;
         return new Vector2f(x, -y);
     }
 

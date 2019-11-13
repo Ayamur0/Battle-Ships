@@ -28,6 +28,7 @@ public class EntityRenderer {
     }
 
     public void render(Map<TexturedModel, List<Entity>> entities){
+        shader.loadProjectionMatrix(MasterRenderer.getProjectionMatrix());
         //prepare each textured model, then prepare each entity that uses this texturedModel and render that entity
         //only needs to load each model and texture once even if it's used multiple times
         //only entities need to be loaded one by one to get their transformationMatrix

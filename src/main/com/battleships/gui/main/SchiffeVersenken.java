@@ -6,6 +6,7 @@ import com.battleships.gui.entities.Light;
 import com.battleships.gui.fontMeshCreator.FontType;
 import com.battleships.gui.fontMeshCreator.GUIText;
 import com.battleships.gui.fontRendering.TextMaster;
+import com.battleships.gui.gameAssets.PlayingField;
 import com.battleships.gui.guis.GuiClickCallback;
 import com.battleships.gui.guis.GuiRenderer;
 import com.battleships.gui.guis.GuiTexture;
@@ -30,6 +31,7 @@ import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
 import org.lwjgl.glfw.GLFW;
+import org.lwjgl.glfw.GLFWWindowSizeCallback;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL30;
 
@@ -125,13 +127,18 @@ public class SchiffeVersenken {
 
         entities.add(ship);
 
+        PlayingField playingField =  new PlayingField(30, loader);
+        entities.add(playingField.getOwn());
+        entities.add(playingField.getOpponent());
+        entities.add(playingField.placeShip(0,0,0, loader));
+
         // *******************Water initialization*******************
         WaterFrameBuffers waterFbos = new WaterFrameBuffers();
 
         WaterShader waterShader = new WaterShader();
         WaterRenderer waterRenderer = new WaterRenderer(loader, waterShader, renderer.getProjectionMatrix(), waterFbos);
         List<WaterTile> waterTiles = new ArrayList<>();
-        waterTiles.add(new WaterTile(250, -250, -3));
+        waterTiles.add(new WaterTile(400, -400, -3));
 
 
         // *******************Particle initialization*******************
@@ -146,13 +153,13 @@ public class SchiffeVersenken {
 
         // *******************Post Processing initialization*******************
 
-        Fbo fbo = new Fbo(WindowManager.getWIDTH(), WindowManager.getHEIGHT(), Fbo.DEPTH_RENDER_BUFFER);
+        Fbo fbo = new Fbo(WindowManager.getWidth(), WindowManager.getHeight(), Fbo.DEPTH_RENDER_BUFFER);
         PostProcessing.init(loader);
 
 
         // *******************Callbacks initialization*******************
 
-        WindowManager.setCallbacks(camera, guiClickCallback);
+        WindowManager.setCallbacks(camera, guiClickCallback, waterFbos);
 
         MousePicker picker = new MousePicker(renderer.getProjectionMatrix(), camera);
 
@@ -172,7 +179,7 @@ public class SchiffeVersenken {
             float distance = 2 * (camera.getPosition().y - waterTiles.get(0).getHeight());
             camera.getPosition().y -= distance;
             camera.invertPitch();
-            renderer.renderScene(entities, terrain, light, camera, new Vector4f(0, 1, 0, -waterTiles.get(0).getHeight()));
+            renderer.renderScene(entities, terrain, light, camera, new Vector4f(0, 1, 0, -waterTiles.get(0).getHeight() + 1f));
             //move camera back to normal
             camera.getPosition().y += distance;
             camera.invertPitch();
@@ -195,7 +202,7 @@ public class SchiffeVersenken {
 //            renderer.processTerrain(terrain);
 //            renderer.processTerrain(terrain2);
 
-            fbo.bindFrameBuffer();
+//            fbo.bindFrameBuffer();
 
             renderer.renderScene(entities, terrain, light, camera, new Vector4f(0, -1, 0, 10000));
 //            renderer.render(light,camera);
@@ -203,13 +210,14 @@ public class SchiffeVersenken {
 
             waterRenderer.render(waterTiles, camera, light);
 
-            fbo.unbindFrameBuffer();
-            PostProcessing.doPostProcessing(fbo.getColorTexture());
+//            fbo.unbindFrameBuffer();
+//            PostProcessing.doPostProcessing(fbo.getColorTexture());
 
             guiRenderer.render(guis);
             TextMaster.render();
 
             WindowManager.updateWindow();
+            renderer.updateProjectionMatrix();
         }
 
         // *******************Clean up*******************

@@ -32,6 +32,7 @@ public class TerrainRenderer {
         //only needs to load each model and texture once even if it's used multiple times
         //only transformationMatrix needs to be loaded one by one to render the terrain side by side
         //after rendering all terrains unbindTerrain
+        shader.loadProjectionMatrix(MasterRenderer.getProjectionMatrix());
         for (Terrain terrain : terrains){
             prepareTerrain(terrain);
             loadModelMatrix(terrain);

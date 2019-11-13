@@ -4,6 +4,7 @@ import com.battleships.gui.entities.Camera;
 import com.battleships.gui.entities.Light;
 import com.battleships.gui.models.RawModel;
 import com.battleships.gui.renderingEngine.Loader;
+import com.battleships.gui.renderingEngine.MasterRenderer;
 import com.battleships.gui.toolbox.Maths;
 import com.battleships.gui.window.WindowManager;
 import org.joml.Matrix4f;
@@ -17,9 +18,9 @@ import java.util.List;
 
 public class WaterRenderer {
 
-    private static final String DUDV_MAP = "waterDUDV.png"; //TODO find best texture and tiling size
-    private static final String NORMAL_MAP = "normalMap.png";
-    private static final float WAVE_SPEED = 0.03f;
+    private static final String DUDV_MAP = "waterDUDV2.png"; //TODO find best texture and tiling size
+    private static final String NORMAL_MAP = "normalMap2.png";
+    private static final float WAVE_SPEED = 0.01f;
 
     private RawModel quad;
     private WaterShader shader;
@@ -55,10 +56,12 @@ public class WaterRenderer {
     private void prepareRender(Camera camera, Light sun){
         shader.start();
         shader.loadViewMatrix(camera);
+        shader.loadProjectionMatrix(MasterRenderer.getProjectionMatrix());
         moveFactor += WAVE_SPEED * WindowManager.getDeltaTime();
         moveFactor %= 1;
         shader.loadMoveFactor(moveFactor);
         shader.loadLight(sun);
+        shader.loadPlanes(MasterRenderer.getNearPlane(), MasterRenderer.getFarPlane());
         GL30.glBindVertexArray(quad.getVaoID());
         GL20.glEnableVertexAttribArray(0);
         GL13.glActiveTexture(GL13.GL_TEXTURE0);
@@ -69,9 +72,15 @@ public class WaterRenderer {
         GL13.glBindTexture(GL11.GL_TEXTURE_2D, dudvTexture);
         GL13.glActiveTexture(GL13.GL_TEXTURE3);
         GL13.glBindTexture(GL11.GL_TEXTURE_2D, normalMap);
+        GL13.glActiveTexture(GL13.GL_TEXTURE4);
+        GL13.glBindTexture(GL11.GL_TEXTURE_2D, fbos.getRefractionDepthTexture());
+
+        GL11.glEnable(GL11.GL_BLEND);
+        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
     }
 
     private void unbind(){
+        GL11.glDisable(GL11.GL_BLEND);
         GL20.glDisableVertexAttribArray(0);
         GL30.glBindVertexArray(0);
         shader.stop();

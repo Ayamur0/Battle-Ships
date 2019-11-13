@@ -13,9 +13,11 @@ uniform mat4 modelMatrix;
 uniform vec3 cameraPosition;
 uniform vec3 lightPosition;
 
-const float tiling = 1.2f;
+const float tiling = 4.0f;
 
 void main(void) {
+
+    gl_ClipDistance[0] = 1;
 
     vec4 worldPosition = modelMatrix * vec4(position.x, 0.0, position.y, 1.0);
     clipSpace = projectionMatrix * viewMatrix * worldPosition;
