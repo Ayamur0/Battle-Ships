@@ -45,17 +45,17 @@ public class MousePicker {
     public void update() {
         projectionMatrix = MasterRenderer.getProjectionMatrix();
         viewMatrix = Maths.createViewMatrix(camera);
-        System.out.println(camera.getPosition().x + " " + camera.getPosition().y + " " + camera.getPosition().z);
+//        System.out.println(camera.getPosition().x + " " + camera.getPosition().y + " " + camera.getPosition().z);
         currentRay = calculateMouseRay();
-        System.out.println(currentRay.x + " " + currentRay.y + " " + currentRay.z);
+//        System.out.println(currentRay.x + " " + currentRay.y + " " + currentRay.z);
         if (intersectionInRange(0, RAY_RANGE, currentRay)) {
             currentTerrainPoint = binarySearch(0, 0, RAY_RANGE, currentRay);
         } else {
             currentTerrainPoint = null;
         }
 
-        if(currentTerrainPoint != null)
-            System.out.println(currentTerrainPoint.x + " " + currentTerrainPoint.y + " " + currentTerrainPoint.z);
+//        if(currentTerrainPoint != null)
+//            System.out.println(currentTerrainPoint.x + " " + currentTerrainPoint.y + " " + currentTerrainPoint.z);
     }
 
     private Vector3f calculateMouseRay() {

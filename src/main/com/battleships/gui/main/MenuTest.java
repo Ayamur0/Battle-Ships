@@ -116,14 +116,14 @@ public class MenuTest {
 
         WindowManager.setCallbacks(camera, guiClickCallback, waterFbos);
 
-        MousePicker picker = new MousePicker(renderer.getProjectionMatrix(), camera);
+//        MousePicker picker = new MousePicker(renderer.getProjectionMatrix(), camera, terrain);
 
         // ****************************************************
         // *******************Main Game Loop*******************
         // ****************************************************
 
         while (!GLFW.glfwWindowShouldClose(window)){
-            picker.update();
+//            picker.update();
 
             GL11.glEnable(GL30.GL_CLIP_DISTANCE0);
 
