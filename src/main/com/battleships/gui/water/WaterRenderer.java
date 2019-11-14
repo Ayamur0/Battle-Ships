@@ -18,8 +18,8 @@ import java.util.List;
 
 public class WaterRenderer {
 
-    private static final String DUDV_MAP = "waterDUDV2.png"; //TODO find best texture and tiling size
-    private static final String NORMAL_MAP = "normalMap2.png";
+    private static final String DUDV_MAP = "waterDUDV1.png"; //TODO find best texture and tiling size
+    private static final String NORMAL_MAP = "normalMap1.png";
     private static final float WAVE_SPEED = 0.01f;
 
     private RawModel quad;

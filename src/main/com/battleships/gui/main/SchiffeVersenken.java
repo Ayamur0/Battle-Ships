@@ -7,21 +7,20 @@ import com.battleships.gui.fontMeshCreator.FontType;
 import com.battleships.gui.fontMeshCreator.GUIText;
 import com.battleships.gui.fontRendering.TextMaster;
 import com.battleships.gui.gameAssets.PlayingField;
+import com.battleships.gui.gameAssets.Ship;
 import com.battleships.gui.guis.GuiClickCallback;
 import com.battleships.gui.guis.GuiRenderer;
 import com.battleships.gui.guis.GuiTexture;
-import com.battleships.gui.models.ModelTexture;
-import com.battleships.gui.models.TexturedModel;
 import com.battleships.gui.particles.*;
 import com.battleships.gui.postProcessing.Fbo;
 import com.battleships.gui.postProcessing.PostProcessing;
 import com.battleships.gui.renderingEngine.Loader;
 import com.battleships.gui.renderingEngine.MasterRenderer;
-import com.battleships.gui.renderingEngine.OBJLoader;
 import com.battleships.gui.terrains.Terrain;
 import com.battleships.gui.terrains.TerrainTexture;
 import com.battleships.gui.terrains.TerrainTexturePack;
 import com.battleships.gui.toolbox.MousePicker;
+import com.battleships.gui.toolbox.MousePickerOld;
 import com.battleships.gui.water.WaterFrameBuffers;
 import com.battleships.gui.water.WaterRenderer;
 import com.battleships.gui.water.WaterShader;
@@ -31,13 +30,11 @@ import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
 import org.lwjgl.glfw.GLFW;
-import org.lwjgl.glfw.GLFWWindowSizeCallback;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL30;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 public class SchiffeVersenken {
 
@@ -107,30 +104,34 @@ public class SchiffeVersenken {
 
         List<Entity> entities = new ArrayList<>();
 
-        TexturedModel fern = new TexturedModel(OBJLoader.loadObjModel("fern"), new ModelTexture(loader.loadTexture("FernAtlas.tga")));
-        fern.getTexture().setNumberOfRows(2);
-        fern.getTexture().setHasTransparency(true);
-        fern.getTexture().setUseFakeLighting(true);
+//        TexturedModel fern = new TexturedModel(OBJLoader.loadObjModel("fern"), new ModelTexture(loader.loadTexture("FernAtlas.tga")));
+//        fern.getTexture().setNumberOfRows(2);
+//        fern.getTexture().setHasTransparency(true);
+//        fern.getTexture().setUseFakeLighting(true);
 
-        List<Entity> ferns = new ArrayList<>();
-        Random random = new Random();
-        for(int i = 0; i < 500; i++){
-            float x = random.nextFloat() * 800 - 400;
-            float z = random.nextFloat() * -600;
-            ferns.add(new Entity(fern, random.nextInt(4), new Vector3f(x, terrain.getHeightOfTerrain(x,z),z ), new Vector3f(), 0.6f));
-        }
+//        List<Entity> ferns = new ArrayList<>();
+//        Random random = new Random();
+//        for(int i = 0; i < 500; i++){
+//            float x = random.nextFloat() * 800 - 400;
+//            float z = random.nextFloat() * -600;
+//            ferns.add(new Entity(fern, random.nextInt(4), new Vector3f(x, terrain.getHeightOfTerrain(x,z),z ), new Vector3f(), 0.6f));
+//        }
+//
+//        entities.addAll(ferns);
 
-        entities.addAll(ferns);
-
-        Entity ship = loader.loadEntityfromOBJ("test", "4ShipTex.tga", 10, 1);
+        Entity ship = loader.loadEntityfromOBJ("ship4", "ship4.tga", 10, 1);
         ship.setPosition(new Vector3f(0,0,-40));
 
         entities.add(ship);
 
         PlayingField playingField =  new PlayingField(30, loader);
+        Ship ships = new Ship(loader);
         entities.add(playingField.getOwn());
         entities.add(playingField.getOpponent());
-        entities.add(playingField.placeShip(0,0,0, loader));
+        playingField.placeShip(entities, ships, 0, 5,4);
+//        playingField.placeShip(entities, ships, 0, 7,2);
+//        playingField.placeShip(entities, ships, 0, 9,3);
+//        playingField.placeShip(entities, ships, 0, 11,5);
 
         // *******************Water initialization*******************
         WaterFrameBuffers waterFbos = new WaterFrameBuffers();
@@ -161,7 +162,7 @@ public class SchiffeVersenken {
 
         WindowManager.setCallbacks(camera, guiClickCallback, waterFbos);
 
-        MousePicker picker = new MousePicker(renderer.getProjectionMatrix(), camera);
+        MousePicker picker = new MousePicker(camera, renderer.getProjectionMatrix(), terrain);
 
         // ****************************************************
         // *******************Main Game Loop*******************
@@ -170,6 +171,11 @@ public class SchiffeVersenken {
         while (!GLFW.glfwWindowShouldClose(window)){
             camera.move(window, terrain);
             picker.update();
+
+
+            Vector3f terrainPoint = picker.getCurrentTerrainPoint();
+            if(terrainPoint != null)
+                entities.get(3).setPosition(new Vector3f(terrainPoint.x, terrainPoint.y < -3 ? -3 : terrainPoint.y, terrainPoint.z));
 
             GL11.glEnable(GL30.GL_CLIP_DISTANCE0);
 

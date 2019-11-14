@@ -8,6 +8,8 @@ import com.battleships.gui.renderingEngine.Loader;
 import com.battleships.gui.renderingEngine.OBJLoader;
 import org.joml.Vector3f;
 
+import java.util.List;
+
 public class PlayingField {
 
     private static final int OWNFIELD = 0;
@@ -66,9 +68,8 @@ public class PlayingField {
         return opponent;
     }
 
-    public Entity placeShip(int field, int index, int shipSize, Loader loader){
-        Entity ship = loader.loadEntityfromOBJ("test", "4ShipTex.tga", 10, 1);
-        ship.setPosition(new Vector3f(ownPosition.x + 300 / 5f * 0.5f,ownPosition.y,ownPosition.z + 300 / 5f * 0.5f));
-        return ship;
+    public void placeShip(List<Entity> entities, Ship ship, int field, float index, int shipSize){
+        ship.placeShip(entities, shipSize, new Vector3f(ownPosition.x - 150 + 150/31f + 150/31f * 0.5f ,ownPosition.y + 0.5f,ownPosition.z - 150 + 150/31f + 150/31f * 0.5f / index * 0.5f), new Vector3f(), 1);
+        //ownPosition.x + 300 / index * 0.5f,ownPosition.y,ownPosition.z + 300 / index * 0.5f
     }
 }

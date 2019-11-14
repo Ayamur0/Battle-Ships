@@ -127,25 +127,26 @@ public class MasterRenderer {
     }
 
     public void updateProjectionMatrix(){
-        IntBuffer w = BufferUtils.createIntBuffer(1);
-        IntBuffer h = BufferUtils.createIntBuffer(1);
-        GLFW.glfwGetWindowSize(WindowManager.getWindow(), w, h);
-        int width = w.get(0);
-        int height = h.get(0);
-        float aspectRatio = (float) width / (float) height;
-        float y_scale = (float) ((1f / Math.tan(Math.toRadians(FOV / 2f))) * aspectRatio);
-        float x_scale = y_scale / aspectRatio;
-        float frustum_length = FAR_PLANE - NEAR_PLANE;
+//        IntBuffer w = BufferUtils.createIntBuffer(1);
+//        IntBuffer h = BufferUtils.createIntBuffer(1);
+//        GLFW.glfwGetWindowSize(WindowManager.getWindow(), w, h);
+//        int width = w.get(0);
+//        int height = h.get(0);
+//        float aspectRatio = (float) width / (float) height;
+//        float y_scale = (float) ((1f / Math.tan(Math.toRadians(FOV / 2f))) * aspectRatio);
+//        float x_scale = y_scale / aspectRatio;
+//        float frustum_length = FAR_PLANE - NEAR_PLANE;
+//
+//        projectionMatrix = new Matrix4f();
+//        projectionMatrix._m00(x_scale);
+//        projectionMatrix._m11(y_scale);
+//        projectionMatrix._m22(-((FAR_PLANE + NEAR_PLANE) / frustum_length));
+//        projectionMatrix._m23(-1);
+//        projectionMatrix._m32(-((2 * NEAR_PLANE * FAR_PLANE) / frustum_length));
+//        projectionMatrix._m33(0);
 
         projectionMatrix = new Matrix4f();
-        projectionMatrix._m00(x_scale);
-        projectionMatrix._m11(y_scale);
-        projectionMatrix._m22(-((FAR_PLANE + NEAR_PLANE) / frustum_length));
-        projectionMatrix._m23(-1);
-        projectionMatrix._m32(-((2 * NEAR_PLANE * FAR_PLANE) / frustum_length));
-        projectionMatrix._m33(0);
-//        projectionMatrix = new Matrix4f();
-//        projectionMatrix.setPerspective((float)Math.toRadians(FOV), 800f / 600f, NEAR_PLANE, FAR_PLANE);
+        projectionMatrix.setPerspective((float)Math.toRadians(FOV), (float) WindowManager.getWidth() / WindowManager.getHeight(), NEAR_PLANE, FAR_PLANE);
     }
 
     public static float getNearPlane() {
