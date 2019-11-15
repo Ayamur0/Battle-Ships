@@ -53,7 +53,7 @@ public class SchiffeVersenken {
         // *******************GUI initialization*******************
 
         List<GuiTexture> guis = new ArrayList<>();
-        GuiTexture gui = new GuiTexture(loader.loadTexture("Brick.jpg"), new Vector2f(0.125f,0.125f), new Vector2f(0.25f,0.25f));
+        GuiTexture gui = new GuiTexture(loader.loadTexture("FernAtlas.tga"), new Vector2f(0.125f,0.125f), new Vector2f(0.25f,0.25f));
         guis.add(gui);
 
         GuiRenderer guiRenderer = new GuiRenderer(loader);
@@ -127,7 +127,8 @@ public class SchiffeVersenken {
         ShipManager ships = new ShipManager(loader);
         entities.add(playingField.getOwn());
         entities.add(playingField.getOpponent());
-        playingField.placeShip(entities, ships, 0, 5,4);
+        playingField.placeShip(entities, ships, 0, new Vector2f(15,15),5, 0);
+        playingField.placeShip(entities, ships, 0, new Vector2f(3,3),3, 1);
 //        playingField.placeShip(entities, ships, 0, 7,2);
 //        playingField.placeShip(entities, ships, 0, 9,3);
 //        playingField.placeShip(entities, ships, 0, 11,5);
@@ -174,7 +175,7 @@ public class SchiffeVersenken {
 
             Vector3f terrainPoint = picker.getCurrentTerrainPoint();
             if(terrainPoint != null) {
-                entities.get(3).setPosition(new Vector3f(terrainPoint.x, terrainPoint.y < -3 ? -3 : terrainPoint.y, terrainPoint.z));
+//                entities.get(3).setPosition(new Vector3f(terrainPoint.x, terrainPoint.y < -3 ? -3 : terrainPoint.y, terrainPoint.z));
                 System.out.println(terrainPoint.x + " " + terrainPoint.z);
             }
             GL11.glEnable(GL30.GL_CLIP_DISTANCE0);

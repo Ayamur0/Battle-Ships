@@ -19,11 +19,12 @@ public class ShipManager {
         ships.add(loader.loadEntityfromOBJ("ship5", "ship5.jpg", 10, 1));
     }
 
-    public void placeShip(List<Entity> entities, int size, Vector3f position, Vector3f rotation, float scale){
+    public int placeShip(List<Entity> entities, int size, Vector3f position, Vector3f rotation, float scale){
         Entity toAdd = ships.get(size - 2);
         toAdd.setPosition(position);
         toAdd.setRotation(rotation);
         toAdd.setScale(scale);
         entities.add(toAdd);
+        return entities.size() - 1;
     }
 }
