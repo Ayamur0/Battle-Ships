@@ -2,10 +2,8 @@ package com.battleships.gui.gameAssets;
 
 import com.battleships.gui.entities.Entity;
 import com.battleships.gui.models.ModelTexture;
-import com.battleships.gui.models.RawModel;
 import com.battleships.gui.models.TexturedModel;
 import com.battleships.gui.renderingEngine.Loader;
-import com.battleships.gui.renderingEngine.OBJLoader;
 import org.joml.Vector3f;
 
 import java.util.List;
@@ -68,7 +66,7 @@ public class PlayingField {
         return opponent;
     }
 
-    public void placeShip(List<Entity> entities, Ship ship, int field, float index, int shipSize){
+    public void placeShip(List<Entity> entities, ShipManager ship, int field, float index, int shipSize){
         ship.placeShip(entities, shipSize, new Vector3f(ownPosition.x - 150 + 150/31f + 150/31f * 0.5f ,ownPosition.y + 0.5f,ownPosition.z - 150 + 150/31f + 150/31f * 0.5f / index * 0.5f), new Vector3f(), 1);
         //ownPosition.x + 300 / index * 0.5f,ownPosition.y,ownPosition.z + 300 / index * 0.5f
     }

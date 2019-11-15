@@ -7,7 +7,7 @@ import com.battleships.gui.fontMeshCreator.FontType;
 import com.battleships.gui.fontMeshCreator.GUIText;
 import com.battleships.gui.fontRendering.TextMaster;
 import com.battleships.gui.gameAssets.PlayingField;
-import com.battleships.gui.gameAssets.Ship;
+import com.battleships.gui.gameAssets.ShipManager;
 import com.battleships.gui.guis.GuiClickCallback;
 import com.battleships.gui.guis.GuiRenderer;
 import com.battleships.gui.guis.GuiTexture;
@@ -20,7 +20,6 @@ import com.battleships.gui.terrains.Terrain;
 import com.battleships.gui.terrains.TerrainTexture;
 import com.battleships.gui.terrains.TerrainTexturePack;
 import com.battleships.gui.toolbox.MousePicker;
-import com.battleships.gui.toolbox.MousePickerOld;
 import com.battleships.gui.water.WaterFrameBuffers;
 import com.battleships.gui.water.WaterRenderer;
 import com.battleships.gui.water.WaterShader;
@@ -54,7 +53,7 @@ public class SchiffeVersenken {
         // *******************GUI initialization*******************
 
         List<GuiTexture> guis = new ArrayList<>();
-        GuiTexture gui = new GuiTexture(loader.loadTexture("Brick.jpg"), new Vector2f(0.5f, 0.5f), new Vector2f(0.25f,0.25f));
+        GuiTexture gui = new GuiTexture(loader.loadTexture("Brick.jpg"), new Vector2f(0.125f,0.125f), new Vector2f(0.25f,0.25f));
         guis.add(gui);
 
         GuiRenderer guiRenderer = new GuiRenderer(loader);
@@ -125,7 +124,7 @@ public class SchiffeVersenken {
         entities.add(ship);
 
         PlayingField playingField =  new PlayingField(30, loader);
-        Ship ships = new Ship(loader);
+        ShipManager ships = new ShipManager(loader);
         entities.add(playingField.getOwn());
         entities.add(playingField.getOpponent());
         playingField.placeShip(entities, ships, 0, 5,4);
@@ -174,9 +173,10 @@ public class SchiffeVersenken {
 
 
             Vector3f terrainPoint = picker.getCurrentTerrainPoint();
-            if(terrainPoint != null)
+            if(terrainPoint != null) {
                 entities.get(3).setPosition(new Vector3f(terrainPoint.x, terrainPoint.y < -3 ? -3 : terrainPoint.y, terrainPoint.z));
-
+                System.out.println(terrainPoint.x + " " + terrainPoint.z);
+            }
             GL11.glEnable(GL30.GL_CLIP_DISTANCE0);
 
             //render reflection texture
