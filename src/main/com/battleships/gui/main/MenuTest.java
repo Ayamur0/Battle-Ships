@@ -35,6 +35,7 @@ import org.lwjgl.glfw.GLFWWindowSizeCallback;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL30;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -57,20 +58,33 @@ public class MenuTest {
         // *******************GUI initialization*******************
 
         List<GuiTexture> guis = new ArrayList<>();
-        GuiTexture gui = new GuiTexture(loader.loadTexture("Brick.jpg"), new Vector2f(0.5f, 0.5f), new Vector2f(0.25f,0.25f));
-        guis.add(gui);
-
+        //main menu
+        Vector2f buttonSize = new Vector2f(0.14f,0.07f);
+        Float buttonGap = 0.15f;
+        GuiTexture play = new GuiTexture(loader.loadTexture("Brick.jpg"), new Vector2f(0.5f, 0.5f), buttonSize);
+        GuiTexture options = new GuiTexture(loader.loadTexture("Brick.jpg"),new Vector2f(play.getPositions().x,play.getPositions().y+buttonGap),buttonSize);
+        GuiTexture exit = new GuiTexture(loader.loadTexture("Brick.jpg"),new Vector2f(options.getPositions().x,options.getPositions().y+buttonGap),buttonSize);
+        guis.add(play);
+        guis.add(options);
+        guis.add(exit);
         GuiRenderer guiRenderer = new GuiRenderer(loader);
 
         GuiClickCallback guiClickCallback = new GuiClickCallback();
-        guiClickCallback.addClickableGui(gui);
+        guiClickCallback.addClickableGui(play);
+        guiClickCallback.addClickableGui(options);
+        guiClickCallback.addClickableGui(exit);
 
         // *******************TextInitialization*******************
 
         TextMaster.init(loader);
 
         FontType font = new FontType(loader.loadFontTexture("font/PixelDistance.png"), "PixelDistance");
-
+        GUIText playText = new GUIText("Play", 1, font, new Vector2f(play.getPositions().x-play.getScale().x/2+0.01f,play.getPositions().y-play.getScale().y/2+0.01f), 0.12f, true, 0.0f, 0.1f, new Vector3f(1.0f,0.0f,0.0f), new Vector2f());
+        playText.setColor(1f,1f,1f);
+        GUIText optionsText = new GUIText("Options", 1, font,new Vector2f(options.getPositions().x-options.getScale().x/2+0.01f,options.getPositions().y-options.getScale().y/2+0.01f), 0.12f, true, 0.0f, 0.1f, new Vector3f(1.0f,0.0f,0.0f), new Vector2f());
+        optionsText.setColor(1f,1f,1f);
+        GUIText exitText = new GUIText("Exit", 1, font,new Vector2f(exit.getPositions().x-exit.getScale().x/2+0.01f,exit.getPositions().y-exit.getScale().y/2+0.01f), 0.12f, true, 0.0f, 0.1f, new Vector3f(1.0f,0.0f,0.0f), new Vector2f());
+        exitText.setColor(1f,1f,1f);
         // *******************Camera initialization*******************
 
         Camera camera = new Camera();
@@ -81,7 +95,6 @@ public class MenuTest {
 
         // *******************Terrain initialization*******************
 
-//        Terrain terrain2 = new Terrain(-1,-1, loader, texturePack, blendMap, "HeightMap.jpg");
 
         // *******************Entity initialization*******************
 
@@ -143,26 +156,20 @@ public class MenuTest {
             ParticleMaster.update(camera);
 
 
-//            for (Entity e : ferns)
-//                renderer.processEntity(e);
-//            renderer.processEntity(ship);
-//            renderer.processTerrain(terrain);
-//            renderer.processTerrain(terrain2);
-
-//            fbo.bindFrameBuffer();
-
-//            renderer.render(light,camera);
             ParticleMaster.renderParticles(camera, 1);
 
-
-//            fbo.unbindFrameBuffer();
-//            PostProcessing.doPostProcessing(fbo.getColorTexture());
 
             guiRenderer.render(guis);
             TextMaster.render();
 
             WindowManager.updateWindow();
             renderer.updateProjectionMatrix();
+
+            double []xpos=new double[1];
+            double []ypos   =new double[1];
+            GLFW.glfwGetCursorPos(window,xpos,ypos);
+            Point p = new Point((int)(xpos[0]),(int)(ypos[0]));
+            //System.out.println(p);
         }
 
         // *******************Clean up*******************
