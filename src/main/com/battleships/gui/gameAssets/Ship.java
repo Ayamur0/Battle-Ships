@@ -9,10 +9,10 @@ import java.util.List;
 
 public abstract class Ship {
 
-    private static final int NORTH = 0;
-    private static final int EAST = 1;
-    private static final int SOUTH = 2;
-    private static final int WEST = 3;
+    protected static final int NORTH = 0;
+    protected static final int EAST = 1;
+    protected static final int SOUTH = 2;
+    protected static final int WEST = 3;
 
     //xMultiplier, zMultiplier, yValue, standardSize
     private static final float[][] STANDARDSHIPVALUES = {{},
