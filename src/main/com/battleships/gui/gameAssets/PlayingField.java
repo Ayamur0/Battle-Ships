@@ -3,11 +3,19 @@ package com.battleships.gui.gameAssets;
 import com.battleships.gui.entities.Entity;
 import com.battleships.gui.models.ModelTexture;
 import com.battleships.gui.models.TexturedModel;
+import com.battleships.gui.particles.ParticleSystemComplex;
+import com.battleships.gui.particles.ParticleTexture;
 import com.battleships.gui.renderingEngine.Loader;
+import com.battleships.gui.window.WindowManager;
+import org.apache.commons.math3.linear.*;
+import org.joml.Matrix3f;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class PlayingField {
 
@@ -26,6 +34,12 @@ public class PlayingField {
     private Entity own;
     private Entity opponent;
     private int vaos;
+
+    private Entity ball;
+    private boolean cannonballFlying;
+    private Cannonball cannonball;
+    private ParticleSystemComplex fire;
+    private Map<Integer, List<Vector3f>> burningFires = new HashMap<>();
 
     private int size;
     private int textureOffset;
@@ -57,6 +71,15 @@ public class PlayingField {
 //        opponent.getRotation().z -= 90;
         opponent.getRotation().x -= 90;
 //        opponent.getRotation().y -= 90;
+
+        this.ball = loader.loadEntityfromOBJ("cannonball", "cannonball.png", 10,1);
+        ParticleTexture fireTex = new ParticleTexture(loader.loadTexture("particles/fire.png"), 8, true);
+        this.fire = new ParticleSystemComplex(fireTex,20, 3.5f, -0.05f, 2f, 17);
+        fire.setLifeError(0.3f);
+        fire.setScaleError(0.3f);
+        fire.setSpeedError(0.15f);
+        fire.randomizeRotation();
+        fire.setDirection(new Vector3f(0.1f,1, 0.1f), -0.15f);
     }
 
     public Entity getOwn() {
@@ -69,7 +92,7 @@ public class PlayingField {
 
     public void placeShip(List<Entity> entities, ShipManager ship, int field, Vector2f index, int shipSize, int rotation){
         //calculate index relative to center of field
-        Vector2f relativeIndex = new Vector2f(index.x - size / 2f, index.y - size / 2f);
+        Vector2f relativeIndex = convertIndextoCoords(index);
         Entity usedField = field == OWNFIELD ? own : opponent;
 //        ship.placeShip(entities, shipSize, new Vector3f(ownPosition.x - 150 + 150/31f + 150/31f * 0.5f ,ownPosition.y + 0.5f,ownPosition.z - 150 + 150/31f + 150/31f * 0.5f / index * 0.5f), new Vector3f(), 1);
         if(rotation == Ship.NORTH || rotation == Ship.SOUTH) {
@@ -87,6 +110,7 @@ public class PlayingField {
             //add offset of -0.5 so all ships are centered
             //size + 1 because of row and column containing letters and numbers
             entities.get(shipIndex).getPosition().x = usedField.getPosition().x + relativeIndex.x * usedField.getScale() / (size + 1) ;
+            entities.get(shipIndex).getPosition().y -= 3;
             entities.get(shipIndex).getPosition().z = usedField.getPosition().z + relativeIndex.y * usedField.getScale() / (size + 1) - 0.5f;
             entities.get(shipIndex).getRotation().y += rotation == Ship.NORTH ? 0 : 180;
         }
@@ -104,6 +128,7 @@ public class PlayingField {
             //add offset of -0.5 so all ships are centered
             //size + 1 because of row and column containing letters and numbers
             entities.get(shipIndex).getPosition().x = usedField.getPosition().x + relativeIndex.x * usedField.getScale() / (size + 1) - 0.5f;
+            entities.get(shipIndex).getPosition().y -= 3;
             entities.get(shipIndex).getPosition().z = usedField.getPosition().z + relativeIndex.y * usedField.getScale() / (size + 1) - 0.5f;
             entities.get(shipIndex).getRotation().y += rotation == Ship.EAST ? 270 : 90;
         }
@@ -112,5 +137,84 @@ public class PlayingField {
 //        ship.placeShip(entities, 3, new Vector3f(350 + 12 * 300f / 31 - 0.5f ,ownPosition.y + 0.5f,-450), new Vector3f(), 1f);
 //        ship.placeShip(entities, 2, new Vector3f(350 + 13 * 300f / 31 - 0.5f ,ownPosition.y + 0.5f,-450 + 300f / 31 * 0.5f) , new Vector3f(), 1f);
         //ownPosition.x + 300 / index * 0.5f,ownPosition.y,ownPosition.z + 300 / index * 0.5f
+    }
+
+    /**
+     * Create a flying cannonball.
+     * @param cannonballs - list of all cannonball entities that should be rendered on screen
+     * @param origin - the playing field from which the cannonball originates
+     * @param destination - the destination cell on the other field
+     */
+    public void shoot(List<Entity> cannonballs, int origin, Vector2f destination){
+        //TODO shoot without animation
+        //calculate index relative to center of field
+        if(cannonballFlying) //TODO test this when clicking on field together with if its your turn
+            return;
+
+        if(/*call logic to test whether field has been shot already or not
+            better: only call this function from logic if shooting is allowed*/false)
+            return;
+
+        Vector2f currentDestination = new Vector2f();
+
+        Vector2f originIndex = origin == OWNFIELD ? new Vector2f(ownPosition.x , ownPosition.z) : new Vector2f(opponentPosition.x, opponentPosition.z);
+
+        //calculate position of destination relative to center
+        currentDestination = convertIndextoCoords(destination);
+        //calculate position of destination as absolute coordinates
+        currentDestination.x += origin == OWNFIELD ? opponent.getPosition().x : own.getPosition().x;
+        currentDestination.y += origin == OWNFIELD ? opponent.getPosition().z : own.getPosition().z;
+
+        //create cannonball flying from origin to destination
+        this.cannonball = new Cannonball(ball, currentDestination, originIndex, cannonballs.size());
+        cannonballFlying = true;
+
+        //add cannonball to rendered entities
+        cannonballs.add(ball);
+    }
+
+    /**
+     * Move the cannonball.
+     * Needs to be called every frame while a cannonball is flying.
+     * @param cannonballs - List containing the cannonball
+     */
+    public void moveCannonball(List<Entity> cannonballs){
+        //TODO make list an entity because only one cannonball is there at a time
+        if(!cannonballFlying)
+            return;
+        if(cannonball.update()) {
+            cannonballs.remove(cannonball.getEntityIndex());
+            cannonballHit();
+        }
+    }
+
+    public void cannonballHit(){
+        //TODO integration with logic
+        if(/*call logic to test if water or ship has been hit*/ true){
+            //get index of hit ship from logic
+            int shipIndex = 0;
+            if (burningFires.containsKey(shipIndex)){
+                burningFires.get(shipIndex).add(new Vector3f(cannonball.getDestination().x, 0, cannonball.getDestination().y));
+            }
+            else{
+                burningFires.put(shipIndex, new ArrayList<Vector3f>());
+                burningFires.get(shipIndex).add(new Vector3f(cannonball.getDestination().x, 0, cannonball.getDestination().y));
+            }
+            cannonballFlying = false;
+        }
+        else //TODO water splash
+            return;
+    }
+
+    public void renderFires(){
+        for(int i : burningFires.keySet()){
+            for(Vector3f pos : burningFires.get(i)){
+                fire.generateParticles(pos);
+            }
+        }
+    }
+
+    private Vector2f convertIndextoCoords(Vector2f index){
+        return new Vector2f(index.x - size / 2f, index.y - size / 2f);
     }
 }

@@ -16,5 +16,6 @@
     <orderEntry type="library" name="lwjgl-glfw" level="project" />
     <orderEntry type="library" name="lwjgl-stb-natives-windows" level="project" />
     <orderEntry type="library" name="PNGDecoder" level="project" />
+    <orderEntry type="library" name="commons-math3-3.6.1" level="project" />
   </component>
 </module>

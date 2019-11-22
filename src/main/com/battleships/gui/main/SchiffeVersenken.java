@@ -129,6 +129,7 @@ public class SchiffeVersenken {
         entities.add(playingField.getOpponent());
         playingField.placeShip(entities, ships, 0, new Vector2f(15,15),5, 0);
         playingField.placeShip(entities, ships, 0, new Vector2f(3,3),3, 1);
+        playingField.shoot(entities,1, new Vector2f(15,15));
 //        playingField.placeShip(entities, ships, 0, 7,2);
 //        playingField.placeShip(entities, ships, 0, 9,3);
 //        playingField.placeShip(entities, ships, 0, 11,5);
@@ -171,12 +172,12 @@ public class SchiffeVersenken {
         while (!GLFW.glfwWindowShouldClose(window)){
             camera.move(window, terrain);
             picker.update();
-
+            ParticleMaster.update(camera);
 
             Vector3f terrainPoint = picker.getCurrentTerrainPoint();
             if(terrainPoint != null) {
 //                entities.get(3).setPosition(new Vector3f(terrainPoint.x, terrainPoint.y < -3 ? -3 : terrainPoint.y, terrainPoint.z));
-                System.out.println(terrainPoint.x + " " + terrainPoint.z);
+//                System.out.println(terrainPoint.x + " " + terrainPoint.z);
             }
             GL11.glEnable(GL30.GL_CLIP_DISTANCE0);
 
@@ -187,6 +188,7 @@ public class SchiffeVersenken {
             camera.getPosition().y -= distance;
             camera.invertPitch();
             renderer.renderScene(entities, terrain, light, camera, new Vector4f(0, 1, 0, -waterTiles.get(0).getHeight() + 1f));
+            ParticleMaster.renderParticles(camera, 1);
             //move camera back to normal
             camera.getPosition().y += distance;
             camera.invertPitch();
@@ -198,24 +200,19 @@ public class SchiffeVersenken {
             GL11.glDisable(GL30.GL_CLIP_DISTANCE0); //not all drivers support disabling, if it doesn't work set clipPlane when rendering to screen high enough so nothing gets clipped
 
             system.generateParticles(new Vector3f());
+            playingField.renderFires();
 //            new Particle(star, new Vector3f(camera.getPosition().x , camera.getPosition().y, camera.getPosition().z), new Vector3f(0, 30, 0), 1 ,4 ,0 ,1);
-            ParticleMaster.update(camera);
+
 
             ship.getRotation().y += 0.1f;
-
-//            for (Entity e : ferns)
-//                renderer.processEntity(e);
-//            renderer.processEntity(ship);
-//            renderer.processTerrain(terrain);
-//            renderer.processTerrain(terrain2);
-
-//            fbo.bindFrameBuffer();
+            playingField.moveCannonball(entities);
 
             renderer.renderScene(entities, terrain, light, camera, new Vector4f(0, -1, 0, 10000));
-//            renderer.render(light,camera);
-            ParticleMaster.renderParticles(camera, 1);
+
 
             waterRenderer.render(waterTiles, camera, light);
+
+            ParticleMaster.renderParticles(camera, 1);
 
 //            fbo.unbindFrameBuffer();
 //            PostProcessing.doPostProcessing(fbo.getColorTexture());
