@@ -193,7 +193,7 @@ public class PlayingField {
         if(/*call logic to test if water or ship has been hit*/ true){
             //get index of hit ship from logic
             int shipIndex = 0;
-            if (burningFires.containsKey(shipIndex)){
+            if (burningFires.containsKey(shipIndex)){ //TODO test if ship has been destroyed (size of Vector List == size of ship)
                 burningFires.get(shipIndex).add(new Vector3f(cannonball.getDestination().x, 0, cannonball.getDestination().y));
             }
             else{

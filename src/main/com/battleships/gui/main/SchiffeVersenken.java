@@ -94,7 +94,7 @@ public class SchiffeVersenken {
 
         TerrainTexturePack texturePack = new TerrainTexturePack(texture0, texture1, texture2, texture3, texture4, texture5);
 
-        TerrainTexture blendMap = new TerrainTexture(loader.loadTexture("BlendMap.tga"));
+        TerrainTexture blendMap = new TerrainTexture(loader.loadTexture("BlendMap.tga")); //TODO change blendMap to remove water texture
 
         Terrain terrain = new Terrain(0,-1, loader, texturePack, blendMap, "HeightMap.jpg");
 //        Terrain terrain2 = new Terrain(-1,-1, loader, texturePack, blendMap, "HeightMap.jpg");
