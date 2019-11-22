@@ -36,7 +36,7 @@ public class Camera {
     public GLFWKeyCallback keyCallback = new GLFWKeyCallback() {
         @Override
         public void invoke(long window, int key, int scanCode, int action, int mods) {
-            if(key == GLFW.GLFW_KEY_ESCAPE && action == GLFW.GLFW_PRESS)
+            if(key == GLFW.GLFW_KEY_F11 && action == GLFW.GLFW_PRESS)
                 WindowManager.setFullScreen(!WindowManager.isFullscreen());
         }
     };
