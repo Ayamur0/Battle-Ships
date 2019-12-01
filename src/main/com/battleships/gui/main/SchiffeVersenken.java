@@ -123,7 +123,7 @@ public class SchiffeVersenken {
 
         entities.add(ship);
 
-        PlayingField playingField =  new PlayingField(30, loader);
+        PlayingField playingField =  new PlayingField(entities,30, loader);
         ShipManager ships = new ShipManager(loader);
         entities.add(playingField.getOwn());
         entities.add(playingField.getOpponent());
@@ -206,6 +206,7 @@ public class SchiffeVersenken {
 
             ship.getRotation().y += 0.1f;
             playingField.moveCannonball(entities);
+            playingField.highligtCell(picker.getCurrentIntersectionPoint());
 
             renderer.renderScene(entities, terrain, light, camera, new Vector4f(0, -1, 0, 10000));
 

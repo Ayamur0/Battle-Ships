@@ -22,7 +22,8 @@ public class PlayingField {
     private static final int OWNFIELD = 0;
     private static final int OPPONENTFIELD = 1;
 
-    private static final String texturePath = "PlayingField.png";
+    private static final String playingfieldTexturePath = "PlayingField.png";
+    private static final String highlightTexturePath = "cannonball.png";
     private static final float[] VERTICES = {-0.5f, 0.5f, 0, -0.5f, -0.5f, 0, 0.5f, -0.5f, 0, 0.5f, 0.5f, 0};
     private static final int[] INDICES = {0,1,3,3,1,2};
     private static final float[] TEXTURECOORDS = {0,0,0,1,1,1,1,0};
@@ -41,6 +42,8 @@ public class PlayingField {
     private ParticleSystemComplex fire;
     private Map<Integer, List<Vector3f>> burningFires = new HashMap<>();
 
+    private Entity highlighter;
+
     private int size;
     private int textureOffset;
     private Vector3f ownPosition;
@@ -49,11 +52,11 @@ public class PlayingField {
     private float scale;
 
 
-    public PlayingField(int size, Loader loader) {
+    public PlayingField(List<Entity> entities, int size, Loader loader) {
         this.size = size;
         this.rotation = new Vector3f();
-        this.scale = 1f;
-        this.texture = new ModelTexture(loader.loadTexture(texturePath));
+        this.scale = 300f;
+        this.texture = new ModelTexture(loader.loadTexture(playingfieldTexturePath));
         this.ownPosition = new Vector3f(350, -2.5f, -450);
         this.opponentPosition = new Vector3f(650, -2.5f, -450);
         this.textureOffset = (size + 1) / MAXSIZE;
@@ -80,6 +83,11 @@ public class PlayingField {
         fire.setSpeedError(0.15f);
         fire.randomizeRotation();
         fire.setDirection(new Vector3f(0.1f,1, 0.1f), -0.15f);
+
+        ModelTexture highlightTex = new ModelTexture(loader.loadTexture(highlightTexturePath));
+        highlighter = new Entity(new TexturedModel(loader.loadToVAO(VERTICES, TEXTURECOORDS, NORMALS, INDICES), highlightTex), 0, new Vector3f(), new Vector3f(), scale / (size + 1));
+        highlighter.getRotation().x -= 90;
+        entities.add(highlighter);
     }
 
     public Entity getOwn() {
@@ -214,7 +222,65 @@ public class PlayingField {
         }
     }
 
+    public void highligtCell(Vector3f intersectionPoint){
+
+        Vector3f pointedCell = getPointedCell(intersectionPoint);
+        if(pointedCell == null){
+            removeHighlighter();
+            return;
+        }
+        setHighlighter(new Vector2f(pointedCell.x, pointedCell.y), (int)pointedCell.z);
+    }
+
+    private Vector3f getPointedCell(Vector3f intersectionPoint){
+        return convertCoordsToIndex(intersectionPoint);
+    }
+
     private Vector2f convertIndextoCoords(Vector2f index){
         return new Vector2f(index.x - size / 2f, index.y - size / 2f);
+    }
+
+    private Vector3f convertCoordsToIndex(Vector3f coords){
+        Vector3f result = new Vector3f();
+        int field;
+        float cellSize;
+
+        if(coords.x > ownPosition.x - own.getScale() && coords.x < ownPosition.x + own.getScale() && coords.z > ownPosition.z - own.getScale() && coords.z < ownPosition.z + own.getScale()){
+            field = OWNFIELD;
+            result.x = coords.x - ownPosition.x + own.getScale() / 2;
+            result.y = coords.z - ownPosition.z + own.getScale() / 2;
+            cellSize = own.getScale() / size;
+        }
+
+        else if(coords.x > opponentPosition.x - opponent.getScale() && coords.x < opponentPosition.x + opponent.getScale() && coords.z > opponentPosition.z - opponent.getScale() && coords.z < opponentPosition.z + opponent.getScale()) {
+            field = OPPONENTFIELD;
+            result.x = coords.x - opponentPosition.x + opponent.getScale() / 2;
+            result.y = coords.z - opponentPosition.z + opponent.getScale() / 2;
+            cellSize = opponent.getScale() / size;
+        }
+        else
+            return null;
+
+        int indexX = (int)(result.x / (scale / (size + 1)));
+        int indexY = (int)(result.y / (scale / (size + 1)));
+
+        result.x = indexX;
+        result.y = indexY;
+        result.z = field;
+
+        return result;
+    }
+
+    private void removeHighlighter(){
+        highlighter.getPosition().y = -1000;
+    }
+
+    private void setHighlighter(Vector2f index, int field){
+        Entity usedField = field == OWNFIELD ? own : opponent;
+        float offset = size % 2 == 0 ? 0 : 0.5f;
+        Vector2f coords = convertIndextoCoords(index);
+        Vector3f position = new Vector3f((coords.x + offset) * usedField.getScale() / (size + 1) + usedField.getPosition().x, -2.51f, (coords.y + offset) * usedField.getScale() / (size + 1) + usedField.getPosition().z);
+        System.out.println(position.x + " " + position.y + " " + position.z);
+        highlighter.setPosition(position);
     }
 }

@@ -4,10 +4,7 @@ import com.battleships.gui.entities.Camera;
 import com.battleships.gui.renderingEngine.MasterRenderer;
 import com.battleships.gui.terrains.Terrain;
 import com.battleships.gui.window.WindowManager;
-import org.joml.Matrix4f;
-import org.joml.Vector2f;
-import org.joml.Vector3f;
-import org.joml.Vector4f;
+import org.joml.*;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.GLFW;
 
@@ -25,6 +22,7 @@ public class MousePicker {
 
     private Terrain terrain;
     private Vector3f currentTerrainPoint;
+    private Vector3f currentIntersectionPoint;
 
     public MousePicker(Camera cam, Matrix4f projection, Terrain terrain) {
         camera = cam;
@@ -35,6 +33,10 @@ public class MousePicker {
 
     public Vector3f getCurrentTerrainPoint() {
         return currentTerrainPoint;
+    }
+
+    public Vector3f getCurrentIntersectionPoint() {
+        return currentIntersectionPoint;
     }
 
     public Vector3f getCurrentRay() {
@@ -53,6 +55,7 @@ public class MousePicker {
         } else {
             currentTerrainPoint = null;
         }
+        currentIntersectionPoint = getXZPlaneIntersectionPoint(camera.getPosition(), currentRay, -2.5f);
 
 //        if(currentTerrainPoint != null)
 //            System.out.println(currentTerrainPoint.x + " " + currentTerrainPoint.y + " " + currentTerrainPoint.z);
@@ -112,6 +115,14 @@ public class MousePicker {
     }
 
     //**********************************************************
+
+    private Vector3f getXZPlaneIntersectionPoint(Vector3f origin, Vector3f ray, float height){
+        float parameter = (float) Intersectiond.intersectRayPlane(origin.x, origin.y, origin.z, ray.x, ray.y, ray.z, 0, height, 0, 0, 1, 0, 0);
+        Vector3f result = new Vector3f();
+        origin.add(ray.mul(parameter), result);
+        return result;
+    }
+
 
     private Vector3f getPointOnRay(Vector3f ray, float distance) {
         Vector3f camPos = camera.getPosition();

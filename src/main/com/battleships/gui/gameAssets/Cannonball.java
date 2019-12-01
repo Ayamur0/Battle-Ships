@@ -10,7 +10,7 @@ public class Cannonball{
 
     private static final float SPEED = 100.0f;
     private static final float ANGLE = (float)Math.toRadians(75);
-    private static final float GRAVITY = -50 * 9.81f * 0.2f;
+    private static final float MAXHEIGHT = 100;
 
     private Entity ball;
     private int entityIndex;
@@ -80,7 +80,7 @@ public class Cannonball{
         x2 = sidewaysDistance;
         y2 = -2.5f;
         x3 = 0.5f * sidewaysDistance;
-        y3 = 100;
+        y3 = MAXHEIGHT;
 
         //create matrix left side where one row contains the parabola function of one point
         //parabola function: y = ax^2 + bx + c
@@ -119,7 +119,7 @@ public class Cannonball{
         position.y = a*x*x + b*x + c;
         debug++;
 
-        System.out.println(position.x + " " + position.y + " " + position.z);
+//        System.out.println(position.x + " " + position.y + " " + position.z);
         ball.setPosition(position);
 
         //if ball is below this y value it has hit a ship or water
