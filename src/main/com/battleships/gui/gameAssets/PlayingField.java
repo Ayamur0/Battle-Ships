@@ -77,6 +77,7 @@ public class PlayingField {
 
         this.ball = loader.loadEntityfromOBJ("cannonball", "cannonball.png", 10,1);
         ParticleTexture fireTex = new ParticleTexture(loader.loadTexture("particles/fire.png"), 8, true);
+
         this.fire = new ParticleSystemComplex(fireTex,20, 3.5f, -0.05f, 2f, 17);
         fire.setLifeError(0.3f);
         fire.setScaleError(0.3f);
@@ -163,13 +164,15 @@ public class PlayingField {
             better: only call this function from logic if shooting is allowed*/false)
             return;
 
-        Vector2f currentDestination = new Vector2f();
+        Vector2f currentDestination;
 
         Vector2f originIndex = origin == OWNFIELD ? new Vector2f(ownPosition.x , ownPosition.z) : new Vector2f(opponentPosition.x, opponentPosition.z);
 
         //calculate position of destination relative to center
         currentDestination = convertIndextoCoords(destination);
         //calculate position of destination as absolute coordinates
+        currentDestination.x *= origin == OWNFIELD ? opponent.getScale() / (size + 1) : own.getScale() / (size + 1);
+        currentDestination.y *= origin == OWNFIELD ? opponent.getScale() / (size + 1) : own.getScale() / (size + 1);
         currentDestination.x += origin == OWNFIELD ? opponent.getPosition().x : own.getPosition().x;
         currentDestination.y += origin == OWNFIELD ? opponent.getPosition().z : own.getPosition().z;
 
@@ -232,7 +235,7 @@ public class PlayingField {
         setHighlighter(new Vector2f(pointedCell.x, pointedCell.y), (int)pointedCell.z);
     }
 
-    private Vector3f getPointedCell(Vector3f intersectionPoint){
+    public Vector3f getPointedCell(Vector3f intersectionPoint){
         return convertCoordsToIndex(intersectionPoint);
     }
 
@@ -243,20 +246,17 @@ public class PlayingField {
     private Vector3f convertCoordsToIndex(Vector3f coords){
         Vector3f result = new Vector3f();
         int field;
-        float cellSize;
 
-        if(coords.x > ownPosition.x - own.getScale() && coords.x < ownPosition.x + own.getScale() && coords.z > ownPosition.z - own.getScale() && coords.z < ownPosition.z + own.getScale()){
+        if(coords.x > ownPosition.x - own.getScale() / 2 && coords.x < ownPosition.x + own.getScale() / 2 && coords.z > ownPosition.z - own.getScale() / 2 && coords.z < ownPosition.z + own.getScale() / 2){
             field = OWNFIELD;
             result.x = coords.x - ownPosition.x + own.getScale() / 2;
             result.y = coords.z - ownPosition.z + own.getScale() / 2;
-            cellSize = own.getScale() / size;
         }
 
-        else if(coords.x > opponentPosition.x - opponent.getScale() && coords.x < opponentPosition.x + opponent.getScale() && coords.z > opponentPosition.z - opponent.getScale() && coords.z < opponentPosition.z + opponent.getScale()) {
+        else if(coords.x > opponentPosition.x - opponent.getScale() / 2 && coords.x < opponentPosition.x + opponent.getScale() / 2 && coords.z > opponentPosition.z - opponent.getScale() / 2 && coords.z < opponentPosition.z + opponent.getScale() / 2) {
             field = OPPONENTFIELD;
             result.x = coords.x - opponentPosition.x + opponent.getScale() / 2;
             result.y = coords.z - opponentPosition.z + opponent.getScale() / 2;
-            cellSize = opponent.getScale() / size;
         }
         else
             return null;

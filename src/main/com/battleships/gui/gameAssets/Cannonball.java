@@ -115,7 +115,7 @@ public class Cannonball{
         position.z += horizontalVelocity.y * WindowManager.getDeltaTime();
 
         //calculate y position of cannonball using parabola function
-        x += Math.abs((horizontalVelocity.x + horizontalVelocity.y) * WindowManager.getDeltaTime());
+        x += (Math.abs(horizontalVelocity.x) + Math.abs(horizontalVelocity.y)) * WindowManager.getDeltaTime();
         position.y = a*x*x + b*x + c;
         debug++;
 

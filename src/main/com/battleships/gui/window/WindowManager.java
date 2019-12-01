@@ -80,6 +80,7 @@ public class WindowManager {
 
     static public void setCallbacks(Camera camera, GuiClickCallback guiClickCallback, WaterFrameBuffers wFbo){
         GLFW.glfwSetMouseButtonCallback(window, guiClickCallback.guiClick);
+        //TODO set ingame clickcallback so that if on no gui, it gets checked if on playingfield
         GLFW.glfwSetScrollCallback(window, camera.scrollCallback);
         GLFW.glfwSetKeyCallback(window, camera.keyCallback);
         GLFW.glfwSetWindowSizeCallback(window, wFbo.sizeCallback);

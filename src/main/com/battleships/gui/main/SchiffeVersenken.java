@@ -130,6 +130,8 @@ public class SchiffeVersenken {
         playingField.placeShip(entities, ships, 0, new Vector2f(15,15),5, 0);
         playingField.placeShip(entities, ships, 0, new Vector2f(3,3),3, 1);
         playingField.shoot(entities,1, new Vector2f(15,15));
+        Vector3f cellIntersection;
+        Vector3f pointedCell;
 //        playingField.placeShip(entities, ships, 0, 7,2);
 //        playingField.placeShip(entities, ships, 0, 9,3);
 //        playingField.placeShip(entities, ships, 0, 11,5);
@@ -206,7 +208,14 @@ public class SchiffeVersenken {
 
             ship.getRotation().y += 0.1f;
             playingField.moveCannonball(entities);
-            playingField.highligtCell(picker.getCurrentIntersectionPoint());
+            cellIntersection = picker.getCurrentIntersectionPoint();
+            playingField.highligtCell(cellIntersection);
+            if(GLFW.glfwGetMouseButton(window, GLFW.GLFW_MOUSE_BUTTON_LEFT) == GLFW.GLFW_PRESS){
+                pointedCell = playingField.getPointedCell(cellIntersection);
+                if(pointedCell != null){
+                    playingField.shoot(entities, 1, new Vector2f(pointedCell.x, pointedCell.y));
+                }
+            }
 
             renderer.renderScene(entities, terrain, light, camera, new Vector4f(0, -1, 0, 10000));
 
