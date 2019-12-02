@@ -2,6 +2,7 @@ package com.battleships.gui.window;
 
 import com.battleships.gui.entities.Camera;
 import com.battleships.gui.guis.GuiClickCallback;
+import com.battleships.gui.guis.GuiManager;
 import com.battleships.gui.main.SchiffeVersenken;
 import com.battleships.gui.postProcessing.Fbo;
 import com.battleships.gui.renderingEngine.MasterRenderer;
@@ -78,8 +79,8 @@ public class WindowManager {
         return window;
     }
 
-    static public void setCallbacks(Camera camera, GuiClickCallback guiClickCallback, WaterFrameBuffers wFbo){
-        GLFW.glfwSetMouseButtonCallback(window, guiClickCallback.guiClick);
+    static public void setCallbacks(Camera camera, GuiManager guiManager, WaterFrameBuffers wFbo){
+        GLFW.glfwSetMouseButtonCallback(window, guiManager.testGuiClick);
         //TODO set ingame clickcallback so that if on no gui, it gets checked if on playingfield
         GLFW.glfwSetScrollCallback(window, camera.scrollCallback);
         GLFW.glfwSetKeyCallback(window, camera.keyCallback);
