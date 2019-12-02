@@ -25,6 +25,4 @@ public abstract class GuiClickCallback {
     }
 
     abstract void clickAction();
-
-
 }

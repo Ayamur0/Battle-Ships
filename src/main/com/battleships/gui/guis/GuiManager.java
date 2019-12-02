@@ -6,9 +6,7 @@ import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWMouseButtonCallback;
 
 import java.nio.DoubleBuffer;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
 
@@ -34,15 +32,23 @@ public class GuiManager {
      * @param gui - The {@link GuiTexture} the click action should be removed from.
      * @return - {@code true} if the gui had a click action that got removed, {@code false} else.
      */
-    public boolean removeclickableGui(GuiTexture gui){
+    public boolean removeClickableGui(GuiTexture gui){
         if(clickableGuis.remove(gui) != null)
             return true;
         return false;
     }
 
     /**
+     * Removes the click function from all guis that has one.
+     */
+    public void clearClickableGuis(){
+        clickableGuis.clear();
+    }
+
+    /**
      * Function that gets called if the user left clicks anywhere in the game.
-     * Tests all guis with a click action if they were clicked and if one was clicked executes the click action of that gui.
+     * Gets the cursor position and tests all guis with a click action if they were
+     * clicked on and if one was clicked executes the click action of that gui.
      */
     public GLFWMouseButtonCallback testGuiClick = new GLFWMouseButtonCallback() {
         @Override
