@@ -1,6 +1,5 @@
 package com.battleships.gui.guis;
 
-import com.battleships.gui.window.WindowManager;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWMouseButtonCallback;
@@ -13,8 +12,8 @@ import java.util.function.Supplier;
 public class GuiManager {
 
     private Map<GuiTexture, Object> clickableGuis = new HashMap<>();
-    private final DoubleBuffer x = BufferUtils.createDoubleBuffer(1);
-    private final DoubleBuffer y = BufferUtils.createDoubleBuffer(1);
+    private DoubleBuffer x = BufferUtils.createDoubleBuffer(1);
+    private DoubleBuffer y = BufferUtils.createDoubleBuffer(1);
 
     /**
      * Add an action to a {@link GuiTexture} that gets execute when the gui element gets clicked on.
@@ -39,7 +38,7 @@ public class GuiManager {
     }
 
     /**
-     * Removes the click function from all guis that has one.
+     * Removes the click function from all guis that had one.
      */
     public void clearClickableGuis(){
         clickableGuis.clear();
@@ -61,8 +60,8 @@ public class GuiManager {
                 float xpos = (float)x.get();
                 float ypos = (float)y.get();
 
-                x.reset();
-                y.reset();
+                x = BufferUtils.createDoubleBuffer(1);
+                y = BufferUtils.createDoubleBuffer(1);
 
                 for(GuiTexture texture : clickableGuis.keySet()){
                     GuiClickCallback current = (GuiClickCallback)clickableGuis.get(texture);

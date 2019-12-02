@@ -69,10 +69,10 @@ public class MenuTest {
         guis.add(exit);
         GuiRenderer guiRenderer = new GuiRenderer(loader);
 
-        GuiClickCallback guiClickCallback = new GuiClickCallback();
-        guiClickCallback.addClickableGui(play);
-        guiClickCallback.addClickableGui(options);
-        guiClickCallback.addClickableGui(exit);
+//        GuiClickCallback guiClickCallback = new GuiClickCallback();
+//        guiClickCallback.addClickableGui(play);
+//        guiClickCallback.addClickableGui(options);
+//        guiClickCallback.addClickableGui(exit);
 
         // *******************TextInitialization*******************
 
@@ -127,7 +127,7 @@ public class MenuTest {
 
         // *******************Callbacks initialization*******************
 
-        WindowManager.setCallbacks(camera, guiClickCallback, waterFbos);
+//        WindowManager.setCallbacks(camera, guiClickCallback, waterFbos);
 
 //        MousePicker picker = new MousePicker(renderer.getProjectionMatrix(), camera, terrain);
 

@@ -9,6 +9,7 @@ import com.battleships.gui.fontRendering.TextMaster;
 import com.battleships.gui.gameAssets.PlayingField;
 import com.battleships.gui.gameAssets.ShipManager;
 import com.battleships.gui.guis.GuiClickCallback;
+import com.battleships.gui.guis.GuiManager;
 import com.battleships.gui.guis.GuiRenderer;
 import com.battleships.gui.guis.GuiTexture;
 import com.battleships.gui.particles.*;
@@ -58,8 +59,9 @@ public class SchiffeVersenken {
 
         GuiRenderer guiRenderer = new GuiRenderer(loader);
 
-        GuiClickCallback guiClickCallback = new GuiClickCallback();
-        guiClickCallback.addClickableGui(gui);
+//        GuiClickCallback guiClickCallback = new GuiClickCallback();
+//        guiClickCallback.addClickableGui(gui);
+        GuiManager guiManager = new GuiManager();
 
         // *******************TextInitialization*******************
 
@@ -163,7 +165,7 @@ public class SchiffeVersenken {
 
         // *******************Callbacks initialization*******************
 
-        WindowManager.setCallbacks(camera, guiClickCallback, waterFbos);
+        WindowManager.setCallbacks(camera, guiManager, waterFbos);
 
         MousePicker picker = new MousePicker(camera, renderer.getProjectionMatrix(), terrain);
 
