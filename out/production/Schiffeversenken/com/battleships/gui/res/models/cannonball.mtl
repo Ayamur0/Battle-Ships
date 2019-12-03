@@ -1,0 +1,13 @@
+# Blender MTL File: 'ships.blend'
+# Material Count: 1
+
+newmtl Material.001
+Ns 160.828523
+Ka 0.695455 0.695455 0.695455
+Kd 0.800000 0.800000 0.800000
+Ks 0.168182 0.168182 0.168182
+Ke 0.0 0.0 0.0
+Ni 1.450000
+d 1.000000
+illum 3
+map_Kd C:\\Users\\timst\\Documents\\IntelliJ\\Projects\\Programmier Praktikum\\Schiffeversenken\\src\\main\\com\\battleships\\gui\\res\\textures\\cannonball.png

@@ -22,8 +22,8 @@ uniform float useFakeLighting;
 uniform float numberOfRows;
 uniform vec2 offset;
 
-const float density = 0.0035; //density of fog
-const float gradient = 3.0; //how far away objects start getting foggy
+const float density = 0.0015; //density of fog (how far objects need to be from camera before they get foggy)
+const float gradient = 3.0; //how fast objects get foggy once they are in fog range
 
 uniform vec4 plane;
 
