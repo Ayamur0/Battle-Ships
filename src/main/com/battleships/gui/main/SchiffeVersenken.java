@@ -8,6 +8,7 @@ import com.battleships.gui.fontMeshCreator.GUIText;
 import com.battleships.gui.fontRendering.TextMaster;
 import com.battleships.gui.gameAssets.PlayingField;
 import com.battleships.gui.gameAssets.ShipManager;
+import com.battleships.gui.gameAssets.ingameGui.ShipSelector;
 import com.battleships.gui.guis.GuiClickCallback;
 import com.battleships.gui.guis.GuiManager;
 import com.battleships.gui.guis.GuiRenderer;
@@ -54,15 +55,15 @@ public class SchiffeVersenken {
         // *******************GUI initialization*******************
 
         List<GuiTexture> guis = new ArrayList<>();
-        GuiTexture gui = new GuiTexture(loader.loadTexture("IngameGuiShipSelectBackground.png"), new Vector2f(0.5f,1-0.1265f), new Vector2f(0.7f,0.253f));
-        GuiTexture gui2 = new GuiTexture(loader.loadTexture("IngameGuiShipSelectShip1.png"), new Vector2f(0.5f,1-0.1265f), new Vector2f(0.7f,0.253f));
-        guis.add(gui);
+
 
         GuiRenderer guiRenderer = new GuiRenderer(loader);
 
 //        GuiClickCallback guiClickCallback = new GuiClickCallback();
 //        guiClickCallback.addClickableGui(gui);
         GuiManager guiManager = new GuiManager();
+
+        ShipSelector test = new ShipSelector(loader, guiManager, guis);
 
         // *******************TextInitialization*******************
 
