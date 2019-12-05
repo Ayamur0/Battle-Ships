@@ -54,7 +54,7 @@ public class SchiffeVersenken {
         // *******************GUI initialization*******************
 
         List<GuiTexture> guis = new ArrayList<>();
-        GuiTexture gui = new GuiTexture(loader.loadTexture("FernAtlas.tga"), new Vector2f(0.125f,0.125f), new Vector2f(0.25f,0.25f));
+        GuiTexture gui = new GuiTexture(loader.loadTexture("IngameGuiShipSelect.png"), new Vector2f(0.5f,0.1f), new Vector2f(0.5f,0.2f));
         guis.add(gui);
 
         GuiRenderer guiRenderer = new GuiRenderer(loader);

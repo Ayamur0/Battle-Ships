@@ -6,13 +6,16 @@ import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWMouseButtonCallback;
 
 import java.nio.DoubleBuffer;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
 
 public class GuiManager {
 
     private Map<GuiTexture, Object> clickableGuis = new HashMap<>();
+    private List<GuiTexture> guis = new ArrayList<>();
     private DoubleBuffer x = BufferUtils.createDoubleBuffer(1);
     private DoubleBuffer y = BufferUtils.createDoubleBuffer(1);
 
@@ -75,4 +78,14 @@ public class GuiManager {
                 }
         }
     };
+
+    /**
+     * Renders all guis that have a click function to the screen.
+     * @param renderer - Renderer to use for rendering.
+     */
+    public void renderClickableGuis(GuiRenderer renderer){
+        guis.clear();
+        guis.addAll(clickableGuis.keySet());
+        renderer.render(guis);
+    }
 }
