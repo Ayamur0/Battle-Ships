@@ -181,4 +181,10 @@ public class TextMeshCreator {
         return array;
     }
 
+    /**
+     * @return - the max height of a line in screen coordinates (0.0 - 1.0)
+     */
+    public static double getLineHeight() {
+        return LINE_HEIGHT;
+    }
 }

@@ -2,6 +2,7 @@ package com.battleships.gui.fontRendering;
 
 import com.battleships.gui.fontMeshCreator.FontType;
 import com.battleships.gui.fontMeshCreator.GUIText;
+import com.battleships.gui.fontMeshCreator.TextMeshCreator;
 import com.battleships.gui.fontMeshCreator.TextMeshData;
 import com.battleships.gui.renderingEngine.Loader;
 
@@ -39,15 +40,24 @@ public class TextMaster {
      * Load a text, create it's meshes store these to the text and add the text to the texts HashMap so it gets rendered.
      * If the HashMap doesn't contain an entry with the used font, create a new one.
      *
-     * @param text - the text to be laoded
+     * @param text - the text to be loaded
      */
     public static void loadText(GUIText text){
         FontType font = text.getFont();
         TextMeshData data = font.loadText(text);
         int vao = loader.loadToVAO(data.getVertexPositions(), data.getTextureCoords());
-        text.getPosition().x -= text.getLineMaxSize() / 4;
-        text.getPosition().y -= calculateTextHeight(data.getVertexPositions()) / 4;
+        text.getPosition().x -= text.getLineMaxSize() / 2f;
+        text.getPosition().y -= TextMeshCreator.getLineHeight() * 2;
         text.setMeshInfo(vao, data.getVertexCount());
+        addText(text);
+    }
+
+    /**
+     * Adds a already loaded Text to the HashMap to be rendered.
+     * @param text - text to add to the HashMap.
+     */
+    public static void addText(GUIText text){
+        FontType font = text.getFont();
         List<GUIText> textBatch = texts.get(font);
         if(textBatch == null) {
             textBatch = new ArrayList<>();
@@ -79,24 +89,5 @@ public class TextMaster {
      */
     public static void cleanUp(){
         renderer.cleanUp();
-    }
-
-    /**
-     * Calculate the height of the text.
-     * @param vertices - vertices of the text.
-     * @return the height of the text.
-     */
-    private static float calculateTextHeight(float[] vertices){
-        float minY = vertices[1];
-        float maxY = vertices[3];
-        for(int i = 1; i < vertices.length; i = i + 12){
-            if(vertices[i] < minY)
-                minY = vertices[i];
-        }
-        for(int i = 3; i < vertices.length; i = i + 12){
-            if(vertices[i] > maxY)
-                maxY = vertices[i];
-        }
-        return Math.abs(Math.abs(maxY) - Math.abs(minY));
     }
 }
