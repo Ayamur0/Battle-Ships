@@ -98,4 +98,4 @@ char id=122     x=319  y=387  width=43   height=42   xoffset=-8   yoffset=17   x
 char id=123     x=103  y=73   width=38   height=64   xoffset=-8   yoffset=-5   xadvance=37   page=0    chnl=0 
 char id=124     x=175  y=0    width=22   height=67   xoffset=-8   yoffset=-4   xadvance=23   page=0    chnl=0 
 char id=125     x=233  y=0    width=37   height=65   xoffset=-8   yoffset=-6   xadvance=37   page=0    chnl=0 
-char id=126     x=89   y=481  width=37   height=22   xoffset=-7   yoffset=18   xadvance=39   page=0    chnl=0
+char id=126     x=89   y=481  width=37   height=22   xoffset=-7   yoffset=18   xadvance=39   page=0    chnl=0 
