@@ -3,13 +3,8 @@ package com.battleships.gui.main;
 import com.battleships.gui.entities.Camera;
 import com.battleships.gui.entities.Entity;
 import com.battleships.gui.entities.Light;
-import com.battleships.gui.fontMeshCreator.FontType;
-import com.battleships.gui.fontMeshCreator.GUIText;
 import com.battleships.gui.fontRendering.TextMaster;
-import com.battleships.gui.gameAssets.MainMenuGui.ExitButton;
 import com.battleships.gui.gameAssets.MainMenuGui.MainMenu;
-import com.battleships.gui.gameAssets.MainMenuGui.OptionButton;
-import com.battleships.gui.gameAssets.MainMenuGui.PlayButton;
 import com.battleships.gui.guis.*;
 import com.battleships.gui.postProcessing.Fbo;
 import com.battleships.gui.postProcessing.PostProcessing;
@@ -41,6 +36,7 @@ public class MenuTest {
 
         Loader loader = new Loader();
         MasterRenderer renderer = new MasterRenderer(loader);
+        TextMaster.init(loader);
 
         // *******************GUI initialization*******************
         GuiManager gui = new GuiManager();
@@ -67,9 +63,8 @@ public class MenuTest {
 //        guiClickCallback.addClickableGui(exit);
 
         // *******************TextInitialization*******************
-        /*
-        TextMaster.init(loader);
 
+        /*
         FontType font = new FontType(loader.loadFontTexture("font/PixelDistance.png"), "PixelDistance");
         GUIText playText = new GUIText("Play", 1, font, new Vector2f(play.getPositions().x-play.getScale().x/2+0.01f,play.getPositions().y-play.getScale().y/2+0.01f), 0.12f, true, 0.0f, 0.1f, new Vector3f(1.0f,0.0f,0.0f), new Vector2f());
         playText.setColor(1f,1f,1f);
@@ -138,7 +133,7 @@ public class MenuTest {
 
             guiRenderer.render(permanentGui);
             gui.renderClickableGuis(guiRenderer);
-            //TextMaster.render();
+            TextMaster.render();
 
             WindowManager.updateWindow();
             renderer.updateProjectionMatrix();
