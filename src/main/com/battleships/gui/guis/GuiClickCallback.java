@@ -18,7 +18,6 @@ public abstract class GuiClickCallback {
         if(gui.getPositions().x - 0.5f * gui.getScale().x <= x && gui.getPositions().x + 0.5f *
                 gui.getScale().x >= x && gui.getPositions().y - 0.5f * gui.getScale().y <= y &&
                 gui.getPositions().y + 0.5f * gui.getScale().y >= y){
-            this.clickAction();
             return true;
         }
         return false;

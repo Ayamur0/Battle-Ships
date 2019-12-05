@@ -28,4 +28,8 @@ public class ShipManager {
         entities.add(toAdd);
         return entities.size() - 1;
     }
+
+    public void stickShipToCursor(int shipSize){
+
+    }
 }

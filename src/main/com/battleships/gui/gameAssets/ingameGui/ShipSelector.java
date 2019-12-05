@@ -1,5 +1,6 @@
 package com.battleships.gui.gameAssets.ingameGui;
 
+import com.battleships.gui.gameAssets.ShipManager;
 import com.battleships.gui.guis.GuiClickCallback;
 import com.battleships.gui.guis.GuiManager;
 import com.battleships.gui.guis.GuiTexture;
@@ -10,7 +11,12 @@ import java.util.List;
 
 public class ShipSelector extends GuiClickCallback {
 
-    public ShipSelector(Loader loader, GuiManager guiManager, List<GuiTexture> guis) {
+    private GuiTexture[] buttons = new GuiTexture[4];
+    private int buttonNumber;
+    private ShipManager shipManager;
+
+    public ShipSelector(Loader loader, GuiManager guiManager, ShipManager shipManager, List<GuiTexture> guis) {
+        this.shipManager = shipManager;
         GuiTexture background = new GuiTexture(loader.loadTexture("IngameGuiShipSelectBackground.png"), new Vector2f(0.5f, 0));
         float space = 0.053125f;
         background.getPositions().y = 1 - background.getScale().y / 2;
@@ -35,11 +41,29 @@ public class ShipSelector extends GuiClickCallback {
 
     @Override
     protected boolean isClickOnGui(GuiTexture gui, double x, double y){
-        return true;
+        for(int i = 0; i < buttons.length; i++) {
+            if (buttons[i].getPositions().x - 0.5f * buttons[i].getScale().x <= x && buttons[i].getPositions().x + 0.5f *
+                    buttons[i].getScale().x >= x && buttons[i].getPositions().y - 0.5f * buttons[i].getScale().y <= y &&
+                    buttons[i].getPositions().y + 0.5f * buttons[i].getScale().y >= y) {
+                this.buttonNumber = i + 1;
+                this.clickAction();
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
     protected void clickAction(){
-
+        switch (buttonNumber){
+            case 1: shipManager.stickShipToCursor(2);
+                    break;
+            case 2: shipManager.stickShipToCursor(3);
+                    break;
+            case 3: shipManager.stickShipToCursor(4);
+                    break;
+            case 4: shipManager.stickShipToCursor(5);
+                    break;
+        }
     }
 }

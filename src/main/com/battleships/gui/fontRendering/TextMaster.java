@@ -45,6 +45,8 @@ public class TextMaster {
         FontType font = text.getFont();
         TextMeshData data = font.loadText(text);
         int vao = loader.loadToVAO(data.getVertexPositions(), data.getTextureCoords());
+        text.getPosition().x -= text.getLineMaxSize() / 2;
+        text.getPosition().y -= calculateTextHeight(data.getVertexPositions()) / 4;
         text.setMeshInfo(vao, data.getVertexCount());
         List<GUIText> textBatch = texts.get(font);
         if(textBatch == null) {
@@ -56,7 +58,7 @@ public class TextMaster {
 
     /**
      * Remove a text from the texts hashMap so it doesn't get rendered anymore
-     * @param text
+     * @param text - the text to be removed
      */
     public static void removeText(GUIText text){
         List<GUIText> textBatch = texts.get(text.getFont());
@@ -77,5 +79,24 @@ public class TextMaster {
      */
     public static void cleanUp(){
         renderer.cleanUp();
+    }
+
+    /**
+     * Calculate the height of the text.
+     * @param vertices - vertices of the text.
+     * @return the height of the text.
+     */
+    private static float calculateTextHeight(float[] vertices){
+        float minY = vertices[1];
+        float maxY = vertices[3];
+        for(int i = 1; i < vertices.length; i = i + 12){
+            if(vertices[i] < minY)
+                minY = vertices[i];
+        }
+        for(int i = 3; i < vertices.length; i = i + 12){
+            if(vertices[i] > maxY)
+                maxY = vertices[i];
+        }
+        return Math.abs(Math.abs(maxY) - Math.abs(minY));
     }
 }

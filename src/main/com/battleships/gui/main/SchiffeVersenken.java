@@ -63,7 +63,8 @@ public class SchiffeVersenken {
 //        guiClickCallback.addClickableGui(gui);
         GuiManager guiManager = new GuiManager();
 
-        ShipSelector test = new ShipSelector(loader, guiManager, guis);
+        ShipManager ships = new ShipManager(loader);
+        ShipSelector test = new ShipSelector(loader, guiManager, ships, guis);
 
         // *******************TextInitialization*******************
 
@@ -128,7 +129,7 @@ public class SchiffeVersenken {
         entities.add(ship);
 
         PlayingField playingField =  new PlayingField(entities,30, loader);
-        ShipManager ships = new ShipManager(loader);
+//        ShipManager ships = new ShipManager(loader);
         entities.add(playingField.getOwn());
         entities.add(playingField.getOpponent());
         playingField.placeShip(entities, ships, 0, new Vector2f(15,15),5, 0);

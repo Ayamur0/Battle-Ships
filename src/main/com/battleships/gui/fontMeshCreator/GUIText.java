@@ -213,4 +213,12 @@ public class GUIText {
     public Vector2f getOutlineOffset() {
         return outlineOffset;
     }
+
+    /**
+     *
+     * @return Max length of a line in this text.
+     */
+    public float getLineMaxSize() {
+        return lineMaxSize;
+    }
 }
