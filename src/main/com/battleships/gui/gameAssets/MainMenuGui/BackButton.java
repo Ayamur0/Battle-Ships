@@ -20,9 +20,9 @@ public class BackButton extends MainMenuButton {
         options = new GuiTexture(loader.loadTexture("Brick.jpg"),new Vector2f(play.getPositions().x,play.getPositions().y+buttonGap),buttonSize);
         exit = new GuiTexture(loader.loadTexture("Brick.jpg"),new Vector2f(options.getPositions().x,options.getPositions().y+buttonGap),buttonSize);
 
-        super.guiTexts.add(new GUIText("Play", 3, font, new Vector2f(play.getPositions().x-play.getScale().x/2+0.01f,play.getPositions().y-play.getScale().y/2+0.01f), 0.12f, true, 0.0f, 0.1f, new Vector3f(1.0f,0.0f,0.0f), new Vector2f()));
-        super.guiTexts.add(new GUIText("Options", 3, font,new Vector2f(options.getPositions().x-options.getScale().x/2+0.01f,options.getPositions().y-options.getScale().y/2+0.01f), 0.12f, true, 0.0f, 0.1f, new Vector3f(1.0f,0.0f,0.0f), new Vector2f()));
-        super.guiTexts.add(new GUIText("Exit", 3, font,new Vector2f(exit.getPositions().x-exit.getScale().x/2+0.01f,exit.getPositions().y-exit.getScale().y/2+0.01f), 0.12f, true, 0.0f, 0.1f, new Vector3f(1.0f,0.0f,0.0f), new Vector2f()));
+        super.guiTexts.add(new GUIText("Play", 3, font, new Vector2f(play.getPositions().x,play.getPositions().y), 0.12f, true, 0.0f, 0.1f, new Vector3f(1.0f,0.0f,0.0f), new Vector2f()));
+        super.guiTexts.add(new GUIText("Options", 3, font,new Vector2f(options.getPositions().x,options.getPositions().y), 0.12f, true, 0.0f, 0.1f, new Vector3f(1.0f,0.0f,0.0f), new Vector2f()));
+        super.guiTexts.add(new GUIText("Exit", 3, font,new Vector2f(exit.getPositions().x,exit.getPositions().y), 0.12f, true, 0.0f, 0.1f, new Vector3f(1.0f,0.0f,0.0f), new Vector2f()));
 
     }
     @Override
