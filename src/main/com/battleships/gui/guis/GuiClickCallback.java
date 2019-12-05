@@ -13,7 +13,7 @@ import java.util.List;
 
 public abstract class GuiClickCallback {
 
-    boolean isClickOnGui(GuiTexture gui, double x, double y){
+    protected boolean isClickOnGui(GuiTexture gui, double x, double y){
         //check if cursor is on gui element
         if(gui.getPositions().x - 0.5f * gui.getScale().x <= x && gui.getPositions().x + 0.5f *
                 gui.getScale().x >= x && gui.getPositions().y - 0.5f * gui.getScale().y <= y &&
@@ -24,5 +24,5 @@ public abstract class GuiClickCallback {
         return false;
     }
 
-    abstract void clickAction();
+    protected abstract void clickAction();
 }

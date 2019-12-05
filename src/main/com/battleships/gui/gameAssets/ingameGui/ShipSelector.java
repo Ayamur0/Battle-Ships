@@ -6,8 +6,8 @@ import com.battleships.gui.guis.GuiTexture;
 public class ShipSelector extends GuiClickCallback {
 
     @Override
-    boolean isClickOnGui(GuiTexture gui, double x, double y){
-
+    protected boolean isClickOnGui(GuiTexture gui, double x, double y){
+        return true;
     }
 
     @Override
