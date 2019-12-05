@@ -31,7 +31,7 @@ public class MainMenu extends MainMenuButton {
         guiManager.createClickableGui(exit,()->new ExitButton());
 
         TextMaster.clear();
-        super.CreatTextLables();
+        super.CreateTextLabels();
     }
     @Override
     protected void clickAction() {
@@ -42,6 +42,6 @@ public class MainMenu extends MainMenuButton {
         guiManager.createClickableGui(exit,() -> new ExitButton());
 
         TextMaster.clear();
-        super.CreatTextLables();
+        super.CreateTextLabels();
     }
 }

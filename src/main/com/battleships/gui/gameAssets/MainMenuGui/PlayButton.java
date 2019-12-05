@@ -20,8 +20,8 @@ public class PlayButton extends MainMenuButton {
         multiplayer = new GuiTexture(loader.loadTexture("Brick.jpg"),new Vector2f(singleplayer.getPositions().x,singleplayer.getPositions().y+buttonGap),buttonSize);
         back = new GuiTexture(loader.loadTexture("Brick.jpg"),new Vector2f(multiplayer.getPositions().x,multiplayer.getPositions().y+buttonGap),buttonSize);
 
-        super.guiTexts.add(new GUIText("Singleplayer", 1, font, new Vector2f(singleplayer.getPositions().x-singleplayer.getScale().x/2+0.01f,singleplayer.getPositions().y-singleplayer.getScale().y/2+0.01f), 0.12f, true, 0.0f, 0.1f, new Vector3f(1.0f,0.0f,0.0f), new Vector2f()));
-        super.guiTexts.add(new GUIText("Multiplayer", 1, font,new Vector2f(multiplayer.getPositions().x-multiplayer.getScale().x/2+0.01f,multiplayer.getPositions().y-multiplayer.getScale().y/2+0.01f), 0.12f, true, 0.0f, 0.1f, new Vector3f(1.0f,0.0f,0.0f), new Vector2f()));
+        super.guiTexts.add(new GUIText("Singleplayer", 0.59f, font, new Vector2f(singleplayer.getPositions().x-singleplayer.getScale().x/2+0.01f,singleplayer.getPositions().y-singleplayer.getScale().y/2+0.0199f), 0.12f, true, 0.0f, 0.1f, new Vector3f(1.0f,0.0f,0.0f), new Vector2f()));
+        super.guiTexts.add(new GUIText("Multiplayer", 0.64f, font,new Vector2f(multiplayer.getPositions().x-multiplayer.getScale().x/2+0.01f,multiplayer.getPositions().y-multiplayer.getScale().y/2+0.0199f), 0.12f, true, 0.0f, 0.1f, new Vector3f(1.0f,0.0f,0.0f), new Vector2f()));
         super.guiTexts.add(new GUIText("Back", 1, font,new Vector2f(back.getPositions().x-back.getScale().x/2+0.01f,back.getPositions().y-back.getScale().y/2+0.01f), 0.12f, true, 0.0f, 0.1f, new Vector3f(1.0f,0.0f,0.0f), new Vector2f()));
 
     }
@@ -34,7 +34,7 @@ public class PlayButton extends MainMenuButton {
         guiManager.createClickableGui(back,() -> new BackButton(guiManager,loader));
 
         TextMaster.clear();
-        super.CreatTextLables();
+        super.CreateTextLabels();
 
     }
 }

@@ -34,6 +34,6 @@ public class BackButton extends MainMenuButton {
         guiManager.createClickableGui(exit,()->new ExitButton());
 
         TextMaster.clear();
-        super.CreatTextLables();
+        super.CreateTextLabels();
     }
-}
+            }
