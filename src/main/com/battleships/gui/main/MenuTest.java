@@ -7,6 +7,7 @@ import com.battleships.gui.fontMeshCreator.FontType;
 import com.battleships.gui.fontMeshCreator.GUIText;
 import com.battleships.gui.fontRendering.TextMaster;
 import com.battleships.gui.gameAssets.MainMenuGui.ExitButton;
+import com.battleships.gui.gameAssets.MainMenuGui.MainMenu;
 import com.battleships.gui.gameAssets.MainMenuGui.OptionButton;
 import com.battleships.gui.gameAssets.MainMenuGui.PlayButton;
 import com.battleships.gui.guis.*;
@@ -43,19 +44,21 @@ public class MenuTest {
 
         // *******************GUI initialization*******************
         GuiManager gui = new GuiManager();
-        List<GuiTexture> guis = new ArrayList<>();
+        List<GuiTexture> permanentGui = new ArrayList<>();
         //main menu
         Vector2f buttonSize = new Vector2f(0.14f,0.07f);
         Float buttonGap = 0.15f;
-        GuiTexture play = new GuiTexture(loader.loadTexture("Brick.jpg"), new Vector2f(0.5f, 0.5f), buttonSize);
+        MainMenu mm=new MainMenu(gui,loader);
+
+
+
+        /*GuiTexture play = new GuiTexture(loader.loadTexture("Brick.jpg"), new Vector2f(0.5f, 0.5f), buttonSize);
         GuiTexture options = new GuiTexture(loader.loadTexture("Brick.jpg"),new Vector2f(play.getPositions().x,play.getPositions().y+buttonGap),buttonSize);
         GuiTexture exit = new GuiTexture(loader.loadTexture("Brick.jpg"),new Vector2f(options.getPositions().x,options.getPositions().y+buttonGap),buttonSize);
-        guis.add(play);
-        guis.add(options);
-        guis.add(exit);
-        gui.createClickableGui(play, PlayButton::new);
+        gui.createClickableGui(play, () -> new PlayButton(gui,loader));
         gui.createClickableGui(options, OptionButton::new);
         gui.createClickableGui(exit, ExitButton::new);
+        */
         GuiRenderer guiRenderer = new GuiRenderer(loader);
 
 //        GuiClickCallback guiClickCallback = new GuiClickCallback();
@@ -64,7 +67,7 @@ public class MenuTest {
 //        guiClickCallback.addClickableGui(exit);
 
         // *******************TextInitialization*******************
-
+        /*
         TextMaster.init(loader);
 
         FontType font = new FontType(loader.loadFontTexture("font/PixelDistance.png"), "PixelDistance");
@@ -74,6 +77,7 @@ public class MenuTest {
         optionsText.setColor(1f,1f,1f);
         GUIText exitText = new GUIText("Exit", 1, font,new Vector2f(exit.getPositions().x-exit.getScale().x/2+0.01f,exit.getPositions().y-exit.getScale().y/2+0.01f), 0.12f, true, 0.0f, 0.1f, new Vector3f(1.0f,0.0f,0.0f), new Vector2f());
         exitText.setColor(1f,1f,1f);
+        */
         // *******************Camera initialization*******************
 
         Camera camera = new Camera();
@@ -132,8 +136,9 @@ public class MenuTest {
 //            new Particle(star, new Vector3f(camera.getPosition().x , camera.getPosition().y, camera.getPosition().z), new Vector3f(0, 30, 0), 1 ,4 ,0 ,1);
 
 
-            guiRenderer.render(guis);
-            TextMaster.render();
+            guiRenderer.render(permanentGui);
+            gui.renderClickableGuis(guiRenderer);
+            //TextMaster.render();
 
             WindowManager.updateWindow();
             renderer.updateProjectionMatrix();
