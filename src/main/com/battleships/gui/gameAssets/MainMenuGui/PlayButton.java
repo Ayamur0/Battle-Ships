@@ -27,7 +27,6 @@ public class PlayButton extends MainMenuButton {
     }
     @Override
     protected void clickAction() {
-
         guiManager.clearClickableGuis();
 
         guiManager.createClickableGui(singleplayer,() -> new SingleplayerButton(guiManager,loader));

@@ -15,6 +15,7 @@ public class SingleplayerButton extends MainMenuButton {
 
     public SingleplayerButton(GuiManager guiManager, Loader loader){
         super(guiManager,loader);
+
         singleplayer = new GuiTexture(loader.loadTexture("Brick.jpg"), new Vector2f(0.5f, 0.5f), buttonSize);
         multiplayer = new GuiTexture(loader.loadTexture("Brick.jpg"),new Vector2f(singleplayer.getPositions().x,singleplayer.getPositions().y+buttonGap),buttonSize);
         back = new GuiTexture(loader.loadTexture("Brick.jpg"),new Vector2f(multiplayer.getPositions().x,multiplayer.getPositions().y+buttonGap),buttonSize);

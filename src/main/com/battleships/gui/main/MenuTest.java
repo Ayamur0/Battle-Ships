@@ -46,33 +46,11 @@ public class MenuTest {
         Float buttonGap = 0.15f;
         MainMenu mm=new MainMenu(gui,loader);
 
-
-
-        /*GuiTexture play = new GuiTexture(loader.loadTexture("Brick.jpg"), new Vector2f(0.5f, 0.5f), buttonSize);
-        GuiTexture options = new GuiTexture(loader.loadTexture("Brick.jpg"),new Vector2f(play.getPositions().x,play.getPositions().y+buttonGap),buttonSize);
-        GuiTexture exit = new GuiTexture(loader.loadTexture("Brick.jpg"),new Vector2f(options.getPositions().x,options.getPositions().y+buttonGap),buttonSize);
-        gui.createClickableGui(play, () -> new PlayButton(gui,loader));
-        gui.createClickableGui(options, OptionButton::new);
-        gui.createClickableGui(exit, ExitButton::new);
-        */
         GuiRenderer guiRenderer = new GuiRenderer(loader);
 
-//        GuiClickCallback guiClickCallback = new GuiClickCallback();
-//        guiClickCallback.addClickableGui(play);
-//        guiClickCallback.addClickableGui(options);
-//        guiClickCallback.addClickableGui(exit);
 
         // *******************TextInitialization*******************
 
-        /*
-        FontType font = new FontType(loader.loadFontTexture("font/PixelDistance.png"), "PixelDistance");
-        GUIText playText = new GUIText("Play", 1, font, new Vector2f(play.getPositions().x-play.getScale().x/2+0.01f,play.getPositions().y-play.getScale().y/2+0.01f), 0.12f, true, 0.0f, 0.1f, new Vector3f(1.0f,0.0f,0.0f), new Vector2f());
-        playText.setColor(1f,1f,1f);
-        GUIText optionsText = new GUIText("Options", 1, font,new Vector2f(options.getPositions().x-options.getScale().x/2+0.01f,options.getPositions().y-options.getScale().y/2+0.01f), 0.12f, true, 0.0f, 0.1f, new Vector3f(1.0f,0.0f,0.0f), new Vector2f());
-        optionsText.setColor(1f,1f,1f);
-        GUIText exitText = new GUIText("Exit", 1, font,new Vector2f(exit.getPositions().x-exit.getScale().x/2+0.01f,exit.getPositions().y-exit.getScale().y/2+0.01f), 0.12f, true, 0.0f, 0.1f, new Vector3f(1.0f,0.0f,0.0f), new Vector2f());
-        exitText.setColor(1f,1f,1f);
-        */
         // *******************Camera initialization*******************
 
         Camera camera = new Camera();
