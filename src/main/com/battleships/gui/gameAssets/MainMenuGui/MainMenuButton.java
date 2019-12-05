@@ -24,7 +24,7 @@ public abstract class MainMenuButton extends GuiClickCallback {
     public MainMenuButton(GuiManager guiManager, Loader loader) {
         this.guiManager = guiManager;
         this.loader = loader;
-        this.font = new FontType(loader.loadFontTexture("font/PixelDistance.png"), "PixelDistance");
+        this.font = new FontType(loader.loadFontTexture("font/pirate.png"), "pirate");
     }
     protected void CreateTextLabels(){
         SetTextColor();
