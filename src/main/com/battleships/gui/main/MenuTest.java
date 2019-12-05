@@ -6,32 +6,18 @@ import com.battleships.gui.entities.Light;
 import com.battleships.gui.fontMeshCreator.FontType;
 import com.battleships.gui.fontMeshCreator.GUIText;
 import com.battleships.gui.fontRendering.TextMaster;
-import com.battleships.gui.gameAssets.PlayingField;
-import com.battleships.gui.guis.GuiClickCallback;
-import com.battleships.gui.guis.GuiRenderer;
-import com.battleships.gui.guis.GuiTexture;
-import com.battleships.gui.models.ModelTexture;
-import com.battleships.gui.models.TexturedModel;
-import com.battleships.gui.particles.*;
+import com.battleships.gui.gameAssets.MainMenuGui.ExitButton;
+import com.battleships.gui.gameAssets.MainMenuGui.OptionButton;
+import com.battleships.gui.gameAssets.MainMenuGui.PlayButton;
+import com.battleships.gui.guis.*;
 import com.battleships.gui.postProcessing.Fbo;
 import com.battleships.gui.postProcessing.PostProcessing;
 import com.battleships.gui.renderingEngine.Loader;
 import com.battleships.gui.renderingEngine.MasterRenderer;
-import com.battleships.gui.renderingEngine.OBJLoader;
-import com.battleships.gui.terrains.Terrain;
-import com.battleships.gui.terrains.TerrainTexture;
-import com.battleships.gui.terrains.TerrainTexturePack;
-import com.battleships.gui.toolbox.MousePicker;
-import com.battleships.gui.water.WaterFrameBuffers;
-import com.battleships.gui.water.WaterRenderer;
-import com.battleships.gui.water.WaterShader;
-import com.battleships.gui.water.WaterTile;
 import com.battleships.gui.window.WindowManager;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
-import org.joml.Vector4f;
 import org.lwjgl.glfw.GLFW;
-import org.lwjgl.glfw.GLFWWindowSizeCallback;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL30;
 
@@ -56,7 +42,7 @@ public class MenuTest {
         MasterRenderer renderer = new MasterRenderer(loader);
 
         // *******************GUI initialization*******************
-
+        GuiManager gui = new GuiManager();
         List<GuiTexture> guis = new ArrayList<>();
         //main menu
         Vector2f buttonSize = new Vector2f(0.14f,0.07f);
@@ -67,6 +53,9 @@ public class MenuTest {
         guis.add(play);
         guis.add(options);
         guis.add(exit);
+        gui.createClickableGui(play, PlayButton::new);
+        gui.createClickableGui(options, OptionButton::new);
+        gui.createClickableGui(exit, ExitButton::new);
         GuiRenderer guiRenderer = new GuiRenderer(loader);
 
 //        GuiClickCallback guiClickCallback = new GuiClickCallback();
@@ -110,15 +99,6 @@ public class MenuTest {
 
         entities.addAll(ferns);
 
-        // *******************Water initialization*******************
-        WaterFrameBuffers waterFbos = new WaterFrameBuffers();
-
-        WaterShader waterShader = new WaterShader();
-
-
-        // *******************Particle initialization*******************
-        ParticleMaster.init(loader, renderer.getProjectionMatrix());
-
         // *******************Post Processing initialization*******************
 
         Fbo fbo = new Fbo(WindowManager.getWidth(), WindowManager.getHeight(), Fbo.DEPTH_RENDER_BUFFER);
@@ -127,7 +107,7 @@ public class MenuTest {
 
         // *******************Callbacks initialization*******************
 
-//        WindowManager.setCallbacks(camera, guiClickCallback, waterFbos);
+        WindowManager.setMainMenuCallbacks(gui);
 
 //        MousePicker picker = new MousePicker(renderer.getProjectionMatrix(), camera, terrain);
 
@@ -141,22 +121,15 @@ public class MenuTest {
             GL11.glEnable(GL30.GL_CLIP_DISTANCE0);
 
             //render reflection texture
-            waterFbos.bindReflectionFrameBuffer();
             //move camera under water to get right reflection
             camera.invertPitch();
             //move camera back to normal
             camera.invertPitch();
 
             //render refraction texture
-            waterFbos.bindRefractionFrameBuffer();
-            waterFbos.unbindCurrentFrameBuffer();
             GL11.glDisable(GL30.GL_CLIP_DISTANCE0); //not all drivers support disabling, if it doesn't work set clipPlane when rendering to screen high enough so nothing gets clipped
 
 //            new Particle(star, new Vector3f(camera.getPosition().x , camera.getPosition().y, camera.getPosition().z), new Vector3f(0, 30, 0), 1 ,4 ,0 ,1);
-            ParticleMaster.update(camera);
-
-
-            ParticleMaster.renderParticles(camera, 1);
 
 
             guiRenderer.render(guis);
@@ -174,11 +147,8 @@ public class MenuTest {
 
         // *******************Clean up*******************
 
-        waterFbos.cleanUp();
-        waterShader.cleanUp();
         PostProcessing.cleanUp();
         fbo.cleanUp();
-        ParticleMaster.cleanUp();
         TextMaster.cleanUp();
         guiRenderer.cleanUp();
         renderer.cleanUp();
