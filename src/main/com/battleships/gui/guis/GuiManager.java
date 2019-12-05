@@ -57,6 +57,9 @@ public class GuiManager {
         @Override
         public void invoke(long window, int button, int action, int mods) {
 
+                if(action != GLFW.GLFW_PRESS)
+                    return;
+
                 GLFW.glfwGetCursorPos(window, x, y);
                 x.rewind();
                 y.rewind();

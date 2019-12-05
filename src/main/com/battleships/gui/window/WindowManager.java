@@ -55,6 +55,7 @@ public class WindowManager {
 
     public static void updateWindow(){
         GLFW.glfwSwapBuffers(window);
+        GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
         //allow mouse and keyboard inputs
         GLFW.glfwPollEvents();
 
