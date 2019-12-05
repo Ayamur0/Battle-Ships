@@ -87,6 +87,10 @@ public class WindowManager {
         GLFW.glfwSetWindowSizeCallback(window, wFbo.sizeCallback);
     }
 
+    static public void setMainMenuCallbacks(GuiManager guiManager){
+        GLFW.glfwSetMouseButtonCallback(window, guiManager.testGuiClick);
+    }
+
     public static int getWidth() {
         return width;
     }

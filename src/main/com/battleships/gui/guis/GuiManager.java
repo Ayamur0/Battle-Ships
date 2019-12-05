@@ -1,5 +1,6 @@
 package com.battleships.gui.guis;
 
+import com.battleships.gui.window.WindowManager;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWMouseButtonCallback;
@@ -57,11 +58,13 @@ public class GuiManager {
                 x.rewind();
                 y.rewind();
 
-                float xpos = (float)x.get();
-                float ypos = (float)y.get();
+                float xpos = (float)x.get() / WindowManager.getWidth();
+                float ypos = (float)y.get() / WindowManager.getHeight();
 
                 x = BufferUtils.createDoubleBuffer(1);
                 y = BufferUtils.createDoubleBuffer(1);
+
+            System.out.println(xpos + " " + ypos);
 
                 for(GuiTexture texture : clickableGuis.keySet()){
                     GuiClickCallback current = (GuiClickCallback)clickableGuis.get(texture);
