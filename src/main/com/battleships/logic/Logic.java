@@ -3,31 +3,48 @@ package com.battleships.logic;
 import java.io.*;
 import java.util.ArrayList;
 
-import static com.battleships.logic.Ship.*;
-
 public class Logic {
-  private final int TEST_SIZE = 10;
+  public static final int HOST = 1;
+  public static final int CLIENT = 2;
+  public static final int SINGLEPLAYER = 0;
   
-  Board ownBoard;
-  Board oppBoard;
+  private int playmode;
+  private int size;
+  
+  private Board ownBoard;
+  private Board oppBoard;
+  
+  private boolean isMyTurn;
   
   public static void main(String[] args) {
     new Logic();
   }
   
-  public Logic() {
-    ownBoard = new Board(TEST_SIZE);
-    oppBoard = new Board(TEST_SIZE);
-  
-    for (Ship ship : testShipPlacement()) ownBoard.placeShip(ship);
-    ownBoard.render();
-    
-    while (ownBoard.shipsLeft() && oppBoard.shipsLeft()) {
-      //TODO
+  public void setPlaymode(int playmode) {
+    if(playmode != HOST && playmode != CLIENT && playmode != SINGLEPLAYER) throw new IllegalArgumentException("Playmode has to be " + HOST + " or " + CLIENT + " or " + SINGLEPLAYER + ".");
+    this.playmode = playmode;
+    switch (playmode){
+      case SINGLEPLAYER:
+      case HOST:
+        isMyTurn = true;
+        break;
+      case CLIENT:
+        isMyTurn = false;
     }
   }
   
-  private ArrayList<Ship> getShipsByGridSize(int size) {
+  public void setSize(int size) {
+    this.size = size;
+    ownBoard = new Board(size);
+    oppBoard = new Board(size);
+  }
+  
+  public boolean onShoot(int x, int y){
+    //TODO
+    return false;
+  }
+  
+  public ArrayList<Ship> getShipsByGridSize(int size) {
     ArrayList<Ship> ships = null;
     try {
       ships = new ArrayList<>();
@@ -51,15 +68,4 @@ public class Logic {
       return ships;
     }
   }
-  
-  //<editor-fold desc="Test Methods">
-  private ArrayList<Ship> testShipPlacement() {
-    return new ArrayList<Ship>() {{
-      add(new Ship(3, HORIZONTAL, 0, 0));
-      add(new Ship(5, VERTICAL, 3, 2));
-      add(new Ship(4, HORIZONTAL, 5, 9));
-      add(new Ship(2, VERTICAL, 9, 3));
-    }};
-  }
-  //</editor-fold>
 }

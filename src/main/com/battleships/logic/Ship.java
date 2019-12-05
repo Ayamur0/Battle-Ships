@@ -1,6 +1,8 @@
 package com.battleships.logic;
 
 public class Ship {
+  //TODO entityIndex hinzufügen
+  //TODO implement dir with 4 options
   public static final int HORIZONTAL = 1;
   public static final int VERTICAL = -1;
   

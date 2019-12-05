@@ -17,7 +17,7 @@ uniform mat4 projectionMatrix;
 uniform mat4 viewMatrix;
 uniform vec3 lightPosition;
 
-const float density = 0.0035; //density of fog
+const float density = 0.0015; //density of fog
 const float gradient = 3.0; //how far away objects start getting foggy
 
 uniform vec4 plane;
