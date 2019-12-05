@@ -66,6 +66,13 @@ public class TextMaster {
     }
 
     /**
+     * Remove all texts from the screen.
+     */
+    public static void clear(){
+        texts.clear();
+    }
+
+    /**
      * CleanUp text related stuff on program exit
      */
     public static void cleanUp(){
