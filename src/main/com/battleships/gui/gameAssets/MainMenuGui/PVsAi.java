@@ -2,6 +2,7 @@ package com.battleships.gui.gameAssets.MainMenuGui;
 
 import com.battleships.gui.fontRendering.TextMaster;
 import com.battleships.gui.guis.GuiManager;
+import com.battleships.gui.main.Inits;
 import com.battleships.gui.main.MenuTest;
 import com.battleships.gui.renderingEngine.Loader;
 
@@ -14,7 +15,9 @@ public class PVsAi extends MainMenuButton {
     @Override
     protected void clickAction() {
         TextMaster.clear();
-        MenuTest.GlobalGameState = 1;
+        //Will be changed in final version
+        Inits.setGlobalGameState(1);
+        //MenuTest.GlobalGameState = 1;
         //TODO
     }
 }
