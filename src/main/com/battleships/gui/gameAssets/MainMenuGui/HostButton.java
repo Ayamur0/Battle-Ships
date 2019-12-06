@@ -13,7 +13,7 @@ public class HostButton extends MainMenuButton {
     protected void clickAction() {
         guiManager.clearClickableGuis();
 
-        //TODO
+        //TODO creat a online game
 
 
         TextMaster.clear();

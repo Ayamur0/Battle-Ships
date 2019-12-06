@@ -6,7 +6,6 @@ import com.battleships.gui.main.Inits;
 import com.battleships.gui.renderingEngine.Loader;
 
 public class AiVsAi extends MainMenuButton {
-    //TODO
     public AiVsAi(GuiManager guiManager, Loader loader) {
         super(guiManager, loader);
     }
@@ -17,6 +16,6 @@ public class AiVsAi extends MainMenuButton {
         //Will be changed in final version
         Inits.setGlobalGameState(1);
         //MenuTest.GlobalGameState = 1;
-        //TODO
+        //TODO start a Ai vs Ai game
     }
 }

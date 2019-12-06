@@ -7,12 +7,13 @@ import org.joml.Vector2f;
 
 public class OptionButton extends MainMenuButton {
 
+    //TODO add options
     public OptionButton(GuiManager guiManager, Loader loader){
         super(guiManager,loader);
-        //TODO
+
     }
     @Override
     protected void clickAction() {
-        //TODO
+
     }
 }

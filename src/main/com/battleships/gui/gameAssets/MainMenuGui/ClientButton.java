@@ -13,7 +13,7 @@ public class ClientButton extends MainMenuButton {
     protected void clickAction() {
         guiManager.clearClickableGuis();
 
-        //TODO
+        //TODO connect to a game
 
 
         TextMaster.clear();
