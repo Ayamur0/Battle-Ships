@@ -28,6 +28,8 @@ public class SingleplayerButton extends MainMenuButton {
     protected void clickAction() {
         guiManager.clearClickableGuis();
 
+        prevMenu = 1;
+
         guiManager.createClickableGui(pVsAi,() -> new PVsAi(guiManager,loader));
         guiManager.createClickableGui(aiVsAi,() -> new AiVsAi(guiManager,loader));
         guiManager.createClickableGui(back,() -> new BackButton(guiManager,loader));
