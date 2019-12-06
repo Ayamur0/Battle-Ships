@@ -45,8 +45,8 @@ public class Inits {
     private MasterRenderer renderer;
     private Fbo fbo;
 
-    private GuiManager gui;
-    private List<GuiTexture> permanentGui;
+    private GuiManager guiManager;
+    private List<GuiTexture> permanentGuiElements;
     private MainMenu startMenu;
     private GuiRenderer guiRenderer;
 
@@ -76,14 +76,6 @@ public class Inits {
 
     private ParticleTexture fire;
 
-    public void setCellIntersection(Vector3f cellIntersection) {
-        this.cellIntersection = cellIntersection;
-    }
-
-    public void setPointedCell(Vector3f pointedCell) {
-        this.pointedCell = pointedCell;
-    }
-
     private ParticleSystemComplex system;
 
     private MousePicker picker;
@@ -100,12 +92,12 @@ public class Inits {
         return fbo;
     }
 
-    public GuiManager getGui() {
-        return gui;
+    public GuiManager getGuiManager() {
+        return guiManager;
     }
 
-    public List<GuiTexture> getPermanentGui() {
-        return permanentGui;
+    public List<GuiTexture> getPermanentGuiElements() {
+        return permanentGuiElements;
     }
 
     public MainMenu getStartMenu() {
@@ -204,6 +196,14 @@ public class Inits {
         return picker;
     }
 
+    public void setCellIntersection(Vector3f cellIntersection) {
+        this.cellIntersection = cellIntersection;
+    }
+
+    public void setPointedCell(Vector3f pointedCell) {
+        this.pointedCell = pointedCell;
+    }
+
     public void initMenu(){
         WindowManager.initialize();
 
@@ -216,10 +216,10 @@ public class Inits {
         TextMaster.init(loader);
 
         // *******************GUI initialization*******************
-        this.gui = new GuiManager();
-        this.permanentGui = new ArrayList<>();
+        this.guiManager = new GuiManager();
+        this.permanentGuiElements = new ArrayList<>();
 
-        this.startMenu = new MainMenu(gui,loader);
+        this.startMenu = new MainMenu(guiManager,loader);
         this.guiRenderer = new GuiRenderer(loader);
 
         // *******************Post Processing initialization*******************
@@ -227,7 +227,7 @@ public class Inits {
         PostProcessing.init(loader);
 
         // *******************Callbacks initialization*******************
-        WindowManager.setMainMenuCallbacks(gui);
+        WindowManager.setMainMenuCallbacks(guiManager);
 
         menuInitDone = true;
     }
@@ -243,7 +243,7 @@ public class Inits {
     public void initGame(){
 
         this.ships = new ShipManager(loader);
-        this.selector = new ShipSelector(loader, gui, ships, permanentGui);
+        this.selector = new ShipSelector(loader, guiManager, ships, permanentGuiElements);
 
         // *******************Camera initialization*******************
 
@@ -303,7 +303,7 @@ public class Inits {
 
         // *******************Callbacks initialization*******************
 
-        WindowManager.setCallbacks(camera, gui, waterFbos);
+        WindowManager.setCallbacks(camera, guiManager, waterFbos);
 
         this.picker = new MousePicker(camera, renderer.getProjectionMatrix(), terrain);
 

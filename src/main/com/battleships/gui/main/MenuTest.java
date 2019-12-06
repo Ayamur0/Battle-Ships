@@ -1,6 +1,5 @@
 package com.battleships.gui.main;
 
-import com.battleships.gui.entities.Entity;
 import com.battleships.gui.fontRendering.TextMaster;
 import com.battleships.gui.particles.ParticleMaster;
 import com.battleships.gui.postProcessing.PostProcessing;
@@ -31,8 +30,8 @@ public class MenuTest {
 
 //            new Particle(star, new Vector3f(camera.getPosition().x , camera.getPosition().y, camera.getPosition().z), new Vector3f(0, 30, 0), 1 ,4 ,0 ,1);
 
-                inits.getGuiRenderer().render(inits.getPermanentGui());
-                inits.getGui().renderClickableGuis(inits.getGuiRenderer());
+                inits.getGuiRenderer().render(inits.getPermanentGuiElements());
+                inits.getGuiManager().renderClickableGuis(inits.getGuiRenderer());
                 TextMaster.render();
 
                 WindowManager.updateWindow();
@@ -92,7 +91,7 @@ public class MenuTest {
                 ParticleMaster.renderParticles(inits.getCamera(), 1);
 
 
-                inits.getGuiRenderer().render(inits.getPermanentGui());
+                inits.getGuiRenderer().render(inits.getPermanentGuiElements());
                 TextMaster.render();
 
                 WindowManager.updateWindow();
