@@ -7,6 +7,7 @@ import com.battleships.gui.guis.GuiClickCallback;
 import com.battleships.gui.guis.GuiManager;
 import com.battleships.gui.renderingEngine.Loader;
 import org.joml.Vector2f;
+import org.joml.Vector3f;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,17 +20,22 @@ public abstract class MainMenuButton extends GuiClickCallback {
     protected Loader loader;
     protected FontType font;
 
+    protected int texture;
+    protected Vector3f outlineColor;
+
     protected List<GUIText> guiTexts = new ArrayList<>();
 
     public MainMenuButton(GuiManager guiManager, Loader loader) {
         this.guiManager = guiManager;
         this.loader = loader;
         this.font = new FontType(loader.loadFontTexture("font/pirate.png"), "pirate");
+        this.texture = loader.loadTexture("Brick.jpg");
+        this.outlineColor = new Vector3f(1.0f,0.0f,0.0f);
     }
     protected void CreateTextLabels(){
         SetTextColor();
         for (GUIText gui :guiTexts) {
-            TextMaster.loadText(gui);
+            TextMaster.addText(gui);
         }
     }
     protected void SetTextColor(){

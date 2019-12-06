@@ -47,7 +47,7 @@ public class TextMaster {
         TextMeshData data = font.loadText(text);
         int vao = loader.loadToVAO(data.getVertexPositions(), data.getTextureCoords());
         text.getPosition().x -= text.getLineMaxSize() / 2f;
-        text.getPosition().y -= TextMeshCreator.getLineHeight() * 2;
+        text.getPosition().y -= TextMeshCreator.getLineHeight();
         text.setMeshInfo(vao, data.getVertexCount());
         addText(text);
     }

@@ -6,7 +6,6 @@ import com.battleships.gui.guis.GuiManager;
 import com.battleships.gui.guis.GuiTexture;
 import com.battleships.gui.renderingEngine.Loader;
 import org.joml.Vector2f;
-import org.joml.Vector3f;
 
 public class MainMenu extends MainMenuButton {
     private GuiTexture play;
@@ -17,14 +16,13 @@ public class MainMenu extends MainMenuButton {
 
     public MainMenu(GuiManager guiManager, Loader loader){
         super(guiManager,loader);
+        play = new GuiTexture(texture, new Vector2f(0.5f, 0.5f), buttonSize);
+        options = new GuiTexture(texture,new Vector2f(play.getPositions().x,play.getPositions().y+buttonGap),buttonSize);
+        exit = new GuiTexture(texture,new Vector2f(options.getPositions().x,options.getPositions().y+buttonGap),buttonSize);
 
-        play = new GuiTexture(loader.loadTexture("Brick.jpg"), new Vector2f(0.5f, 0.5f), buttonSize);
-        options = new GuiTexture(loader.loadTexture("Brick.jpg"),new Vector2f(play.getPositions().x,play.getPositions().y+buttonGap),buttonSize);
-        exit = new GuiTexture(loader.loadTexture("Brick.jpg"),new Vector2f(options.getPositions().x,options.getPositions().y+buttonGap),buttonSize);
-
-        super.guiTexts.add(new GUIText("Play", 3, font, new Vector2f(play.getPositions().x,play.getPositions().y), 0.12f, true, 0.0f, 0.1f, new Vector3f(1.0f,0.0f,0.0f), new Vector2f()));
-        super.guiTexts.add(new GUIText("Options", 3, font,new Vector2f(options.getPositions().x,options.getPositions().y), 0.12f, true, 0.0f, 0.1f, new Vector3f(1.0f,0.0f,0.0f), new Vector2f()));
-        super.guiTexts.add(new GUIText("Exit", 3, font,new Vector2f(exit.getPositions().x,exit.getPositions().y), 0.12f, true, 0.0f, 0.1f, new Vector3f(1.0f,0.0f,0.0f), new Vector2f()));
+        super.guiTexts.add(new GUIText("Play", 3, font, new Vector2f(play.getPositions().x,play.getPositions().y), 0.12f, true, 0.0f, 0.1f,outlineColor, new Vector2f()));
+        super.guiTexts.add(new GUIText("Options", 3, font,new Vector2f(options.getPositions().x,options.getPositions().y), 0.12f, true, 0.0f, 0.1f,outlineColor, new Vector2f()));
+        super.guiTexts.add(new GUIText("Exit", 3, font,new Vector2f(exit.getPositions().x,exit.getPositions().y), 0.12f, true, 0.0f, 0.1f,outlineColor, new Vector2f()));
 
         guiManager.createClickableGui(play,()->new PlayButton(guiManager,loader));
         guiManager.createClickableGui(options,()-> new OptionButton(guiManager,loader));
