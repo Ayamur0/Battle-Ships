@@ -58,6 +58,8 @@ public class GUIText {
         this.fontSize = fontSize;
         this.font = font;
         this.position = position;
+        position.x -= maxLineLength / 2f;
+        position.y -= TextMeshCreator.getLineHeight();
         this.lineMaxSize = maxLineLength;
         this.centerText = centered;
         this.outlineWidth = outlineWidth;
@@ -220,5 +222,14 @@ public class GUIText {
      */
     public float getLineMaxSize() {
         return lineMaxSize;
+    }
+
+    /**
+     * Change the text, after changing the text, this GUIText needs to be
+     * removed from the TextMaster and then be loaded again to use the new text.
+     * @param textString - new text string
+     */
+    public void setTextString(String textString) {
+        this.textString = textString;
     }
 }

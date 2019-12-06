@@ -57,7 +57,7 @@ public class GuiManager {
         @Override
         public void invoke(long window, int button, int action, int mods) {
 
-                if(action != GLFW.GLFW_PRESS)
+                if(action != GLFW.GLFW_PRESS || button != GLFW.GLFW_MOUSE_BUTTON_1)
                     return;
 
                 GLFW.glfwGetCursorPos(window, x, y);

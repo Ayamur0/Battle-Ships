@@ -51,6 +51,7 @@ public class SchiffeVersenken {
 
         Loader loader = new Loader();
         MasterRenderer renderer = new MasterRenderer(loader);
+        TextMaster.init(loader);
 
         // *******************GUI initialization*******************
 
@@ -63,12 +64,10 @@ public class SchiffeVersenken {
 //        guiClickCallback.addClickableGui(gui);
         GuiManager guiManager = new GuiManager();
 
-        ShipManager ships = new ShipManager(loader);
-        ShipSelector test = new ShipSelector(loader, guiManager, ships, guis);
 
         // *******************TextInitialization*******************
 
-        TextMaster.init(loader);
+
 
         FontType font = new FontType(loader.loadFontTexture("font/PixelDistance.png"), "PixelDistance");
         GUIText text = new GUIText("Testing text rendering!", 1, font, new Vector2f(0f,0.4f), 1f, true, 0.0f, 0.1f, new Vector3f(1.0f,0.0f,0.0f), new Vector2f());
@@ -129,10 +128,12 @@ public class SchiffeVersenken {
         entities.add(ship);
 
         PlayingField playingField =  new PlayingField(entities,30, loader);
+        ShipManager ships = new ShipManager(loader,playingField);
+        ShipSelector shipSelector = new ShipSelector(loader, guiManager, ships, guis);
 //        ShipManager ships = new ShipManager(loader);
         entities.add(playingField.getOwn());
         entities.add(playingField.getOpponent());
-        playingField.placeShip(entities, ships, 0, new Vector2f(15,15),5, 0);
+        playingField.placeShip(entities, ships, 0, new Vector2f(15,15),4, 0);
         playingField.placeShip(entities, ships, 0, new Vector2f(3,3),3, 1);
         playingField.shoot(entities,1, new Vector2f(15,15));
         Vector3f cellIntersection;
@@ -215,8 +216,15 @@ public class SchiffeVersenken {
             playingField.moveCannonball(entities);
             cellIntersection = picker.getCurrentIntersectionPoint();
             playingField.highligtCell(cellIntersection);
+
+            ships.moveCursorShip(renderer);
+
+            if(GLFW.glfwGetKey(window, GLFW.GLFW_KEY_R) == GLFW.GLFW_PRESS){
+                ships.rotateShip();
+            }
+
             if(GLFW.glfwGetMouseButton(window, GLFW.GLFW_MOUSE_BUTTON_LEFT) == GLFW.GLFW_PRESS){
-                pointedCell = playingField.getPointedCell(cellIntersection);
+                pointedCell = playingField.calculatePointedCell(cellIntersection);
                 if(pointedCell != null){
                     playingField.shoot(entities, 1, new Vector2f(pointedCell.x, pointedCell.y));
                 }

@@ -9,10 +9,7 @@ import java.util.List;
 
 public abstract class Ship {
 
-    protected static final int NORTH = 0;
-    protected static final int EAST = 1;
-    protected static final int SOUTH = 2;
-    protected static final int WEST = 3;
+
 
     //xMultiplier, zMultiplier, yValue, standardSize
     private static final float[][] STANDARDSHIPVALUES = {{},
@@ -41,27 +38,27 @@ public abstract class Ship {
      * @param facing - direction the ship should face
      * @return the index the ship was added at in the entities list
      */
-    protected int addShip(List<Entity> entities, Vector2f gridPosition, int gridSideLength, int gridSize, int gridIndex, int facing){
-        Entity dummy = new Entity(model, new Vector3f(), new Vector3f(), standardSize);
-        dummy.getPosition().x = gridPosition.x * xMultiplier + (gridIndex % gridSize) * (float) gridSideLength / (gridSize + 1);
-        dummy.getPosition().y = yValue;
-        dummy.getPosition().z = gridPosition.y * zMultiplier + (int)(gridIndex / gridSize) * (float) gridSideLength / (gridSize + 1);
-        switch (facing){
-            case NORTH: break;
-            case EAST:
-                dummy.getRotation().y += 90;
-                break;
-            case SOUTH:
-                dummy.getRotation().y += 180;
-                break;
-            case WEST:
-                dummy.getRotation().y += 270;
-                break;
-            default: break;
-        }
-        entities.add(dummy);
-        return entities.size() - 1;
-    }
+//    protected int addShip(List<Entity> entities, Vector2f gridPosition, int gridSideLength, int gridSize, int gridIndex, int facing){
+//        Entity dummy = new Entity(model, new Vector3f(), new Vector3f(), standardSize);
+//        dummy.getPosition().x = gridPosition.x * xMultiplier + (gridIndex % gridSize) * (float) gridSideLength / (gridSize + 1);
+//        dummy.getPosition().y = yValue;
+//        dummy.getPosition().z = gridPosition.y * zMultiplier + (int)(gridIndex / gridSize) * (float) gridSideLength / (gridSize + 1);
+//        switch (facing){
+//            case NORTH: break;
+//            case EAST:
+//                dummy.getRotation().y += 90;
+//                break;
+//            case SOUTH:
+//                dummy.getRotation().y += 180;
+//                break;
+//            case WEST:
+//                dummy.getRotation().y += 270;
+//                break;
+//            default: break;
+//        }
+//        entities.add(dummy);
+//        return entities.size() - 1;
+//    }
 
     protected void setAttributes(){
 

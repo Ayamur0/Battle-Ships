@@ -1,17 +1,27 @@
 package com.battleships.gui.gameAssets.ingameGui;
 
+import com.battleships.gui.fontMeshCreator.FontType;
+import com.battleships.gui.fontMeshCreator.GUIText;
+import com.battleships.gui.fontRendering.TextMaster;
 import com.battleships.gui.gameAssets.ShipManager;
 import com.battleships.gui.guis.GuiClickCallback;
 import com.battleships.gui.guis.GuiManager;
 import com.battleships.gui.guis.GuiTexture;
 import com.battleships.gui.renderingEngine.Loader;
 import org.joml.Vector2f;
+import org.joml.Vector3f;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ShipSelector extends GuiClickCallback {
 
+    private static final Vector3f BLACK = new Vector3f();
+    private static final Vector2f OUTLINEOFFSET = new Vector2f();
+
     private GuiTexture[] buttons = new GuiTexture[4];
+    private List<GUIText> shipCountTexts = new ArrayList<>();
+    private int[] shipCounts = new int[4];
     private int buttonNumber;
     private ShipManager shipManager;
 
@@ -33,10 +43,22 @@ public class ShipSelector extends GuiClickCallback {
         guis.add(ship2);
         guis.add(ship3);
         guis.add(ship4);
+        buttons[0] = ship1;
+        buttons[1] = ship2;
+        buttons[2] = ship3;
+        buttons[3] = ship4;
         guiManager.createClickableGui(ship1, () -> this);
         guiManager.createClickableGui(ship2, () -> this);
         guiManager.createClickableGui(ship3, () -> this);
         guiManager.createClickableGui(ship4, () -> this);
+        FontType pirateFont = new FontType(loader.loadFontTexture("font/pirate.png"), "pirate");
+        //TODO get ship counts from logic
+        shipCounts[0] = 10;
+        shipCounts[1] = 10;
+        shipCounts[2] = 10;
+        shipCounts[3] = 10;
+        for(int i = 1; i < guis.size(); i++)
+            shipCountTexts.add(new GUIText(shipCounts[i - 1] + " Left", 2, pirateFont, new Vector2f(guis.get(i).getPositions().x, guis.get(i).getPositions().y + guis.get(i).getScale().y / 2 + 0.05f), guis.get(i).getScale().x, true, 0, 0.1f,BLACK, OUTLINEOFFSET));
     }
 
     @Override
@@ -45,8 +67,7 @@ public class ShipSelector extends GuiClickCallback {
             if (buttons[i].getPositions().x - 0.5f * buttons[i].getScale().x <= x && buttons[i].getPositions().x + 0.5f *
                     buttons[i].getScale().x >= x && buttons[i].getPositions().y - 0.5f * buttons[i].getScale().y <= y &&
                     buttons[i].getPositions().y + 0.5f * buttons[i].getScale().y >= y) {
-                this.buttonNumber = i + 1;
-                this.clickAction();
+                this.buttonNumber = i + 2;
                 return true;
             }
         }
@@ -55,15 +76,18 @@ public class ShipSelector extends GuiClickCallback {
 
     @Override
     protected void clickAction(){
-        switch (buttonNumber){
-            case 1: shipManager.stickShipToCursor(2);
-                    break;
-            case 2: shipManager.stickShipToCursor(3);
-                    break;
-            case 3: shipManager.stickShipToCursor(4);
-                    break;
-            case 4: shipManager.stickShipToCursor(5);
-                    break;
+        if(shipCounts[buttonNumber - 2] > 0) {
+            shipManager.stickShipToCursor(buttonNumber);
+            decrementCount(buttonNumber);
         }
+    }
+
+    public void decrementCount(int shipSize){
+        GUIText dummy = shipCountTexts.get(shipSize - 2);
+        dummy.remove();
+        shipCounts[shipSize - 2]--;
+        dummy.setTextString(shipCounts[shipSize - 2] + " Left");
+        //TextMaster.loadText(new GUIText(shipCounts[0] + " Left", 2, dummy.getFont(), dummy.getPosition(), dummy.getLineMaxSize(), true, 0, 0.1f,BLACK, OUTLINEOFFSET));
+        TextMaster.loadText(dummy);
     }
 }

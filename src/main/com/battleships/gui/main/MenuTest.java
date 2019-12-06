@@ -77,7 +77,7 @@ public class MenuTest {
                 inits.setCellIntersection(inits.getPicker().getCurrentIntersectionPoint());
                 inits.getPlayingField().highligtCell(inits.getCellIntersection());
                 if(GLFW.glfwGetMouseButton(Inits.getWindow(), GLFW.GLFW_MOUSE_BUTTON_LEFT) == GLFW.GLFW_PRESS){
-                    inits.setPointedCell(inits.getPlayingField().getPointedCell(inits.getCellIntersection()));
+                    inits.setPointedCell(inits.getPlayingField().calculatePointedCell(inits.getCellIntersection()));
                     if(inits.getPointedCell() != null){
                         inits.getPlayingField().shoot(inits.getEntities(), 1, new Vector2f(inits.getPointedCell().x, inits.getPointedCell().y));
                     }

@@ -242,7 +242,7 @@ public class Inits {
 
     public void initGame(){
 
-        this.ships = new ShipManager(loader);
+        this.ships = new ShipManager(loader, playingField);
         this.selector = new ShipSelector(loader, guiManager, ships, permanentGuiElements);
 
         // *******************Camera initialization*******************
