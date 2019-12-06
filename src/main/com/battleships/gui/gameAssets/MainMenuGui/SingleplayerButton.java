@@ -16,7 +16,7 @@ public class SingleplayerButton extends MainMenuButton {
     public SingleplayerButton(GuiManager guiManager, Loader loader){
         super(guiManager,loader);
 
-        pVsAi = new GuiTexture(texture, new Vector2f(0.7f, 0.3f), buttonSize);
+        pVsAi = new GuiTexture(texture, standardButtonPos, buttonSize);
         aiVsAi = new GuiTexture(texture,new Vector2f(pVsAi.getPositions().x,pVsAi.getPositions().y+buttonGap),buttonSize);
         back = new GuiTexture(texture,new Vector2f(aiVsAi.getPositions().x,aiVsAi.getPositions().y+buttonGap),buttonSize);
 

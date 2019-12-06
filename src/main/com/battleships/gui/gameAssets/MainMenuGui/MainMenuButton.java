@@ -13,8 +13,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class MainMenuButton extends GuiClickCallback {
-    protected Vector2f buttonSize = new Vector2f(0.14f,0.07f);
-    protected Float buttonGap = 0.15f;
+    protected Vector2f buttonSize;
+    protected Vector2f standardButtonPos;
+    protected Float buttonGap;
 
     protected GuiManager guiManager;
     protected Loader loader;
@@ -31,6 +32,10 @@ public abstract class MainMenuButton extends GuiClickCallback {
         this.font = new FontType(loader.loadFontTexture("font/pirate.png"), "pirate");
         this.texture = loader.loadTexture("Brick.jpg");
         this.outlineColor = new Vector3f(1.0f,0.0f,0.0f);
+
+        this.buttonSize = new Vector2f(0.14f,0.07f);
+        this.standardButtonPos = new Vector2f(0.5f, 0.4f);
+        this.buttonGap = 0.15f;
     }
     protected void CreateTextLabels(){
         SetTextColor();

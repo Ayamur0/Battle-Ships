@@ -16,7 +16,7 @@ public class MainMenu extends MainMenuButton {
 
     public MainMenu(GuiManager guiManager, Loader loader){
         super(guiManager,loader);
-        play = new GuiTexture(texture, new Vector2f(0.5f, 0.5f), buttonSize);
+        play = new GuiTexture(texture, standardButtonPos, buttonSize);
         options = new GuiTexture(texture,new Vector2f(play.getPositions().x,play.getPositions().y+buttonGap),buttonSize);
         exit = new GuiTexture(texture,new Vector2f(options.getPositions().x,options.getPositions().y+buttonGap),buttonSize);
 

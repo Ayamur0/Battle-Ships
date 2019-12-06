@@ -15,7 +15,7 @@ public class PlayButton extends MainMenuButton {
     public PlayButton(GuiManager guiManager, Loader loader){
         super(guiManager,loader);
 
-        singleplayer = new GuiTexture(texture, new Vector2f(0.2f, 0.2f), buttonSize);
+        singleplayer = new GuiTexture(texture, standardButtonPos, buttonSize);
         multiplayer = new GuiTexture(texture,new Vector2f(singleplayer.getPositions().x,singleplayer.getPositions().y+buttonGap),buttonSize);
         back = new GuiTexture(texture,new Vector2f(multiplayer.getPositions().x,multiplayer.getPositions().y+buttonGap),buttonSize);
 
