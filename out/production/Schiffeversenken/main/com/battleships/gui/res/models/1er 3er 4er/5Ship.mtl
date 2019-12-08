@@ -1,0 +1,123 @@
+# Blender MTL File: 'ships.blend'
+# Material Count: 11
+
+newmtl D0902A25:DrawCall_0025SG.002
+Ns 225.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.500000 0.500000 0.500000
+Ke 0.0 0.0 0.0
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd C:\\Users\\timst\\Google Drive\\Hochschule Aalen\\Programmier Praktikum\\IntJ Schiffe Versenken\\src\\Game\\res\\textures\\5Ship\\5ShipTex.jpg
+
+newmtl D0902A25:DrawCall_0026SG.002
+Ns 225.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.500000 0.500000 0.500000
+Ke 0.0 0.0 0.0
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd C:\\Users\\timst\\Google Drive\\Hochschule Aalen\\Programmier Praktikum\\IntJ Schiffe Versenken\\src\\Game\\res\\textures\\5Ship\\5ShipTex.jpg
+
+newmtl D0902A25:DrawCall_0027SG.002
+Ns 225.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.500000 0.500000 0.500000
+Ke 0.0 0.0 0.0
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd C:\\Users\\timst\\Google Drive\\Hochschule Aalen\\Programmier Praktikum\\IntJ Schiffe Versenken\\src\\Game\\res\\textures\\5Ship\\5ShipTex.jpg
+
+newmtl D0902A25:DrawCall_0028SG.002
+Ns 225.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.500000 0.500000 0.500000
+Ke 0.0 0.0 0.0
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd C:\\Users\\timst\\Google Drive\\Hochschule Aalen\\Programmier Praktikum\\IntJ Schiffe Versenken\\src\\Game\\res\\textures\\5Ship\\5ShipTex.jpg
+
+newmtl D0902A25:DrawCall_0029SG.002
+Ns 225.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.500000 0.500000 0.500000
+Ke 0.0 0.0 0.0
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd C:\\Users\\timst\\Google Drive\\Hochschule Aalen\\Programmier Praktikum\\IntJ Schiffe Versenken\\src\\Game\\res\\textures\\5Ship\\5ShipTex.jpg
+
+newmtl D0902A25:DrawCall_0030SG.002
+Ns 225.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.500000 0.500000 0.500000
+Ke 0.0 0.0 0.0
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd C:\\Users\\timst\\Google Drive\\Hochschule Aalen\\Programmier Praktikum\\IntJ Schiffe Versenken\\src\\Game\\res\\textures\\5Ship\\5ShipTex.jpg
+
+newmtl D0902A25:DrawCall_0031SG.002
+Ns 225.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.500000 0.500000 0.500000
+Ke 0.0 0.0 0.0
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd C:\\Users\\timst\\Google Drive\\Hochschule Aalen\\Programmier Praktikum\\IntJ Schiffe Versenken\\src\\Game\\res\\textures\\5Ship\\5ShipTex.jpg
+
+newmtl D0902A25:DrawCall_0032SG.002
+Ns 225.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.500000 0.500000 0.500000
+Ke 0.0 0.0 0.0
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd C:\\Users\\timst\\Google Drive\\Hochschule Aalen\\Programmier Praktikum\\IntJ Schiffe Versenken\\src\\Game\\res\\textures\\5Ship\\5ShipTex.jpg
+
+newmtl D0902A25:DrawCall_0033SG.002
+Ns 225.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.500000 0.500000 0.500000
+Ke 0.0 0.0 0.0
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd C:\\Users\\timst\\Google Drive\\Hochschule Aalen\\Programmier Praktikum\\IntJ Schiffe Versenken\\src\\Game\\res\\textures\\5Ship\\5ShipTex.jpg
+
+newmtl D0902A25:DrawCall_0034SG.002
+Ns 225.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.500000 0.500000 0.500000
+Ke 0.0 0.0 0.0
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd C:\\Users\\timst\\Google Drive\\Hochschule Aalen\\Programmier Praktikum\\IntJ Schiffe Versenken\\src\\Game\\res\\textures\\5Ship\\5ShipTex.jpg
+
+newmtl D0902A25:DrawCall_0035SG.002
+Ns 225.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.500000 0.500000 0.500000
+Ke 0.0 0.0 0.0
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd C:\\Users\\timst\\Google Drive\\Hochschule Aalen\\Programmier Praktikum\\IntJ Schiffe Versenken\\src\\Game\\res\\textures\\5Ship\\5ShipTex.jpg

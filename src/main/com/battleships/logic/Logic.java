@@ -20,10 +20,15 @@ public class Logic {
     new Logic();
   }
   
+  public Logic() {
+    getShipsByGridSize(30);
+  }
+  
   public void setPlaymode(int playmode) {
-    if(playmode != HOST && playmode != CLIENT && playmode != SINGLEPLAYER) throw new IllegalArgumentException("Playmode has to be " + HOST + " or " + CLIENT + " or " + SINGLEPLAYER + ".");
+    if (playmode != HOST && playmode != CLIENT && playmode != SINGLEPLAYER)
+      throw new IllegalArgumentException("Playmode has to be " + HOST + " or " + CLIENT + " or " + SINGLEPLAYER + ".");
     this.playmode = playmode;
-    switch (playmode){
+    switch (playmode) {
       case SINGLEPLAYER:
       case HOST:
         isMyTurn = true;
@@ -39,31 +44,36 @@ public class Logic {
     oppBoard = new Board(size);
   }
   
-  public boolean onShoot(int x, int y){
+  public boolean onShoot(int x, int y) {
     //TODO
     return false;
   }
   
   public ArrayList<Ship> getShipsByGridSize(int size) {
+    if (size < 5 || size > 30) throw new IllegalArgumentException("Size has to be between 5 and 30!");
+    
     ArrayList<Ship> ships = null;
+    
     try {
       ships = new ArrayList<>();
-      //FIXME change for Build
-      File file = new File("C:\\Users\\lukas\\Desktop\\Schiffeversenken\\src\\main\\resources\\ships.csv");
+      File file = new File(getClass().getResource("/schiffstabelle.csv").toURI());
       BufferedReader bf = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
       
-      //Richtige Zeile in der Date finden
       String line = null;
-      for (int i = 5; i <= size; i++) line = bf.readLine();
-      
-      //Anzahlen durchgehen und so viele Schiffe hinzufügen
-      String[] elems = line.split(";");
-      for (int i = 0; i < elems.length; i++) {
-        int shipCount = Integer.parseInt(elems[i]);
-        for (int j = 1; j <= shipCount; j++) ships.add(Ship.getDefault(size));
+      for (int i = 4; i < size; i++) {
+        line = bf.readLine();
       }
-    }catch (IOException e) {
+      
+      String shipCounts[] = line.split(";");
+      for (int i = shipCounts.length - 1; i >= 0; i--) {
+        int shipCount = Integer.parseInt(shipCounts[i]);
+        for (int j = 0; j < shipCount; j++) {
+          ships.add(Ship.getDefault(i + 2));
+        }
+      }
+    }catch (Exception e) {
       e.printStackTrace();
+      System.err.println("Reading 'Schiffstabelle.csv' was not possible :(");
     }finally {
       return ships;
     }
