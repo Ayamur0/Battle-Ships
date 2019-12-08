@@ -48,6 +48,8 @@ public class MenuTest {
 
                 Vector3f terrainPoint = inits.getPicker().getCurrentTerrainPoint();
                 if(terrainPoint != null) {
+//                entities.get(3).setPosition(new Vector3f(terrainPoint.x, terrainPoint.y < -3 ? -3 : terrainPoint.y, terrainPoint.z));
+//                System.out.println(terrainPoint.x + " " + terrainPoint.z);
                 }
                 GL11.glEnable(GL30.GL_CLIP_DISTANCE0);
 
@@ -71,11 +73,20 @@ public class MenuTest {
 
                 inits.getSystem().generateParticles(new Vector3f());
                 inits.getPlayingField().renderFires();
+//              new Particle(star, new Vector3f(camera.getPosition().x , camera.getPosition().y, camera.getPosition().z), new Vector3f(0, 30, 0), 1 ,4 ,0 ,1);
+
 
                 inits.getShip().getRotation().y += 0.1f;
                 inits.getPlayingField().moveCannonball();
                 inits.setCellIntersection(inits.getPicker().getCurrentIntersectionPoint());
                 inits.getPlayingField().highligtCell(inits.getCellIntersection());
+
+                inits.getShips().moveCursorShip(inits.getRenderer());
+
+                if(GLFW.glfwGetKey(Inits.getWindow(), GLFW.GLFW_KEY_R) == GLFW.GLFW_PRESS){
+                    inits.getShips().rotateShip();
+                }
+
                 if(GLFW.glfwGetMouseButton(Inits.getWindow(), GLFW.GLFW_MOUSE_BUTTON_LEFT) == GLFW.GLFW_PRESS){
                     inits.setPointedCell(inits.getPlayingField().calculatePointedCell(inits.getCellIntersection()));
                     if(inits.getPointedCell() != null){
@@ -90,6 +101,8 @@ public class MenuTest {
 
                 ParticleMaster.renderParticles(inits.getCamera(), 1);
 
+//            fbo.unbindFrameBuffer();
+//            PostProcessing.doPostProcessing(fbo.getColorTexture());
 
                 inits.getGuiRenderer().render(inits.getPermanentGuiElements());
                 TextMaster.render();

@@ -28,6 +28,8 @@ public class PlayButton extends MainMenuButton {
     protected void clickAction() {
         guiManager.clearClickableGuis();
 
+        prevMenu = 0;
+
         guiManager.createClickableGui(singleplayer,() -> new SingleplayerButton(guiManager,loader));
         guiManager.createClickableGui(multiplayer,() -> new MultiplayerButton(guiManager,loader));
         guiManager.createClickableGui(back,() -> new BackButton(guiManager,loader));

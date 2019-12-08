@@ -29,6 +29,8 @@ public class MultiplayerButton extends MainMenuButton {
     protected void clickAction() {
         guiManager.clearClickableGuis();
 
+        prevMenu = 1;
+
         guiManager.createClickableGui(host,() -> new HostButton(guiManager,loader));
         guiManager.createClickableGui(client,() -> new ClientButton(guiManager,loader));
         guiManager.createClickableGui(back,() -> new BackButton(guiManager,loader));
