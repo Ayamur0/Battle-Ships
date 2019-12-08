@@ -1,6 +1,7 @@
 package com.battleships.gui.gameAssets;
 
 import com.battleships.gui.entities.Entity;
+import com.battleships.gui.renderingEngine.MasterRenderer;
 import com.battleships.gui.window.WindowManager;
 import org.apache.commons.math3.linear.*;
 import org.joml.Vector2f;
@@ -13,7 +14,6 @@ public class Cannonball{
     private static final float MAXHEIGHT = 100;
 
     private Entity ball;
-    private int entityIndex;
     private Vector2f destination;
     private Vector2f horizontalVelocity = new Vector2f();
     private Vector3f position = new Vector3f();
@@ -28,12 +28,10 @@ public class Cannonball{
      * @param ball - the entity of this cannonball
      * @param destination - destination where the cannonball should land
      * @param origin - where the cannonball is fired from
-     * @param entityIndex - index in the entity array where ball is saved, so it can be removed later
      */
-    public Cannonball(Entity ball, Vector2f destination, Vector2f origin, int entityIndex) {
+    public Cannonball(Entity ball, Vector2f destination, Vector2f origin) {
         this.ball = ball;
         this.destination = destination;
-        this.entityIndex = entityIndex;
 
         //position of the cannonball that gets updated every frame
         //start by setting position to origin
@@ -137,11 +135,20 @@ public class Cannonball{
         return false;
     }
 
-    public int getEntityIndex() {
-        return entityIndex;
-    }
-
+    /**
+     *
+     * @return - The index of the cell the cannonball is flying towards.
+     */
     public Vector2f getDestination() {
         return destination;
+    }
+
+    /**
+     *
+     * @return - Render the cannonball if one exists.
+     */
+    public void render(MasterRenderer renderer) {
+        if(ball != null)
+            renderer.processEntity(ball);
     }
 }

@@ -13,12 +13,25 @@ public class GuiTexture {
     private Vector2f positions;
     private Vector2f scale;
 
+    /**
+     * Create a new gui with a texture at the specified position and the specified scale.
+     * @param texture - The texture the gui should use.
+     * @param positions - Position of the center of the gui in screen coordinates (0,0) top left and (1,1) bottom right.
+     * @param scale - Scale for this gui as x and y values for horizontal and vertical scale.
+     *              Scale is percentage of the screen the gui should occupy, 1 for screen width/height.
+     */
     public GuiTexture(int texture, Vector2f positions, Vector2f scale) {
         this.texture = texture;
         this.positions = positions;
         this.scale = scale;
     }
 
+    /**
+     * Create a new gui with a texture at the specified position. The scale will be set
+     * to the scale of the texture image.
+     * @param texture - The texture the gui should use.
+     * @param positions - Position of the center of the gui in screen coordinates (0,0) top left and (1,1) bottom right.
+     */
     public GuiTexture(int texture, Vector2f positions) {
         this.texture = texture;
         this.positions = positions;
@@ -26,14 +39,23 @@ public class GuiTexture {
         setScaleToTextureAspect();
     }
 
+    /**
+     * @return - TextureID of this gui.
+     */
     public int getTexture() {
         return texture;
     }
 
+    /**
+     * @return - Positions of the center of this gui
+     */
     public Vector2f getPositions() {
         return positions;
     }
 
+    /**
+     * @return - Scale of this gui as x and y values for horizontal and vertical scale in terms of screen space occupied (1 = screen width)
+     */
     public Vector2f getScale() {
         return scale;
     }

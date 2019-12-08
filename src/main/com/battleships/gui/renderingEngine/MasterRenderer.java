@@ -45,6 +45,10 @@ public class MasterRenderer {
 
     private SkyboxRenderer skyboxRenderer;
 
+    /**
+     * Create new MasterRenderer, that is capable of rendering entities, terrains, skyboxes and lights.
+     * @param loader - Loader to pass to pass to skyboxRenderer to load it's CubeMap
+     */
     public MasterRenderer(Loader loader){
         enableCulling();
         updateProjectionMatrix();
@@ -53,25 +57,48 @@ public class MasterRenderer {
         skyboxRenderer = new SkyboxRenderer(loader, projectionMatrix);
     }
 
+    /**
+     * Disables the rendering of the backsides of faces, so the inside of
+     * models doesn't get rendered to save performance.
+     */
     public static void enableCulling(){
-        //disable rendering of the backside of faces (inside of models)
         GL11.glEnable(GL11.GL_CULL_FACE);
         GL11.glCullFace(GL11.GL_BACK);
     }
 
+    /**
+     * Enable the rendering of the backside of faces, so the inside of models
+     * has texture, needs more performance.
+     */
     public static void disableCulling(){
-        //enable rendering of the backside of faces (inside of models){
         GL11.glDisable(GL11.GL_CULL_FACE);
     }
 
+    /**
+     * Add all elements of a scene consisting of many entities, one terrain, one light, one camera and a clipPlane
+     * to the List/Hashmaps so they get passed to the corresponding renderers. After that call the render method
+     * to actually render the scene.
+     * @param entities - All entities that should be added before rendering the scene.
+     * @param terrain - The terrain that should be added before rendering the scene.
+     * @param light - The light that lights the scene.
+     * @param camera - The camera, from which the scene should be rendered.
+     * @param clipPlane - Plane after which nothing should be rendered. x,y,z and w are the A, B, C and D of a plane
+     *                  equation (Ax + By + Cz + D = 0), so x,y and z are the normal of the plane and D ist he signed distance
+     *                  from the origin.
+     */
     public void renderScene(List<Entity> entities, Terrain terrain, Light light, Camera camera, Vector4f clipPlane){
         processTerrain(terrain);
-        for(Entity entity : entities)
-            processEntity(entity);
+        processEntityList(entities);
         render(light, camera, clipPlane);
     }
 
-    //load things needed for rendering and then render all entities
+    /**
+     * Start shaders and load everything needed to them, then render all currently saved entities and terrains to the
+     * screen using the light and camera, as well as removing everything behind the clipPlane.
+     * @param light - Light that lights the scene.
+     * @param camera - Camera from which the scene should be rendered. (Picture on screen is what camera sees)
+     * @param clipPlane - Plane after which nothing gets rendered anymore.
+     */
     public void render(Light light, Camera camera , Vector4f clipPlane){
         prepare();
         shader.start();
@@ -94,10 +121,27 @@ public class MasterRenderer {
         entities.clear();
     }
 
+    /**
+     * Add a terrain to the list of terrain that should be rendered, next time render() is called.
+     * @param terrain - Terrain to be added to the List of rendered terrains.
+     */
     public void processTerrain(Terrain terrain){
         terrains.add(terrain);
     }
 
+    /**
+     * Add a List of entities to the HashMap of entities that get rendered when render() is called.
+     * @param entities - List of entities that should be added.
+     */
+    public void processEntityList(List<Entity> entities){
+        for(Entity e : entities)
+            processEntity(e);
+    }
+
+    /**
+     * Add one entity to the HashMap of entities that get rendered when render() is called.
+     * @param entity - Entity that should be added.
+     */
     public void processEntity(Entity entity){
         TexturedModel entityModel = entity.getModel();
         List<Entity> batch = entities.get(entityModel);
@@ -113,6 +157,9 @@ public class MasterRenderer {
         }
     }
 
+    /**
+     * Set some OpenGl related settings needed before 3D objects can be rendered.
+     */
     public void prepare(){
         //Clear window
         GL11.glEnable(GL11.GL_DEPTH_TEST); //Only render pixel closest to camera
@@ -120,12 +167,19 @@ public class MasterRenderer {
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT| GL11.GL_DEPTH_BUFFER_BIT);
     }
 
+    /**
+     * CleanUp all the shaders and renderers, call this method on program exit.
+     */
     public void cleanUp(){
         shader.cleanUp();
         terrainShader.cleanUp();
         skyboxRenderer.cleanUp();
     }
 
+    /**
+     * Update the projection matrix to current window settings.
+     * This method needs to be called whenever the size of the window is changed.
+     */
     public void updateProjectionMatrix(){
 //        IntBuffer w = BufferUtils.createIntBuffer(1);
 //        IntBuffer h = BufferUtils.createIntBuffer(1);
@@ -149,14 +203,25 @@ public class MasterRenderer {
         projectionMatrix.setPerspective((float)Math.toRadians(FOV), (float) WindowManager.getWidth() / WindowManager.getHeight(), NEAR_PLANE, FAR_PLANE);
     }
 
+    /**
+     * @return Distance of the nearPlane from the point from which the scene is rendered (camera), everything in front of
+     *          this plane doesn't get rendered.
+     */
     public static float getNearPlane() {
         return NEAR_PLANE;
     }
 
+    /**
+     * @return Distance of the farPlane from the point from which the scene is rendered (camera), everything behind of
+     *          this plane doesn't get rendered.
+     */
     public static float getFarPlane() {
         return FAR_PLANE;
     }
 
+    /**
+     * @return The current projection Matrix.
+     */
     public static Matrix4f getProjectionMatrix() {
         return projectionMatrix;
     }

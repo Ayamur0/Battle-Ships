@@ -1,6 +1,8 @@
 package com.battleships.gui.window;
 
 import com.battleships.gui.entities.Camera;
+import com.battleships.gui.gameAssets.GameManager;
+import com.battleships.gui.gameAssets.MainMenuGui.MainMenuManager;
 import com.battleships.gui.guis.GuiClickCallback;
 import com.battleships.gui.guis.GuiManager;
 import com.battleships.gui.main.SchiffeVersenken;
@@ -80,16 +82,16 @@ public class WindowManager {
         return window;
     }
 
-    static public void setCallbacks(Camera camera, GuiManager guiManager, WaterFrameBuffers wFbo){
-        GLFW.glfwSetMouseButtonCallback(window, guiManager.testGuiClick);
+    static public void setCallbacks(Camera camera, GameManager gameManager, WaterFrameBuffers wFbo){
+        GLFW.glfwSetMouseButtonCallback(window, gameManager.testClick);
         //TODO set ingame clickcallback so that if on no gui, it gets checked if on playingfield
         GLFW.glfwSetScrollCallback(window, camera.scrollCallback);
-        GLFW.glfwSetKeyCallback(window, camera.keyCallback);
+        GLFW.glfwSetKeyCallback(window, gameManager.keyCallback);
         GLFW.glfwSetWindowSizeCallback(window, wFbo.sizeCallback);
     }
 
-    static public void setMainMenuCallbacks(GuiManager guiManager){
-        GLFW.glfwSetMouseButtonCallback(window, guiManager.testGuiClick);
+    static public void setMainMenuCallbacks(MainMenuManager mainMenuManager){
+        GLFW.glfwSetMouseButtonCallback(window, mainMenuManager.testClick);
     }
 
     public static int getWidth() {

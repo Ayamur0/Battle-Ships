@@ -4,7 +4,9 @@ import com.battleships.gui.entities.Camera;
 import com.battleships.gui.entities.Entity;
 import com.battleships.gui.entities.Light;
 import com.battleships.gui.fontRendering.TextMaster;
+import com.battleships.gui.gameAssets.GameManager;
 import com.battleships.gui.gameAssets.MainMenuGui.MainMenu;
+import com.battleships.gui.gameAssets.MainMenuGui.MainMenuManager;
 import com.battleships.gui.gameAssets.PlayingField;
 import com.battleships.gui.gameAssets.ShipManager;
 import com.battleships.gui.gameAssets.ingameGui.ShipSelector;
@@ -50,6 +52,9 @@ public class Inits {
     private MainMenu startMenu;
     private GuiRenderer guiRenderer;
 
+
+    private MainMenuManager mainMenuManager;
+    private GameManager gameManager;
 
     private ShipManager ships;
     private ShipSelector selector;
@@ -227,7 +232,9 @@ public class Inits {
         PostProcessing.init(loader);
 
         // *******************Callbacks initialization*******************
-        WindowManager.setMainMenuCallbacks(guiManager);
+        mainMenuManager = new MainMenuManager(guiManager);
+
+        WindowManager.setMainMenuCallbacks(mainMenuManager);
 
         menuInitDone = true;
     }
@@ -275,13 +282,13 @@ public class Inits {
 
         entities.add(ship);
 
-        this.playingField =  new PlayingField(entities,30, loader);
+        this.playingField =  new PlayingField(new ArrayList<>(), new ArrayList<>(), 30, loader);
 
         entities.add(playingField.getOwn());
         entities.add(playingField.getOpponent());
-        playingField.placeShip(entities, ships, 0, new Vector2f(15,15),5, 0);
-        playingField.placeShip(entities, ships, 0, new Vector2f(3,3),3, 1);
-        playingField.shoot(entities,1, new Vector2f(15,15));
+        playingField.placeShip(0, new Vector2f(15,15),5, 0);
+        playingField.placeShip(0, new Vector2f(3,3),3, 1);
+        playingField.shoot(1, new Vector2f(15,15));
 
         // *******************Water initialization*******************
         this.waterFbos = new WaterFrameBuffers();
@@ -303,7 +310,9 @@ public class Inits {
 
         // *******************Callbacks initialization*******************
 
-        WindowManager.setCallbacks(camera, guiManager, waterFbos);
+        gameManager = new GameManager(guiManager, playingField, picker);
+
+        WindowManager.setCallbacks(camera, gameManager, waterFbos);
 
         this.picker = new MousePicker(camera, renderer.getProjectionMatrix(), terrain);
 

@@ -33,16 +33,7 @@ public class Camera {
         }
     };
 
-    public GLFWKeyCallback keyCallback = new GLFWKeyCallback() {
-        @Override
-        public void invoke(long window, int key, int scanCode, int action, int mods) {
-            if(key == GLFW.GLFW_KEY_F11 && action == GLFW.GLFW_PRESS)
-                WindowManager.setFullScreen(!WindowManager.isFullscreen());
-        }
-    };
-
-
-    public void move(long window, Terrain terrain){ //TODO limit zoom and pitch amount, keep movement in game area
+        public void move(long window, Terrain terrain){ //TODO limit zoom and pitch amount, keep movement in game area
         calculatePitch(window);
         calculatePosition(window);
         pitch %= 360;

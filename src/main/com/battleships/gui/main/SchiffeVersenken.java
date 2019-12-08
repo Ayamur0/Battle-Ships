@@ -6,6 +6,7 @@ import com.battleships.gui.entities.Light;
 import com.battleships.gui.fontMeshCreator.FontType;
 import com.battleships.gui.fontMeshCreator.GUIText;
 import com.battleships.gui.fontRendering.TextMaster;
+import com.battleships.gui.gameAssets.GameManager;
 import com.battleships.gui.gameAssets.PlayingField;
 import com.battleships.gui.gameAssets.ShipManager;
 import com.battleships.gui.gameAssets.ingameGui.ShipSelector;
@@ -69,19 +70,22 @@ public class SchiffeVersenken {
 
 
 
-        FontType font = new FontType(loader.loadFontTexture("font/PixelDistance.png"), "PixelDistance");
-        GUIText text = new GUIText("Testing text rendering!", 1, font, new Vector2f(0f,0.4f), 1f, true, 0.0f, 0.1f, new Vector3f(1.0f,0.0f,0.0f), new Vector2f());
-        text.setColor(1,1,1);
-        GUIText text2 = new GUIText("Text with outline!", 1, font, new Vector2f(0f,0.5f), 1f, true, 0.7f, 0.1f, new Vector3f(1.0f,0.0f,0.0f), new Vector2f());
-        text2.setColor(1,1,1);
-        GUIText text3 = new GUIText("Glowing Text!", 1, font, new Vector2f(0f,0.6f), 1f, true, 0.5f, 0.4f, new Vector3f(1.0f,0.0f,0.0f), new Vector2f());
-        text3.setColor(1,1,1);
-        GUIText text4 = new GUIText("Text with shadow!", 1, font, new Vector2f(0f,0.7f), 1f, true, 0.7f, 0.1f, new Vector3f(0.0f,0.0f,0.0f), new Vector2f(-0.006f, -0.006f));
-        text4.setColor(1,1,1);
+//        FontType font = new FontType(loader.loadFontTexture("font/PixelDistance.png"), "PixelDistance");
+//        GUIText text = new GUIText("Testing text rendering!", 1, font, new Vector2f(0f,0.4f), 1f, true, 0.0f, 0.1f, new Vector3f(1.0f,0.0f,0.0f), new Vector2f());
+//        text.setColor(1,1,1);
+//        GUIText text2 = new GUIText("Text with outline!", 1, font, new Vector2f(0f,0.5f), 1f, true, 0.7f, 0.1f, new Vector3f(1.0f,0.0f,0.0f), new Vector2f());
+//        text2.setColor(1,1,1);
+//        GUIText text3 = new GUIText("Glowing Text!", 1, font, new Vector2f(0f,0.6f), 1f, true, 0.5f, 0.4f, new Vector3f(1.0f,0.0f,0.0f), new Vector2f());
+//        text3.setColor(1,1,1);
+//        GUIText text4 = new GUIText("Text with shadow!", 1, font, new Vector2f(0f,0.7f), 1f, true, 0.7f, 0.1f, new Vector3f(0.0f,0.0f,0.0f), new Vector2f(-0.006f, -0.006f));
+//        text4.setColor(1,1,1);
 
         // *******************Camera initialization*******************
 
         Camera camera = new Camera();
+        camera.getPosition().x = 350f;
+        camera.getPosition().y = 100f;
+        camera.getPosition().z = -450f;
 
         // *******************Light initialization*******************
 
@@ -127,15 +131,13 @@ public class SchiffeVersenken {
 
         entities.add(ship);
 
-        PlayingField playingField =  new PlayingField(entities,30, loader);
-        ShipManager ships = new ShipManager(loader,playingField);
+        PlayingField playingField =  new PlayingField(new ArrayList<>(), new ArrayList<>(), 30, loader);
+        ShipManager ships = playingField.getShipManager();
         ShipSelector shipSelector = new ShipSelector(loader, guiManager, ships, guis);
 //        ShipManager ships = new ShipManager(loader);
-        entities.add(playingField.getOwn());
-        entities.add(playingField.getOpponent());
-        playingField.placeShip(entities, ships, 0, new Vector2f(15,15),4, 0);
-        playingField.placeShip(entities, ships, 0, new Vector2f(3,3),3, 1);
-        playingField.shoot(entities,1, new Vector2f(15,15));
+        playingField.placeShip( 0, new Vector2f(15,15),4, 0);
+        playingField.placeShip(0, new Vector2f(3,3),3, 1);
+        playingField.shoot(1, new Vector2f(15,15));
         Vector3f cellIntersection;
         Vector3f pointedCell;
 //        playingField.placeShip(entities, ships, 0, 7,2);
@@ -169,9 +171,10 @@ public class SchiffeVersenken {
 
         // *******************Callbacks initialization*******************
 
-        WindowManager.setCallbacks(camera, guiManager, waterFbos);
-
         MousePicker picker = new MousePicker(camera, renderer.getProjectionMatrix(), terrain);
+
+        GameManager gameManager = new GameManager(guiManager, playingField, picker);
+        WindowManager.setCallbacks(camera, gameManager, waterFbos);
 
         // ****************************************************
         // *******************Main Game Loop*******************
@@ -209,28 +212,18 @@ public class SchiffeVersenken {
 
             system.generateParticles(new Vector3f());
             playingField.renderFires();
+            playingField.render(renderer);
 //            new Particle(star, new Vector3f(camera.getPosition().x , camera.getPosition().y, camera.getPosition().z), new Vector3f(0, 30, 0), 1 ,4 ,0 ,1);
 
 
             ship.getRotation().y += 0.1f;
-            playingField.moveCannonball(entities);
+            playingField.moveCannonball();
             cellIntersection = picker.getCurrentIntersectionPoint();
             playingField.highligtCell(cellIntersection);
 
-            ships.moveCursorShip(renderer);
+            ships.moveCursorShip();
 
-            if(GLFW.glfwGetKey(window, GLFW.GLFW_KEY_R) == GLFW.GLFW_PRESS){
-                ships.rotateShip();
-            }
-
-            if(GLFW.glfwGetMouseButton(window, GLFW.GLFW_MOUSE_BUTTON_LEFT) == GLFW.GLFW_PRESS){
-                pointedCell = playingField.calculatePointedCell(cellIntersection);
-                if(pointedCell != null){
-                    playingField.shoot(entities, 1, new Vector2f(pointedCell.x, pointedCell.y));
-                }
-            }
-
-            renderer.renderScene(entities, terrain, light, camera, new Vector4f(0, -1, 0, 10000));
+            renderer.renderScene(entities, terrain, light, camera, new Vector4f(0, 0, 0, 0));
 
 
             waterRenderer.render(waterTiles, camera, light);

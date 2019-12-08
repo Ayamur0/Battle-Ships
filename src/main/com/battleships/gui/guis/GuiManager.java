@@ -1,6 +1,9 @@
 package com.battleships.gui.guis;
 
+import com.battleships.gui.gameAssets.PlayingField;
 import com.battleships.gui.window.WindowManager;
+import org.joml.Vector2f;
+import org.joml.Vector3f;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWMouseButtonCallback;
@@ -53,34 +56,16 @@ public class GuiManager {
      * Gets the cursor position and tests all guis with a click action if they were
      * clicked on and if one was clicked executes the click action of that gui.
      */
-    public GLFWMouseButtonCallback testGuiClick = new GLFWMouseButtonCallback() {
-        @Override
-        public void invoke(long window, int button, int action, int mods) {
-
-                if(action != GLFW.GLFW_PRESS || button != GLFW.GLFW_MOUSE_BUTTON_1)
-                    return;
-
-                GLFW.glfwGetCursorPos(window, x, y);
-                x.rewind();
-                y.rewind();
-
-                float xpos = (float)x.get() / WindowManager.getWidth();
-                float ypos = (float)y.get() / WindowManager.getHeight();
-
-                x = BufferUtils.createDoubleBuffer(1);
-                y = BufferUtils.createDoubleBuffer(1);
-
-            System.out.println(xpos + " " + ypos);
-
-                for(GuiTexture texture : clickableGuis.keySet()){
-                    GuiClickCallback current = (GuiClickCallback)clickableGuis.get(texture);
-                    if(current.isClickOnGui(texture, xpos, ypos)) {
-                        current.clickAction();
-                        break;
-                    }
-                }
+    public boolean testGuiClick (float x, float y) {
+        for (GuiTexture texture : clickableGuis.keySet()) {
+            GuiClickCallback current = (GuiClickCallback) clickableGuis.get(texture);
+            if (current.isClickOnGui(texture, x, y)) {
+                current.clickAction();
+                return true;
+            }
         }
-    };
+        return false;
+    }
 
     /**
      * Renders all guis that have a click function to the screen.

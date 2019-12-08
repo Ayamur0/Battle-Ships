@@ -160,13 +160,17 @@ public class Loader {
         return new Entity(texturedModel, new Vector3f(0,0,-1), new Vector3f(), 1);
     }
 
-    public Entity loadEntityfromOBJ(String objPath, String texturePath, float shineDamper, float reflectivity){
+    public TexturedModel loadModelFromOBJ(String objPath, String texturePath, float shineDamper, float reflectivity){
         RawModel model = OBJLoader.loadObjModel(objPath);
         TexturedModel texturedModel = new TexturedModel(model, new ModelTexture(loadTexture(texturePath)));
         ModelTexture texture = texturedModel.getTexture();
         texture.setReflectivity(reflectivity);
         texture.setShineDamper(shineDamper);
-        return new Entity(texturedModel, new Vector3f(0,0,-1), new Vector3f(), 1);
+        return texturedModel;
+    }
+
+    public Entity loadEntityfromOBJ(String objPath, String texturePath, float shineDamper, float reflectivity){
+        return new Entity(loadModelFromOBJ(objPath, texturePath, shineDamper, reflectivity), new Vector3f(0,0,-1), new Vector3f(), 1);
     }
 
     public void cleanUp(){

@@ -25,6 +25,14 @@ public class ShipSelector extends GuiClickCallback {
     private int buttonNumber;
     private ShipManager shipManager;
 
+    /**
+     * Create the gui used for ship selecting.
+     * @param loader - Loader needed to load textures.
+     * @param guiManager - GuiManager needed to link click functions to the gui elements.
+     * @param shipManager - ShipManager of the current game, needed for the click functions.
+     * @param guis - List of guis this gui should be saved to, this list needs to be rendered later to show this gui
+     *             on screen.
+     */
     public ShipSelector(Loader loader, GuiManager guiManager, ShipManager shipManager, List<GuiTexture> guis) {
         this.shipManager = shipManager;
         GuiTexture background = new GuiTexture(loader.loadTexture("IngameGuiShipSelectBackground.png"), new Vector2f(0.5f, 0));
@@ -61,6 +69,15 @@ public class ShipSelector extends GuiClickCallback {
             shipCountTexts.add(new GUIText(shipCounts[i - 1] + " Left", 2, pirateFont, new Vector2f(guis.get(i).getPositions().x, guis.get(i).getPositions().y + guis.get(i).getScale().y / 2 + 0.05f), guis.get(i).getScale().x, true, 0, 0.1f,BLACK, OUTLINEOFFSET));
     }
 
+    /**
+     * Function that gets called to test if a click was on this gui.
+     * This gui has 4 individual buttons, so depending on which button was pressed, the buttonNumber
+     * attribute gets set to the value for that button, so the clickAction() method knows, which button was clicked.
+     * @param gui - not used in this override, because the gui textures are saved in buttons[] array, so should be null.
+     * @param x - x position of the click in screen coordinates.
+     * @param y - y position of the click in screen coordinates.
+     * @return {@code true} if the click was on one of the buttons of this gui, {@code false} else.
+     */
     @Override
     protected boolean isClickOnGui(GuiTexture gui, double x, double y){
         for(int i = 0; i < buttons.length; i++) {
@@ -74,14 +91,25 @@ public class ShipSelector extends GuiClickCallback {
         return false;
     }
 
+    /**
+     * Gets called if one of the 4 buttons on this gui was clicked.
+     * Adds a ship to the cursor and decrements the amount of ships left for that size.
+     * The size of the ship changes from 2 - 5 depending on which button was clicked.
+     */
     @Override
     protected void clickAction(){
         if(shipCounts[buttonNumber - 2] > 0) {
             shipManager.stickShipToCursor(buttonNumber);
+            //TODO decrement only on placing
             decrementCount(buttonNumber);
         }
     }
 
+    /**
+     * Change the text under the button for that ship size, so it shows that you can place one
+     * ship less of that size than before.
+     * @param shipSize - Size of the ship for that the count should get decremented.
+     */
     public void decrementCount(int shipSize){
         GUIText dummy = shipCountTexts.get(shipSize - 2);
         dummy.remove();

@@ -18,56 +18,65 @@ public class ShipManager {
     protected static final int SOUTH = 2;
     protected static final int WEST = 3;
 
-    private Entity[] ships;
+    private TexturedModel[] ships;
     private PlayingField ownPlayingField;
 
     private Entity cursorShip;
     private int cursorShipSize;
     private int cursorShipDirection;
     private boolean cursorShipAttached;
+    private boolean cursorShipOnGrid;
 
     public ShipManager(Loader loader, PlayingField ownPlayingField){
+        cursorShipAttached = false;
         this.ownPlayingField = ownPlayingField;
-        ships = new Entity[4];
-        ships[0] = (loader.loadEntityfromOBJ("ship2", "ship2.tga", 10, 1));
-        ships[1] = (loader.loadEntityfromOBJ("ship3", "ship3.jpg", 10, 1));
-        ships[2] = (loader.loadEntityfromOBJ("ship4", "ship4.tga", 10, 1));
-        ships[3] = (loader.loadEntityfromOBJ("ship5new", "ship5.jpg", 10, 1));
+        ships = new TexturedModel[4];
+        ships[0] = (loader.loadModelFromOBJ("ship2", "ship2.tga", 10, 1));
+        ships[1] = (loader.loadModelFromOBJ("ship3", "ship3.jpg", 10, 1));
+        ships[2] = (loader.loadModelFromOBJ("ship4", "ship4.tga", 10, 1));
+        ships[3] = (loader.loadModelFromOBJ("ship5new", "ship5.jpg", 10, 1));
     }
 
     public int placeShip(List<Entity> entities, int size, Vector3f position, Vector3f rotation, float scale){
-        Entity toAdd = ships[size - 2];
-        toAdd.setPosition(position);
-        toAdd.setRotation(rotation);
-        toAdd.setScale(scale);
+        Entity toAdd = new Entity(ships[size - 2], position, rotation, scale);
         entities.add(toAdd);
         return entities.size() - 1;
     }
 
     public void stickShipToCursor(int shipSize) {
-        cursorShipAttached = true;
         cursorShipSize = shipSize;
-        cursorShipDirection = NORTH;
-        cursorShip = ships[shipSize - 2];
+        cursorShip = new Entity(ships[shipSize - 2], new Vector3f(), new Vector3f(), 1f);
+        cursorShipAttached = true;
     }
 
-    private void renderCursorShip(MasterRenderer renderer){
-        if(cursorShip != null)
+    public void renderCursorShip(MasterRenderer renderer){
+        if(cursorShipAttached && cursorShipOnGrid)
             renderer.processEntity(cursorShip);
     }
 
-    public void removeCursorShip(){
-        cursorShip = null;
+    public void placeCursorShip(List<Entity> entities){
+        if(!cursorShipAttached)
+            return;
+        entities.add(new Entity(cursorShip.getModel(), new Vector3f(cursorShip.getPosition()), new Vector3f(cursorShip.getRotation()), cursorShip.getScale()));
+        removeCursorShip();
     }
 
-    public void moveCursorShip(MasterRenderer renderer){
+    public void removeCursorShip(){
+        cursorShipAttached = false;
+        cursorShip = null;
+        cursorShipDirection = NORTH;
+    }
+
+    public void moveCursorShip(){
         if(!cursorShipAttached)
             return;
         Vector3f currentCell = ownPlayingField.getCurrentPointedCell();
-        if(currentCell == null)
+        if(currentCell == null) {
+            cursorShipOnGrid = false;
             return;
+        }
+        cursorShipOnGrid = true;
         cursorShip.setPosition(ownPlayingField.calculateShipPosition(PlayingField.OWNFIELD, new Vector2f(currentCell.x, currentCell.y), cursorShipSize, cursorShipDirection));
-        renderCursorShip(renderer);
     }
 
     public void rotateShip(){
