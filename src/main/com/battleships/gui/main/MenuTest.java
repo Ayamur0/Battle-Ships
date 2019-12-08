@@ -81,7 +81,7 @@ public class MenuTest {
                 inits.setCellIntersection(inits.getPicker().getCurrentIntersectionPoint());
                 inits.getPlayingField().highligtCell(inits.getCellIntersection());
 
-                inits.getShips().moveCursorShip(inits.getRenderer());
+                inits.getShips().moveCursorShip();
 
                 if(GLFW.glfwGetKey(Inits.getWindow(), GLFW.GLFW_KEY_R) == GLFW.GLFW_PRESS){
                     inits.getShips().rotateShip();
