@@ -8,12 +8,20 @@ import com.battleships.gui.renderingEngine.Loader;
 import org.joml.Vector2f;
 
 public class PlayButton extends MainMenuButton {
+    private SingleplayerButton singleplayerButton;
+    private MultiplayerButton multiplayerButton;
+    private BackButton backButton;
+
     private GuiTexture singleplayer;
     private GuiTexture multiplayer;
     private GuiTexture back;
 
     public PlayButton(GuiManager guiManager, Loader loader){
         super(guiManager,loader);
+
+        singleplayerButton = new SingleplayerButton(guiManager,loader);
+        multiplayerButton = new MultiplayerButton(guiManager,loader);
+        backButton = new BackButton(guiManager,loader,0);
 
         singleplayer = new GuiTexture(texture, standardButtonPos, buttonSize);
         multiplayer = new GuiTexture(texture,new Vector2f(singleplayer.getPositions().x,singleplayer.getPositions().y+buttonGap),buttonSize);
@@ -28,11 +36,9 @@ public class PlayButton extends MainMenuButton {
     protected void clickAction() {
         guiManager.clearClickableGuis();
 
-        prevMenu = 0;
-
-        guiManager.createClickableGui(singleplayer,() -> new SingleplayerButton(guiManager,loader));
-        guiManager.createClickableGui(multiplayer,() -> new MultiplayerButton(guiManager,loader));
-        guiManager.createClickableGui(back,() -> new BackButton(guiManager,loader));
+        guiManager.createClickableGui(singleplayer,() -> singleplayerButton);
+        guiManager.createClickableGui(multiplayer,() -> multiplayerButton);
+        guiManager.createClickableGui(back,() -> backButton);
 
         TextMaster.clear();
         super.CreateTextLabels();

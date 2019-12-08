@@ -13,8 +13,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class MainMenuButton extends GuiClickCallback {
-    protected static int prevMenu;//0=Main Menu, 1=Play Menu
-
     protected Vector2f buttonSize;
     protected Vector2f standardButtonPos;
     protected Float buttonGap;

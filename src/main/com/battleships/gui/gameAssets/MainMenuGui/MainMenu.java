@@ -8,6 +8,11 @@ import com.battleships.gui.renderingEngine.Loader;
 import org.joml.Vector2f;
 
 public class MainMenu extends MainMenuButton {
+
+    private PlayButton playButton;
+    private OptionButton optionButton;
+    private ExitButton exitButton;
+
     private GuiTexture play;
     private GuiTexture options;
     private GuiTexture exit;
@@ -16,6 +21,11 @@ public class MainMenu extends MainMenuButton {
 
     public MainMenu(GuiManager guiManager, Loader loader){
         super(guiManager,loader);
+
+        playButton = new PlayButton(guiManager,loader);
+        optionButton = new OptionButton(guiManager,loader);
+        exitButton = new ExitButton();
+
         play = new GuiTexture(texture, standardButtonPos, buttonSize);
         options = new GuiTexture(texture,new Vector2f(play.getPositions().x,play.getPositions().y+buttonGap),buttonSize);
         exit = new GuiTexture(texture,new Vector2f(options.getPositions().x,options.getPositions().y+buttonGap),buttonSize);
@@ -24,9 +34,9 @@ public class MainMenu extends MainMenuButton {
         super.guiTexts.add(new GUIText("Options", 3, font,new Vector2f(options.getPositions().x,options.getPositions().y), 0.12f, true, 0.0f, 0.1f,outlineColor, new Vector2f()));
         super.guiTexts.add(new GUIText("Exit", 3, font,new Vector2f(exit.getPositions().x,exit.getPositions().y), 0.12f, true, 0.0f, 0.1f,outlineColor, new Vector2f()));
 
-        guiManager.createClickableGui(play,()->new PlayButton(guiManager,loader));
-        guiManager.createClickableGui(options,()-> new OptionButton(guiManager,loader));
-        guiManager.createClickableGui(exit,()->new ExitButton());
+        guiManager.createClickableGui(play,()-> playButton);
+        guiManager.createClickableGui(options,()-> optionButton);
+        guiManager.createClickableGui(exit,()-> exitButton);
 
         TextMaster.clear();
         super.CreateTextLabels();
@@ -35,9 +45,9 @@ public class MainMenu extends MainMenuButton {
     protected void clickAction() {
         guiManager.clearClickableGuis();
 
-        guiManager.createClickableGui(play,() -> new PlayButton(guiManager,loader));
-        guiManager.createClickableGui(options,() -> new OptionButton(guiManager,loader));
-        guiManager.createClickableGui(exit,() -> new ExitButton());
+        guiManager.createClickableGui(play,() -> playButton);
+        guiManager.createClickableGui(options,() -> optionButton);
+        guiManager.createClickableGui(exit,() -> exitButton);
 
         TextMaster.clear();
         super.CreateTextLabels();

@@ -4,8 +4,11 @@ import com.battleships.gui.guis.GuiManager;
 import com.battleships.gui.renderingEngine.Loader;
 
 public class BackButton extends MainMenuButton {
-    public BackButton(GuiManager guiManager, Loader loader){
+    private int prevMenu; //0=Main Menu, 1=Play Menu
+
+    public BackButton(GuiManager guiManager, Loader loader, int prevMenu){
         super(guiManager,loader);
+        this.prevMenu = prevMenu;
     }
     @Override
     protected void clickAction() {

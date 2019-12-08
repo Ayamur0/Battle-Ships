@@ -8,6 +8,11 @@ import com.battleships.gui.renderingEngine.Loader;
 import org.joml.Vector2f;
 
 public class SingleplayerButton extends MainMenuButton {
+
+    private PVsAiButton pVsAiButton;
+    private AiVsAiButton aiVsAiButton;
+    private BackButton backButton;
+
     private GuiTexture pVsAi;
     private GuiTexture aiVsAi;
     private GuiTexture back;
@@ -15,6 +20,10 @@ public class SingleplayerButton extends MainMenuButton {
 
     public SingleplayerButton(GuiManager guiManager, Loader loader){
         super(guiManager,loader);
+
+        pVsAiButton = new PVsAiButton(guiManager,loader);
+        aiVsAiButton = new AiVsAiButton(guiManager,loader);
+        backButton = new BackButton(guiManager,loader,1);
 
         pVsAi = new GuiTexture(texture, standardButtonPos, buttonSize);
         aiVsAi = new GuiTexture(texture,new Vector2f(pVsAi.getPositions().x,pVsAi.getPositions().y+buttonGap),buttonSize);
@@ -28,11 +37,9 @@ public class SingleplayerButton extends MainMenuButton {
     protected void clickAction() {
         guiManager.clearClickableGuis();
 
-        prevMenu = 1;
-
-        guiManager.createClickableGui(pVsAi,() -> new PVsAi(guiManager,loader));
-        guiManager.createClickableGui(aiVsAi,() -> new AiVsAi(guiManager,loader));
-        guiManager.createClickableGui(back,() -> new BackButton(guiManager,loader));
+        guiManager.createClickableGui(pVsAi,() -> pVsAiButton);
+        guiManager.createClickableGui(aiVsAi,() -> aiVsAiButton);
+        guiManager.createClickableGui(back,() -> backButton);
 
         TextMaster.clear();
         super.CreateTextLabels();
