@@ -73,7 +73,8 @@ public class MenuTest {
 
                 inits.getSystem().generateParticles(new Vector3f());
                 inits.getPlayingField().renderFires();
-//              new Particle(star, new Vector3f(camera.getPosition().x , camera.getPosition().y, camera.getPosition().z), new Vector3f(0, 30, 0), 1 ,4 ,0 ,1);
+                inits.getPlayingField().render(inits.getRenderer());
+//            new Particle(star, new Vector3f(camera.getPosition().x , camera.getPosition().y, camera.getPosition().z), new Vector3f(0, 30, 0), 1 ,4 ,0 ,1);
 
 
                 inits.getShip().getRotation().y += 0.1f;
@@ -83,18 +84,7 @@ public class MenuTest {
 
                 inits.getShips().moveCursorShip();
 
-                if(GLFW.glfwGetKey(Inits.getWindow(), GLFW.GLFW_KEY_R) == GLFW.GLFW_PRESS){
-                    inits.getShips().rotateShip();
-                }
-
-                if(GLFW.glfwGetMouseButton(Inits.getWindow(), GLFW.GLFW_MOUSE_BUTTON_LEFT) == GLFW.GLFW_PRESS){
-                    inits.setPointedCell(inits.getPlayingField().calculatePointedCell(inits.getCellIntersection()));
-                    if(inits.getPointedCell() != null){
-                        inits.getPlayingField().shoot(1, new Vector2f(inits.getPointedCell().x, inits.getPointedCell().y));
-                    }
-                }
-
-                inits.getRenderer().renderScene(inits.getEntities(), inits.getTerrain(), inits.getLight(), inits.getCamera(), new Vector4f(0, -1, 0, 10000));
+                inits.getRenderer().renderScene(inits.getEntities(), inits.getTerrain(), inits.getLight(), inits.getCamera(), new Vector4f(0, 0, 0, 0));
 
 
                 inits.getWaterRenderer().render(inits.getWaterTiles(), inits.getCamera(), inits.getLight());

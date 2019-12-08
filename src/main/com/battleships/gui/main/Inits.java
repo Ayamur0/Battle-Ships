@@ -57,7 +57,7 @@ public class Inits {
     private GameManager gameManager;
 
     private ShipManager ships;
-    private ShipSelector selector;
+    private ShipSelector shipSelector;
 
     private Camera camera;
     private Light light;
@@ -133,8 +133,8 @@ public class Inits {
         return ships;
     }
 
-    public ShipSelector getSelector() {
-        return selector;
+    public ShipSelector getShipSelector() {
+        return shipSelector;
     }
 
     public Camera getCamera() {
@@ -210,25 +210,26 @@ public class Inits {
     }
 
     public void initMenu(){
+
         WindowManager.initialize();
 
-        this.window = WindowManager.getWindow();
+        window = WindowManager.getWindow();
 
         // *******************Main stuff initialization*******************
 
-        this.loader = new Loader();
-        this.renderer = new MasterRenderer(loader);
+        loader = new Loader();
+        renderer = new MasterRenderer(loader);
         TextMaster.init(loader);
 
         // *******************GUI initialization*******************
-        this.guiManager = new GuiManager();
-        this.permanentGuiElements = new ArrayList<>();
+        guiManager = new GuiManager();
+        permanentGuiElements = new ArrayList<>();
 
-        this.startMenu = new MainMenu(guiManager,loader);
-        this.guiRenderer = new GuiRenderer(loader);
+        startMenu = new MainMenu(guiManager,loader);
+        guiRenderer = new GuiRenderer(loader);
 
         // *******************Post Processing initialization*******************
-        this.fbo = new Fbo(WindowManager.getWidth(), WindowManager.getHeight(), Fbo.DEPTH_RENDER_BUFFER);
+        fbo = new Fbo(WindowManager.getWidth(), WindowManager.getHeight(), Fbo.DEPTH_RENDER_BUFFER);
         PostProcessing.init(loader);
 
         // *******************Callbacks initialization*******************
@@ -249,16 +250,16 @@ public class Inits {
 
     public void initGame(){
 
-        this.ships = new ShipManager(loader, playingField);
-        this.selector = new ShipSelector(loader, guiManager, ships, permanentGuiElements);
-
         // *******************Camera initialization*******************
 
-        this.camera = new Camera();
+        camera = new Camera();
+        camera.getPosition().x = 350f;
+        camera.getPosition().y = 100f;
+        camera.getPosition().z = -450f;
 
         // *******************Light initialization*******************
 
-        this.light = new Light(new Vector3f(20000,20000,2000), new Vector3f(1,1,1));
+        light = new Light(new Vector3f(20000,20000,2000), new Vector3f(1,1,1));
 
         // *******************Terrain initialization*******************
 
@@ -269,39 +270,46 @@ public class Inits {
         TerrainTexture texture4 = new TerrainTexture(loader.loadTexture("WetSand.jpg"));
         TerrainTexture texture5 = new TerrainTexture(loader.loadTexture("Sand.jpg"));
 
-        this.texturePack = new TerrainTexturePack(texture0, texture1, texture2, texture3, texture4, texture5);
+        texturePack = new TerrainTexturePack(texture0, texture1, texture2, texture3, texture4, texture5);
 
-        this.blendMap = new TerrainTexture(loader.loadTexture("BlendMap.tga")); //TODO change blendMap to remove water texture
+        blendMap = new TerrainTexture(loader.loadTexture("BlendMap.tga")); //TODO change blendMap to remove water texture
 
-        this.terrain = new Terrain(0,-1, loader, texturePack, blendMap, "HeightMap.jpg");
+        terrain = new Terrain(0,-1, loader, texturePack, blendMap, "HeightMap.jpg");
+//        Terrain terrain2 = new Terrain(-1,-1, loader, texturePack, blendMap, "HeightMap.jpg");
 
-        this.entities = new ArrayList<>();
+        // *******************Entity initialization*******************
 
-        this.ship = loader.loadEntityfromOBJ("ship4", "ship4.tga", 10, 1);
+        entities = new ArrayList<>();
+
+        ship = loader.loadEntityfromOBJ("ship4", "ship4.tga", 10, 1);
         ship.setPosition(new Vector3f(0,0,-40));
 
         entities.add(ship);
 
-        this.playingField =  new PlayingField(new ArrayList<>(), new ArrayList<>(), 30, loader);
-
-        entities.add(playingField.getOwn());
-        entities.add(playingField.getOpponent());
-        playingField.placeShip(0, new Vector2f(15,15),5, 0);
+        playingField =  new PlayingField(new ArrayList<>(), new ArrayList<>(), 30, loader);
+        ships = playingField.getShipManager();
+        shipSelector = new ShipSelector(loader, guiManager, ships, permanentGuiElements);
+//        ShipManager ships = new ShipManager(loader);
+        playingField.placeShip( 0, new Vector2f(15,15),4, 0);
         playingField.placeShip(0, new Vector2f(3,3),3, 1);
         playingField.shoot(1, new Vector2f(15,15));
+//        playingField.placeShip(entities, ships, 0, 7,2);
+//        playingField.placeShip(entities, ships, 0, 9,3);
+//        playingField.placeShip(entities, ships, 0, 11,5);
 
         // *******************Water initialization*******************
-        this.waterFbos = new WaterFrameBuffers();
+        waterFbos = new WaterFrameBuffers();
 
-        this.waterShader = new WaterShader();
-        this.waterRenderer = new WaterRenderer(loader, waterShader, renderer.getProjectionMatrix(), waterFbos);
-        this.waterTiles = new ArrayList<>();
+        waterShader = new WaterShader();
+        waterRenderer = new WaterRenderer(loader, waterShader, renderer.getProjectionMatrix(), waterFbos);
+        waterTiles = new ArrayList<>();
         waterTiles.add(new WaterTile(400, -400, -3));
+
 
         // *******************Particle initialization*******************
         ParticleMaster.init(loader, renderer.getProjectionMatrix());
-        this.fire = new ParticleTexture(loader.loadTexture("particles/fire.png"), 8, true);
-        this.system = new ParticleSystemComplex(fire,20, 3.5f, -0.05f, 2f, 17);
+        fire = new ParticleTexture(loader.loadTexture("particles/fire.png"), 8, true);
+        system = new ParticleSystemComplex(fire,20, 3.5f, -0.05f, 2f, 17);
         system.setLifeError(0.3f);
         system.setScaleError(0.3f);
         system.setSpeedError(0.15f);
@@ -310,12 +318,13 @@ public class Inits {
 
         // *******************Callbacks initialization*******************
 
-        gameManager = new GameManager(guiManager, playingField, picker);
+        picker = new MousePicker(camera, renderer.getProjectionMatrix(), terrain);
 
+        gameManager = new GameManager(guiManager, playingField, picker);
         WindowManager.setCallbacks(camera, gameManager, waterFbos);
 
-        this.picker = new MousePicker(camera, renderer.getProjectionMatrix(), terrain);
 
         gameInitDone = true;
+
     }
 }
