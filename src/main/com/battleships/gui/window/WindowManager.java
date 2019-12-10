@@ -67,7 +67,9 @@ public class WindowManager {
         GLFW.glfwGetWindowSize(window, widthBuffer, heightBuffer);
         width = widthBuffer.get(0);
         height = heightBuffer.get(0);
-        GL11.glViewport(0, 0, width, height);
+
+        if(width <= 1920 && height <= 1080)
+            GL11.glViewport(0, 0, width, height);
 
         double currentFrame = GLFW.glfwGetTime();
         deltaTime = currentFrame - lastFrame;

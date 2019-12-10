@@ -75,7 +75,9 @@ public class GuiTexture {
         int height = y.get();
 
         scale = new Vector2f();
-        scale.x = width / (float)GLFW.glfwGetVideoMode(GLFW.glfwGetPrimaryMonitor()).width();
-        scale.y = height / (float)GLFW.glfwGetVideoMode(GLFW.glfwGetPrimaryMonitor()).height();
+//        scale.x = width / (float)GLFW.glfwGetVideoMode(GLFW.glfwGetPrimaryMonitor()).width();
+//        scale.y = height / (float)GLFW.glfwGetVideoMode(GLFW.glfwGetPrimaryMonitor()).height();
+        scale.x = (float)width / 1920;
+        scale.y = (float)height / 1080;
     }
 }

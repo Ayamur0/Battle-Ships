@@ -45,6 +45,7 @@ public class ShipManager {
 
     public void stickShipToCursor(int shipSize) {
         cursorShipSize = shipSize;
+        cursorShipDirection = NORTH;
         cursorShip = new Entity(ships[shipSize - 2], new Vector3f(), new Vector3f(), 1f);
         cursorShipAttached = true;
     }
@@ -64,7 +65,6 @@ public class ShipManager {
     public void removeCursorShip(){
         cursorShipAttached = false;
         cursorShip = null;
-        cursorShipDirection = NORTH;
     }
 
     public void moveCursorShip(){
