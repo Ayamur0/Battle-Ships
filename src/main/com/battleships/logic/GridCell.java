@@ -22,6 +22,10 @@ public class GridCell {
     return stat;
   }
   
+  public void setStat(int stat) {
+    this.stat = stat;
+  }
+  
   public Ship getShip() {
     return ship;
   }
@@ -31,14 +35,14 @@ public class GridCell {
     stat = SHIP;
   }
   
-  public boolean fire(){
+  public Ship fire(){
     if(stat == SHIP){
       ship.hit();
       stat = SHIP_HIT;
-      return true;
+      return ship;
     }else {
       stat = MISSED_HIT;
-      return false;
+      return null;
     }
   }
 }

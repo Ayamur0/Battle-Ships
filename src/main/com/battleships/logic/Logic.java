@@ -21,7 +21,8 @@ public class Logic {
   }
   
   public Logic() {
-    getShipsByGridSize(30);
+    setSize(30);
+    getShipsByGridSize();
   }
   
   public void setPlaymode(int playmode) {
@@ -45,11 +46,12 @@ public class Logic {
   }
   
   public boolean onShoot(int x, int y) {
-    //TODO
+    
+    
     return false;
   }
   
-  public ArrayList<Ship> getShipsByGridSize(int size) {
+  public ArrayList<Ship> getShipsByGridSize() {
     if (size < 5 || size > 30) throw new IllegalArgumentException("Size has to be between 5 and 30!");
     
     ArrayList<Ship> ships = null;
@@ -81,5 +83,9 @@ public class Logic {
   
   public boolean placeShip(Ship ship){
     return ownBoard.placeShip(ship);
+  }
+  
+  public boolean editShip(Ship oldShip, Ship newShip){
+    return ownBoard.editShip(oldShip, newShip);
   }
 }
