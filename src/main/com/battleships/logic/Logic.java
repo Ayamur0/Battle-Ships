@@ -78,4 +78,8 @@ public class Logic {
       return ships;
     }
   }
+  
+  public boolean placeShip(Ship ship){
+    return ownBoard.placeShip(ship);
+  }
 }
