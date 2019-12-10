@@ -3,8 +3,10 @@ package com.battleships.logic;
 public class Ship {
   //TODO entityIndex hinzufügen
   //TODO implement dir with 4 options
-  public static final int HORIZONTAL = 1;
-  public static final int VERTICAL = -1;
+  public static final int EAST = 1;
+  public static final int NORTH = -1;
+  public static final int WEST = 2;
+  public static final int SOUTH = -2;
   
   private final String[] types = {"U-Boot", "Zerstörer", "Schlachtschiff", "Flugzeugträger"};
   
@@ -27,7 +29,7 @@ public class Ship {
   }
   
   public static Ship getDefault(int size){
-    return new Ship(size, VERTICAL, 0, 0);
+    return new Ship(size, NORTH, 0, 0);
   }
   
   public void setDir(int dir) {
