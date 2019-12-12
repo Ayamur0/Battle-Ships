@@ -35,6 +35,7 @@ public class ShipSelector extends GuiClickCallback {
      */
     public ShipSelector(Loader loader, GuiManager guiManager, ShipManager shipManager, List<GuiTexture> guis) {
         this.shipManager = shipManager;
+        shipManager.setShipSelector(this);
         GuiTexture background = new GuiTexture(loader.loadTexture("IngameGuiShipSelectBackground.png"), new Vector2f(0.5f, 0));
         float space = 0.053125f;
         background.getPositions().y = 1 - background.getScale().y / 2;
@@ -100,8 +101,6 @@ public class ShipSelector extends GuiClickCallback {
     protected void clickAction(){
         if(shipCounts[buttonNumber - 2] > 0) {
             shipManager.stickShipToCursor(buttonNumber);
-            //TODO decrement only on placing
-            decrementCount(buttonNumber);
         }
     }
 

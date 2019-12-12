@@ -1,17 +1,24 @@
 package com.battleships.gui.gameAssets;
 
 import com.battleships.gui.entities.Entity;
+import com.battleships.gui.gameAssets.ingameGui.ShipSelector;
 import com.battleships.gui.models.TexturedModel;
 import com.battleships.gui.renderingEngine.Loader;
 import com.battleships.gui.renderingEngine.MasterRenderer;
+import com.battleships.logic.Ship;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
+import org.joml.Vector4f;
 
 import java.util.ArrayList;
 import java.util.EmptyStackException;
 import java.util.List;
 
 public class ShipManager {
+
+    private static final Vector3f GREEN = new Vector3f(0,1,0);
+    private static final Vector3f RED = new Vector3f(1,0,0);
+    private static final float MIXPERCENTAGE = 0.5f;
 
     protected static final int NORTH = 0;
     protected static final int EAST = 1;
@@ -20,6 +27,7 @@ public class ShipManager {
 
     private TexturedModel[] ships;
     private PlayingField ownPlayingField;
+    private ShipSelector shipSelector;
 
     private Entity cursorShip;
     private int cursorShipSize;
@@ -50,6 +58,10 @@ public class ShipManager {
         cursorShipAttached = true;
     }
 
+    public void stickShipToCursor(Ship ship){
+        //TODO get shipsize, entity and direction from logic
+    }
+
     public void renderCursorShip(MasterRenderer renderer){
         if(cursorShipAttached && cursorShipOnGrid)
             renderer.processEntity(cursorShip);
@@ -58,6 +70,8 @@ public class ShipManager {
     public void placeCursorShip(List<Entity> entities){
         if(!cursorShipAttached)
             return;
+        cursorShip.setAdditionalColorPercentage(0);
+        shipSelector.decrementCount(cursorShipSize);
         entities.add(new Entity(cursorShip.getModel(), new Vector3f(cursorShip.getPosition()), new Vector3f(cursorShip.getRotation()), cursorShip.getScale()));
         removeCursorShip();
     }
@@ -71,7 +85,15 @@ public class ShipManager {
         if(!cursorShipAttached)
             return;
         Vector3f currentCell = ownPlayingField.getCurrentPointedCell();
-        if(currentCell == null) {
+        if(true) { //TODO get if ship is allowed to be placed at currentCell)
+            cursorShip.setAdditionalColor(GREEN);
+            cursorShip.setAdditionalColorPercentage(MIXPERCENTAGE);
+        }
+        else{
+            cursorShip.setAdditionalColor(RED);
+            cursorShip.setAdditionalColorPercentage(MIXPERCENTAGE);
+        }
+        if(currentCell == null || (int) currentCell.z == PlayingField.OPPONENTFIELD) {
             cursorShipOnGrid = false;
             return;
         }
@@ -85,5 +107,9 @@ public class ShipManager {
         cursorShipDirection++;
         cursorShipDirection %= 4;
         cursorShip.getRotation().y = ownPlayingField.calculateShipRotation(cursorShipDirection);
+    }
+
+    public void setShipSelector(ShipSelector shipSelector) {
+        this.shipSelector = shipSelector;
     }
 }

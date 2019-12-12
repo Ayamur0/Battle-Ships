@@ -131,13 +131,12 @@ public class SchiffeVersenken {
 
         entities.add(ship);
 
-        PlayingField playingField =  new PlayingField(new ArrayList<>(), new ArrayList<>(), 30, loader);
+        PlayingField playingField =  new PlayingField(30, loader);
         ShipManager ships = playingField.getShipManager();
         ShipSelector shipSelector = new ShipSelector(loader, guiManager, ships, guis);
 //        ShipManager ships = new ShipManager(loader);
         playingField.placeShip( 0, new Vector2f(15,15),4, 0);
         playingField.placeShip(0, new Vector2f(3,3),3, 1);
-        playingField.shoot(1, new Vector2f(15,15));
         Vector3f cellIntersection;
         Vector3f pointedCell;
 //        playingField.placeShip(entities, ships, 0, 7,2);
@@ -211,7 +210,6 @@ public class SchiffeVersenken {
             GL11.glDisable(GL30.GL_CLIP_DISTANCE0); //not all drivers support disabling, if it doesn't work set clipPlane when rendering to screen high enough so nothing gets clipped
 
             system.generateParticles(new Vector3f());
-            playingField.renderFires();
             playingField.render(renderer);
 //            new Particle(star, new Vector3f(camera.getPosition().x , camera.getPosition().y, camera.getPosition().z), new Vector3f(0, 30, 0), 1 ,4 ,0 ,1);
 

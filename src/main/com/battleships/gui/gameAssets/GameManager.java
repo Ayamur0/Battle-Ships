@@ -42,26 +42,31 @@ public class GameManager {
         @Override
         public void invoke(long window, int button, int action, int mods) {
 
-            if(action != GLFW.GLFW_PRESS || button != GLFW.GLFW_MOUSE_BUTTON_1)
+            if(action == GLFW.GLFW_PRESS && button == GLFW.GLFW_MOUSE_BUTTON_2){
+                shipManager.removeCursorShip();
                 return;
+            }
+            if(action == GLFW.GLFW_PRESS && button == GLFW.GLFW_MOUSE_BUTTON_1) {
 
-            GLFW.glfwGetCursorPos(window, x, y);
-            x.rewind();
-            y.rewind();
+                GLFW.glfwGetCursorPos(window, x, y);
+                x.rewind();
+                y.rewind();
 
-            float xpos = (float)x.get() / WindowManager.getWidth();
-            float ypos = (float)y.get() / WindowManager.getHeight();
+                float xpos = (float) x.get() / WindowManager.getWidth();
+                float ypos = (float) y.get() / WindowManager.getHeight();
 
-            x.clear();
-            y.clear();
+                x.clear();
+                y.clear();
 
-            if(guiManager.testGuiClick(xpos, ypos))
-                return;
+                if (guiManager.testGuiClick(xpos, ypos))
+                    return;
 
-            Vector3f cellIntersection = mousePicker.getCurrentIntersectionPoint();
-            Vector3f pointedCell = playingField.calculatePointedCell(cellIntersection);
-            if(pointedCell != null){
-                playingField.cellClicked(new Vector2f(pointedCell.x, pointedCell.y), (int)pointedCell.z);}
+                Vector3f cellIntersection = mousePicker.getCurrentIntersectionPoint();
+                Vector3f pointedCell = playingField.calculatePointedCell(cellIntersection);
+                if (pointedCell != null) {
+                    playingField.cellClicked(new Vector2f(pointedCell.x, pointedCell.y), (int) pointedCell.z);
+                }
+            }
         }
     };
 

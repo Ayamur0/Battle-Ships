@@ -7,6 +7,7 @@ import com.battleships.gui.particles.ParticleSystemComplex;
 import com.battleships.gui.particles.ParticleTexture;
 import com.battleships.gui.renderingEngine.Loader;
 import com.battleships.gui.renderingEngine.MasterRenderer;
+import com.battleships.gui.renderingEngine.OBJLoader;
 import com.battleships.gui.window.WindowManager;
 import org.apache.commons.math3.linear.*;
 import org.joml.Matrix3f;
@@ -23,6 +24,7 @@ public class PlayingField {
     public static final int OWNFIELD = 0;
     public static final int OPPONENTFIELD = 1;
 
+    private static final String buoyModelOBJ = "buoy";
     private static final String playingfieldTexturePath = "PlayingField.png";
     private static final String highlightTexturePath = "cannonball.png";
     private static final float[] VERTICES = {-0.5f, 0.5f, 0, -0.5f, -0.5f, 0, 0.5f, -0.5f, 0, 0.5f, 0.5f, 0};
@@ -30,6 +32,7 @@ public class PlayingField {
     private static final float[] TEXTURECOORDS = {0, 0, 0, 1, 1, 1, 1, 0};
     private static final float[] NORMALS = {0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0};
     private static final int MAXSIZE = 31;
+    private static final float SCALE = 300;
 
     private ModelTexture texture;
     private Entity own;
@@ -47,45 +50,60 @@ public class PlayingField {
     private Map<Integer, List<Vector3f>> burningFires = new HashMap<>();
     private boolean animation = true;
 
+    private List<Entity> markers;
     private Entity highlighter;
     private Vector3f currentPointedCell;
+    private TexturedModel buoyModelWhite;
+    private TexturedModel buoyModelRed;
+    private ModelTexture white;
+    private ModelTexture red;
 
     private int size;
     private int textureOffset;
     private Vector3f ownPosition;
     private Vector3f opponentPosition;
     private Vector3f rotation;
-    private float scale;
 
     /**
      * Create the two grids, the game is played on.
-     * @param grids - List of entities the two grids and the highlighter should be saved to.
-     * @param ships - List of entities all ships should be saved to.
      * @param size - Count of rows/columns one grid should have.
      * @param loader - Loader needed to load models.
      */
-    public PlayingField(List<Entity> grids, List<Entity> ships, int size, Loader loader) {
+    public PlayingField(int size, Loader loader) {
         this.shipManager = new ShipManager(loader, this);
-        this.grids = grids;
-        this.ships = ships;
+        this.grids = new ArrayList<>();
+        this.ships = new ArrayList<>();
+        this.markers = new ArrayList<>();
         initializeGrids(grids, loader, size);
 
         this.ball = loader.loadEntityfromOBJ("cannonball", "cannonball.png", 10, 1);
         shipPlacingPhase = true;
 
         initializeFireParticleSystem(loader);
-        initializeHighlighter(loader, grids);
+        initializeMarkers(loader, grids);
     }
 
+    /**
+     * Adds all entities related to this playingfield to the entity list in the renderer, so they get
+     * rendered to the scene. Also renders all fires by creating particles emitted by the particle systems.
+     * @param renderer - Renderer that the entities should be added to, this renderer needs to render the scene later.
+     */
     public void render(MasterRenderer renderer){
         if(cannonballFlying)
             cannonball.render(renderer);
         renderer.processEntityList(ships);
         renderer.processEntityList(grids);
+        renderer.processEntityList(markers);
         shipManager.renderCursorShip(renderer);
+        for (int i : burningFires.keySet()) {
+            for (Vector3f pos : burningFires.get(i)) {
+                fire.generateParticles(pos);
+            }
+        }
     }
 
     public void cellClicked(Vector2f index, int field){
+        //TODO move to logic
         if(cannonballFlying)
             return;
         if(shipPlacingPhase){
@@ -109,15 +127,25 @@ public class PlayingField {
 
         shipManager.placeShip(ships, shipSize, position, degrees, 1f);
     }
+    
+    public void placeMarker(boolean ship, Vector2f index, int field){
+        Vector2f coords = convertIndextoCoords(index, field);
+        Entity buoy;
+        if(ship)
+            buoy = new Entity(buoyModelRed, new Vector3f(coords.x, -3, coords.y), new Vector3f(), 1);
+        else
+            buoy = new Entity(buoyModelWhite, new Vector3f(coords.x, -3, coords.y), new Vector3f(), 1);
+        markers.add(buoy);
+    }
 
     /**
      * Create a flying cannonball.
      * @param origin      - the playing field from which the cannonball originates
-     * @param destination - the destination cell on the other field
+     * @param destinationCell - the destination cell on the other field
      */
-    public void shoot(int origin, Vector2f destination) {
+    public void shoot(int origin, Vector2f destinationCell) {
         if(!animation){
-            playHitEffect(convertIndextoCoords(destination, origin == OWNFIELD ? OPPONENTFIELD : OWNFIELD));
+            playHitEffect(convertIndextoCoords(destinationCell, origin == OWNFIELD ? OPPONENTFIELD : OWNFIELD));
             return;
         }
         //calculate index relative to center of field
@@ -131,10 +159,10 @@ public class PlayingField {
         Vector2f originIndex = origin == OWNFIELD ? new Vector2f(ownPosition.x, ownPosition.z) : new Vector2f(opponentPosition.x, opponentPosition.z);
 
         //calculate coordinate position of destination
-        Vector2f  currentDestination = convertIndextoCoords(destination, origin == OWNFIELD ? OPPONENTFIELD : OWNFIELD);
+        Vector2f  destinationCoords = convertIndextoCoords(destinationCell, origin == OWNFIELD ? OPPONENTFIELD : OWNFIELD);
 
         //create cannonball flying from origin to destination
-        this.cannonball = new Cannonball(ball, currentDestination, originIndex);
+        this.cannonball = new Cannonball(ball, destinationCoords, originIndex, destinationCell, origin == OWNFIELD ? OPPONENTFIELD : OWNFIELD);
         cannonballFlying = true;
 
     }
@@ -149,17 +177,6 @@ public class PlayingField {
             return;
         if (cannonball.update()) {
             cannonballHit();
-        }
-    }
-
-    /**
-     * Renders all fires, that are currently burning on ships.
-     */
-    public void renderFires() {
-        for (int i : burningFires.keySet()) {
-            for (Vector3f pos : burningFires.get(i)) {
-                fire.generateParticles(pos);
-            }
         }
     }
 
@@ -195,24 +212,11 @@ public class PlayingField {
         shipPlacingPhase = !shipPlacingPhase;
     }
 
+    /**
+     * Toggles whether a shooting animation is shown or not.
+     */
     public void toggleShootingAnimation(){
         animation = !animation;
-    }
-
-    /**
-     *
-     * @return Entity of the players grid.
-     */
-    public Entity getOwn() {
-        return own;
-    }
-
-    /**
-     *
-     * @return Emtity of the opponents grid.
-     */
-    public Entity getOpponent() {
-        return opponent;
     }
 
     /**
@@ -289,11 +293,20 @@ public class PlayingField {
     }
 
     /**
-     * Disables and removes flying cannonball. And plays effect at hit location.
+     * Disables and removes flying cannonball. And plays effect at hit location, or marks the hit location.
      */
     private void cannonballHit() {
         //TODO integration with logic
-        playHitEffect(cannonball.getDestination());
+        boolean shipHit = false;
+        if(cannonball.getDestinationField() == OWNFIELD) {
+            playHitEffect(cannonball.getDestination());
+            if(!shipHit)
+                placeMarker(shipHit, cannonball.getDestinationCell(), cannonball.getDestinationField());
+        }
+        if(cannonball.getDestinationField() == OPPONENTFIELD || !shipHit) {
+            //TODO play water effect
+            placeMarker(shipHit, cannonball.getDestinationCell(), cannonball.getDestinationField());
+        }
         cannonballFlying = false;
         cannonball = null;
     }
@@ -318,12 +331,13 @@ public class PlayingField {
 
     /**
      * Convert the index of a cell to world coordinates of the center of that cell.
-     * @param index - The index of the cell.
+     * @param i - The index of the cell.
      * @param field - The field the cell is on.
      * @return - The world coordinates of the center of the cell at the index.
      */
-    private Vector2f convertIndextoCoords(Vector2f index, int field) {
+    private Vector2f convertIndextoCoords(Vector2f i, int field) {
         float offset = size % 2 == 0 ? 0 : 0.5f;
+        Vector2f index = new Vector2f(i.x, i.y);
         index.x -= size / 2f;
         index.y -= size / 2f;
         Entity usedField = field == OWNFIELD ? own : opponent;
@@ -353,8 +367,8 @@ public class PlayingField {
         } else
             return null;
 
-        int indexX = (int) (result.x / (scale / (size + 1)));
-        int indexY = (int) (result.y / (scale / (size + 1)));
+        int indexX = (int) (result.x / (SCALE / (size + 1)));
+        int indexY = (int) (result.y / (SCALE / (size + 1)));
 
         result.x = indexX;
         result.y = indexY;
@@ -391,32 +405,34 @@ public class PlayingField {
     private void initializeGrids(List<Entity> grids, Loader loader, int size) {
         this.size = size;
         this.rotation = new Vector3f();
-        this.scale = 300f;
         this.texture = new ModelTexture(loader.loadTexture(playingfieldTexturePath));
         this.ownPosition = new Vector3f(350, -2.5f, -450);
         this.opponentPosition = new Vector3f(650, -2.5f, -450);
         this.textureOffset = (size + 1) / MAXSIZE;
-        this.own = new Entity(new TexturedModel(loader.loadToVAO(VERTICES, TEXTURECOORDS, NORMALS, INDICES), texture), 0, ownPosition, new Vector3f(), scale);
-        own.setScale(300);
+        this.own = new Entity(new TexturedModel(loader.loadToVAO(VERTICES, TEXTURECOORDS, NORMALS, INDICES), texture), 0, ownPosition, new Vector3f(), SCALE);
         own.getRotation().x -= 90;
         grids.add(own);
 
-        this.opponent = new Entity(new TexturedModel(loader.loadToVAO(VERTICES, TEXTURECOORDS, NORMALS, INDICES), texture), 0, opponentPosition, new Vector3f(), scale);
-        opponent.setScale(300);
+        this.opponent = new Entity(new TexturedModel(loader.loadToVAO(VERTICES, TEXTURECOORDS, NORMALS, INDICES), texture), 0, opponentPosition, new Vector3f(), SCALE);
         opponent.getRotation().x -= 90;
         grids.add(opponent);
     }
 
     /**
-     * Initialize the Entity that is used to highlight cells.
+     * Initialize the Entity that is used to highlight cells and the model for the buoyModels marking shot cells.
      * @param loader - Loader to load models.
      * @param entities - List of entities, the highlighter entity should be saved to.
      */
-    private void initializeHighlighter(Loader loader, List<Entity> entities) {
+    private void initializeMarkers(Loader loader, List<Entity> entities) {
         ModelTexture highlightTex = new ModelTexture(loader.loadTexture(highlightTexturePath));
-        highlighter = new Entity(new TexturedModel(loader.loadToVAO(VERTICES, TEXTURECOORDS, NORMALS, INDICES), highlightTex), 0, new Vector3f(), new Vector3f(), scale / (size + 1));
+        highlighter = new Entity(new TexturedModel(loader.loadToVAO(VERTICES, TEXTURECOORDS, NORMALS, INDICES), highlightTex), new Vector3f(), new Vector3f(), SCALE / (size + 1));
         highlighter.getRotation().x -= 90;
         entities.add(highlighter);
+
+        white = new ModelTexture(loader.loadTexture("white.png"));
+        red = new ModelTexture(loader.loadTexture("red.png"));
+        buoyModelWhite = new TexturedModel(OBJLoader.loadObjModel(buoyModelOBJ), white);
+        buoyModelRed = new TexturedModel(OBJLoader.loadObjModel(buoyModelOBJ), red);
     }
 
     /**
@@ -431,5 +447,13 @@ public class PlayingField {
         fire.setSpeedError(0.15f);
         fire.randomizeRotation();
         fire.setDirection(new Vector3f(0.1f, 1, 0.1f), -0.15f);
+    }
+
+    /**
+     *
+     * @return - The scale (diameter) of one playing field in world coordinates.
+     */
+    public static float getSCALE() {
+        return SCALE;
     }
 }

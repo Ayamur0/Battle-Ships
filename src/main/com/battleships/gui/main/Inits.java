@@ -286,7 +286,7 @@ public class Inits {
 
         entities.add(ship);
 
-        playingField =  new PlayingField(new ArrayList<>(), new ArrayList<>(), 30, loader);
+        playingField =  new PlayingField(30, loader);
         ships = playingField.getShipManager();
         shipSelector = new ShipSelector(loader, guiManager, ships, permanentGuiElements);
 //        ShipManager ships = new ShipManager(loader);

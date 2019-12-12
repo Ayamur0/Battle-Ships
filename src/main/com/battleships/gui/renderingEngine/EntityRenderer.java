@@ -74,6 +74,7 @@ public class EntityRenderer {
     private void prepareInstance(Entity entity){
         //create transfMatrix with current position rotation and scale of entity
         Matrix4f transformationMatrix = Maths.createTransformationMatrix(entity.getPosition(), entity.getRotation(), entity.getScale());
+        shader.loadMixColor(entity.getAdditionalColor(), entity.getAdditionalColorPercentage());
         shader.loadTransformationMatrix(transformationMatrix); //pass transfMatrix to shader
         shader.loadOffset(entity.getTextureXOffset(), entity.getTextureYOffset());
     }

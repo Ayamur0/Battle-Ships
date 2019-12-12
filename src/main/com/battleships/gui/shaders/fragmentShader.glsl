@@ -15,6 +15,8 @@ uniform vec3 lightColor;
 uniform float shineDamper;
 uniform float reflectivity;
 uniform vec3 skyColor;
+uniform float mixPercentage;
+uniform vec3 mixColor;
 
 void main(){
 
@@ -42,4 +44,5 @@ void main(){
 
     out_Color = vec4(diffuse,1.0) * textureColor + vec4(finalSpecular,1.0); //return color of pixel at coordinates
     out_Color = mix(vec4(skyColor, 1.0), out_Color, visibility); //mix skyColor (fog Color( and object color depending on visibility
+    out_Color = mix(out_Color, vec4(mixColor, 1.0), mixPercentage);
 }

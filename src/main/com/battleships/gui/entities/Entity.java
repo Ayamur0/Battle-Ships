@@ -2,12 +2,16 @@ package com.battleships.gui.entities;
 
 import com.battleships.gui.models.TexturedModel;
 import org.joml.Vector3f;
+import org.joml.Vector4f;
 
 public class Entity {
 
     private TexturedModel model;
     private Vector3f position, rotation;
     private float scale;
+
+    private Vector3f additionalColor = new Vector3f();
+    private float additionalColorPercentage = 0;
 
     private int textureIndex = 0;
 
@@ -84,5 +88,21 @@ public class Entity {
 
     public void setScale(float scale) {
         this.scale = scale;
+    }
+
+    public Vector3f getAdditionalColor() {
+        return additionalColor;
+    }
+
+    public void setAdditionalColor(Vector3f additionalColor) {
+        this.additionalColor = additionalColor;
+    }
+
+    public float getAdditionalColorPercentage() {
+        return additionalColorPercentage;
+    }
+
+    public void setAdditionalColorPercentage(float additionalColorPercentage) {
+        this.additionalColorPercentage = additionalColorPercentage;
     }
 }

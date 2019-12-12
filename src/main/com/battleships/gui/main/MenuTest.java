@@ -72,7 +72,6 @@ public class MenuTest {
                 GL11.glDisable(GL30.GL_CLIP_DISTANCE0); //not all drivers support disabling, if it doesn't work set clipPlane when rendering to screen high enough so nothing gets clipped
 
                 inits.getSystem().generateParticles(new Vector3f());
-                inits.getPlayingField().renderFires();
                 inits.getPlayingField().render(inits.getRenderer());
 //            new Particle(star, new Vector3f(camera.getPosition().x , camera.getPosition().y, camera.getPosition().z), new Vector3f(0, 30, 0), 1 ,4 ,0 ,1);
 

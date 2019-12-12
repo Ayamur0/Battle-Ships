@@ -10,17 +10,21 @@ import org.joml.Vector3f;
 public class Cannonball{
 
     private static final float SPEED = 100.0f;
+    private static final float DRAG = 0.1f;
     private static final float ANGLE = (float)Math.toRadians(75);
     private static final float MAXHEIGHT = 100;
 
     private Entity ball;
     private Vector2f destination;
+    private Vector2f destinationCell;
+    private int destinationField;
     private Vector2f horizontalVelocity = new Vector2f();
     private Vector3f position = new Vector3f();
     private float sidewaysDistance;
+    private float startSpeed;
+    private float currentSpeed;
     private float a,b,c,x = 0;
 
-    private int debug;
 
     /**
      * Creates a new Cannonball Entity, that flies from the origin to the
@@ -29,9 +33,11 @@ public class Cannonball{
      * @param destination - destination where the cannonball should land
      * @param origin - where the cannonball is fired from
      */
-    public Cannonball(Entity ball, Vector2f destination, Vector2f origin) {
+    public Cannonball(Entity ball, Vector2f destination, Vector2f origin, Vector2f destinationCell, int destinationField) {
         this.ball = ball;
         this.destination = destination;
+        this.destinationCell = destinationCell;
+        this.destinationField = destinationField;
 
         //position of the cannonball that gets updated every frame
         //start by setting position to origin
@@ -46,10 +52,12 @@ public class Cannonball{
         float xPercentage = Math.abs(origin.x - destination.x) / sidewaysDistance;
         float zPercentage = Math.abs(origin.y - destination.y) / sidewaysDistance;
 
+        calculateSpeed();
+
         //calculate the velocity for the ball in x and z direction depending on launch angle, ball speed
         //and distance to travel in x and z direction
-        horizontalVelocity.x = (float)Math.sin(ANGLE) * SPEED * xPercentage;
-        horizontalVelocity.y = (float)Math.sin(ANGLE) * SPEED * zPercentage;
+        horizontalVelocity.x = (float)Math.sin(ANGLE) * startSpeed * xPercentage;
+        horizontalVelocity.y = (float)Math.sin(ANGLE) * startSpeed * zPercentage;
 
         //invert velocity if ball has to move in negative x/z direction
         if(origin.x > destination.x)
@@ -60,6 +68,17 @@ public class Cannonball{
         //calculate the parameters of a parabola function that describes the flight
         //of the cannonball. This function is used to calculate the y value of the ball
         calculateParabolaFunction();
+    }
+
+    /**
+     * Calculate with how much speed (strength) the cannonball needs to be shot, so it always reaches it's destination in the
+     * same time.
+     */
+    private void calculateSpeed(){
+        float averageDistance = PlayingField.getSCALE();
+        float shotStrength = sidewaysDistance / averageDistance;
+        startSpeed = shotStrength * SPEED;
+        currentSpeed = startSpeed;
     }
 
     /**
@@ -115,24 +134,26 @@ public class Cannonball{
         //calculate y position of cannonball using parabola function
         x += (Math.abs(horizontalVelocity.x) + Math.abs(horizontalVelocity.y)) * WindowManager.getDeltaTime();
         position.y = a*x*x + b*x + c;
-        debug++;
 
 //        System.out.println(position.x + " " + position.y + " " + position.z);
         ball.setPosition(position);
 
+        updateVelocities();
+
         //if ball is below this y value it has hit a ship or water
-        //TODO remove debug value
-        //debug is needed when cannonball is there before game start, because deltaTime is too long then
-        if(debug < 10){
-            x = 0;
-            position.x = 650;
-            position.z = -450;
-            position.y = -2.5f;
-        }
         if(position.y < -5) {
             return true;
         }
         return false;
+    }
+
+    /**
+     * Update the velocity values, according to the drag and speed during last update.
+     */
+    public void updateVelocities(){
+        currentSpeed -= WindowManager.getDeltaTime() * DRAG;
+        horizontalVelocity.x *=  currentSpeed / startSpeed;
+        horizontalVelocity.y *=  currentSpeed / startSpeed;
     }
 
     /**
@@ -150,5 +171,21 @@ public class Cannonball{
     public void render(MasterRenderer renderer) {
         if(ball != null)
             renderer.processEntity(ball);
+    }
+
+    /**
+     *
+     * @return - The index of the destination cell.
+     */
+    public Vector2f getDestinationCell() {
+        return destinationCell;
+    }
+
+    /**
+     *
+     * @return - The field the destination is on.
+     */
+    public int getDestinationField() {
+        return destinationField;
     }
 }
