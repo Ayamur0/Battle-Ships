@@ -15,11 +15,10 @@ public class OptionButton extends MainMenuButton {
     //TODO add options
     public OptionButton(GuiManager guiManager, Loader loader){
         super(guiManager,loader);
-        backButton = new BackButton(guiManager,loader,0);
 
-        back = new GuiTexture(texture,new Vector2f(standardButtonPos.x,standardButtonPos.y+2*buttonGap),buttonSize);
+        this.creatButtons();
 
-        super.guiTexts.add(new GUIText("Exit", 3, font,new Vector2f(back.getPositions().x,back.getPositions().y), 0.12f, true, 0.0f, 0.1f,outlineColor, new Vector2f()));
+        this.creatLabels();
     }
     @Override
     protected void clickAction() {
@@ -29,5 +28,13 @@ public class OptionButton extends MainMenuButton {
 
         TextMaster.clear();
         super.CreateTextLabels();
+    }
+    private void creatButtons(){
+        backButton = new BackButton(guiManager,loader,0);
+
+        back = new GuiTexture(texture,new Vector2f(standardButtonPos.x,standardButtonPos.y+2*buttonGap),buttonSize);
+    }
+    private void creatLabels(){
+        super.guiTexts.add(new GUIText("Back", 3, font,new Vector2f(back.getPositions().x,back.getPositions().y), 0.12f, true, 0.0f, 0.1f,outlineColor, new Vector2f()));
     }
 }
