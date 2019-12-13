@@ -1,5 +1,7 @@
 package com.battleships.network;
 
+import com.battleships.logic.Logic;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -18,12 +20,16 @@ public class NetzwerkServer {
     private ServerSocket serverSocket;
     private Socket clientSocket;
 
-    private String shot = "shoot";
-    private String start = "start";
-    private String confirmed = "confirmed";
+    private String shot = "shoot ";
+    private String size = "size ";
+    private String confirmed = "confirmed ";
+
+    private final Logic logic;
 
     //Konstruktor für den Server
-    public NetzwerkServer(){
+    public NetzwerkServer(Logic logic){
+        this.logic = logic;
+
         startServer();
         waitForClient();
         try {
@@ -32,20 +38,31 @@ public class NetzwerkServer {
             e.printStackTrace();
         }
     }
-    //TBH will ich des nicht so machen aber bleibt mir eine andere Möglichkeit??? Send Help pls
-
     //Die Methode bekommt den Befehl übergeben, was der gegenüber den gemacht hat und schreibt das jeweilige
     //befehlswort "shot", "start", "confirmed" aus dem Befehlsstring raus und übrig sollten die Koordinaten beliben
-
-    //TODO Was mach ich mit den Koordinaten??
     private void whatKindOfStringIsThis(String text){
         if(text.contains(shot)){
+
             text = text.replace(shot, "");
-        }else if(text.contains(start)){
-            text = text.replace(start, "");
+            String[] temp = text.split(" ");
+            //temp[0] = row
+            //temp[1] = col
+
+            int row= Integer.parseInt(temp[0]);
+            int col = Integer.parseInt(temp[1]);
+
+            this.logic.onShoot(row,col);
+
+        }else if(text.contains(size)){
+            text = text.replace(size, "");
+            this.logic.setSize(Integer.parseInt(text));
         }else if(text.contains(confirmed)){
             text = text.replace(confirmed, "");
-        }else if(false);
+
+            //Ruft Methode in Logic auf
+        }else{
+            //Fehlermeldung??
+        }
     }
 
 
@@ -59,7 +76,7 @@ public class NetzwerkServer {
     //Starten den Server mit dem dazugehörigen Port
     private void startServer(){
         try {
-            System.out.println("Startin Server");
+            //System.out.println("Startin Server");
             serverSocket = new ServerSocket(PORT);
 
             //Der BufferedReader wird dafür verwendet den Input von der Logic dem Client zu senden.
@@ -84,6 +101,6 @@ public class NetzwerkServer {
 
     //Main
     public static void main(String[] args) {
-        new NetzwerkServer();
+        new NetzwerkServer(new Logic());
     }
 }

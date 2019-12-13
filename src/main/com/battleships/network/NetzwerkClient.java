@@ -18,6 +18,8 @@ public class NetzwerkClient {
     // private String clientAdress;
     // private int clientPort;
 
+    private boolean online = false;
+
 
     /**
     *Der Client soll aufgerufen werden mit einer IP Adresse (in Form eines Strings)
@@ -28,7 +30,7 @@ public class NetzwerkClient {
     }
 
     private void waitingForInput() throws  IOException{
-        while(true) {
+        while(online) {
             getData(getInputFromHost.readLine());
             out.println(sendToHost.readLine());
         }
@@ -43,11 +45,14 @@ public class NetzwerkClient {
     * startet Client
     */
     private void startClient(String adress) throws IOException {
-        System.out.println("Starting Client...");
+       //System.out.println("Starting Client...");
         clientSocket = new Socket(adress, PORT);
+        online = true;
+
         getInputFromHost = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
         sendToHost = new BufferedReader(new InputStreamReader(System.in));
         out = new PrintWriter(clientSocket.getOutputStream(),true);
+
     }
 
     public static void main(String[] args) {
