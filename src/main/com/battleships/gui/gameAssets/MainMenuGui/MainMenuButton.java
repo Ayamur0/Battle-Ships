@@ -30,7 +30,7 @@ public abstract class MainMenuButton extends GuiClickCallback {
         this.guiManager = guiManager;
         this.loader = loader;
         this.font = new FontType(loader.loadFontTexture("font/pirate.png"), "pirate");
-        this.texture = loader.loadTexture("Brick.jpg");
+        this.texture = loader.loadTexture("WoodButton.png");
         this.outlineColor = new Vector3f(1.0f,0.0f,0.0f);
 
         this.buttonSize = new Vector2f(0.14f,0.07f);
