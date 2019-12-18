@@ -14,8 +14,9 @@ public class AiVsAiButton extends MainMenuButton {
     protected void clickAction() {
         TextMaster.clear();
         //Will be changed in final version
-        Inits.setGlobalGameState(1);
+        //Inits.setGlobalGameState(1);
         //MenuTest.GlobalGameState = 1;
         //TODO start a Ai vs Ai game
+        System.out.println("Ai VS Ai");
     }
 }
