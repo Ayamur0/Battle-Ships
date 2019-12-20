@@ -10,6 +10,17 @@ public class BackButton extends MainMenuButton {
         super(guiManager,loader);
         this.prevMenu = prevMenu;
     }
+
+    @Override
+    protected void createButtons() {
+
+    }
+
+    @Override
+    protected void createLabels() {
+
+    }
+
     @Override
     protected void clickAction() {
         guiManager.clearClickableGuis();

@@ -48,4 +48,6 @@ public abstract class MainMenuButton extends GuiClickCallback {
             gui.setColor(1f,1f,1f);
         }
     }
+    protected abstract void createButtons();
+    protected abstract void createLabels();
 }

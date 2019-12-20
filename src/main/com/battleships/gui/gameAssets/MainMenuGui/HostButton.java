@@ -10,6 +10,16 @@ public class HostButton extends MainMenuButton {
     }
 
     @Override
+    protected void createButtons() {
+
+    }
+
+    @Override
+    protected void createLabels() {
+
+    }
+
+    @Override
     protected void clickAction() {
         guiManager.clearClickableGuis();
 

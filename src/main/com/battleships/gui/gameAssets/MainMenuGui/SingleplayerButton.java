@@ -11,18 +11,29 @@ public class SingleplayerButton extends MainMenuButton {
 
     private BackButton backButton;
 
-    private GuiTexture pVsAi;
-    private GuiTexture aiVsAi;
     private GuiTexture back;
 
 
     public SingleplayerButton(GuiManager guiManager, Loader loader){
         super(guiManager,loader);
 
-        this.creatButtons();
+        this.createButtons();
 
-        this.creatLabels();
+        this.createLabels();
     }
+
+    @Override
+    protected void createButtons() {
+        backButton = new BackButton(guiManager,loader,1);
+
+        back = new GuiTexture(texture,new Vector2f(standardButtonPos),buttonSize);
+    }
+
+    @Override
+    protected void createLabels() {
+        super.guiTexts.add(new GUIText("Back", 3f, font, new Vector2f(back.getPositions().x,back.getPositions().y), 0.12f, true, 0.0f, 0.1f,outlineColor, new Vector2f()));
+    }
+
     @Override
     protected void clickAction() {
         guiManager.clearClickableGuis();
@@ -31,14 +42,5 @@ public class SingleplayerButton extends MainMenuButton {
 
         TextMaster.clear();
         super.CreateTextLabels();
-    }
-    private void creatButtons(){
-        backButton = new BackButton(guiManager,loader,1);
-
-        back = new GuiTexture(texture,new Vector2f(standardButtonPos),buttonSize);
-    }
-    private void creatLabels(){
-        super.guiTexts.add(new GUIText("Back", 3f, font, new Vector2f(back.getPositions().x,back.getPositions().y), 0.12f, true, 0.0f, 0.1f,outlineColor, new Vector2f()));
-
     }
 }

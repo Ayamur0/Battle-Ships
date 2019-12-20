@@ -18,6 +18,15 @@ public class MainMenu extends MainMenuButton {
     private GuiTexture exit;
 
 
+    @Override
+    protected void createButtons() {
+
+    }
+
+    @Override
+    protected void createLabels() {
+
+    }
 
     public MainMenu(GuiManager guiManager, Loader loader){
         super(guiManager,loader);
