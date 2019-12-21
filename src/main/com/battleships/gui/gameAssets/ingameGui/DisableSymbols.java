@@ -15,7 +15,7 @@ public class DisableSymbols extends GuiClickCallback {
     public static final int ANIMATION = 0;
     public static final int SOUND = 1;
 
-    private static final String textureAtlas = "DisableSymbols.png";
+    private static final String textureAtlas = "DisableSymbolsWood.png";
     private List<GuiTexture> currentSymbols = new ArrayList<>();
     private int buttonClicked;
     private GameManager gameManager;
