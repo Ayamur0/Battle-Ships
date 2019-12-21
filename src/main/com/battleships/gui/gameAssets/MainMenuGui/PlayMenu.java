@@ -5,15 +5,13 @@ import com.battleships.gui.fontRendering.TextMaster;
 import com.battleships.gui.guis.GuiManager;
 import com.battleships.gui.guis.GuiTexture;
 import com.battleships.gui.renderingEngine.Loader;
-import com.battleships.gui.window.WindowManager;
 import org.joml.Vector2f;
-import org.lwjgl.glfw.GLFW;
 
-public class MainMenu extends MainMenuButton {
+public class PlayMenu extends MainMenuButton {
 
-    public MainMenu(GuiManager guiManager, Loader loader) {
+    public PlayMenu(GuiManager guiManager, Loader loader) {
         super(guiManager, loader);
-        
+
 
         guiManager.clearClickableGuis();
 
@@ -24,7 +22,6 @@ public class MainMenu extends MainMenuButton {
         SetTextColor();
 
         CreateTextLabels();
-        
     }
 
     private void createMenu(){
@@ -32,14 +29,16 @@ public class MainMenu extends MainMenuButton {
         super.buttons.add(new GuiTexture(texture, standardButtonPos, buttonSize));
         super.buttons.add(new GuiTexture(texture,new Vector2f(buttons.get(0).getPositions().x,buttons.get(0).getPositions().y+buttonGap),buttonSize));
         super.buttons.add(new GuiTexture(texture,new Vector2f(buttons.get(1).getPositions().x,buttons.get(1).getPositions().y+buttonGap),buttonSize));
+        super.buttons.add(new GuiTexture(texture,new Vector2f(buttons.get(2).getPositions().x,buttons.get(2).getPositions().y+buttonGap),buttonSize));
 
-        super.guiTexts.add(new GUIText("Play", 3, font, new Vector2f(buttons.get(0).getPositions().x,buttons.get(0).getPositions().y), 0.12f, true,outlineColor, 0.0f, 0.1f,outlineColor, new Vector2f()));
-        super.guiTexts.add(new GUIText("Options", 3, font,new Vector2f(buttons.get(1).getPositions().x,buttons.get(1).getPositions().y), 0.12f, true,outlineColor, 0.0f, 0.1f,outlineColor, new Vector2f()));
-        super.guiTexts.add(new GUIText("Exit", 3, font,new Vector2f(buttons.get(2).getPositions().x,buttons.get(2).getPositions().y), 0.12f, true,outlineColor, 0.0f, 0.1f,outlineColor, new Vector2f()));
+
+        super.guiTexts.add(new GUIText("Ai VS Ai",2.5f, font, new Vector2f(buttons.get(0).getPositions().x,buttons.get(0).getPositions().y), 0.12f, true, outlineColor,0.0f, 0.1f,outlineColor, new Vector2f()));
+        super.guiTexts.add(new GUIText("Singleplayer", 2.5f, font, new Vector2f(buttons.get(1).getPositions().x,buttons.get(1).getPositions().y), 0.12f, true, outlineColor,0.0f, 0.1f,outlineColor, new Vector2f()));
+        super.guiTexts.add(new GUIText("Multiplayer", 2.5f, font,new Vector2f(buttons.get(2).getPositions().x,buttons.get(2).getPositions().y), 0.12f, true, outlineColor,0.0f, 0.1f,outlineColor, new Vector2f()));
+        super.guiTexts.add(new GUIText("Back", 3, font,new Vector2f(buttons.get(3).getPositions().x,buttons.get(3).getPositions().y), 0.12f, true, outlineColor,0.0f, 0.1f,outlineColor, new Vector2f()));
 
         super.createClickable();
     }
-    
     @Override
     protected boolean isClickOnGui(GuiTexture gui, double x, double y) {
         if(super.isClickOnGui(super.buttons.get(0), x, y)) {
@@ -54,20 +53,26 @@ public class MainMenu extends MainMenuButton {
             super.buttonClicked = 2;
             return true;
         }
+        if(super.isClickOnGui(super.buttons.get(3), x, y)) {
+            super.buttonClicked = 3;
+            return true;
+        }
         return false;
     }
 
     @Override
     protected void clickAction() {
         if(buttonClicked == 0) {
-            System.out.println("Hallo");
-            new PlayMenu(guiManager,loader);
-        }
-        if(buttonClicked == 1){
 
         }
+        if(buttonClicked == 1){
+            new SingleplayerMenu(guiManager,loader);
+        }
         if (super.buttonClicked == 2){
-            GLFW.glfwSetWindowShouldClose(WindowManager.getWindow(),true);
+
+        }
+        if (super.buttonClicked == 3){
+            new MainMenu(guiManager,loader);
         }
     }
 

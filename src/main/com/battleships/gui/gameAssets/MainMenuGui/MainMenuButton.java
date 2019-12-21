@@ -5,6 +5,7 @@ import com.battleships.gui.fontMeshCreator.GUIText;
 import com.battleships.gui.fontRendering.TextMaster;
 import com.battleships.gui.guis.GuiClickCallback;
 import com.battleships.gui.guis.GuiManager;
+import com.battleships.gui.guis.GuiTexture;
 import com.battleships.gui.renderingEngine.Loader;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
@@ -24,7 +25,10 @@ public abstract class MainMenuButton extends GuiClickCallback {
     protected int texture;
     protected Vector3f outlineColor;
 
+    protected List<GuiTexture> buttons = new ArrayList<>();
     protected List<GUIText> guiTexts = new ArrayList<>();
+
+    protected int buttonClicked;
 
     public MainMenuButton(GuiManager guiManager, Loader loader) {
         this.guiManager = guiManager;
@@ -48,6 +52,9 @@ public abstract class MainMenuButton extends GuiClickCallback {
             gui.setColor(1f,1f,1f);
         }
     }
-    protected abstract void createButtons();
-    protected abstract void createLabels();
+    protected void createClickable(){
+        for (GuiTexture i:buttons){
+            guiManager.createClickableGui(i,() -> this);
+        }
+    }
 }

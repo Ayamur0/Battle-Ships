@@ -5,8 +5,8 @@ import com.battleships.gui.entities.Entity;
 import com.battleships.gui.entities.Light;
 import com.battleships.gui.fontRendering.TextMaster;
 import com.battleships.gui.gameAssets.GameManager;
-import com.battleships.gui.gameAssets.MainMenuGui.MainMenu;
 import com.battleships.gui.gameAssets.MainMenuGui.MainMenuManager;
+import com.battleships.gui.gameAssets.MainMenuGui.MainMenu;
 import com.battleships.gui.gameAssets.PlayingField;
 import com.battleships.gui.gameAssets.ShipManager;
 import com.battleships.gui.gameAssets.ingameGui.ShipSelector;
@@ -220,6 +220,7 @@ public class Inits {
         loader = new Loader();
         renderer = new MasterRenderer(loader);
         TextMaster.init(loader);
+        gameManager = new GameManager(loader);
 
         // *******************GUI initialization*******************
         guiManager = new GuiManager(gameManager);

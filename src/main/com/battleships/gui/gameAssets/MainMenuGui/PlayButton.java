@@ -37,7 +37,6 @@ public class PlayButton extends MainMenuButton {
         TextMaster.clear();
         super.CreateTextLabels();
     }
-    @Override
     protected void createButtons() {
         aiVsAiButton = new AiVsAiButton(guiManager,loader);
         singleplayerButton = new SingleplayerButton(guiManager,loader);
@@ -50,7 +49,6 @@ public class PlayButton extends MainMenuButton {
         back = new GuiTexture(texture,new Vector2f(multiplayer.getPositions().x,multiplayer.getPositions().y+buttonGap),buttonSize);
     }
 
-    @Override
     protected void createLabels() {
         super.guiTexts.add(new GUIText("Ai VS Ai",2.5f, font, new Vector2f(aivsai.getPositions().x,aivsai.getPositions().y), 0.12f, true, outlineColor,0.0f, 0.1f,outlineColor, new Vector2f()));
         super.guiTexts.add(new GUIText("Singleplayer", 2.5f, font, new Vector2f(singleplayer.getPositions().x,singleplayer.getPositions().y), 0.12f, true, outlineColor,0.0f, 0.1f,outlineColor, new Vector2f()));

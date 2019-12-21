@@ -11,16 +11,6 @@ public class AiVsAiButton extends MainMenuButton {
     }
 
     @Override
-    protected void createButtons() {
-
-    }
-
-    @Override
-    protected void createLabels() {
-
-    }
-
-    @Override
     protected void clickAction() {
         TextMaster.clear();
         //Will be changed in final version

@@ -8,17 +8,6 @@ public class SaveButton extends MainMenuButton {
     public SaveButton(GuiManager guiManager, Loader loader) {
         super(guiManager, loader);
     }
-
-    @Override
-    protected void createButtons() {
-
-    }
-
-    @Override
-    protected void createLabels() {
-
-    }
-
     @Override
     protected void clickAction() {
 

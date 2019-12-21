@@ -17,17 +17,6 @@ public class MultiplayerButton extends MainMenuButton {
     private GuiTexture client;
     private GuiTexture back;
 
-
-    @Override
-    protected void createButtons() {
-
-    }
-
-    @Override
-    protected void createLabels() {
-
-    }
-
     public MultiplayerButton(GuiManager guiManager, Loader loader){
         super(guiManager,loader);
 

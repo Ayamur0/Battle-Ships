@@ -27,7 +27,6 @@ public class ESCMenu extends MainMenuButton {
 
     }
 
-    @Override
     protected void createButtons() {
         saveButton = new SaveButton(guiManager,loader);
         resumeButton = new ResumeButton(guiManager,loader);
@@ -40,7 +39,6 @@ public class ESCMenu extends MainMenuButton {
         exit = new GuiTexture(texture,new Vector2f(resume.getPositions().x,resume.getPositions().y+buttonGap),buttonSize);
     }
 
-    @Override
     protected void createLabels() {
         super.guiTexts.add(new GUIText("Save",2.5f, font, new Vector2f(save.getPositions().x,save.getPositions().y), 0.12f, true, outlineColor,0.0f, 0.1f,outlineColor, new Vector2f()));
         super.guiTexts.add(new GUIText("Resume", 2.5f, font, new Vector2f(resume.getPositions().x,resume.getPositions().y), 0.12f, true,outlineColor, 0.0f, 0.1f,outlineColor, new Vector2f()));

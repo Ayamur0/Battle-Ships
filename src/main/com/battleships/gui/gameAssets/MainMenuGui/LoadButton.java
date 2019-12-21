@@ -13,13 +13,4 @@ public class LoadButton extends MainMenuButton {
 
     }
 
-    @Override
-    protected void createButtons() {
-
-    }
-
-    @Override
-    protected void createLabels() {
-
-    }
 }
