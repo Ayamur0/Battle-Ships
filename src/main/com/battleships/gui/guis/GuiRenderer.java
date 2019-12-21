@@ -38,6 +38,8 @@ public class GuiRenderer {
             GL11.glBindTexture(GL11.GL_TEXTURE_2D, gui.getTexture());
             Matrix4f matrix = Maths.createTransformationMatrix(new Vector2f(gui.getPositions().x * 2.0f - 1, (-1.0f * (gui.getPositions().y  * 2.0f - 1))), gui.getScale());
             shader.loadTransformation(matrix);
+            shader.loadNumberOfRows(gui.getRows());
+            shader.loadOffset(gui.getOffsetX(), gui.getOffsetY());
             GL11.glDrawArrays(GL11.GL_TRIANGLE_STRIP, 0, quad.getVertexCount());
         }
         GL11.glDisable(GL11.GL_BLEND);

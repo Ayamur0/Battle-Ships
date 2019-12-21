@@ -86,16 +86,16 @@ public class StaticShader extends ShaderProgram {
      * Load the numberOfRows of a texture atlas into the uniform variable.
      * Needed so the shader can calculate the part of a texture atlas, it needs to but
      * on the model.
-     * @param numberOfRows - Number of rows the used texture atlas contains.
+     * @param numberOfRows - Number of rows the used texture atlas contains (1 if it's a normal texture).
      */
-    public void loadNumberOfRows(int numberOfRows){
+    public void loadNumberOfRows(float numberOfRows){
         super.loadFloat(uniformLocations.get("numberOfRows"), numberOfRows);
     }
 
     /**
      * Load the offset of the texture that should be used in a texture atlas into the uniform variable.
-     * @param x - column of the texture that should be used.
-     * @param y - row of the texture.
+     * @param x - column of the texture that should be used (0 if it's a normal texture).
+     * @param y - row of the texture (0 if it's a normal texture).
      */
     public void loadOffset(float x, float y){
         super.load2DVector(uniformLocations.get("offset"), new Vector2f(x, y));

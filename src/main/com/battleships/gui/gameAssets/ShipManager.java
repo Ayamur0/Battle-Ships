@@ -29,7 +29,6 @@ public class ShipManager {
     private TexturedModel[] ships;
     private PlayingField ownPlayingField;
     private ShipSelector shipSelector;
-    private ShipCounter shipCounter;
 
     private Entity cursorShip;
     private int cursorShipSize;
@@ -113,9 +112,5 @@ public class ShipManager {
 
     public void setShipSelector(ShipSelector shipSelector) {
         this.shipSelector = shipSelector;
-    }
-
-    public void setShipCounter(ShipCounter shipCounter) {
-        this.shipCounter = shipCounter;
     }
 }

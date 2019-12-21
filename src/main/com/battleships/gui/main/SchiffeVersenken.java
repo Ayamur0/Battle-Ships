@@ -9,6 +9,7 @@ import com.battleships.gui.fontRendering.TextMaster;
 import com.battleships.gui.gameAssets.GameManager;
 import com.battleships.gui.gameAssets.PlayingField;
 import com.battleships.gui.gameAssets.ShipManager;
+import com.battleships.gui.gameAssets.ingameGui.DisableSymbols;
 import com.battleships.gui.gameAssets.ingameGui.ShipCounter;
 import com.battleships.gui.gameAssets.ingameGui.ShipSelector;
 import com.battleships.gui.guis.GuiClickCallback;
@@ -65,6 +66,8 @@ public class SchiffeVersenken {
 
 
         GuiRenderer guiRenderer = new GuiRenderer(loader);
+        new ShipCounter(loader, guiManager, guis, gameManager);
+        new DisableSymbols(loader, guiManager, guis, gameManager);
 
 //        GuiClickCallback guiClickCallback = new GuiClickCallback();
 //        guiClickCallback.addClickableGui(gui);
@@ -135,7 +138,7 @@ public class SchiffeVersenken {
 
         entities.add(ship);
 
-        PlayingField playingField =  new PlayingField(30, loader, gameManager);
+        PlayingField playingField =  new PlayingField(10, loader, gameManager);
         ShipManager ships = playingField.getShipManager();
         ShipSelector shipSelector = new ShipSelector(loader, guiManager, ships, guis);
 //        ShipManager ships = new ShipManager(loader);
@@ -151,13 +154,13 @@ public class SchiffeVersenken {
         WaterFrameBuffers waterFbos = new WaterFrameBuffers();
 
         WaterShader waterShader = new WaterShader();
-        WaterRenderer waterRenderer = new WaterRenderer(loader, waterShader, renderer.getProjectionMatrix(), waterFbos);
+        WaterRenderer waterRenderer = new WaterRenderer(loader, waterShader, MasterRenderer.getProjectionMatrix(), waterFbos);
         List<WaterTile> waterTiles = new ArrayList<>();
         waterTiles.add(new WaterTile(400, -400, -3));
 
 
         // *******************Particle initialization*******************
-        ParticleMaster.init(loader, renderer.getProjectionMatrix());
+        ParticleMaster.init(loader, MasterRenderer.getProjectionMatrix());
         ParticleTexture fire = new ParticleTexture(loader.loadTexture("particles/fire.png"), 8, true);
         ParticleSystemComplex system = new ParticleSystemComplex(fire,20, 3.5f, -0.05f, 2f, 17);
         system.setLifeError(0.3f);
@@ -174,12 +177,12 @@ public class SchiffeVersenken {
 
         // *******************Callbacks initialization*******************
 
-        MousePicker picker = new MousePicker(camera, renderer.getProjectionMatrix(), terrain, gameManager);
+        MousePicker picker = new MousePicker(camera, MasterRenderer.getProjectionMatrix(), terrain, gameManager);
 
 
         WindowManager.setCallbacks(camera, gameManager, waterFbos);
 
-        new ShipCounter(loader, ships, guis);
+
         // ****************************************************
         // *******************Main Game Loop*******************
         // ****************************************************

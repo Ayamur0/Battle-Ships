@@ -75,7 +75,7 @@ public class Cannonball{
      * same time.
      */
     private void calculateSpeed(){
-        float averageDistance = PlayingField.getSCALE();
+        float averageDistance = PlayingField.getScale();
         float shotStrength = sidewaysDistance / averageDistance;
         startSpeed = shotStrength * SPEED;
         currentSpeed = startSpeed;

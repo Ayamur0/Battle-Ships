@@ -32,14 +32,14 @@ public class Entity {
 
     //factor that textureCoord x needs to be multiplied with to be on the right coordinate in a texture atlas
     public float getTextureXOffset(){
-        int column = textureIndex % model.getTexture().getNumberOfRows();
-        return (float)column / (float) model.getTexture().getNumberOfRows();
+        int column = textureIndex % (int)model.getTexture().getNumberOfRows();
+        return (float)column / model.getTexture().getNumberOfRows();
     }
 
     //factor that textureCoord y needs to be multiplied with to be on the right coordinate in a texture atlas
     public float getTextureYOffset(){
-        int row = textureIndex / model.getTexture().getNumberOfRows();
-        return (float)row/(float)model.getTexture().getNumberOfRows();
+        int row = textureIndex / (int)model.getTexture().getNumberOfRows();
+        return (float)row/model.getTexture().getNumberOfRows();
     }
 
     public void increasePosition(float dx, float dy, float dz){

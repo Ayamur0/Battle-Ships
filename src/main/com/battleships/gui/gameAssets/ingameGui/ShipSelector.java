@@ -67,9 +67,9 @@ public class ShipSelector extends GuiClickCallback {
         shipCounts[1] = 10;
         shipCounts[2] = 10;
         shipCounts[3] = 10;
-        for(int i = 1; i < guis.size(); i++)
-            shipCountTexts.add(new GUIText(shipCounts[i - 1] + " Left", 2, GameManager.getPirateFont(), new Vector2f(guis.get(i).getPositions().x, guis.get(i).getPositions().y + guis.get(i).getScale().y / 2 + 0.05f), guis.get(i).getScale().x, true, BLACK, 0, 0.1f,BLACK, OUTLINEOFFSET));
-    }
+        for(int i = 0; i < 4; i++)
+            shipCountTexts.add(new GUIText(shipCounts[i] + " Left", 2, GameManager.getPirateFont(), new Vector2f(buttons[i].getPositions().x, buttons[i].getPositions().y + buttons[i].getScale().y / 2 + 0.05f), buttons[i].getScale().x, true, BLACK, 0, 0.1f,BLACK, OUTLINEOFFSET));
+}
 
     /**
      * Function that gets called to test if a click was on this gui.

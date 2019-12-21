@@ -2,11 +2,14 @@ package com.battleships.gui.gameAssets;
 
 import com.battleships.gui.fontMeshCreator.FontType;
 import com.battleships.gui.fontMeshCreator.GUIText;
+import com.battleships.gui.gameAssets.ingameGui.DisableSymbols;
+import com.battleships.gui.gameAssets.ingameGui.ShipCounter;
 import com.battleships.gui.guis.GuiClickCallback;
 import com.battleships.gui.guis.GuiManager;
 import com.battleships.gui.guis.GuiTexture;
 import com.battleships.gui.renderingEngine.Loader;
 import com.battleships.gui.toolbox.MousePicker;
+import com.battleships.gui.toolbox.ParallelTasks;
 import com.battleships.gui.window.WindowManager;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
@@ -28,9 +31,46 @@ public class GameManager {
     private PlayingField playingField;
     private MousePicker mousePicker;
     private ShipManager shipManager;
+    private ShipCounter shipCounter;
+    private DisableSymbols disableSymbols;
 
     public GameManager(Loader loader) {
         pirateFont = new FontType(loader.loadFontTexture("font/pirate.png"), "pirate");
+    }
+
+    /**
+     * Shoot method, that passes the shoot command to the playingfield.
+     * @param originField - Field the shot originates from (0 for own, 1 for opponent).
+     * @param destinationIndex - Index of the field that should get shot.
+     */
+    public void shoot(int originField, Vector2f destinationIndex){
+        playingField.shoot(originField, destinationIndex);
+    }
+
+    /**
+     * Passes the command to place a marker, at the specified index, to the playingfield.
+     * @param shipHit - {@code true} if a ship was hit, so marker should be red. {@code false} if no ship was hit, so marker should be white.
+     * @param index - Index where the marker should be placed.
+     * @param field - Field the marker should be placed on (0 for own, 1 for opponent).
+     */
+    public void placeMarker(boolean shipHit, Vector2f index, int field){
+        playingField.placeMarker(shipHit, index, field);
+    }
+
+    /**
+     * Finishes the game and shows endscreen.
+     * @param won - {@code true} if the player has won, {@code false} else.
+     */
+    public void finishGame(boolean won){
+        //TODO
+    }
+
+    /**
+     * Decrement the count, that keeps track of how many enemy ships of each size are alive.
+     * @param size - Size of ship the count should be decremented for.
+     */
+    public void decrementAliveShip(int size){
+        shipCounter.decrementCount(size);
     }
 
     /**
@@ -86,8 +126,8 @@ public class GameManager {
         }
     };
 
-    private void toggleAnimations() {
-        //TODO make gui that shows that animations are disabled
+    public void toggleAnimations() {
+        disableSymbols.toggleSymbol(DisableSymbols.ANIMATION);
         playingField.toggleShootingAnimation();
     }
 
@@ -106,5 +146,13 @@ public class GameManager {
 
     public void setMousePicker(MousePicker mousePicker) {
         this.mousePicker = mousePicker;
+    }
+
+    public void setShipCounter(ShipCounter shipCounter) {
+        this.shipCounter = shipCounter;
+    }
+
+    public void setDisableSymbols(DisableSymbols disableSymbols) {
+        this.disableSymbols = disableSymbols;
     }
 }

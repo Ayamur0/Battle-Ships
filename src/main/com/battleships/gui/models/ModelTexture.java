@@ -10,13 +10,13 @@ public class ModelTexture {
     private boolean hasTransparency = false;
     private boolean useFakeLighting = false; //to render objects that are only one face thick better, because normals only face to one side, so the other would be dark without this option
 
-    private int numberOfRows = 1; //for texture atlases to map textureCoords correctly
+    private float numberOfRows = 1; //for texture atlases to map textureCoords correctly
 
-    public int getNumberOfRows() {
+    public float getNumberOfRows() {
         return numberOfRows;
     }
 
-    public void setNumberOfRows(int numberOfRows) {
+    public void setNumberOfRows(float numberOfRows) {
         this.numberOfRows = numberOfRows;
     }
 

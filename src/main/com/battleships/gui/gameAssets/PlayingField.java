@@ -32,7 +32,6 @@ public class PlayingField {
     private static final float[] TEXTURECOORDS = {0, 0, 0, 1, 1, 1, 1, 0};
     private static final float[] NORMALS = {0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0};
     private static final int MAXSIZE = 31;
-    private static final float SCALE = 300;
 
     private ModelTexture texture;
     private Entity own;
@@ -63,6 +62,7 @@ public class PlayingField {
     private Vector3f ownPosition;
     private Vector3f opponentPosition;
     private Vector3f rotation;
+    private static float scale = 300;
 
     /**
      * Create the two grids, the game is played on.
@@ -368,8 +368,8 @@ public class PlayingField {
         } else
             return null;
 
-        int indexX = (int) (result.x / (SCALE / (size + 1)));
-        int indexY = (int) (result.y / (SCALE / (size + 1)));
+        int indexX = (int) (result.x / (scale / (size + 1)));
+        int indexY = (int) (result.y / (scale / (size + 1)));
 
         result.x = indexX;
         result.y = indexY;
@@ -407,14 +407,16 @@ public class PlayingField {
         this.size = size;
         this.rotation = new Vector3f();
         this.texture = new ModelTexture(loader.loadTexture(playingfieldTexturePath));
+        texture.setNumberOfRows(31f / (size + 1));
+        scale *= (size + 1) / 31f;
         this.ownPosition = new Vector3f(350, -2.5f, -450);
         this.opponentPosition = new Vector3f(650, -2.5f, -450);
         this.textureOffset = (size + 1) / MAXSIZE;
-        this.own = new Entity(new TexturedModel(loader.loadToVAO(VERTICES, TEXTURECOORDS, NORMALS, INDICES), texture), 0, ownPosition, new Vector3f(), SCALE);
+        this.own = new Entity(new TexturedModel(loader.loadToVAO(VERTICES, TEXTURECOORDS, NORMALS, INDICES), texture), 0, ownPosition, new Vector3f(), scale);
         own.getRotation().x -= 90;
         grids.add(own);
 
-        this.opponent = new Entity(new TexturedModel(loader.loadToVAO(VERTICES, TEXTURECOORDS, NORMALS, INDICES), texture), 0, opponentPosition, new Vector3f(), SCALE);
+        this.opponent = new Entity(new TexturedModel(loader.loadToVAO(VERTICES, TEXTURECOORDS, NORMALS, INDICES), texture), 0, opponentPosition, new Vector3f(), scale);
         opponent.getRotation().x -= 90;
         grids.add(opponent);
     }
@@ -426,7 +428,7 @@ public class PlayingField {
      */
     private void initializeMarkers(Loader loader, List<Entity> entities) {
         ModelTexture highlightTex = new ModelTexture(loader.loadTexture(highlightTexturePath));
-        highlighter = new Entity(new TexturedModel(loader.loadToVAO(VERTICES, TEXTURECOORDS, NORMALS, INDICES), highlightTex), new Vector3f(), new Vector3f(), SCALE / (size + 1));
+        highlighter = new Entity(new TexturedModel(loader.loadToVAO(VERTICES, TEXTURECOORDS, NORMALS, INDICES), highlightTex), new Vector3f(), new Vector3f(), scale / (size + 1));
         highlighter.getRotation().x -= 90;
         entities.add(highlighter);
 
@@ -454,7 +456,7 @@ public class PlayingField {
      *
      * @return - The scale (diameter) of one playing field in world coordinates.
      */
-    public static float getSCALE() {
-        return SCALE;
+    public static float getScale() {
+        return scale;
     }
 }

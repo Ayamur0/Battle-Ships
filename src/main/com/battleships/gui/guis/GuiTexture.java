@@ -12,6 +12,8 @@ public class GuiTexture {
     private int texture;
     private Vector2f positions;
     private Vector2f scale;
+    private int rows = 1;
+    private float offsetX = 0, offsetY = 0;
 
     /**
      * Create a new gui with a texture at the specified position and the specified scale.
@@ -79,5 +81,49 @@ public class GuiTexture {
 //        scale.y = height / (float)GLFW.glfwGetVideoMode(GLFW.glfwGetPrimaryMonitor()).height();
         scale.x = (float)width / 1920;
         scale.y = (float)height / 1080;
+    }
+
+    /**
+     * @return - NumberOfRows this texture uses (1 if this isn't a texture atlas).
+     */
+    public int getRows() {
+        return rows;
+    }
+
+    /**
+     * Set amount of rows this texture uses (default 1, for no texture atlas).
+     * @param rows - numberOfRows this texture has.
+     */
+    public void setRows(int rows) {
+        this.rows = rows;
+    }
+
+    /**
+     * @return - The offset of the column in the textureAtlas for the texture this GUITexture uses.
+     */
+    public float getOffsetX() {
+        return offsetX / rows;
+    }
+
+    /**
+     * Sets the column of the texture in the Texture Atlas this GUITexture should use (default 0, for no texture atlas).
+     * @param offsetX - Column of texture to be used.
+     */
+    public void setOffsetX(float offsetX) {
+        this.offsetX = offsetX;
+    }
+
+    /**
+     * @return - The offset of the row in the textureAtlas for the texture this GUITexture uses.
+     */
+    public float getOffsetY() {
+        return offsetY / rows;
+    }
+    /**
+     * Sets the row of the texture in the Texture Atlas this GUITexture should use (default 0, for no texture atlas).
+     * @param offsetY - Row of texture to be used.
+     */
+    public void setOffsetY(float offsetY) {
+        this.offsetY = offsetY;
     }
 }
