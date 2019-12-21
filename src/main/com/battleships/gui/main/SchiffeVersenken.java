@@ -9,6 +9,7 @@ import com.battleships.gui.fontRendering.TextMaster;
 import com.battleships.gui.gameAssets.GameManager;
 import com.battleships.gui.gameAssets.PlayingField;
 import com.battleships.gui.gameAssets.ShipManager;
+import com.battleships.gui.gameAssets.ingameGui.ShipCounter;
 import com.battleships.gui.gameAssets.ingameGui.ShipSelector;
 import com.battleships.gui.guis.GuiClickCallback;
 import com.battleships.gui.guis.GuiManager;
@@ -51,8 +52,12 @@ public class SchiffeVersenken {
         // *******************Main stuff initialization*******************
 
         Loader loader = new Loader();
+        GameManager gameManager = new GameManager(loader);
         MasterRenderer renderer = new MasterRenderer(loader);
         TextMaster.init(loader);
+        GuiManager guiManager = new GuiManager(gameManager);
+
+
 
         // *******************GUI initialization*******************
 
@@ -63,7 +68,6 @@ public class SchiffeVersenken {
 
 //        GuiClickCallback guiClickCallback = new GuiClickCallback();
 //        guiClickCallback.addClickableGui(gui);
-        GuiManager guiManager = new GuiManager();
 
 
         // *******************TextInitialization*******************
@@ -131,7 +135,7 @@ public class SchiffeVersenken {
 
         entities.add(ship);
 
-        PlayingField playingField =  new PlayingField(30, loader);
+        PlayingField playingField =  new PlayingField(30, loader, gameManager);
         ShipManager ships = playingField.getShipManager();
         ShipSelector shipSelector = new ShipSelector(loader, guiManager, ships, guis);
 //        ShipManager ships = new ShipManager(loader);
@@ -170,11 +174,12 @@ public class SchiffeVersenken {
 
         // *******************Callbacks initialization*******************
 
-        MousePicker picker = new MousePicker(camera, renderer.getProjectionMatrix(), terrain);
+        MousePicker picker = new MousePicker(camera, renderer.getProjectionMatrix(), terrain, gameManager);
 
-        GameManager gameManager = new GameManager(guiManager, playingField, picker);
+
         WindowManager.setCallbacks(camera, gameManager, waterFbos);
 
+        new ShipCounter(loader, ships, guis);
         // ****************************************************
         // *******************Main Game Loop*******************
         // ****************************************************

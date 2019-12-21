@@ -3,6 +3,7 @@ package com.battleships.gui.gameAssets.ingameGui;
 import com.battleships.gui.fontMeshCreator.FontType;
 import com.battleships.gui.fontMeshCreator.GUIText;
 import com.battleships.gui.fontRendering.TextMaster;
+import com.battleships.gui.gameAssets.GameManager;
 import com.battleships.gui.gameAssets.ShipManager;
 import com.battleships.gui.guis.GuiClickCallback;
 import com.battleships.gui.guis.GuiManager;
@@ -60,14 +61,14 @@ public class ShipSelector extends GuiClickCallback {
         guiManager.createClickableGui(ship2, () -> this);
         guiManager.createClickableGui(ship3, () -> this);
         guiManager.createClickableGui(ship4, () -> this);
-        FontType pirateFont = new FontType(loader.loadFontTexture("font/pirate.png"), "pirate");
+
         //TODO get ship counts from logic
         shipCounts[0] = 10;
         shipCounts[1] = 10;
         shipCounts[2] = 10;
         shipCounts[3] = 10;
         for(int i = 1; i < guis.size(); i++)
-            shipCountTexts.add(new GUIText(shipCounts[i - 1] + " Left", 2, pirateFont, new Vector2f(guis.get(i).getPositions().x, guis.get(i).getPositions().y + guis.get(i).getScale().y / 2 + 0.05f), guis.get(i).getScale().x, true, 0, 0.1f,BLACK, OUTLINEOFFSET));
+            shipCountTexts.add(new GUIText(shipCounts[i - 1] + " Left", 2, GameManager.getPirateFont(), new Vector2f(guis.get(i).getPositions().x, guis.get(i).getPositions().y + guis.get(i).getScale().y / 2 + 0.05f), guis.get(i).getScale().x, true, BLACK, 0, 0.1f,BLACK, OUTLINEOFFSET));
     }
 
     /**

@@ -31,7 +31,7 @@ public class SingleplayerButton extends MainMenuButton {
 
     @Override
     protected void createLabels() {
-        super.guiTexts.add(new GUIText("Back", 3f, font, new Vector2f(back.getPositions().x,back.getPositions().y), 0.12f, true, 0.0f, 0.1f,outlineColor, new Vector2f()));
+        super.guiTexts.add(new GUIText("Back", 3f, font, new Vector2f(back.getPositions().x,back.getPositions().y), 0.12f, true, outlineColor, 0.0f, 0.1f,outlineColor, new Vector2f()));
     }
 
     @Override

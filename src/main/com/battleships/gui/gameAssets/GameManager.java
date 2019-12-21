@@ -1,9 +1,11 @@
 package com.battleships.gui.gameAssets;
 
+import com.battleships.gui.fontMeshCreator.FontType;
 import com.battleships.gui.fontMeshCreator.GUIText;
 import com.battleships.gui.guis.GuiClickCallback;
 import com.battleships.gui.guis.GuiManager;
 import com.battleships.gui.guis.GuiTexture;
+import com.battleships.gui.renderingEngine.Loader;
 import com.battleships.gui.toolbox.MousePicker;
 import com.battleships.gui.window.WindowManager;
 import org.joml.Vector2f;
@@ -20,17 +22,15 @@ public class GameManager {
     private DoubleBuffer x = BufferUtils.createDoubleBuffer(1);
     private DoubleBuffer y = BufferUtils.createDoubleBuffer(1);
 
+    private static FontType pirateFont;
+
     private GuiManager guiManager;
     private PlayingField playingField;
     private MousePicker mousePicker;
     private ShipManager shipManager;
 
-    public GameManager(GuiManager guiManager, PlayingField playingField, MousePicker mousePicker) {
-        this.guiManager = guiManager;
-        this.playingField = playingField;
-        this.mousePicker = mousePicker;
-
-        shipManager = playingField.getShipManager();
+    public GameManager(Loader loader) {
+        pirateFont = new FontType(loader.loadFontTexture("font/pirate.png"), "pirate");
     }
 
     /**
@@ -89,5 +89,22 @@ public class GameManager {
     private void toggleAnimations() {
         //TODO make gui that shows that animations are disabled
         playingField.toggleShootingAnimation();
+    }
+
+    public static FontType getPirateFont() {
+        return pirateFont;
+    }
+
+    public void setGuiManager(GuiManager guiManager) {
+        this.guiManager = guiManager;
+    }
+
+    public void setPlayingField(PlayingField playingField) {
+        this.playingField = playingField;
+        shipManager = playingField.getShipManager();
+    }
+
+    public void setMousePicker(MousePicker mousePicker) {
+        this.mousePicker = mousePicker;
     }
 }

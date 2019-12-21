@@ -1,6 +1,7 @@
 package com.battleships.gui.toolbox;
 
 import com.battleships.gui.entities.Camera;
+import com.battleships.gui.gameAssets.GameManager;
 import com.battleships.gui.renderingEngine.MasterRenderer;
 import com.battleships.gui.terrains.Terrain;
 import com.battleships.gui.window.WindowManager;
@@ -24,7 +25,8 @@ public class MousePicker {
     private Vector3f currentTerrainPoint;
     private Vector3f currentIntersectionPoint;
 
-    public MousePicker(Camera cam, Matrix4f projection, Terrain terrain) {
+    public MousePicker(Camera cam, Matrix4f projection, Terrain terrain, GameManager gameManager) {
+        gameManager.setMousePicker(this);
         camera = cam;
         projectionMatrix = projection;
         viewMatrix = Maths.createViewMatrix(camera);

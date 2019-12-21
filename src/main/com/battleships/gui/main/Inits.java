@@ -222,7 +222,7 @@ public class Inits {
         TextMaster.init(loader);
 
         // *******************GUI initialization*******************
-        guiManager = new GuiManager();
+        guiManager = new GuiManager(gameManager);
         permanentGuiElements = new ArrayList<>();
 
         startMenu = new MainMenu(guiManager,loader);
@@ -286,7 +286,7 @@ public class Inits {
 
         entities.add(ship);
 
-        playingField =  new PlayingField(30, loader);
+        playingField =  new PlayingField(30, loader, gameManager);
         ships = playingField.getShipManager();
         shipSelector = new ShipSelector(loader, guiManager, ships, permanentGuiElements);
 //        ShipManager ships = new ShipManager(loader);
@@ -318,9 +318,9 @@ public class Inits {
 
         // *******************Callbacks initialization*******************
 
-        picker = new MousePicker(camera, renderer.getProjectionMatrix(), terrain);
+        picker = new MousePicker(camera, renderer.getProjectionMatrix(), terrain, gameManager);
 
-        gameManager = new GameManager(guiManager, playingField, picker);
+        gameManager = new GameManager(loader);
         WindowManager.setCallbacks(camera, gameManager, waterFbos);
 
 

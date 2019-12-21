@@ -56,9 +56,9 @@ public class MultiplayerButton extends MainMenuButton {
         back = new GuiTexture(texture,new Vector2f(client.getPositions().x, client.getPositions().y+buttonGap),buttonSize);
     }
     private void creatLabels(){
-        super.guiTexts.add(new GUIText("Host", 3f, font, new Vector2f(host.getPositions().x, host.getPositions().y), 0.12f, true, 0.0f, 0.1f,outlineColor, new Vector2f()));
-        super.guiTexts.add(new GUIText("Client", 3f, font,new Vector2f(client.getPositions().x, client.getPositions().y), 0.12f, true, 0.0f, 0.1f,outlineColor, new Vector2f()));
-        super.guiTexts.add(new GUIText("Back", 3, font,new Vector2f(back.getPositions().x,back.getPositions().y), 0.12f, true, 0.0f, 0.1f,outlineColor, new Vector2f()));
+        super.guiTexts.add(new GUIText("Host", 3f, font, new Vector2f(host.getPositions().x, host.getPositions().y), 0.12f, true,outlineColor, 0.0f, 0.1f,outlineColor, new Vector2f()));
+        super.guiTexts.add(new GUIText("Client", 3f, font,new Vector2f(client.getPositions().x, client.getPositions().y), 0.12f, true,outlineColor, 0.0f, 0.1f,outlineColor, new Vector2f()));
+        super.guiTexts.add(new GUIText("Back", 3, font,new Vector2f(back.getPositions().x,back.getPositions().y), 0.12f, true, outlineColor,0.0f, 0.1f,outlineColor, new Vector2f()));
 
 
     }

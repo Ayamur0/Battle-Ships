@@ -11,7 +11,7 @@ public class GUIText {
 
     private int textMeshVao;
     private int vertexCount;
-    private Vector3f color = new Vector3f(0f, 0f, 0f);
+    private Vector3f color;
 
     private Vector2f position;
     private float lineMaxSize;
@@ -53,7 +53,7 @@ public class GUIText {
      *            - offset of the outline to create a shadow effect
      */
     public GUIText(String text, float fontSize, FontType font, Vector2f position, float maxLineLength,
-                   boolean centered, float outlineWidth, float outlineEdge, Vector3f outlineColor, Vector2f outlineOffset) {
+                   boolean centered, Vector3f color, float outlineWidth, float outlineEdge, Vector3f outlineColor, Vector2f outlineOffset) {
         this.textString = text;
         this.fontSize = fontSize;
         this.font = font;
@@ -62,6 +62,7 @@ public class GUIText {
         position.y -= TextMeshCreator.getLineHeight();
         this.lineMaxSize = maxLineLength;
         this.centerText = centered;
+        this.color = color;
         this.outlineWidth = outlineWidth;
         this.outlineEdge = outlineEdge;
         this.outlineColor = outlineColor;

@@ -69,8 +69,9 @@ public class PlayingField {
      * @param size - Count of rows/columns one grid should have.
      * @param loader - Loader needed to load models.
      */
-    public PlayingField(int size, Loader loader) {
+    public PlayingField(int size, Loader loader, GameManager gameManager) {
         this.shipManager = new ShipManager(loader, this);
+        gameManager.setPlayingField(this);
         this.grids = new ArrayList<>();
         this.ships = new ArrayList<>();
         this.markers = new ArrayList<>();

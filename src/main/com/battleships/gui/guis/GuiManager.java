@@ -1,5 +1,6 @@
 package com.battleships.gui.guis;
 
+import com.battleships.gui.gameAssets.GameManager;
 import com.battleships.gui.gameAssets.PlayingField;
 import com.battleships.gui.window.WindowManager;
 import org.joml.Vector2f;
@@ -21,6 +22,10 @@ public class GuiManager {
     private List<GuiTexture> guis = new ArrayList<>();
     private DoubleBuffer x = BufferUtils.createDoubleBuffer(1);
     private DoubleBuffer y = BufferUtils.createDoubleBuffer(1);
+
+    public GuiManager (GameManager gameManager){
+        gameManager.setGuiManager(this);
+    }
 
     /**
      * Add an action to a {@link GuiTexture} that gets execute when the gui element gets clicked on.

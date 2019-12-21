@@ -66,9 +66,9 @@ public class MainMenu extends MainMenuButton {
     }
 
     private void creatLabels(){
-        super.guiTexts.add(new GUIText("Play", 3, font, new Vector2f(play.getPositions().x,play.getPositions().y), 0.12f, true, 0.0f, 0.1f,outlineColor, new Vector2f()));
-        super.guiTexts.add(new GUIText("Options", 3, font,new Vector2f(options.getPositions().x,options.getPositions().y), 0.12f, true, 0.0f, 0.1f,outlineColor, new Vector2f()));
-        super.guiTexts.add(new GUIText("Exit", 3, font,new Vector2f(exit.getPositions().x,exit.getPositions().y), 0.12f, true, 0.0f, 0.1f,outlineColor, new Vector2f()));
+        super.guiTexts.add(new GUIText("Play", 3, font, new Vector2f(play.getPositions().x,play.getPositions().y), 0.12f, true,outlineColor, 0.0f, 0.1f,outlineColor, new Vector2f()));
+        super.guiTexts.add(new GUIText("Options", 3, font,new Vector2f(options.getPositions().x,options.getPositions().y), 0.12f, true,outlineColor, 0.0f, 0.1f,outlineColor, new Vector2f()));
+        super.guiTexts.add(new GUIText("Exit", 3, font,new Vector2f(exit.getPositions().x,exit.getPositions().y), 0.12f, true,outlineColor, 0.0f, 0.1f,outlineColor, new Vector2f()));
 
 
     }
