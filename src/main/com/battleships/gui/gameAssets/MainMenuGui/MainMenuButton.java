@@ -35,26 +35,29 @@ public abstract class MainMenuButton extends GuiClickCallback {
         this.loader = loader;
         this.font = new FontType(loader.loadFontTexture("font/pirate.png"), "pirate");
         this.texture = loader.loadTexture("WoodButton.png");
-        this.outlineColor = new Vector3f(1.0f,0.0f,0.0f);
+        this.outlineColor = new Vector3f(1.0f, 0.0f, 0.0f);
 
-        this.buttonSize = new Vector2f(0.14f,0.07f);
+        this.buttonSize = new Vector2f(0.14f, 0.07f);
         this.standardButtonPos = new Vector2f(0.5f, 0.4f);
         this.buttonGap = 0.15f;
     }
-    protected void CreateTextLabels(){
+
+    protected void CreateTextLabels() {
         SetTextColor();
-        for (GUIText gui :guiTexts) {
+        for (GUIText gui : guiTexts) {
             TextMaster.addText(gui);
         }
     }
-    protected void SetTextColor(){
-        for (GUIText gui :guiTexts) {
-            gui.setColor(1f,1f,1f);
+
+    protected void SetTextColor() {
+        for (GUIText gui : guiTexts) {
+            gui.setColor(1f, 1f, 1f);
         }
     }
-    protected void createClickable(){
-        for (GuiTexture i:buttons){
-            guiManager.createClickableGui(i,() -> this);
+
+    protected void createClickable() {
+        for (GuiTexture i : buttons) {
+            guiManager.createClickableGui(i, () -> this);
         }
     }
 }

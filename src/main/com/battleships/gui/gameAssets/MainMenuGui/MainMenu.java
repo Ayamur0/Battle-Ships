@@ -39,7 +39,6 @@ public class MainMenu extends MainMenuButton {
 
         super.createClickable();
     }
-    
     @Override
     protected boolean isClickOnGui(GuiTexture gui, double x, double y) {
         if(super.isClickOnGui(super.buttons.get(0), x, y)) {
@@ -60,11 +59,10 @@ public class MainMenu extends MainMenuButton {
     @Override
     protected void clickAction() {
         if(buttonClicked == 0) {
-            System.out.println("Hallo");
             new PlayMenu(guiManager,loader);
         }
         if(buttonClicked == 1){
-
+            new OptionMenu(guiManager,loader);
         }
         if (super.buttonClicked == 2){
             GLFW.glfwSetWindowShouldClose(WindowManager.getWindow(),true);
