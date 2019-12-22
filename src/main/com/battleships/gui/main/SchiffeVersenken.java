@@ -15,10 +15,7 @@ import com.battleships.gui.gameAssets.ingameGui.DisableSymbols;
 import com.battleships.gui.gameAssets.ingameGui.ShipCounter;
 import com.battleships.gui.gameAssets.ingameGui.ShipSelector;
 import com.battleships.gui.gameAssets.testLogic.TestLogic;
-import com.battleships.gui.guis.GuiClickCallback;
-import com.battleships.gui.guis.GuiManager;
-import com.battleships.gui.guis.GuiRenderer;
-import com.battleships.gui.guis.GuiTexture;
+import com.battleships.gui.guis.*;
 import com.battleships.gui.particles.*;
 import com.battleships.gui.postProcessing.Fbo;
 import com.battleships.gui.postProcessing.PostProcessing;
@@ -64,8 +61,6 @@ public class SchiffeVersenken {
         AudioMaster.init();
         TestLogic.init(20);
 
-        TinyFileDialogs.tinyfd_inputBox("test", "test", null);
-
 
         // *******************GUI initialization*******************
 
@@ -75,6 +70,9 @@ public class SchiffeVersenken {
         GuiRenderer guiRenderer = new GuiRenderer(loader);
         new ShipCounter(loader, guiManager, guis, gameManager);
         new DisableSymbols(loader, guiManager, guis, gameManager);
+
+        new Slider(loader.loadTexture("Brick.jpg"), loader.loadTexture("Brick.jpg"), 5, 30,
+                15, new Vector2f(0.3f, 0.01f), new Vector2f(0.5f, 0.5f), guiManager, guis);
 
 //        GuiClickCallback guiClickCallback = new GuiClickCallback();
 //        guiClickCallback.addClickableGui(gui);
