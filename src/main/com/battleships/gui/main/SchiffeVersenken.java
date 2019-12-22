@@ -1,5 +1,7 @@
 package com.battleships.gui.main;
 
+import com.battleships.gui.audio.AudioMaster;
+import com.battleships.gui.audio.Source;
 import com.battleships.gui.entities.Camera;
 import com.battleships.gui.entities.Entity;
 import com.battleships.gui.entities.Light;
@@ -57,7 +59,7 @@ public class SchiffeVersenken {
         MasterRenderer renderer = new MasterRenderer(loader);
         TextMaster.init(loader);
         GuiManager guiManager = new GuiManager(gameManager);
-
+        AudioMaster.init();
 
 
         // *******************GUI initialization*******************
@@ -138,7 +140,7 @@ public class SchiffeVersenken {
 
         entities.add(ship);
 
-        PlayingField playingField =  new PlayingField(10, loader, gameManager);
+        PlayingField playingField =  new PlayingField(20, loader, gameManager);
         ShipManager ships = playingField.getShipManager();
         ShipSelector shipSelector = new ShipSelector(loader, guiManager, ships, guis);
 //        ShipManager ships = new ShipManager(loader);
@@ -183,6 +185,16 @@ public class SchiffeVersenken {
         WindowManager.setCallbacks(camera, gameManager, waterFbos);
 
 
+        // *******************Audio initialization*******************
+
+        AudioMaster.setListenerData(0,0,0);
+
+        int buffer = AudioMaster.loadSound("fire");
+        Source source = new Source(1,1,50);
+
+        source.setLooping(true);
+        source.play(buffer);
+
         // ****************************************************
         // *******************Main Game Loop*******************
         // ****************************************************
@@ -191,6 +203,7 @@ public class SchiffeVersenken {
             camera.move(window, terrain);
             picker.update();
             ParticleMaster.update(camera);
+            AudioMaster.setListenerData(camera.getPosition().x, camera.getPosition().y, camera.getPosition().z);
 
             Vector3f terrainPoint = picker.getCurrentTerrainPoint();
             if(terrainPoint != null) {
@@ -248,6 +261,7 @@ public class SchiffeVersenken {
 
         // *******************Clean up*******************
 
+        AudioMaster.cleanUp();
         waterFbos.cleanUp();
         waterShader.cleanUp();
         PostProcessing.cleanUp();

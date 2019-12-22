@@ -3,6 +3,7 @@
     <CLASSES>
       <root url="jar://$PROJECT_DIR$/src/main/resources/lwjgl-3.2.3/lwjgl/lwjgl.jar!/" />
       <root url="jar://$PROJECT_DIR$/src/main/resources/lwjgl-3.2.3/lwjgl/lwjgl-natives-windows.jar!/" />
+      <root url="jar://$PROJECT_DIR$/src/main/resources/lwjgl-3.2.3/lwjgl/lwjgl-natives-windows-x86.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

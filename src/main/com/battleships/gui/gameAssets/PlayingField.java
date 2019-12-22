@@ -1,5 +1,7 @@
 package com.battleships.gui.gameAssets;
 
+import com.battleships.gui.audio.AudioMaster;
+import com.battleships.gui.audio.Source;
 import com.battleships.gui.entities.Entity;
 import com.battleships.gui.models.ModelTexture;
 import com.battleships.gui.models.TexturedModel;
@@ -48,6 +50,11 @@ public class PlayingField {
     private ParticleSystemComplex fire;
     private Map<Integer, List<Vector3f>> burningFires = new HashMap<>();
     private boolean animation = true;
+    private Source cannon = new Source(1, 40, 500);
+    private int cannonSound = AudioMaster.loadSound("Cannon");
+    private Source waterSplash = new Source(1, 40, 500);
+    private int waterSplashSound = AudioMaster.loadSound("WaterSplash2");
+    private int hitSound = AudioMaster.loadSound("HitSoundShort");
 
     private List<Entity> markers;
     private Entity highlighter;
@@ -149,6 +156,12 @@ public class PlayingField {
             playHitEffect(convertIndextoCoords(destinationCell, origin == OWNFIELD ? OPPONENTFIELD : OWNFIELD));
             return;
         }
+
+        if(origin == OWNFIELD)
+            cannon.setPosition(own.getPosition().x, own.getPosition().y, own.getPosition().z);
+        else
+            cannon.setPosition(opponent.getPosition().x, opponent.getPosition().y, opponent.getPosition().z);
+        cannon.play(cannonSound);
         //calculate index relative to center of field
         if (cannonballFlying) //TODO test this when clicking on field together with if its your turn
             return;
@@ -301,11 +314,16 @@ public class PlayingField {
         boolean shipHit = false;
         if(cannonball.getDestinationField() == OWNFIELD) {
             playHitEffect(cannonball.getDestination());
-            if(!shipHit)
+            if(!shipHit) {
                 placeMarker(shipHit, cannonball.getDestinationCell(), cannonball.getDestinationField());
+                waterSplash.setPosition(cannonball.getDestination().x, -3, cannonball.getDestination().y);
+                waterSplash.play(hitSound);
+            }
         }
-        if(cannonball.getDestinationField() == OPPONENTFIELD || !shipHit) {
+        else if(cannonball.getDestinationField() == OPPONENTFIELD || !shipHit) {
             //TODO play water effect
+            waterSplash.setPosition(cannonball.getDestination().x, -3, cannonball.getDestination().y);
+            waterSplash.play(waterSplashSound);
             placeMarker(shipHit, cannonball.getDestinationCell(), cannonball.getDestinationField());
         }
         cannonballFlying = false;
