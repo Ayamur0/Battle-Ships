@@ -42,6 +42,14 @@ public abstract class MainMenuButton extends GuiClickCallback {
         this.buttonGap = 0.15f;
     }
 
+    protected void CreateButtonTextures(int anzahl){
+        buttons.add(new GuiTexture(texture, standardButtonPos, buttonSize));
+        for (int i = 0;i < anzahl-1; i++){
+            buttons.add(new GuiTexture(texture,new Vector2f(buttons.get(i).getPositions().x,buttons.get(i).getPositions().y+buttonGap),buttonSize));
+
+        }
+    }
+
     protected void CreateTextLabels() {
         SetTextColor();
         for (GUIText gui : guiTexts) {

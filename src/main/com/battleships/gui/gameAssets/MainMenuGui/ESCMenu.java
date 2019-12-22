@@ -5,7 +5,11 @@ import com.battleships.gui.fontRendering.TextMaster;
 import com.battleships.gui.guis.GuiManager;
 import com.battleships.gui.guis.GuiTexture;
 import com.battleships.gui.renderingEngine.Loader;
+import com.battleships.gui.window.WindowManager;
 import org.joml.Vector2f;
+import org.lwjgl.glfw.GLFW;
+
+import javax.swing.*;
 
 public class ESCMenu extends MainMenuButton {
     private SaveButton saveButton;
@@ -21,42 +25,70 @@ public class ESCMenu extends MainMenuButton {
     public ESCMenu(GuiManager guiManager, Loader loader) {
         super(guiManager, loader);
 
-        this.createButtons();
 
-        this.createLabels();
+        guiManager.clearClickableGuis();
+
+        TextMaster.clear();
+
+        this.createMenu();
+
+        SetTextColor();
+
+        CreateTextLabels();
 
     }
+    private void createMenu(){
 
-    protected void createButtons() {
-        saveButton = new SaveButton(guiManager,loader);
-        resumeButton = new ResumeButton(guiManager,loader);
-        backButton = new BackButton(guiManager,loader,8);//TODO real back implement
-        exitButton = new ExitButton();
+        super.CreateButtonTextures(4);
 
-        save = new GuiTexture(texture,standardButtonPos,buttonSize);
-        resume = new GuiTexture(texture, new Vector2f(save.getPositions().x,save.getPositions().y+buttonGap), buttonSize);
-        back = new GuiTexture(texture,new Vector2f(resume.getPositions().x,resume.getPositions().y+buttonGap),buttonSize);
-        exit = new GuiTexture(texture,new Vector2f(resume.getPositions().x,resume.getPositions().y+buttonGap),buttonSize);
+
+        super.guiTexts.add(new GUIText("Save", 3, font, new Vector2f(buttons.get(0).getPositions().x,buttons.get(0).getPositions().y), 0.12f, true,outlineColor, 0.0f, 0.1f,outlineColor, new Vector2f()));
+        super.guiTexts.add(new GUIText("Resume", 3, font,new Vector2f(buttons.get(1).getPositions().x,buttons.get(1).getPositions().y), 0.12f, true,outlineColor, 0.0f, 0.1f,outlineColor, new Vector2f()));
+        super.guiTexts.add(new GUIText("Back to Main Menu", 3, font,new Vector2f(buttons.get(2).getPositions().x,buttons.get(2).getPositions().y), 0.12f, true,outlineColor, 0.0f, 0.1f,outlineColor, new Vector2f()));
+        super.guiTexts.add(new GUIText("Exit to Desktop", 3, font,new Vector2f(buttons.get(3).getPositions().x,buttons.get(3).getPositions().y), 0.12f, true,outlineColor, 0.0f, 0.1f,outlineColor, new Vector2f()));
+
+        super.createClickable();
     }
 
-    protected void createLabels() {
-        super.guiTexts.add(new GUIText("Save",2.5f, font, new Vector2f(save.getPositions().x,save.getPositions().y), 0.12f, true, outlineColor,0.0f, 0.1f,outlineColor, new Vector2f()));
-        super.guiTexts.add(new GUIText("Resume", 2.5f, font, new Vector2f(resume.getPositions().x,resume.getPositions().y), 0.12f, true,outlineColor, 0.0f, 0.1f,outlineColor, new Vector2f()));
-        super.guiTexts.add(new GUIText("Back to Main Menu", 2.5f, font,new Vector2f(back.getPositions().x,back.getPositions().y), 0.12f, true,outlineColor, 0.0f, 0.1f,outlineColor, new Vector2f()));
-        super.guiTexts.add(new GUIText("Exit to Desktop", 3, font,new Vector2f(exit.getPositions().x,exit.getPositions().y), 0.12f, true,outlineColor, 0.0f, 0.1f,outlineColor, new Vector2f()));
 
+
+    @Override
+    protected boolean isClickOnGui(GuiTexture gui, double x, double y) {
+        if(super.isClickOnGui(super.buttons.get(0), x, y)) {
+            super.buttonClicked = 0;
+            return true;
+        }
+        if(super.isClickOnGui(super.buttons.get(1), x, y)) {
+            super.buttonClicked = 1;
+            return true;
+        }
+        if(super.isClickOnGui(super.buttons.get(2), x, y)) {
+            super.buttonClicked = 2;
+            return true;
+        }
+        if(super.isClickOnGui(super.buttons.get(3), x, y)) {
+            super.buttonClicked = 3;
+            return true;
+        }
+        return false;
     }
 
     @Override
     protected void clickAction() {
-        guiManager.clearClickableGuis();
-
-        guiManager.createClickableGui(save,() -> saveButton);
-        guiManager.createClickableGui(resume,() -> resumeButton);
-        guiManager.createClickableGui(back,() -> backButton);
-        guiManager.createClickableGui(exit,() -> exitButton);
-
-        TextMaster.clear();
-        super.CreateTextLabels();
+        if(buttonClicked == 0) {
+            //TODO adding save thing
+        }
+        if(buttonClicked == 1){
+            guiManager.clearClickableGuis();
+            TextMaster.clear();
+            //TODO check with tim
+        }
+        if (super.buttonClicked == 2){
+            new MainMenu(guiManager,loader);
+        }
+        if(buttonClicked == 3){
+            GLFW.glfwSetWindowShouldClose(WindowManager.getWindow(),true);
+        }
     }
+
 }

@@ -25,11 +25,7 @@ public class PlayMenu extends MainMenuButton {
 
     private void createMenu(){
 
-        super.buttons.add(new GuiTexture(texture, standardButtonPos, buttonSize));
-        super.buttons.add(new GuiTexture(texture,new Vector2f(buttons.get(0).getPositions().x,buttons.get(0).getPositions().y+buttonGap),buttonSize));
-        super.buttons.add(new GuiTexture(texture,new Vector2f(buttons.get(1).getPositions().x,buttons.get(1).getPositions().y+buttonGap),buttonSize));
-        super.buttons.add(new GuiTexture(texture,new Vector2f(buttons.get(2).getPositions().x,buttons.get(2).getPositions().y+buttonGap),buttonSize));
-
+        super.CreateButtonTextures(4);
 
         super.guiTexts.add(new GUIText("Ai VS Ai",2.5f, font, new Vector2f(buttons.get(0).getPositions().x,buttons.get(0).getPositions().y), 0.12f, true, outlineColor,0.0f, 0.1f,outlineColor, new Vector2f()));
         super.guiTexts.add(new GUIText("Singleplayer", 2.5f, font, new Vector2f(buttons.get(1).getPositions().x,buttons.get(1).getPositions().y), 0.12f, true, outlineColor,0.0f, 0.1f,outlineColor, new Vector2f()));
@@ -62,7 +58,7 @@ public class PlayMenu extends MainMenuButton {
     @Override
     protected void clickAction() {
         if(buttonClicked == 0) {
-
+            //TODO open ai vs ai Settings
         }
         if(buttonClicked == 1){
             new SingleplayerMenu(guiManager,loader);

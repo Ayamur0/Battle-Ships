@@ -21,10 +21,8 @@ public class MultiplayerMenu extends MainMenuButton {
 
         CreateTextLabels();
     }
-    private void createMenu(){
-        super.buttons.add(new GuiTexture(texture, standardButtonPos, buttonSize));
-        super.buttons.add(new GuiTexture(texture,new Vector2f(buttons.get(0).getPositions().x,buttons.get(0).getPositions().y+buttonGap),buttonSize));
-        super.buttons.add(new GuiTexture(texture,new Vector2f(buttons.get(1).getPositions().x,buttons.get(1).getPositions().y+buttonGap),buttonSize));
+    private void createMenu() {
+        super.CreateButtonTextures(3);
 
         super.guiTexts.add(new GUIText("Host", 3f, font, new Vector2f(buttons.get(0).getPositions().x, buttons.get(0).getPositions().y), 0.12f, true,outlineColor, 0.0f, 0.1f,outlineColor, new Vector2f()));
         super.guiTexts.add(new GUIText("Client", 3f, font,new Vector2f(buttons.get(1).getPositions().x, buttons.get(1).getPositions().y), 0.12f, true,outlineColor, 0.0f, 0.1f,outlineColor, new Vector2f()));
