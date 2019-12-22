@@ -9,19 +9,7 @@ import com.battleships.gui.window.WindowManager;
 import org.joml.Vector2f;
 import org.lwjgl.glfw.GLFW;
 
-import javax.swing.*;
-
 public class ESCMenu extends MainMenuButton {
-    private SaveButton saveButton;
-    private ResumeButton resumeButton;
-    private BackButton backButton;
-    private ExitButton exitButton;
-
-    private GuiTexture save;
-    private GuiTexture resume;
-    private GuiTexture back;
-    private GuiTexture exit;
-
     public ESCMenu(GuiManager guiManager, Loader loader) {
         super(guiManager, loader);
 
