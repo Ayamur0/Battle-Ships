@@ -5,6 +5,7 @@ import com.battleships.gui.renderingEngine.MasterRenderer;
 import com.battleships.gui.window.WindowManager;
 import org.apache.commons.math3.linear.*;
 import org.joml.Vector2f;
+import org.joml.Vector2i;
 import org.joml.Vector3f;
 
 public class Cannonball{
@@ -16,7 +17,7 @@ public class Cannonball{
 
     private Entity ball;
     private Vector2f destination;
-    private Vector2f destinationCell;
+    private Vector2i destinationCell;
     private int destinationField;
     private Vector2f horizontalVelocity = new Vector2f();
     private Vector3f position = new Vector3f();
@@ -33,7 +34,7 @@ public class Cannonball{
      * @param destination - destination where the cannonball should land
      * @param origin - where the cannonball is fired from
      */
-    public Cannonball(Entity ball, Vector2f destination, Vector2f origin, Vector2f destinationCell, int destinationField) {
+    public Cannonball(Entity ball, Vector2f destination, Vector2f origin, Vector2i destinationCell, int destinationField) {
         this.ball = ball;
         this.destination = destination;
         this.destinationCell = destinationCell;
@@ -177,7 +178,7 @@ public class Cannonball{
      *
      * @return - The index of the destination cell.
      */
-    public Vector2f getDestinationCell() {
+    public Vector2i getDestinationCell() {
         return destinationCell;
     }
 

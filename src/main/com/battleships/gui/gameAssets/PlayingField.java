@@ -3,6 +3,7 @@ package com.battleships.gui.gameAssets;
 import com.battleships.gui.audio.AudioMaster;
 import com.battleships.gui.audio.Source;
 import com.battleships.gui.entities.Entity;
+import com.battleships.gui.gameAssets.testLogic.TestLogic;
 import com.battleships.gui.models.ModelTexture;
 import com.battleships.gui.models.TexturedModel;
 import com.battleships.gui.particles.ParticleSystemComplex;
@@ -12,9 +13,7 @@ import com.battleships.gui.renderingEngine.MasterRenderer;
 import com.battleships.gui.renderingEngine.OBJLoader;
 import com.battleships.gui.window.WindowManager;
 import org.apache.commons.math3.linear.*;
-import org.joml.Matrix3f;
-import org.joml.Vector2f;
-import org.joml.Vector3f;
+import org.joml.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -49,16 +48,18 @@ public class PlayingField {
     private Cannonball cannonball;
     private ParticleSystemComplex fire;
     private Map<Integer, List<Vector3f>> burningFires = new HashMap<>();
+    private Map<Integer, List<Source>> burningFireSounds = new HashMap<>();
     private boolean animation = true;
     private Source cannon = new Source(1, 40, 500);
     private int cannonSound = AudioMaster.loadSound("Cannon");
     private Source waterSplash = new Source(1, 40, 500);
     private int waterSplashSound = AudioMaster.loadSound("WaterSplash2");
     private int hitSound = AudioMaster.loadSound("HitSoundShort");
+    private int fireSound = AudioMaster.loadSound("fire");
 
     private List<Entity> markers;
     private Entity highlighter;
-    private Vector3f currentPointedCell;
+    private Vector3i currentPointedCell;
     private TexturedModel buoyModelWhite;
     private TexturedModel buoyModelRed;
     private ModelTexture white;
@@ -77,8 +78,6 @@ public class PlayingField {
      * @param loader - Loader needed to load models.
      */
     public PlayingField(int size, Loader loader, GameManager gameManager) {
-        this.shipManager = new ShipManager(loader, this);
-        gameManager.setPlayingField(this);
         this.grids = new ArrayList<>();
         this.ships = new ArrayList<>();
         this.markers = new ArrayList<>();
@@ -89,6 +88,9 @@ public class PlayingField {
 
         initializeFireParticleSystem(loader);
         initializeMarkers(loader, grids);
+
+        this.shipManager = new ShipManager(loader, this);
+        gameManager.setPlayingField(this);
     }
 
     /**
@@ -110,12 +112,12 @@ public class PlayingField {
         }
     }
 
-    public void cellClicked(Vector2f index, int field){
+    public void cellClicked(Vector2i index, int field){
         //TODO move to logic
         if(cannonballFlying)
             return;
         if(shipPlacingPhase){
-            shipManager.placeCursorShip(ships);
+            shipManager.placeCursorShip();
             return;
         }
         else
@@ -123,21 +125,27 @@ public class PlayingField {
     }
 
     /**
-     * Places a ship on the Grid.
-     * @param field - On which field the ship should be placed (OWNFIELD = 0 or OPPONENTFIELD = 1).
+     * Places a ship on the Grid of the player.
      * @param index - The index of the cell the back of the ship should be placed on. X and y of index are both integers.
      * @param shipSize - Size of the ship (between 2 and 5).
      * @param rotation - Direction the ship should be facing (one of the constant values in {@link ShipManager} for the directions)
      */
-    public void placeShip(int field, Vector2f index, int shipSize, int rotation) {
-        Vector3f position = calculateShipPosition(field, index, shipSize, rotation);
+    public void placeShip(Vector2i index, int shipSize, int rotation) {
+        Vector3f position = calculateShipPosition(OWNFIELD, index, shipSize, rotation);
         Vector3f degrees = new Vector3f(0, calculateShipRotation(rotation), 0);
 
         shipManager.placeShip(ships, shipSize, position, degrees, 1f);
     }
-    
-    public void placeMarker(boolean ship, Vector2f index, int field){
-        Vector2f coords = convertIndextoCoords(index, field);
+
+    /**
+     * Places a marker that indicates that a field has been shot. Is used anytime a cel is shot that doesn't
+     * contain a ship owned by the player. In that case the marker would be the fire.
+     * @param ship - {@code true} if marker should indicate a ship was hit, {@code false} for water.
+     * @param index - Index at which the marker should be placed.
+     * @param field - Field on which the marker should be placed (0 for OWNFIELD, 1 for OPPONENTFIELD).
+     */
+    public void placeMarker(boolean ship, Vector2i index, int field){
+        Vector2f coords = convertIndextoCoords(new Vector2f(index), field);
         Entity buoy;
         if(ship)
             buoy = new Entity(buoyModelRed, new Vector3f(coords.x, -3, coords.y), new Vector3f(), 1);
@@ -147,13 +155,13 @@ public class PlayingField {
     }
 
     /**
-     * Create a flying cannonball.
+     * Create a flying cannonball that shoots the specified cell.
      * @param origin      - the playing field from which the cannonball originates
      * @param destinationCell - the destination cell on the other field
      */
-    public void shoot(int origin, Vector2f destinationCell) {
+    public void shoot(int origin, Vector2i destinationCell) {
         if(!animation){
-            playHitEffect(convertIndextoCoords(destinationCell, origin == OWNFIELD ? OPPONENTFIELD : OWNFIELD));
+            playHitEffect(convertIndextoCoords(new Vector2f(destinationCell), origin == OWNFIELD ? OPPONENTFIELD : OWNFIELD));
             return;
         }
 
@@ -173,7 +181,7 @@ public class PlayingField {
         Vector2f originIndex = origin == OWNFIELD ? new Vector2f(ownPosition.x, ownPosition.z) : new Vector2f(opponentPosition.x, opponentPosition.z);
 
         //calculate coordinate position of destination
-        Vector2f  destinationCoords = convertIndextoCoords(destinationCell, origin == OWNFIELD ? OPPONENTFIELD : OWNFIELD);
+        Vector2f  destinationCoords = convertIndextoCoords(new Vector2f(destinationCell), origin == OWNFIELD ? OPPONENTFIELD : OWNFIELD);
 
         //create cannonball flying from origin to destination
         this.cannonball = new Cannonball(ball, destinationCoords, originIndex, destinationCell, origin == OWNFIELD ? OPPONENTFIELD : OWNFIELD);
@@ -200,12 +208,12 @@ public class PlayingField {
      * @param intersectionPoint - Vector that should intersect with grid to determine pointed cell.
      */
     public void highligtCell(Vector3f intersectionPoint) {
-        Vector3f pointedCell = calculatePointedCell(intersectionPoint);
+        Vector3i pointedCell = calculatePointedCell(intersectionPoint);
         if (pointedCell == null) {
             removeHighlighter();
             return;
         }
-        setHighlighter(new Vector2f(pointedCell.x, pointedCell.y), (int) pointedCell.z);
+        setHighlighter(new Vector2i(pointedCell.x, pointedCell.y), (int) pointedCell.z);
     }
 
     /**
@@ -214,7 +222,7 @@ public class PlayingField {
      * @return - {@link Vector3f} with x = column index, y = row index and z = field that intersection is
      *             on (OWNFIELD or OPPONENTFIELD).
      */
-    public Vector3f calculatePointedCell(Vector3f intersectionPoint) {
+    public Vector3i calculatePointedCell(Vector3f intersectionPoint) {
         return currentPointedCell = convertCoordsToIndex(intersectionPoint);
     }
 
@@ -237,7 +245,7 @@ public class PlayingField {
      *
      * @return - The last cell that was calculated using the calculatePointedCell Method.
      */
-    public Vector3f getCurrentPointedCell() {
+    public Vector3i getCurrentPointedCell() {
         return currentPointedCell;
     }
 
@@ -247,6 +255,14 @@ public class PlayingField {
      */
     public ShipManager getShipManager() {
         return shipManager;
+    }
+
+    /**
+     *
+     * @return - The amount of columns/rows on one playingField.
+     */
+    public int getSize() {
+        return size;
     }
 
     /**
@@ -276,18 +292,19 @@ public class PlayingField {
     /**
      * Calculates the Coordinates the ship entity needs to have, to be placed on a given cell.
      * @param field - The field the ship should be placed on.
-     * @param index - The index of the cell on the field the stern of the ship is on.
+     * @param indexInt - The index of the cell on the field the stern of the ship is on.
      * @param shipSize - The size of the ship (2-5)
      * @param rotation - The direction the ship should be facing (one of the constant values in {@link ShipManager} for the directions)
      * @return - The OpenGl Coordinates the entity of the ship needs to be placed at.
      */
-    protected Vector3f calculateShipPosition(int field, Vector2f index, int shipSize, int rotation) {
+    protected Vector3f calculateShipPosition(int field, Vector2i indexInt, int shipSize, int rotation) {
         Vector3f position = new Vector3f();
+        Vector2f indexFloat = new Vector2f(indexInt);
         if (rotation == ShipManager.NORTH || rotation == ShipManager.SOUTH) {
             //move index so it's at center of ship instead of the cell the back part of the ship is on
             //upwards if ship is facing north, downwards if ship is facing south
-            index.y += rotation == ShipManager.NORTH ? -(shipSize - 1) / 2f : (shipSize - 1) / 2f;
-            Vector2f coords = convertIndextoCoords(index, field);
+            indexFloat.y += rotation == ShipManager.NORTH ? -(shipSize - 1) / 2f : (shipSize - 1) / 2f;
+            Vector2f coords = convertIndextoCoords(indexFloat, field);
 
             position.x = coords.x;
             position.y -= 3;
@@ -296,8 +313,8 @@ public class PlayingField {
         if (rotation == ShipManager.EAST || rotation == ShipManager.WEST) {
             //move index so it's at center of ship instead of back
             //right if ship is facing east, left is ship is facing west
-            index.x += rotation == ShipManager.EAST ? (shipSize - 1) / 2f : -(shipSize - 1) / 2f;
-            Vector2f coords = convertIndextoCoords(index, field);
+            indexFloat.x += rotation == ShipManager.EAST ? (shipSize - 1) / 2f : -(shipSize - 1) / 2f;
+            Vector2f coords = convertIndextoCoords(indexFloat, field);
 
             position.x = coords.x - 0.5f;
             position.y -= 3;
@@ -335,17 +352,20 @@ public class PlayingField {
      * whether there was a ship or not.
      */
     private void playHitEffect(Vector2f location){
-        if (/*call logic to test if water or ship has been hit*/ true) {
-            //get index of hit ship from logic
-            int shipIndex = 0;
-            if (burningFires.containsKey(shipIndex)) { //TODO test if ship has been destroyed (size of Vector List == size of ship) Logic?
-                burningFires.get(shipIndex).add(new Vector3f(location.x, 0, location.y));
-            } else {
-                burningFires.put(shipIndex, new ArrayList<>());
-                burningFires.get(shipIndex).add(new Vector3f(location.x, 0, location.y));
-            }
-        } else //TODO water splash
-        return;
+        int shipIndex = 0;
+        Source sound = new Source(1, 10, 300);
+        sound.setPosition(location.x, 0, location.y);
+        sound.setLooping(true);
+        sound.play(fireSound);
+        if (burningFires.containsKey(shipIndex)) { //TODO test if ship has been destroyed (size of Vector List == size of ship) Logic?
+            burningFires.get(shipIndex).add(new Vector3f(location.x, 0, location.y));
+            burningFireSounds.get(shipIndex).add(sound);
+        } else {
+            burningFires.put(shipIndex, new ArrayList<>());
+            burningFires.get(shipIndex).add(new Vector3f(location.x, 0, location.y));
+            burningFireSounds.put(shipIndex, new ArrayList<>());
+            burningFireSounds.get(shipIndex).add(sound);
+        }
     }
 
     /**
@@ -371,7 +391,7 @@ public class PlayingField {
      *               y-value of the coordinates does not matter.
      * @return - The index of the cell that is at the given coordinates, or {@code null} if there is no cell at the coordinates.
      */
-    private Vector3f convertCoordsToIndex(Vector3f coords) {
+    private Vector3i convertCoordsToIndex(Vector3f coords) {
         Vector3f result = new Vector3f();
         int field;
 
@@ -389,11 +409,7 @@ public class PlayingField {
         int indexX = (int) (result.x / (scale / (size + 1)));
         int indexY = (int) (result.y / (scale / (size + 1)));
 
-        result.x = indexX;
-        result.y = indexY;
-        result.z = field;
-
-        return result;
+        return new Vector3i(indexX, indexY, field);
     }
 
     /**
@@ -409,8 +425,8 @@ public class PlayingField {
      * @param index - index of the cell that should be highlighted.
      * @param field - the field the cell that should be highlighted is on.
      */
-    private void setHighlighter(Vector2f index, int field) {
-        Vector2f coords = convertIndextoCoords(index, field);
+    private void setHighlighter(Vector2i index, int field) {
+        Vector2f coords = convertIndextoCoords(new Vector2f(index), field);
         Vector3f position = new Vector3f(coords.x, -2.51f, coords.y);
         highlighter.setPosition(position);
     }

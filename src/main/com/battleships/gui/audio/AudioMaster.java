@@ -1,10 +1,12 @@
 package com.battleships.gui.audio;
 
+import org.lwjgl.BufferUtils;
 import org.lwjgl.openal.*;
 import org.lwjgl.stb.STBVorbisInfo;
 import org.w3c.dom.stylesheets.LinkStyle;
 
 import java.nio.ByteBuffer;
+import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.nio.ShortBuffer;
 import java.util.ArrayList;
@@ -35,8 +37,15 @@ public class AudioMaster {
         AL10.alDistanceModel(AL11.AL_EXPONENT_DISTANCE_CLAMPED);
     }
 
-    public static void setListenerData(float x, float y, float z){
+    public static void setListenerData(float x, float y, float z, float pitch, float yaw){
         AL10.alListener3f(AL10.AL_POSITION, x, y, z);
+        FloatBuffer orientation = BufferUtils.createFloatBuffer(6);
+        pitch = (float)Math.toRadians(pitch);
+        yaw = (float)Math.toRadians(yaw);
+        //orientation.put(new float[] {(float) Math.sin(Math.toRadians(yaw)),-(float)Math.sin(Math.toRadians(pitch) * (float)Math.cos(Math.toRadians(yaw))),-(float)Math.cos(Math.toRadians(pitch) * (float)Math.cos(Math.toRadians(yaw))),0,1,0});
+        orientation.put(new float[] {(float) (Math.cos(pitch) * Math.sin(yaw)), (float) Math.sin(pitch), (float) (Math.cos(pitch) * Math.cos(yaw)),0,-1,0});
+        orientation.flip();
+        AL10.alListenerfv(AL10.AL_ORIENTATION, orientation);
         AL10.alListener3f(AL10.AL_VELOCITY,0,0,0);
     }
 

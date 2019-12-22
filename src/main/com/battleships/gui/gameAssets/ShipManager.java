@@ -3,13 +3,12 @@ package com.battleships.gui.gameAssets;
 import com.battleships.gui.entities.Entity;
 import com.battleships.gui.gameAssets.ingameGui.ShipCounter;
 import com.battleships.gui.gameAssets.ingameGui.ShipSelector;
+import com.battleships.gui.gameAssets.testLogic.TestLogic;
 import com.battleships.gui.models.TexturedModel;
 import com.battleships.gui.renderingEngine.Loader;
 import com.battleships.gui.renderingEngine.MasterRenderer;
 import com.battleships.logic.Ship;
-import org.joml.Vector2f;
-import org.joml.Vector3f;
-import org.joml.Vector4f;
+import org.joml.*;
 
 import java.util.ArrayList;
 import java.util.EmptyStackException;
@@ -21,14 +20,15 @@ public class ShipManager {
     private static final Vector3f RED = new Vector3f(1,0,0);
     private static final float MIXPERCENTAGE = 0.5f;
 
-    protected static final int NORTH = 0;
-    protected static final int EAST = 1;
-    protected static final int SOUTH = 2;
-    protected static final int WEST = 3;
+    public static final int NORTH = 0;
+    public static final int EAST = 1;
+    public static final int SOUTH = 2;
+    public static final int WEST = 3;
 
     private TexturedModel[] ships;
     private PlayingField ownPlayingField;
     private ShipSelector shipSelector;
+    private int gridSize;
 
     private Entity cursorShip;
     private int cursorShipSize;
@@ -39,6 +39,7 @@ public class ShipManager {
     public ShipManager(Loader loader, PlayingField ownPlayingField){
         cursorShipAttached = false;
         this.ownPlayingField = ownPlayingField;
+        gridSize = ownPlayingField.getSize();
         ships = new TexturedModel[4];
         ships[0] = (loader.loadModelFromOBJ("ship2", "ship2.tga", 10, 1));
         ships[1] = (loader.loadModelFromOBJ("ship3", "ship3.jpg", 10, 1));
@@ -46,10 +47,8 @@ public class ShipManager {
         ships[3] = (loader.loadModelFromOBJ("ship5new", "ship5.jpg", 10, 1));
     }
 
-    public int placeShip(List<Entity> entities, int size, Vector3f position, Vector3f rotation, float scale){
-        Entity toAdd = new Entity(ships[size - 2], position, rotation, scale);
-        entities.add(toAdd);
-        return entities.size() - 1;
+    public void placeShip(List<Entity> entities, int size, Vector3f position, Vector3f rotation, float scale){
+        entities.add(new Entity(ships[size - 2], position, rotation, scale));
     }
 
     public void stickShipToCursor(int shipSize) {
@@ -68,12 +67,13 @@ public class ShipManager {
             renderer.processEntity(cursorShip);
     }
 
-    public void placeCursorShip(List<Entity> entities){
+    public void placeCursorShip(){
         if(!cursorShipAttached)
             return;
         cursorShip.setAdditionalColorPercentage(0);
         shipSelector.decrementCount(cursorShipSize);
-        entities.add(new Entity(cursorShip.getModel(), new Vector3f(cursorShip.getPosition()), new Vector3f(cursorShip.getRotation()), cursorShip.getScale()));
+        GameManager.placeShip(new Vector2i(ownPlayingField.getCurrentPointedCell().x, ownPlayingField.getCurrentPointedCell().y), cursorShipSize, cursorShipDirection, PlayingField.OWNFIELD);
+        //ownPlayingField.placeShip(new Vector2i(ownPlayingField.getCurrentPointedCell().x, ownPlayingField.getCurrentPointedCell().y), cursorShipSize, cursorShipDirection);
         removeCursorShip();
     }
 
@@ -85,8 +85,13 @@ public class ShipManager {
     public void moveCursorShip(){
         if(!cursorShipAttached)
             return;
-        Vector3f currentCell = ownPlayingField.getCurrentPointedCell();
-        if(true) { //TODO get if ship is allowed to be placed at currentCell)
+        Vector3i currentCell = ownPlayingField.getCurrentPointedCell();
+        if(currentCell == null || currentCell.z == PlayingField.OPPONENTFIELD) {
+            cursorShipOnGrid = false;
+            return;
+        }
+        //if(TestLogic.own.canShipBePlaced(currentCell.x, currentCell.y, cursorShipSize, cursorShipDirection)) { //TODO get if ship is allowed to be placed at currentCell)
+        if(true){
             cursorShip.setAdditionalColor(GREEN);
             cursorShip.setAdditionalColorPercentage(MIXPERCENTAGE);
         }
@@ -94,12 +99,8 @@ public class ShipManager {
             cursorShip.setAdditionalColor(RED);
             cursorShip.setAdditionalColorPercentage(MIXPERCENTAGE);
         }
-        if(currentCell == null || (int) currentCell.z == PlayingField.OPPONENTFIELD) {
-            cursorShipOnGrid = false;
-            return;
-        }
         cursorShipOnGrid = true;
-        cursorShip.setPosition(ownPlayingField.calculateShipPosition(PlayingField.OWNFIELD, new Vector2f(currentCell.x, currentCell.y), cursorShipSize, cursorShipDirection));
+        cursorShip.setPosition(ownPlayingField.calculateShipPosition(PlayingField.OWNFIELD, new Vector2i(currentCell.x, currentCell.y), cursorShipSize, cursorShipDirection));
     }
 
     public void rotateShip(){
@@ -112,5 +113,13 @@ public class ShipManager {
 
     public void setShipSelector(ShipSelector shipSelector) {
         this.shipSelector = shipSelector;
+    }
+
+    /**
+     *
+     * @return - size of the playingField this ShipManager belongs to.
+     */
+    public int getGridSize() {
+        return gridSize;
     }
 }

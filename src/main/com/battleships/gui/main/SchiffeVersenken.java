@@ -14,6 +14,7 @@ import com.battleships.gui.gameAssets.ShipManager;
 import com.battleships.gui.gameAssets.ingameGui.DisableSymbols;
 import com.battleships.gui.gameAssets.ingameGui.ShipCounter;
 import com.battleships.gui.gameAssets.ingameGui.ShipSelector;
+import com.battleships.gui.gameAssets.testLogic.TestLogic;
 import com.battleships.gui.guis.GuiClickCallback;
 import com.battleships.gui.guis.GuiManager;
 import com.battleships.gui.guis.GuiRenderer;
@@ -38,6 +39,7 @@ import org.joml.Vector4f;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL30;
+import org.lwjgl.util.tinyfd.TinyFileDialogs;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -60,6 +62,9 @@ public class SchiffeVersenken {
         TextMaster.init(loader);
         GuiManager guiManager = new GuiManager(gameManager);
         AudioMaster.init();
+        TestLogic.init(20);
+
+        TinyFileDialogs.tinyfd_inputBox("test", "test", null);
 
 
         // *******************GUI initialization*******************
@@ -144,8 +149,6 @@ public class SchiffeVersenken {
         ShipManager ships = playingField.getShipManager();
         ShipSelector shipSelector = new ShipSelector(loader, guiManager, ships, guis);
 //        ShipManager ships = new ShipManager(loader);
-        playingField.placeShip( 0, new Vector2f(15,15),4, 0);
-        playingField.placeShip(0, new Vector2f(3,3),3, 1);
         Vector3f cellIntersection;
         Vector3f pointedCell;
 //        playingField.placeShip(entities, ships, 0, 7,2);
@@ -187,8 +190,6 @@ public class SchiffeVersenken {
 
         // *******************Audio initialization*******************
 
-        AudioMaster.setListenerData(0,0,0);
-
         int buffer = AudioMaster.loadSound("fire");
         Source source = new Source(1,1,50);
 
@@ -203,7 +204,7 @@ public class SchiffeVersenken {
             camera.move(window, terrain);
             picker.update();
             ParticleMaster.update(camera);
-            AudioMaster.setListenerData(camera.getPosition().x, camera.getPosition().y, camera.getPosition().z);
+            AudioMaster.setListenerData(camera.getPosition().x, camera.getPosition().y, camera.getPosition().z, camera.getPitch(), camera.getYaw());
 
             Vector3f terrainPoint = picker.getCurrentTerrainPoint();
             if(terrainPoint != null) {

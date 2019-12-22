@@ -291,9 +291,6 @@ public class Inits {
         ships = playingField.getShipManager();
         shipSelector = new ShipSelector(loader, guiManager, ships, permanentGuiElements);
 //        ShipManager ships = new ShipManager(loader);
-        playingField.placeShip( 0, new Vector2f(15,15),4, 0);
-        playingField.placeShip(0, new Vector2f(3,3),3, 1);
-        playingField.shoot(1, new Vector2f(15,15));
 //        playingField.placeShip(entities, ships, 0, 7,2);
 //        playingField.placeShip(entities, ships, 0, 9,3);
 //        playingField.placeShip(entities, ships, 0, 11,5);

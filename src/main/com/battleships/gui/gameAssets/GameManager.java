@@ -4,6 +4,7 @@ import com.battleships.gui.fontMeshCreator.FontType;
 import com.battleships.gui.fontMeshCreator.GUIText;
 import com.battleships.gui.gameAssets.ingameGui.DisableSymbols;
 import com.battleships.gui.gameAssets.ingameGui.ShipCounter;
+import com.battleships.gui.gameAssets.testLogic.TestLogic;
 import com.battleships.gui.guis.GuiClickCallback;
 import com.battleships.gui.guis.GuiManager;
 import com.battleships.gui.guis.GuiTexture;
@@ -12,7 +13,9 @@ import com.battleships.gui.toolbox.MousePicker;
 import com.battleships.gui.toolbox.ParallelTasks;
 import com.battleships.gui.window.WindowManager;
 import org.joml.Vector2f;
+import org.joml.Vector2i;
 import org.joml.Vector3f;
+import org.joml.Vector3i;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWKeyCallback;
@@ -27,15 +30,25 @@ public class GameManager {
 
     private static FontType pirateFont;
 
-    private GuiManager guiManager;
-    private PlayingField playingField;
-    private MousePicker mousePicker;
-    private ShipManager shipManager;
-    private ShipCounter shipCounter;
-    private DisableSymbols disableSymbols;
+    private static GuiManager guiManager;
+    private static PlayingField playingField;
+    private static MousePicker mousePicker;
+    private static ShipManager shipManager;
+    private static ShipCounter shipCounter;
+    private static DisableSymbols disableSymbols;
 
     public GameManager(Loader loader) {
         pirateFont = new FontType(loader.loadFontTexture("font/pirate.png"), "pirate");
+    }
+
+    public static void placeShip(Vector2i index, int size, int direction, int field){
+        if(field == PlayingField.OPPONENTFIELD) {
+            //TestLogic.opponent.placeShip(index.x, index.y, size, direction);
+        }
+        if(field == PlayingField.OWNFIELD){
+            playingField.placeShip(index, size, direction);
+            //TestLogic.own.placeShip(index.x, index.y, size, direction);
+        }
     }
 
     /**
@@ -43,7 +56,7 @@ public class GameManager {
      * @param originField - Field the shot originates from (0 for own, 1 for opponent).
      * @param destinationIndex - Index of the field that should get shot.
      */
-    public void shoot(int originField, Vector2f destinationIndex){
+    public static void shoot(int originField, Vector2i destinationIndex){
         playingField.shoot(originField, destinationIndex);
     }
 
@@ -53,7 +66,7 @@ public class GameManager {
      * @param index - Index where the marker should be placed.
      * @param field - Field the marker should be placed on (0 for own, 1 for opponent).
      */
-    public void placeMarker(boolean shipHit, Vector2f index, int field){
+    public static void placeMarker(boolean shipHit, Vector2i index, int field){
         playingField.placeMarker(shipHit, index, field);
     }
 
@@ -61,7 +74,7 @@ public class GameManager {
      * Finishes the game and shows endscreen.
      * @param won - {@code true} if the player has won, {@code false} else.
      */
-    public void finishGame(boolean won){
+    public static void finishGame(boolean won){
         //TODO
     }
 
@@ -69,7 +82,7 @@ public class GameManager {
      * Decrement the count, that keeps track of how many enemy ships of each size are alive.
      * @param size - Size of ship the count should be decremented for.
      */
-    public void decrementAliveShip(int size){
+    public static void decrementAliveShip(int size){
         shipCounter.decrementCount(size);
     }
 
@@ -102,9 +115,9 @@ public class GameManager {
                     return;
 
                 Vector3f cellIntersection = mousePicker.getCurrentIntersectionPoint();
-                Vector3f pointedCell = playingField.calculatePointedCell(cellIntersection);
+                Vector3i pointedCell = playingField.calculatePointedCell(cellIntersection);
                 if (pointedCell != null) {
-                    playingField.cellClicked(new Vector2f(pointedCell.x, pointedCell.y), (int) pointedCell.z);
+                    playingField.cellClicked(new Vector2i(pointedCell.x, pointedCell.y), pointedCell.z);
                 }
             }
         }
@@ -126,7 +139,7 @@ public class GameManager {
         }
     };
 
-    public void toggleAnimations() {
+    public static void toggleAnimations() {
         disableSymbols.toggleSymbol(DisableSymbols.ANIMATION);
         playingField.toggleShootingAnimation();
     }
@@ -135,24 +148,24 @@ public class GameManager {
         return pirateFont;
     }
 
-    public void setGuiManager(GuiManager guiManager) {
-        this.guiManager = guiManager;
+    public static void setGuiManager(GuiManager guiManager2) {
+        guiManager = guiManager2;
     }
 
-    public void setPlayingField(PlayingField playingField) {
-        this.playingField = playingField;
+    public static void setPlayingField(PlayingField playingField2) {
+        playingField = playingField2;
         shipManager = playingField.getShipManager();
     }
 
-    public void setMousePicker(MousePicker mousePicker) {
-        this.mousePicker = mousePicker;
+    public static void setMousePicker(MousePicker mousePicker2) {
+        mousePicker = mousePicker2;
     }
 
-    public void setShipCounter(ShipCounter shipCounter) {
-        this.shipCounter = shipCounter;
+    public static void setShipCounter(ShipCounter shipCounter2) {
+        shipCounter = shipCounter2;
     }
 
-    public void setDisableSymbols(DisableSymbols disableSymbols) {
-        this.disableSymbols = disableSymbols;
+    public static void setDisableSymbols(DisableSymbols disableSymbols2) {
+        disableSymbols = disableSymbols2;
     }
 }

@@ -5,6 +5,7 @@ import com.battleships.gui.fontMeshCreator.GUIText;
 import com.battleships.gui.fontRendering.TextMaster;
 import com.battleships.gui.gameAssets.GameManager;
 import com.battleships.gui.gameAssets.ShipManager;
+import com.battleships.gui.gameAssets.testLogic.TestLogic;
 import com.battleships.gui.guis.GuiClickCallback;
 import com.battleships.gui.guis.GuiManager;
 import com.battleships.gui.guis.GuiTexture;
@@ -22,7 +23,7 @@ public class ShipSelector extends GuiClickCallback {
 
     private GuiTexture[] buttons = new GuiTexture[4];
     private List<GUIText> shipCountTexts = new ArrayList<>();
-    private int[] shipCounts = new int[4];
+    private int[] shipCounts;
     private int buttonNumber;
     private ShipManager shipManager;
 
@@ -62,11 +63,11 @@ public class ShipSelector extends GuiClickCallback {
         guiManager.createClickableGui(ship3, () -> this);
         guiManager.createClickableGui(ship4, () -> this);
 
-        //TODO get ship counts from logic
-        shipCounts[0] = 10;
-        shipCounts[1] = 10;
-        shipCounts[2] = 10;
-        shipCounts[3] = 10;
+        shipCounts = TestLogic.getShipAmounts(shipManager.getGridSize());
+        if(shipCounts == null){
+            System.err.println("Something went wrong calculating the ship amounts!");
+            return;
+        }
         for(int i = 0; i < 4; i++)
             shipCountTexts.add(new GUIText(shipCounts[i] + " Left", 2, GameManager.getPirateFont(), new Vector2f(buttons[i].getPositions().x, buttons[i].getPositions().y + buttons[i].getScale().y / 2 + 0.05f), buttons[i].getScale().x, true, BLACK, 0, 0.1f,BLACK, OUTLINEOFFSET));
 }
