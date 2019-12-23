@@ -1,15 +1,16 @@
 package com.battleships.gui.main;
 
 import com.battleships.gui.fontRendering.TextMaster;
+import com.battleships.gui.gameAssets.MainMenuGui.SingleplayerMenu;
 import com.battleships.gui.particles.ParticleMaster;
 import com.battleships.gui.postProcessing.PostProcessing;
 import com.battleships.gui.window.WindowManager;
-import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL30;
+
 
 public class MenuTest {
 
@@ -19,7 +20,8 @@ public class MenuTest {
         // ****************************************************
         // *******************Main Game Loop*******************
         // ****************************************************
-
+        //String s = TinyFileDialogs.tinyfd_inputBox("test", "test","");
+        SingleplayerMenu s = new SingleplayerMenu(inits.getGuiManager(),inits.getLoader());
         while (!GLFW.glfwWindowShouldClose(Inits.getWindow())){
 //            picker.update();
             if(Inits.getGlobalGameState() == 0) {
@@ -29,6 +31,10 @@ public class MenuTest {
                 GL11.glDisable(GL30.GL_CLIP_DISTANCE0); //not all drivers support disabling, if it doesn't work set clipPlane when rendering to screen high enough so nothing gets clipped
 
 //            new Particle(star, new Vector3f(camera.getPosition().x , camera.getPosition().y, camera.getPosition().z), new Vector3f(0, 30, 0), 1 ,4 ,0 ,1);
+
+                if (s.getSlider().isRunning()){
+                    s.RefreshSliderValue();
+                }
 
                 inits.getGuiRenderer().render(inits.getPermanentGuiElements());
                 inits.getGuiManager().renderClickableGuis(inits.getGuiRenderer());

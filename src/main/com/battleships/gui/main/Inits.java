@@ -48,7 +48,7 @@ public class Inits {
     private Fbo fbo;
 
     private GuiManager guiManager;
-    private List<GuiTexture> permanentGuiElements;
+    private static List<GuiTexture> permanentGuiElements;
     private MainMenu startMenu;
     private GuiRenderer guiRenderer;
 
@@ -101,7 +101,7 @@ public class Inits {
         return guiManager;
     }
 
-    public List<GuiTexture> getPermanentGuiElements() {
+    public static List<GuiTexture> getPermanentGuiElements() {
         return permanentGuiElements;
     }
 
@@ -226,7 +226,7 @@ public class Inits {
         guiManager = new GuiManager(gameManager);
         permanentGuiElements = new ArrayList<>();
 
-        startMenu = new MainMenu(guiManager,loader);
+        //startMenu = new MainMenu(guiManager,loader);
         guiRenderer = new GuiRenderer(loader);
 
         // *******************Post Processing initialization*******************

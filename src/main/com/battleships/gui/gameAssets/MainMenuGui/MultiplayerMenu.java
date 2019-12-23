@@ -6,6 +6,7 @@ import com.battleships.gui.guis.GuiManager;
 import com.battleships.gui.guis.GuiTexture;
 import com.battleships.gui.renderingEngine.Loader;
 import org.joml.Vector2f;
+import org.lwjgl.util.tinyfd.TinyFileDialogs;
 
 public class MultiplayerMenu extends MainMenuButton {
         public MultiplayerMenu(GuiManager guiManager, Loader loader){
@@ -50,10 +51,12 @@ public class MultiplayerMenu extends MainMenuButton {
     protected void clickAction() {
         System.out.println(buttonClicked);
         if (super.buttonClicked == 0){
-            //TODO Adding ip thingi
+            //TODO Adding host game creation
+
         }
         if (super.buttonClicked == 1){
-            //TODO Adding host game creation
+            String ip = TinyFileDialogs.tinyfd_inputBox("Connect", "Enter ip Address", "");
+            //TODO Adding ip thingi
         }
         if (super.buttonClicked == 2) {
             new PlayMenu(guiManager,loader);

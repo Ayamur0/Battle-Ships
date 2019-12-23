@@ -37,7 +37,7 @@ public abstract class MainMenuButton extends GuiClickCallback {
         this.texture = loader.loadTexture("WoodButton.png");
         this.outlineColor = new Vector3f(1.0f, 0.0f, 0.0f);
 
-        this.buttonSize = new Vector2f(0.14f, 0.07f);
+        this.buttonSize = new Vector2f(0.16f, 0.12f);
         this.standardButtonPos = new Vector2f(0.5f, 0.4f);
         this.buttonGap = 0.15f;
     }
