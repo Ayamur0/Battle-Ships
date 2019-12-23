@@ -21,6 +21,9 @@ public class Slider extends GuiClickCallback implements Runnable{
 
     private float mousePosX;
 
+    private List<GuiTexture> guis;
+    private GuiManager guiManager;
+
     private boolean running;
 
     /**
@@ -45,6 +48,8 @@ public class Slider extends GuiClickCallback implements Runnable{
         setToValue(defaultValue);
         guis.add(slider);
         guis.add(bar);
+        this.guis = guis;
+        this.guiManager = guiManager;
         guiManager.createClickableGui(slider, () -> this);
     }
 
@@ -134,5 +139,13 @@ public class Slider extends GuiClickCallback implements Runnable{
      */
     public boolean isRunning() {
         return running;
+    }
+
+    /**
+     *
+     * @return - Removes the guiTextures of this slider from guis List and removes clickFunction of slider in the guiManager.
+     */
+    public boolean remove(){
+        return guis.remove(bar) && guis.remove(slider) && guiManager.removeClickableGui(slider);
     }
 }
