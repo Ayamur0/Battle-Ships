@@ -3,16 +3,19 @@ package com.battleships.gui.gameAssets;
 import com.battleships.gui.entities.Camera;
 import com.battleships.gui.fontMeshCreator.FontType;
 import com.battleships.gui.fontMeshCreator.GUIText;
+import com.battleships.gui.gameAssets.MainMenuGui.ESCMenu;
 import com.battleships.gui.gameAssets.ingameGui.DisableSymbols;
 import com.battleships.gui.gameAssets.ingameGui.ShipCounter;
 import com.battleships.gui.gameAssets.testLogic.TestLogic;
 import com.battleships.gui.guis.GuiClickCallback;
 import com.battleships.gui.guis.GuiManager;
 import com.battleships.gui.guis.GuiTexture;
+import com.battleships.gui.main.Inits;
 import com.battleships.gui.renderingEngine.Loader;
 import com.battleships.gui.toolbox.MousePicker;
 import com.battleships.gui.toolbox.ParallelTasks;
 import com.battleships.gui.window.WindowManager;
+import com.sun.org.apache.xml.internal.security.Init;
 import org.joml.Vector2f;
 import org.joml.Vector2i;
 import org.joml.Vector3f;
@@ -140,6 +143,8 @@ public class GameManager {
             }
             if(key == GLFW.GLFW_KEY_T && action == GLFW.GLFW_PRESS)
                 camera.turnCamera();
+            if(key == GLFW.GLFW_KEY_ESCAPE && action == GLFW.GLFW_PRESS)
+                Inits.setStartMenu(new ESCMenu(guiManager,Inits.getLoader()));
         }
     };
 

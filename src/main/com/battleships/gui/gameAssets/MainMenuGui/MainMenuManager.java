@@ -27,7 +27,6 @@ public class MainMenuManager {
 
             if(action != GLFW.GLFW_PRESS || button != GLFW.GLFW_MOUSE_BUTTON_1)
                 return;
-
             GLFW.glfwGetCursorPos(window, x, y);
             x.rewind();
             y.rewind();

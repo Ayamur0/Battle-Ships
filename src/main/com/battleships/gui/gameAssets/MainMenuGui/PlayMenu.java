@@ -8,7 +8,7 @@ import com.battleships.gui.main.Inits;
 import com.battleships.gui.renderingEngine.Loader;
 import org.joml.Vector2f;
 
-public class PlayMenu extends MainMenuButton {
+public class PlayMenu extends Menu {
 
     public PlayMenu(GuiManager guiManager, Loader loader) {
         super(guiManager, loader);
@@ -62,7 +62,7 @@ public class PlayMenu extends MainMenuButton {
             //TODO open ai vs ai Settings
         }
         if(buttonClicked == 1){
-            Inits.setStartMenu(new SingleplayerMenu(guiManager,loader));
+            Inits.setStartMenu(new InGameSettingsMenu(guiManager,loader,0));
         }
         if (super.buttonClicked == 2){
             Inits.setStartMenu(new MultiplayerMenu(guiManager,loader));

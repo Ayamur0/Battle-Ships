@@ -5,7 +5,7 @@ import com.battleships.gui.entities.Entity;
 import com.battleships.gui.entities.Light;
 import com.battleships.gui.fontRendering.TextMaster;
 import com.battleships.gui.gameAssets.GameManager;
-import com.battleships.gui.gameAssets.MainMenuGui.MainMenuButton;
+import com.battleships.gui.gameAssets.MainMenuGui.Menu;
 import com.battleships.gui.gameAssets.MainMenuGui.MainMenuManager;
 import com.battleships.gui.gameAssets.MainMenuGui.MainMenu;
 import com.battleships.gui.gameAssets.PlayingField;
@@ -30,7 +30,6 @@ import com.battleships.gui.water.WaterRenderer;
 import com.battleships.gui.water.WaterShader;
 import com.battleships.gui.water.WaterTile;
 import com.battleships.gui.window.WindowManager;
-import org.joml.Vector2f;
 import org.joml.Vector3f;
 
 import java.util.ArrayList;
@@ -44,18 +43,18 @@ public class Inits {
     private boolean menuInitDone;
     private boolean gameInitDone;
 
-    private Loader loader;
+    private static Loader loader = new Loader();
     private MasterRenderer renderer;
     private Fbo fbo;
 
     private GuiManager guiManager;
     private static List<GuiTexture> permanentGuiElements;
 
-    public static void setStartMenu(MainMenuButton startMenu) {
+    public static void setStartMenu(Menu startMenu) {
         Inits.startMenu = startMenu;
     }
 
-    private static MainMenuButton startMenu;
+    private static Menu startMenu;
     private GuiRenderer guiRenderer;
 
 
@@ -91,7 +90,7 @@ public class Inits {
 
     private MousePicker picker;
 
-    public Loader getLoader() {
+    public static Loader getLoader() {
         return loader;
     }
 
@@ -111,7 +110,7 @@ public class Inits {
         return permanentGuiElements;
     }
 
-    public static MainMenuButton getStartMenu() {
+    public static Menu getStartMenu() {
         return startMenu;
     }
 

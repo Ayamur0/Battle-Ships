@@ -9,7 +9,7 @@ import com.battleships.gui.renderingEngine.Loader;
 import org.joml.Vector2f;
 import org.lwjgl.util.tinyfd.TinyFileDialogs;
 
-public class MultiplayerMenu extends MainMenuButton {
+public class MultiplayerMenu extends Menu {
         public MultiplayerMenu(GuiManager guiManager, Loader loader){
         super(guiManager, loader);
 
@@ -52,6 +52,8 @@ public class MultiplayerMenu extends MainMenuButton {
     protected void clickAction() {
         System.out.println(buttonClicked);
         if (super.buttonClicked == 0){
+            //TODO Set mode to multiplayer
+            Inits.setStartMenu(new InGameSettingsMenu(super.guiManager,super.loader,1));
             //TODO Adding host game creation
 
         }

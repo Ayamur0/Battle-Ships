@@ -13,7 +13,7 @@ import org.joml.Vector3f;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class MainMenuButton extends GuiClickCallback {
+public abstract class Menu extends GuiClickCallback {
     protected Vector2f buttonSize;
     protected Vector2f standardButtonPos;
     protected Float buttonGap;
@@ -30,7 +30,7 @@ public abstract class MainMenuButton extends GuiClickCallback {
 
     protected int buttonClicked;
 
-    public MainMenuButton(GuiManager guiManager, Loader loader) {
+    public Menu(GuiManager guiManager, Loader loader) {
         this.guiManager = guiManager;
         this.loader = loader;
         this.font = new FontType(loader.loadFontTexture("font/pirate.png"), "pirate");

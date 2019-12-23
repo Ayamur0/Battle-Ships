@@ -7,13 +7,12 @@ import com.battleships.gui.guis.GuiTexture;
 import com.battleships.gui.main.Inits;
 import com.battleships.gui.renderingEngine.Loader;
 import com.battleships.gui.window.WindowManager;
-import javafx.stage.FileChooser;
 import org.joml.Vector2f;
 import org.lwjgl.glfw.GLFW;
 
 import javax.swing.*;
 
-public class MainMenu extends MainMenuButton {
+public class MainMenu extends Menu {
 
     JFileChooser fc;
 

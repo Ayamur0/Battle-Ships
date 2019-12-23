@@ -10,14 +10,11 @@ import com.battleships.gui.window.WindowManager;
 import org.joml.Vector2f;
 import org.lwjgl.glfw.GLFW;
 
-public class ESCMenu extends MainMenuButton {
+public class ESCMenu extends Menu {
     public ESCMenu(GuiManager guiManager, Loader loader) {
         super(guiManager, loader);
 
-
         guiManager.clearClickableGuis();
-
-        TextMaster.clear();
 
         this.createMenu();
 
@@ -33,8 +30,8 @@ public class ESCMenu extends MainMenuButton {
 
         super.guiTexts.add(new GUIText("Save", 3, font, new Vector2f(buttons.get(0).getPositions().x,buttons.get(0).getPositions().y), 0.12f, true,outlineColor, 0.0f, 0.1f,outlineColor, new Vector2f()));
         super.guiTexts.add(new GUIText("Resume", 3, font,new Vector2f(buttons.get(1).getPositions().x,buttons.get(1).getPositions().y), 0.12f, true,outlineColor, 0.0f, 0.1f,outlineColor, new Vector2f()));
-        super.guiTexts.add(new GUIText("Back to Main Menu", 3, font,new Vector2f(buttons.get(2).getPositions().x,buttons.get(2).getPositions().y), 0.12f, true,outlineColor, 0.0f, 0.1f,outlineColor, new Vector2f()));
-        super.guiTexts.add(new GUIText("Exit to Desktop", 3, font,new Vector2f(buttons.get(3).getPositions().x,buttons.get(3).getPositions().y), 0.12f, true,outlineColor, 0.0f, 0.1f,outlineColor, new Vector2f()));
+        super.guiTexts.add(new GUIText("Back", 3, font,new Vector2f(buttons.get(2).getPositions().x,buttons.get(2).getPositions().y), 0.12f, true,outlineColor, 0.0f, 0.1f,outlineColor, new Vector2f()));
+        super.guiTexts.add(new GUIText("Exit", 3, font,new Vector2f(buttons.get(3).getPositions().x,buttons.get(3).getPositions().y), 0.12f, true,outlineColor, 0.0f, 0.1f,outlineColor, new Vector2f()));
 
         super.createClickable();
     }
@@ -69,7 +66,10 @@ public class ESCMenu extends MainMenuButton {
         }
         if(buttonClicked == 1){
             guiManager.clearClickableGuis();
-            TextMaster.clear();
+            for(int i =0; i < super.buttons.size(); i++){
+                super.guiTexts.get(i).remove();
+                TextMaster.removeText(super.guiTexts.get(i));
+            }
             //TODO check with tim
         }
         if (super.buttonClicked == 2){

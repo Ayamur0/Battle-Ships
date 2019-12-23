@@ -148,4 +148,12 @@ public class Slider extends GuiClickCallback implements Runnable{
     public boolean remove(){
         return guis.remove(bar) && guis.remove(slider) && guiManager.removeClickableGui(slider);
     }
+
+    /**
+     *
+     * @return - Returns screen coordinates of the slider.
+     */
+    public Vector2f getPositions(){
+        return bar.getPositions();
+    }
 }

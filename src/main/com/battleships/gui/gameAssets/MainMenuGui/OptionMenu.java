@@ -8,7 +8,7 @@ import com.battleships.gui.main.Inits;
 import com.battleships.gui.renderingEngine.Loader;
 import org.joml.Vector2f;
 
-public class OptionMenu extends MainMenuButton {
+public class OptionMenu extends Menu {
     public OptionMenu(GuiManager guiManager, Loader loader) {
         super(guiManager, loader);
 
