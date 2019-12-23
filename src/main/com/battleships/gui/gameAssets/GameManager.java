@@ -1,5 +1,6 @@
 package com.battleships.gui.gameAssets;
 
+import com.battleships.gui.entities.Camera;
 import com.battleships.gui.fontMeshCreator.FontType;
 import com.battleships.gui.fontMeshCreator.GUIText;
 import com.battleships.gui.gameAssets.ingameGui.DisableSymbols;
@@ -36,6 +37,7 @@ public class GameManager {
     private static ShipManager shipManager;
     private static ShipCounter shipCounter;
     private static DisableSymbols disableSymbols;
+    private static Camera camera;
 
     public GameManager(Loader loader) {
         pirateFont = new FontType(loader.loadFontTexture("font/pirate.png"), "pirate");
@@ -130,12 +132,14 @@ public class GameManager {
                 WindowManager.setFullScreen(!WindowManager.isFullscreen());
             if(key == GLFW.GLFW_KEY_F && action == GLFW.GLFW_PRESS)
                 playingField.swapShipPlacingPhase();
-            if(GLFW.glfwGetKey(window, GLFW.GLFW_KEY_R) == GLFW.GLFW_PRESS){
+            if(key == GLFW.GLFW_KEY_R && action == GLFW.GLFW_PRESS){
                 shipManager.rotateShip();
             }
-            if(GLFW.glfwGetKey(window, GLFW.GLFW_KEY_X) == GLFW.GLFW_PRESS){
+            if(key == GLFW.GLFW_KEY_X && action == GLFW.GLFW_PRESS){
                 toggleAnimations();
             }
+            if(key == GLFW.GLFW_KEY_T && action == GLFW.GLFW_PRESS)
+                camera.turnCamera();
         }
     };
 
@@ -146,6 +150,10 @@ public class GameManager {
 
     public static FontType getPirateFont() {
         return pirateFont;
+    }
+
+    public static PlayingField getPlayingField() {
+        return playingField;
     }
 
     public static void setGuiManager(GuiManager guiManager2) {
@@ -167,5 +175,9 @@ public class GameManager {
 
     public static void setDisableSymbols(DisableSymbols disableSymbols2) {
         disableSymbols = disableSymbols2;
+    }
+
+    public static void setCamera(Camera camera) {
+        GameManager.camera = camera;
     }
 }

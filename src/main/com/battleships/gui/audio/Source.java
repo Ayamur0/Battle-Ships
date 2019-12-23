@@ -11,6 +11,7 @@ public class Source {
         AL10.alSourcef(sourceId, AL10.AL_ROLLOFF_FACTOR, rolloff);
         AL10.alSourcef(sourceId, AL10.AL_REFERENCE_DISTANCE, referenceDist);
         AL10.alSourcef(sourceId, AL10.AL_MAX_DISTANCE, maxDist);
+        setVolume(AudioMaster.getSFXVolume());
         AudioMaster.addSource(this);
     }
 

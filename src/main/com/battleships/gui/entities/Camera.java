@@ -1,5 +1,7 @@
 package com.battleships.gui.entities;
 
+import com.battleships.gui.gameAssets.GameManager;
+import com.battleships.gui.gameAssets.PlayingField;
 import com.battleships.gui.terrains.Terrain;
 import com.battleships.gui.window.WindowManager;
 import org.joml.Vector3f;
@@ -24,7 +26,16 @@ public class Camera {
     private float currentSidewaysSpeed;
     private float currentUpwardsSpeed;
 
+    private boolean turned;
+    private float originX;
+    private float originZ;
+    private float radius;
+
     private boolean mouseLocked = false;
+
+    public Camera() {
+        GameManager.setCamera(this);
+    }
 
     public GLFWScrollCallback scrollCallback = new GLFWScrollCallback(){
         @Override
@@ -68,6 +79,9 @@ public class Camera {
         currentSidewaysSpeed = 0;
         currentUpwardsSpeed = 0;
         zoom = 0;
+
+        position.x = originX + (float)Math.cos(Math.toRadians(yaw + 90))*radius;
+        position.z = originZ + (float)Math.sin(Math.toRadians(yaw + 90))*radius;
 
         //don't allow to get under terrain
         float terrainHeight = terrain.getHeightOfTerrain(position.x, position.z);
@@ -147,6 +161,25 @@ public class Camera {
             GLFW.glfwSetInputMode(window, GLFW.GLFW_CURSOR, GLFW.GLFW_CURSOR_NORMAL);
             mouseLocked = false;
         }
+    }
+
+    public void setStandardPos(){
+            radius = Math.abs(350 * ((float)GameManager.getPlayingField().getSize() + 1) / PlayingField.getMAXSIZE() - Math.abs(GameManager.getPlayingField().getOwn().getPosition().z));
+            originZ = GameManager.getPlayingField().getOwn().getPosition().z;
+            originX = position.x = (GameManager.getPlayingField().getOwn().getPosition().x + GameManager.getPlayingField().getOpponent().getPosition().x) / 2f;
+            position.y = 255f * ((float)GameManager.getPlayingField().getSize() + 1) / PlayingField.getMAXSIZE();
+            position.z = -350 + 0.5f * -350f * (1 - ((float)GameManager.getPlayingField().getSize() + 1) / PlayingField.getMAXSIZE());
+            pitch = 70;
+            yaw = 0;
+    }
+
+    public void turnCamera(){
+            if(turned)
+                position.z += 2 * Math.abs(350 * ((float)GameManager.getPlayingField().getSize() + 1) / PlayingField.getMAXSIZE() - Math.abs(GameManager.getPlayingField().getOwn().getPosition().z));
+            else
+                position.z -= 2 * Math.abs(350 * ((float)GameManager.getPlayingField().getSize() + 1) / PlayingField.getMAXSIZE() - Math.abs(GameManager.getPlayingField().getOwn().getPosition().z));
+            turned = !turned;
+            yaw -= 180;
     }
 
     public void invertPitch(){

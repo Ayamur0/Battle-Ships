@@ -17,6 +17,8 @@ public class AudioMaster {
     private static long device;
     private static long context;
 
+    private static float SFXVolume;
+
     private static List<Integer> buffers = new ArrayList<>();
     private static List<Source> sources = new ArrayList<>();
 
@@ -56,6 +58,17 @@ public class AudioMaster {
         AL10.alBufferData(buffer, waveFile.format, waveFile.data, waveFile.samplerate);
         waveFile.dispose();
         return buffer;
+    }
+
+    public static void changeVolume(float volume){
+        SFXVolume = volume;
+        for(Source s : sources){
+            s.setVolume(volume);
+        }
+    }
+
+    public static float getSFXVolume() {
+        return SFXVolume;
     }
 
     public static void addSource(Source source){

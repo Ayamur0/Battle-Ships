@@ -143,7 +143,7 @@ public class SchiffeVersenken {
 
         entities.add(ship);
 
-        PlayingField playingField =  new PlayingField(20, loader, gameManager);
+        PlayingField playingField =  new PlayingField(30, loader, gameManager);
         ShipManager ships = playingField.getShipManager();
         ShipSelector shipSelector = new ShipSelector(loader, guiManager, ships, guis);
 //        ShipManager ships = new ShipManager(loader);
@@ -159,7 +159,7 @@ public class SchiffeVersenken {
         WaterShader waterShader = new WaterShader();
         WaterRenderer waterRenderer = new WaterRenderer(loader, waterShader, MasterRenderer.getProjectionMatrix(), waterFbos);
         List<WaterTile> waterTiles = new ArrayList<>();
-        waterTiles.add(new WaterTile(400, -400, -3));
+        waterTiles.add(new WaterTile(500, -500, -3));
 
 
         // *******************Particle initialization*******************
@@ -193,13 +193,14 @@ public class SchiffeVersenken {
 
         source.setLooping(true);
         source.play(buffer);
-
+        camera.setStandardPos();
         // ****************************************************
         // *******************Main Game Loop*******************
         // ****************************************************
 
         while (!GLFW.glfwWindowShouldClose(window)){
             camera.move(window, terrain);
+            System.out.println("x: " + camera.getPosition().x + " y: " + camera.getPosition().y + " z: " + camera.getPosition().z + " pitch: " + camera.getPitch() + " yaw: " + camera.getYaw());
             picker.update();
             ParticleMaster.update(camera);
             AudioMaster.setListenerData(camera.getPosition().x, camera.getPosition().y, camera.getPosition().z, camera.getPitch(), camera.getYaw());

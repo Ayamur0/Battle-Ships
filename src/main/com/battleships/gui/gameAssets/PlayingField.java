@@ -441,10 +441,10 @@ public class PlayingField {
         this.size = size;
         this.rotation = new Vector3f();
         this.texture = new ModelTexture(loader.loadTexture(playingfieldTexturePath));
-        texture.setNumberOfRows(31f / (size + 1));
-        scale *= (size + 1) / 31f;
+        texture.setNumberOfRows((float)MAXSIZE / (size + 1));
+        scale *= (size + 1) / (float)MAXSIZE;
         this.ownPosition = new Vector3f(350, -2.5f, -450);
-        this.opponentPosition = new Vector3f(650, -2.5f, -450);
+        this.opponentPosition = new Vector3f(350 + scale + 5, -2.5f, -450);
         this.textureOffset = (size + 1) / MAXSIZE;
         this.own = new Entity(new TexturedModel(loader.loadToVAO(VERTICES, TEXTURECOORDS, NORMALS, INDICES), texture), 0, ownPosition, new Vector3f(), scale);
         own.getRotation().x -= 90;
@@ -484,6 +484,30 @@ public class PlayingField {
         fire.setSpeedError(0.15f);
         fire.randomizeRotation();
         fire.setDirection(new Vector3f(0.1f, 1, 0.1f), -0.15f);
+    }
+
+    /**
+     *
+     * @return - Entity for the gird of the player.
+     */
+    public Entity getOwn() {
+        return own;
+    }
+
+    /**
+     *
+     * @return - Entity for the grid of the opponent.
+     */
+    public Entity getOpponent() {
+        return opponent;
+    }
+
+    /**
+     *
+     * @return - Maximum Size of one grid (including one row / column for labels)
+     */
+    public static int getMAXSIZE() {
+        return MAXSIZE;
     }
 
     /**
