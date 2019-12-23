@@ -45,29 +45,18 @@ public class SingleplayerMenu extends MainMenuButton {
             super.buttonClicked = 0;
             return true;
         }
-        else {
-            super.buttonClicked = 1;
-            return true;
-        }
-        //return false;
+        return false;
     }
     public void RefreshSliderValue(){
-        TextMaster.clear();
-        //super.guiTexts.get(1).remove();
-        super.guiTexts.removeAll(super.guiTexts);
-        //super.guiTexts.get(1).setTextString(String.format("%d",slider.getValueAsInt()));
-        super.guiTexts.add(new GUIText("Back",2.5f, font, new Vector2f(buttons.get(0).getPositions().x,buttons.get(0).getPositions().y), 0.12f, true, outlineColor,0.0f, 0.1f,outlineColor, new Vector2f()));
-        super.guiTexts.add(new GUIText(String.format("%d",slider.getValueAsInt()),2.5f, font, new Vector2f(0.5f,0.5f), 0.12f, true, outlineColor,0.0f, 0.1f,outlineColor, new Vector2f()));
-        TextMaster.addText(super.guiTexts.get(1));
+        super.guiTexts.get(1).remove();
+        super.guiTexts.get(1).setTextString(String.format("%d",slider.getValueAsInt()));
+       TextMaster.loadText(super.guiTexts.get(1));
     }
     @Override
         protected void clickAction() {
             if (super.buttonClicked == 0){
                 slider.remove();
                 Inits.setStartMenu(new PlayMenu(guiManager,loader));
-            }
-            if (super.buttonClicked == 1){
-                RefreshSliderValue();
             }
 
     }
