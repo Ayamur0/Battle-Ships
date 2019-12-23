@@ -96,7 +96,6 @@ public class Slider extends GuiClickCallback implements Runnable{
                 slider.getPositions().x = maxPosX;
             if (slider.getPositions().x < minPosX)
                 slider.getPositions().x = minPosX;
-            System.out.println((int)getValue());
         }
         running = false;
 
@@ -104,11 +103,20 @@ public class Slider extends GuiClickCallback implements Runnable{
 
     /**
      *
-     * @return - Current value of the slider.
+     * @return - Current value of the slider as float value.
      */
-    public float getValue(){
+    public float getValueAsFloat(){
         float percentage = (slider.getPositions().x - minPosX) / (maxPosX - minPosX);
         return percentage * (maxValue - minValue) + minValue;
+    }
+
+    /**
+     *
+     * @return - Current value of the slider rounded to an int value.
+     */
+    public int getValueAsInt(){
+        float fValue = getValueAsFloat();
+        return Math.round(fValue);
     }
 
     /**
@@ -116,7 +124,15 @@ public class Slider extends GuiClickCallback implements Runnable{
      * @param value - Value the slider should be set to.
      */
     public void setToValue(float value){
-        float percentage = value / ((maxValue - minValue) + minValue);
+        float percentage = (value - minValue) / ((maxValue - minValue));
         slider.getPositions().x = percentage * (maxPosX - minPosX) + minPosX;
+    }
+
+    /**
+     *
+     * @return - {@code true} is the slider is currently moving, {@code false} else.
+     */
+    public boolean isRunning() {
+        return running;
     }
 }
