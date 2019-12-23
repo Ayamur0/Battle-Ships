@@ -64,7 +64,7 @@ public class SingleplayerMenu extends MainMenuButton {
         protected void clickAction() {
             if (super.buttonClicked == 0){
                 slider.remove();
-                new PlayMenu(guiManager,loader);
+                Inits.setStartMenu(new PlayMenu(guiManager,loader));
             }
             if (super.buttonClicked == 1){
                 RefreshSliderValue();

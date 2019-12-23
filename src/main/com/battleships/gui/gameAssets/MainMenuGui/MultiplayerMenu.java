@@ -4,6 +4,7 @@ import com.battleships.gui.fontMeshCreator.GUIText;
 import com.battleships.gui.fontRendering.TextMaster;
 import com.battleships.gui.guis.GuiManager;
 import com.battleships.gui.guis.GuiTexture;
+import com.battleships.gui.main.Inits;
 import com.battleships.gui.renderingEngine.Loader;
 import org.joml.Vector2f;
 import org.lwjgl.util.tinyfd.TinyFileDialogs;
@@ -59,7 +60,7 @@ public class MultiplayerMenu extends MainMenuButton {
             //TODO Adding ip thingi
         }
         if (super.buttonClicked == 2) {
-            new PlayMenu(guiManager,loader);
+            Inits.setStartMenu(new PlayMenu(guiManager,loader));
         }
     }
 }

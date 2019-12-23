@@ -4,6 +4,7 @@ import com.battleships.gui.fontMeshCreator.GUIText;
 import com.battleships.gui.fontRendering.TextMaster;
 import com.battleships.gui.guis.GuiManager;
 import com.battleships.gui.guis.GuiTexture;
+import com.battleships.gui.main.Inits;
 import com.battleships.gui.renderingEngine.Loader;
 import org.joml.Vector2f;
 
@@ -61,13 +62,13 @@ public class PlayMenu extends MainMenuButton {
             //TODO open ai vs ai Settings
         }
         if(buttonClicked == 1){
-            new SingleplayerMenu(guiManager,loader);
+            Inits.setStartMenu(new SingleplayerMenu(guiManager,loader));
         }
         if (super.buttonClicked == 2){
-            new MultiplayerMenu(guiManager,loader);
+            Inits.setStartMenu(new MultiplayerMenu(guiManager,loader));
         }
         if (super.buttonClicked == 3){
-            new MainMenu(guiManager,loader);
+            Inits.setStartMenu(new MainMenu(guiManager,loader));
         }
     }
 

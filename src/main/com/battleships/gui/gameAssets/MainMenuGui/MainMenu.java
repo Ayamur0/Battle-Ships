@@ -4,6 +4,7 @@ import com.battleships.gui.fontMeshCreator.GUIText;
 import com.battleships.gui.fontRendering.TextMaster;
 import com.battleships.gui.guis.GuiManager;
 import com.battleships.gui.guis.GuiTexture;
+import com.battleships.gui.main.Inits;
 import com.battleships.gui.renderingEngine.Loader;
 import com.battleships.gui.window.WindowManager;
 import javafx.stage.FileChooser;
@@ -71,10 +72,10 @@ public class MainMenu extends MainMenuButton {
             fc.showOpenDialog(null);
         }
         if(buttonClicked == 1){
-            new PlayMenu(guiManager,loader);
+            Inits.setStartMenu(new PlayMenu(guiManager,loader));
         }
         if (super.buttonClicked == 2){
-            new OptionMenu(guiManager,loader);
+            Inits.setStartMenu(new OptionMenu(guiManager,loader));
         }
         if(buttonClicked == 3){
             GLFW.glfwSetWindowShouldClose(WindowManager.getWindow(),true);

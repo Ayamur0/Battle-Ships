@@ -5,6 +5,7 @@ import com.battleships.gui.entities.Entity;
 import com.battleships.gui.entities.Light;
 import com.battleships.gui.fontRendering.TextMaster;
 import com.battleships.gui.gameAssets.GameManager;
+import com.battleships.gui.gameAssets.MainMenuGui.MainMenuButton;
 import com.battleships.gui.gameAssets.MainMenuGui.MainMenuManager;
 import com.battleships.gui.gameAssets.MainMenuGui.MainMenu;
 import com.battleships.gui.gameAssets.PlayingField;
@@ -49,11 +50,16 @@ public class Inits {
 
     private GuiManager guiManager;
     private static List<GuiTexture> permanentGuiElements;
-    private MainMenu startMenu;
+
+    public static void setStartMenu(MainMenuButton startMenu) {
+        Inits.startMenu = startMenu;
+    }
+
+    private static MainMenuButton startMenu;
     private GuiRenderer guiRenderer;
 
 
-    private MainMenuManager mainMenuManager;
+    private static MainMenuManager mainMenuManager;
     private GameManager gameManager;
 
     private ShipManager ships;
@@ -105,7 +111,7 @@ public class Inits {
         return permanentGuiElements;
     }
 
-    public MainMenu getStartMenu() {
+    public static MainMenuButton getStartMenu() {
         return startMenu;
     }
 
@@ -226,7 +232,7 @@ public class Inits {
         guiManager = new GuiManager(gameManager);
         permanentGuiElements = new ArrayList<>();
 
-        //startMenu = new MainMenu(guiManager,loader);
+        startMenu = new MainMenu(guiManager,loader);
         guiRenderer = new GuiRenderer(loader);
 
         // *******************Post Processing initialization*******************

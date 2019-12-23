@@ -4,6 +4,7 @@ import com.battleships.gui.fontMeshCreator.GUIText;
 import com.battleships.gui.fontRendering.TextMaster;
 import com.battleships.gui.guis.GuiManager;
 import com.battleships.gui.guis.GuiTexture;
+import com.battleships.gui.main.Inits;
 import com.battleships.gui.renderingEngine.Loader;
 import com.battleships.gui.window.WindowManager;
 import org.joml.Vector2f;
@@ -72,7 +73,7 @@ public class ESCMenu extends MainMenuButton {
             //TODO check with tim
         }
         if (super.buttonClicked == 2){
-            new MainMenu(guiManager,loader);
+            Inits.setStartMenu(new MainMenu(guiManager,loader));
         }
         if(buttonClicked == 3){
             GLFW.glfwSetWindowShouldClose(WindowManager.getWindow(),true);

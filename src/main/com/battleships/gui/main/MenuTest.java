@@ -21,7 +21,6 @@ public class MenuTest {
         // *******************Main Game Loop*******************
         // ****************************************************
         //String s = TinyFileDialogs.tinyfd_inputBox("test", "test","");
-        SingleplayerMenu s = new SingleplayerMenu(inits.getGuiManager(),inits.getLoader());
         while (!GLFW.glfwWindowShouldClose(Inits.getWindow())){
 //            picker.update();
             if(Inits.getGlobalGameState() == 0) {
@@ -32,8 +31,10 @@ public class MenuTest {
 
 //            new Particle(star, new Vector3f(camera.getPosition().x , camera.getPosition().y, camera.getPosition().z), new Vector3f(0, 30, 0), 1 ,4 ,0 ,1);
 
-                if (s.getSlider().isRunning()){
-                    s.RefreshSliderValue();
+                if(Inits.getStartMenu() instanceof SingleplayerMenu){
+                    if (((SingleplayerMenu) Inits.getStartMenu()).getSlider().isRunning()) {
+                        ((SingleplayerMenu) Inits.getStartMenu()).RefreshSliderValue();
+                    }
                 }
 
                 inits.getGuiRenderer().render(inits.getPermanentGuiElements());
