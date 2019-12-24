@@ -35,10 +35,6 @@ public class Camera {
 
     private boolean mouseLocked = false;
 
-    public Camera() {
-        GameManager.setCamera(this);
-    }
-
     public GLFWScrollCallback scrollCallback = new GLFWScrollCallback(){
         @Override
         public void invoke(long window, double xOffset, double yOffset) {

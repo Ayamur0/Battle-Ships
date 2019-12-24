@@ -77,7 +77,7 @@ public class PlayingField {
      * @param size - Count of rows/columns one grid should have.
      * @param loader - Loader needed to load models.
      */
-    public PlayingField(int size, Loader loader, GameManager gameManager) {
+    public PlayingField(int size, Loader loader) {
         this.grids = new ArrayList<>();
         this.ships = new ArrayList<>();
         this.markers = new ArrayList<>();
@@ -90,7 +90,6 @@ public class PlayingField {
         initializeMarkers(loader, grids);
 
         this.shipManager = new ShipManager(loader, this);
-        gameManager.setPlayingField(this);
     }
 
     /**
@@ -99,6 +98,8 @@ public class PlayingField {
      * @param renderer - Renderer that the entities should be added to, this renderer needs to render the scene later.
      */
     public void render(MasterRenderer renderer){
+        moveCannonball();
+        highligtCell(GameManager.getPicker().getCurrentIntersectionPoint());
         if(cannonballFlying)
             cannonball.render(renderer);
         renderer.processEntityList(ships);
@@ -227,11 +228,11 @@ public class PlayingField {
     }
 
     /**
-     * Swap between shipPlacing phase, so clicking on cells places ships and
+     * Set phase to be shipPlacing phase, so clicking on cells places ships or
      * firing phase, so clicking on cell shoots a cannonball.
      */
-    public void swapShipPlacingPhase() {
-        shipPlacingPhase = !shipPlacingPhase;
+    public void setShipPlacingPhase(boolean shipPlacingPhase) {
+        this.shipPlacingPhase = shipPlacingPhase;
     }
 
     /**

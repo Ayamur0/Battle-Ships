@@ -5,7 +5,6 @@ import java.util.List;
 
 public class TerrainTexturePack {
 
-    private TerrainTexture waterTexture;
     private TerrainTexture pathTexture;
     private TerrainTexture gravelTexture;
     private TerrainTexture grassTexture;
@@ -13,9 +12,7 @@ public class TerrainTexturePack {
     private TerrainTexture sandTexture;
     private List<TerrainTexture> textures = new ArrayList<>();
 
-    public TerrainTexturePack(TerrainTexture waterTexture, TerrainTexture pathTexture, TerrainTexture gravelTexture, TerrainTexture grassTexture, TerrainTexture wetSandTexture, TerrainTexture sandTexture) {
-        this.waterTexture = waterTexture;
-        textures.add(waterTexture);
+    public TerrainTexturePack(TerrainTexture pathTexture, TerrainTexture gravelTexture, TerrainTexture grassTexture, TerrainTexture wetSandTexture, TerrainTexture sandTexture) {
         this.pathTexture = pathTexture;
         textures.add(pathTexture);
         this.gravelTexture = gravelTexture;
@@ -26,10 +23,6 @@ public class TerrainTexturePack {
         textures.add(wetSandTexture);
         this.sandTexture = sandTexture;
         textures.add(sandTexture);
-    }
-
-    public TerrainTexture getWaterTexture() {
-        return waterTexture;
     }
 
     public TerrainTexture getPathTexture() {

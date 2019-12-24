@@ -17,7 +17,7 @@ public class AudioMaster {
     private static long device;
     private static long context;
 
-    private static float SFXVolume;
+    private static float SFXVolume = 1;
 
     private static List<Integer> buffers = new ArrayList<>();
     private static List<Source> sources = new ArrayList<>();

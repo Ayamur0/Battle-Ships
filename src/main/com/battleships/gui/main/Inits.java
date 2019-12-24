@@ -225,10 +225,9 @@ public class Inits {
         loader = new Loader();
         renderer = new MasterRenderer(loader);
         TextMaster.init(loader);
-        gameManager = new GameManager(loader);
 
         // *******************GUI initialization*******************
-        guiManager = new GuiManager(gameManager);
+        guiManager = new GuiManager();
         permanentGuiElements = new ArrayList<>();
 
         startMenu = new MainMenu(guiManager,loader);
@@ -269,14 +268,13 @@ public class Inits {
 
         // *******************Terrain initialization*******************
 
-        TerrainTexture texture0 = new TerrainTexture(loader.loadTexture("Water.jpg"));
         TerrainTexture texture1 = new TerrainTexture(loader.loadTexture("path.jpg"));
         TerrainTexture texture2 = new TerrainTexture(loader.loadTexture("Gravel.jpg"));
         TerrainTexture texture3 = new TerrainTexture(loader.loadTexture("Grass.jpg"));
         TerrainTexture texture4 = new TerrainTexture(loader.loadTexture("WetSand.jpg"));
         TerrainTexture texture5 = new TerrainTexture(loader.loadTexture("Sand.jpg"));
 
-        texturePack = new TerrainTexturePack(texture0, texture1, texture2, texture3, texture4, texture5);
+        texturePack = new TerrainTexturePack(texture1, texture2, texture3, texture4, texture5);
 
         blendMap = new TerrainTexture(loader.loadTexture("BlendMap.tga")); //TODO change blendMap to remove water texture
 
@@ -292,7 +290,7 @@ public class Inits {
 
         entities.add(ship);
 
-        playingField =  new PlayingField(30, loader, gameManager);
+        playingField =  new PlayingField(30, loader);
         ships = playingField.getShipManager();
         shipSelector = new ShipSelector(loader, guiManager, ships, permanentGuiElements);
 //        ShipManager ships = new ShipManager(loader);
@@ -321,10 +319,9 @@ public class Inits {
 
         // *******************Callbacks initialization*******************
 
-        picker = new MousePicker(camera, renderer.getProjectionMatrix(), terrain, gameManager);
+        picker = new MousePicker(camera, renderer.getProjectionMatrix(), terrain);
 
-        gameManager = new GameManager(loader);
-        WindowManager.setCallbacks(camera, gameManager, waterFbos);
+        WindowManager.setCallbacks(camera, waterFbos);
 
 
         gameInitDone = true;

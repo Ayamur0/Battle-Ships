@@ -42,7 +42,7 @@ public class TerrainShader extends ShaderProgram {
     @Override
     protected void getAllUniformLocations() {
         String[] uniformNames = {"transformationMatrix", "projectionMatrix", "viewMatrix", "lightPosition", "lightColor", "shineDamper",
-                "reflectivity", "skyColor", "waterTexture", "pathTexture", "gravelTexture", "grassTexture", "wetSandTexture", "sandTexture", "blendMap", "plane"};
+                "reflectivity", "skyColor", "pathTexture", "gravelTexture", "grassTexture", "wetSandTexture", "sandTexture", "blendMap", "plane"};
         uniformLocations = new HashMap<>();
         for(String s : uniformNames){
             uniformLocations.put(s, super.getUniformLocation(s));
@@ -58,13 +58,12 @@ public class TerrainShader extends ShaderProgram {
     }
 
     public void connectTextureUnits(){
-        super.loadInt(uniformLocations.get("waterTexture"), 0);
-        super.loadInt(uniformLocations.get("pathTexture"), 1);
-        super.loadInt(uniformLocations.get("gravelTexture"), 2);
-        super.loadInt(uniformLocations.get("grassTexture"), 3);
-        super.loadInt(uniformLocations.get("wetSandTexture"), 4);
-        super.loadInt(uniformLocations.get("sandTexture"), 5);
-        super.loadInt(uniformLocations.get("blendMap"), 6);
+        super.loadInt(uniformLocations.get("pathTexture"), 0);
+        super.loadInt(uniformLocations.get("gravelTexture"), 1);
+        super.loadInt(uniformLocations.get("grassTexture"), 2);
+        super.loadInt(uniformLocations.get("wetSandTexture"), 3);
+        super.loadInt(uniformLocations.get("sandTexture"), 4);
+        super.loadInt(uniformLocations.get("blendMap"), 5);
     }
 
     /**
@@ -100,21 +99,6 @@ public class TerrainShader extends ShaderProgram {
     public void loadViewMatrix(Camera camera){
         Matrix4f viewMatrix = Maths.createViewMatrix(camera);
         super.loadMatrix(uniformLocations.get("viewMatrix"), viewMatrix);
-//        Matrix4f viewMatrix = new Matrix4f();
-//        Vector3f position = new Vector3f(0,0,0);
-//        Vector3f direction = new Vector3f(0,0,0);
-//        Vector3f rotation = new Vector3f(0,0,0);
-//        double pitch = Math.toRadians(rotation.x);
-//        double yaw = Math.toRadians(rotation.y);
-//        //don't convert z rotation, because it's not used as it's close to the same as x rotation
-//
-//        //convert rotations into direction vectors
-//        direction.x = (float) (Math.cos(pitch) * Math.sin(yaw));
-//        direction.y = (float) Math.sin(pitch);
-//        direction.z = (float) (Math.cos(pitch) * Math.cos(yaw));
-//        Vector3f target = new Vector3f(0,0,0);
-//        viewMatrix.setLookAt(new Vector3f (0,0,0), position.add(direction, target), UP_VECTOR);
-//        super.loadMatrix(location_viewMatrix, viewMatrix);
     }
 
     public void loadProjectionMatrix(Matrix4f projection){
