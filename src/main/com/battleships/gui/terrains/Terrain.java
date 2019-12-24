@@ -14,7 +14,7 @@ import java.nio.Buffer;
 
 public class Terrain {
 
-    private static final float SIZE = 800;
+    private static final float SIZE = 1600;
     private static final float MAX_HEIGHT = 40;
     private static final float MAX_PIXEL_COLOR = 256 * 256 * 256;
 
@@ -26,7 +26,7 @@ public class Terrain {
 
     private float[][] heights;
 
-    public Terrain(int gridX, int gridZ, Loader loader, TerrainTexturePack texturePack, TerrainTexture blendMap, String heightMap){
+    public Terrain(float gridX, float gridZ, Loader loader, TerrainTexturePack texturePack, TerrainTexture blendMap, String heightMap){
         this.blendMap = blendMap;
         this.texturePack = texturePack;
         this.x = gridX * SIZE;

@@ -16,6 +16,8 @@ public class Camera {
 
     private static final float WALK_SPEED = 20;
     private static final int RUN_MULTIPLIER = 5;
+    private static final float maxY = 315;
+    private static final float minY = -3;
 
     private float zoom = 0;
 
@@ -70,10 +72,11 @@ public class Camera {
         position.y += upwardsDistance;
 
         //calculate new positions depending on zoom
-        //calculate new positions depending on distance moved forward
-        position.x += (float) (2 * zoom * Math.sin(Math.toRadians(yaw)) * Math.abs(Math.cos(Math.toRadians(pitch))));
-        position.z -= (float) (2 * zoom * Math.cos(Math.toRadians(yaw)) * Math.abs(Math.cos(Math.toRadians(pitch))));
-        position.y -= 2* zoom * Math.abs(Math.sin(Math.toRadians(pitch)));
+        if(position.y - 2* zoom * Math.abs(Math.sin(Math.toRadians(pitch))) > minY && position.y - 2* zoom * Math.abs(Math.sin(Math.toRadians(pitch))) < maxY) {
+            position.x += (float) (2 * zoom * Math.sin(Math.toRadians(yaw)) * Math.abs(Math.cos(Math.toRadians(pitch))));
+            position.z -= (float) (2 * zoom * Math.cos(Math.toRadians(yaw)) * Math.abs(Math.cos(Math.toRadians(pitch))));
+            position.y -= 2 * zoom * Math.abs(Math.sin(Math.toRadians(pitch)));
+        }
 
         currentForwardSpeed = 0;
         currentSidewaysSpeed = 0;
@@ -174,12 +177,10 @@ public class Camera {
     }
 
     public void turnCamera(){
-            if(turned)
-                position.z += 2 * Math.abs(350 * ((float)GameManager.getPlayingField().getSize() + 1) / PlayingField.getMAXSIZE() - Math.abs(GameManager.getPlayingField().getOwn().getPosition().z));
+            if(350 < yaw || yaw < 10)
+                yaw = 180;
             else
-                position.z -= 2 * Math.abs(350 * ((float)GameManager.getPlayingField().getSize() + 1) / PlayingField.getMAXSIZE() - Math.abs(GameManager.getPlayingField().getOwn().getPosition().z));
-            turned = !turned;
-            yaw -= 180;
+                yaw = 0;
     }
 
     public void invertPitch(){

@@ -2,7 +2,7 @@ package com.battleships.gui.water;
 
 public class WaterTile {
 
-    public static final float TILE_SIZE = 500;
+    public static final float TILE_SIZE = 400;
 
     private float height;
     private float x,z;

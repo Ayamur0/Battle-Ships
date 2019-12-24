@@ -43,12 +43,6 @@ public class Maths {
         Vector3f cameraPos = camera.getPosition();
         Vector3f negativeCameraPos = new Vector3f(-cameraPos.x,-cameraPos.y,-cameraPos.z);
         viewMatrix.translate(negativeCameraPos, viewMatrix);
-//        return viewMatrix;
-//        float pitch = (float) Math.toRadians(camera.getPitch());
-//        float yaw = (float) Math.toRadians(camera.getYaw());
-//        Vector3f position = camera.getPosition();
-//        Vector3f direction = new Vector3f((float) (Math.cos(pitch) * Math.sin(yaw)), (float) Math.sin(pitch), (float) (Math.cos(pitch) * Math.cos(yaw)));
-//        viewMatrix.setLookAt(position, position.add(direction, target), new Vector3f(0, 1, 0));
         return viewMatrix;
     }
 }

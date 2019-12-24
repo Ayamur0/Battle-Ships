@@ -114,9 +114,9 @@ public class SchiffeVersenken {
 
         TerrainTexturePack texturePack = new TerrainTexturePack(texture0, texture1, texture2, texture3, texture4, texture5);
 
-        TerrainTexture blendMap = new TerrainTexture(loader.loadTexture("BlendMap.tga")); //TODO change blendMap to remove water texture
+        TerrainTexture blendMap = new TerrainTexture(loader.loadTexture("BlendMapLarge.tga")); //TODO change blendMap to remove water texture
 
-        Terrain terrain = new Terrain(0,-1, loader, texturePack, blendMap, "HeightMap.jpg");
+        Terrain terrain = new Terrain(-0.25f,-0.75f, loader, texturePack, blendMap, "HeightMapLarge.jpg");
 //        Terrain terrain2 = new Terrain(-1,-1, loader, texturePack, blendMap, "HeightMap.jpg");
 
         // *******************Entity initialization*******************
@@ -159,7 +159,10 @@ public class SchiffeVersenken {
         WaterShader waterShader = new WaterShader();
         WaterRenderer waterRenderer = new WaterRenderer(loader, waterShader, MasterRenderer.getProjectionMatrix(), waterFbos);
         List<WaterTile> waterTiles = new ArrayList<>();
-        waterTiles.add(new WaterTile(500, -500, -3));
+        waterTiles.add(new WaterTile(0, 0, -3));
+        waterTiles.add(new WaterTile(800, 0, -3));
+        waterTiles.add(new WaterTile(0, -800, -3));
+        waterTiles.add(new WaterTile(800, -800, -3));
 
 
         // *******************Particle initialization*******************
@@ -200,7 +203,6 @@ public class SchiffeVersenken {
 
         while (!GLFW.glfwWindowShouldClose(window)){
             camera.move(window, terrain);
-            System.out.println("x: " + camera.getPosition().x + " y: " + camera.getPosition().y + " z: " + camera.getPosition().z + " pitch: " + camera.getPitch() + " yaw: " + camera.getYaw());
             picker.update();
             ParticleMaster.update(camera);
             AudioMaster.setListenerData(camera.getPosition().x, camera.getPosition().y, camera.getPosition().z, camera.getPitch(), camera.getYaw());
