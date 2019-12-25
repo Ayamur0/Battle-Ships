@@ -1,5 +1,6 @@
 package com.battleships.gui.gameAssets.ingameGui;
 
+import com.battleships.gui.audio.AudioMaster;
 import com.battleships.gui.gameAssets.GameManager;
 import com.battleships.gui.guis.GuiClickCallback;
 import com.battleships.gui.guis.GuiManager;
@@ -18,7 +19,9 @@ public class DisableSymbols extends GuiClickCallback {
     private static final String textureAtlas = "DisableSymbolsWood.png";
     private List<GuiTexture> currentSymbols = new ArrayList<>();
     private int buttonClicked;
-    private GameManager gameManager;
+
+    private List<GuiTexture> guis;
+    private GuiManager guiManager;
 
     /**
      * Creates the gui-elements for the symbols that show whether sound or animations are enabled or disabled.
@@ -26,9 +29,9 @@ public class DisableSymbols extends GuiClickCallback {
      * @param guiManager - GuiManager that should handle the click function of these guis.
      * @param guis - List of guis that these should be added to. This list needs to be rendered so these guis show on screen.
      */
-    public DisableSymbols (Loader loader, GuiManager guiManager, List<GuiTexture> guis, GameManager gameManager){
-        this.gameManager = gameManager;
-        gameManager.setDisableSymbols(this);
+    public DisableSymbols (Loader loader, GuiManager guiManager, List<GuiTexture> guis){
+        this.guiManager = guiManager;
+        this.guis = guis;
         int texture = loader.loadTexture(textureAtlas);
         GuiTexture animation = new GuiTexture(texture, new Vector2f(0.89f, 0.9f));
         animation.getScale().x /= 2;
@@ -46,6 +49,13 @@ public class DisableSymbols extends GuiClickCallback {
         guis.addAll(currentSymbols);
     }
 
+    /**
+     * Tests if the click was on either of the symbols.
+     * @param gui - The gui to test for if the click was on it.
+     * @param x - xPos of the click (left of screen = 0, right of screen = 1).
+     * @param y - yPos of the click (top of screen = 0, bottom of screen = 1).
+     * @return - {@code true} if the click was on either symbol, {@code false} else.
+     */
     @Override
     protected boolean isClickOnGui(GuiTexture gui, double x, double y) {
         if(super.isClickOnGui(currentSymbols.get(0), x, y)) {
@@ -59,16 +69,39 @@ public class DisableSymbols extends GuiClickCallback {
         return false;
     }
 
+    /**
+     * Toggles state of clicked symbol.
+     */
     @Override
     protected void clickAction() {
-        if(buttonClicked == 0) {
-            gameManager.toggleAnimations();
+        if(buttonClicked == ANIMATION) {
+            GameManager.toggleAnimations();
+            toggleSymbol(ANIMATION);
         }
-        if(buttonClicked == 1){}
-            //TODO sound toggle
+        if(buttonClicked == SOUND) {
+            if(currentSymbols.get(SOUND).getOffsetX() == 0)
+                AudioMaster.changeVolume(0);
+            else
+                AudioMaster.changeVolume(1);
+            toggleSymbol(SOUND);
+        }
     }
 
+    /**
+     * Swaps the texture of a symbol between on and off.
+     * @param symbol - number of the symbol that should be toggled.
+     */
     public void toggleSymbol(int symbol){
         currentSymbols.get(symbol).setOffsetX((currentSymbols.get(symbol).getOffsetX() * currentSymbols.get(symbol).getRows() + 1) % 2);
+    }
+
+    /**
+     * Removes the gui elemnts of the disableSymbols from the screen.
+     */
+    public void remove(){
+        for(GuiTexture g : currentSymbols){
+            guiManager.removeClickableGui(g);
+            guis.remove(g);
+        }
     }
 }

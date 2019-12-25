@@ -27,6 +27,9 @@ public class ShipCounter extends GuiClickCallback implements Runnable{
     private List<GUIText> texts = new ArrayList<>();
     private GUIText[] counts = new GUIText[4];
 
+    private GuiManager guiManager;
+    private List<GuiTexture> guis;
+
     /**
      * Creates the gui, that shows the amount of enemy ships left.
      * @param loader - Loader to load textures.
@@ -34,8 +37,9 @@ public class ShipCounter extends GuiClickCallback implements Runnable{
      * @param guis - List of guis, this one should be added to. This list needs to be
      *               passed to a renderer, for this gui to show on the screen.
      */
-    public ShipCounter (Loader loader, GuiManager guiManager, List<GuiTexture> guis, GameManager gameManager){
-        gameManager.setShipCounter(this);
+    public ShipCounter (Loader loader, GuiManager guiManager, List<GuiTexture> guis){
+        this.guiManager = guiManager;
+        this.guis = guis;
         gui = new GuiTexture(loader.loadTexture(texture), new Vector2f(0.5f, 0.15f));
         guis.add(gui);
         GuiTexture hideButton = new GuiTexture(loader.loadTexture(hider), new Vector2f(gui.getPositions().x + gui.getScale().x / 2 + 0.02f, 0.05f));
@@ -102,5 +106,15 @@ public class ShipCounter extends GuiClickCallback implements Runnable{
             }
             visible = true;
         }
+    }
+
+    /**
+     * Removes the shipCounter gui from the screen.
+     */
+    public void remove(){
+        guiManager.removeClickableGui(gui);
+        guis.remove(gui);
+        for(GUIText t : texts)
+            t.remove();
     }
 }

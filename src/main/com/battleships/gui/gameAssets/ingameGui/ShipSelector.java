@@ -26,6 +26,10 @@ public class ShipSelector extends GuiClickCallback {
     private int[] shipCounts;
     private int buttonNumber;
     private ShipManager shipManager;
+    private GuiTexture background;
+
+    private GuiManager guiManager;
+    private List<GuiTexture> guis;
 
     /**
      * Create the gui used for ship selecting.
@@ -36,9 +40,11 @@ public class ShipSelector extends GuiClickCallback {
      *             on screen.
      */
     public ShipSelector(Loader loader, GuiManager guiManager, ShipManager shipManager, List<GuiTexture> guis) {
+        this.guiManager = guiManager;
+        this.guis = guis;
         this.shipManager = shipManager;
         shipManager.setShipSelector(this);
-        GuiTexture background = new GuiTexture(loader.loadTexture("IngameGuiShipSelectBackground.png"), new Vector2f(0.5f, 0));
+        background = new GuiTexture(loader.loadTexture("IngameGuiShipSelectBackground.png"), new Vector2f(0.5f, 0));
         float space = 0.053125f;
         background.getPositions().y = 1 - background.getScale().y / 2;
         GuiTexture ship1 = new GuiTexture(loader.loadTexture("IngameGuiShipSelectShip1.png"), new Vector2f(0,background.getPositions().y - 0.0204f));
@@ -118,5 +124,18 @@ public class ShipSelector extends GuiClickCallback {
         dummy.setTextString(shipCounts[shipSize - 2] + " Left");
         //TextMaster.loadText(new GUIText(shipCounts[0] + " Left", 2, dummy.getFont(), dummy.getPosition(), dummy.getLineMaxSize(), true, 0, 0.1f,BLACK, OUTLINEOFFSET));
         TextMaster.loadText(dummy);
+    }
+
+    /**
+     * Removes the gui elements of the ship selector.
+     */
+    public void remove(){
+        guis.remove(background);
+        for(GuiTexture t : buttons){
+            guis.remove(t);
+            guiManager.removeClickableGui(t);
+        }
+        for(GUIText t : shipCountTexts)
+            t.remove();
     }
 }

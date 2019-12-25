@@ -47,81 +47,28 @@ public class SchiffeVersenken {
 
     public static void main(String[] args){
 
-        WindowManager.initialize();
-
-        window = WindowManager.getWindow();
-
         // *******************Main stuff initialization*******************
 
-        Loader loader = new Loader();
-        GameManager gameManager = new GameManager(loader);
-        MasterRenderer renderer = new MasterRenderer(loader);
-        TextMaster.init(loader);
-        GuiManager guiManager = new GuiManager(gameManager);
-        AudioMaster.init();
-        TestLogic.init(20);
 
+        TestLogic.init(20);
+        GameManager.init();
+        GameManager.loadIngameScene();
 
         // *******************GUI initialization*******************
 
-        List<GuiTexture> guis = new ArrayList<>();
-
-
-        GuiRenderer guiRenderer = new GuiRenderer(loader);
-        new ShipCounter(loader, guiManager, guis, gameManager);
-        new DisableSymbols(loader, guiManager, guis, gameManager);
-
-        new Slider(loader.loadTexture("Brick.jpg"), loader.loadTexture("Brick.jpg"), 5, 30,
-                15, new Vector2f(0.3f, 0.01f), new Vector2f(0.5f, 0.5f), guiManager, guis);
-
-//        GuiClickCallback guiClickCallback = new GuiClickCallback();
-//        guiClickCallback.addClickableGui(gui);
-
-
-        // *******************TextInitialization*******************
-
-
-
-//        FontType font = new FontType(loader.loadFontTexture("font/PixelDistance.png"), "PixelDistance");
-//        GUIText text = new GUIText("Testing text rendering!", 1, font, new Vector2f(0f,0.4f), 1f, true, 0.0f, 0.1f, new Vector3f(1.0f,0.0f,0.0f), new Vector2f());
-//        text.setColor(1,1,1);
-//        GUIText text2 = new GUIText("Text with outline!", 1, font, new Vector2f(0f,0.5f), 1f, true, 0.7f, 0.1f, new Vector3f(1.0f,0.0f,0.0f), new Vector2f());
-//        text2.setColor(1,1,1);
-//        GUIText text3 = new GUIText("Glowing Text!", 1, font, new Vector2f(0f,0.6f), 1f, true, 0.5f, 0.4f, new Vector3f(1.0f,0.0f,0.0f), new Vector2f());
-//        text3.setColor(1,1,1);
-//        GUIText text4 = new GUIText("Text with shadow!", 1, font, new Vector2f(0f,0.7f), 1f, true, 0.7f, 0.1f, new Vector3f(0.0f,0.0f,0.0f), new Vector2f(-0.006f, -0.006f));
-//        text4.setColor(1,1,1);
 
         // *******************Camera initialization*******************
 
-        Camera camera = new Camera();
-        camera.getPosition().x = 350f;
-        camera.getPosition().y = 100f;
-        camera.getPosition().z = -450f;
+
 
         // *******************Light initialization*******************
 
-        Light light = new Light(new Vector3f(20000,20000,2000), new Vector3f(1,1,1));
 
         // *******************Terrain initialization*******************
 
-        TerrainTexture texture0 = new TerrainTexture(loader.loadTexture("Water.jpg"));
-        TerrainTexture texture1 = new TerrainTexture(loader.loadTexture("path.jpg"));
-        TerrainTexture texture2 = new TerrainTexture(loader.loadTexture("Gravel.jpg"));
-        TerrainTexture texture3 = new TerrainTexture(loader.loadTexture("Grass.jpg"));
-        TerrainTexture texture4 = new TerrainTexture(loader.loadTexture("WetSand.jpg"));
-        TerrainTexture texture5 = new TerrainTexture(loader.loadTexture("Sand.jpg"));
-
-        TerrainTexturePack texturePack = new TerrainTexturePack(texture0, texture1, texture2, texture3, texture4, texture5);
-
-        TerrainTexture blendMap = new TerrainTexture(loader.loadTexture("BlendMapLarge.tga")); //TODO change blendMap to remove water texture
-
-        Terrain terrain = new Terrain(-0.25f,-0.75f, loader, texturePack, blendMap, "HeightMapLarge.jpg");
-//        Terrain terrain2 = new Terrain(-1,-1, loader, texturePack, blendMap, "HeightMap.jpg");
 
         // *******************Entity initialization*******************
 
-        List<Entity> entities = new ArrayList<>();
 
 //        TexturedModel fern = new TexturedModel(OBJLoader.loadObjModel("fern"), new ModelTexture(loader.loadTexture("FernAtlas.tga")));
 //        fern.getTexture().setNumberOfRows(2);
@@ -138,141 +85,45 @@ public class SchiffeVersenken {
 //
 //        entities.addAll(ferns);
 
-        Entity ship = loader.loadEntityfromOBJ("ship4", "ship4.tga", 10, 1);
-        ship.setPosition(new Vector3f(0,0,-40));
-
-        entities.add(ship);
-
-        PlayingField playingField =  new PlayingField(30, loader, gameManager);
-        ShipManager ships = playingField.getShipManager();
-        ShipSelector shipSelector = new ShipSelector(loader, guiManager, ships, guis);
-//        ShipManager ships = new ShipManager(loader);
         Vector3f cellIntersection;
-        Vector3f pointedCell;
-//        playingField.placeShip(entities, ships, 0, 7,2);
-//        playingField.placeShip(entities, ships, 0, 9,3);
-//        playingField.placeShip(entities, ships, 0, 11,5);
 
         // *******************Water initialization*******************
-        WaterFrameBuffers waterFbos = new WaterFrameBuffers();
-
-        WaterShader waterShader = new WaterShader();
-        WaterRenderer waterRenderer = new WaterRenderer(loader, waterShader, MasterRenderer.getProjectionMatrix(), waterFbos);
-        List<WaterTile> waterTiles = new ArrayList<>();
-        waterTiles.add(new WaterTile(0, 0, -3));
-        waterTiles.add(new WaterTile(800, 0, -3));
-        waterTiles.add(new WaterTile(0, -800, -3));
-        waterTiles.add(new WaterTile(800, -800, -3));
 
 
         // *******************Particle initialization*******************
-        ParticleMaster.init(loader, MasterRenderer.getProjectionMatrix());
-        ParticleTexture fire = new ParticleTexture(loader.loadTexture("particles/fire.png"), 8, true);
-        ParticleSystemComplex system = new ParticleSystemComplex(fire,20, 3.5f, -0.05f, 2f, 17);
-        system.setLifeError(0.3f);
-        system.setScaleError(0.3f);
-        system.setSpeedError(0.15f);
-        system.randomizeRotation();
-        system.setDirection(new Vector3f(0.1f,1, 0.1f), -0.15f);
 
         // *******************Post Processing initialization*******************
 
-        Fbo fbo = new Fbo(WindowManager.getWidth(), WindowManager.getHeight(), Fbo.DEPTH_RENDER_BUFFER);
-        PostProcessing.init(loader);
-
+       // Fbo fbo = new Fbo(WindowManager.getWidth(), WindowManager.getHeight(), Fbo.DEPTH_RENDER_BUFFER);
+       // PostProcessing.init(loader);
 
         // *******************Callbacks initialization*******************
 
-        MousePicker picker = new MousePicker(camera, MasterRenderer.getProjectionMatrix(), terrain, gameManager);
 
-
-        WindowManager.setCallbacks(camera, gameManager, waterFbos);
 
 
         // *******************Audio initialization*******************
 
-        int buffer = AudioMaster.loadSound("fire");
-        Source source = new Source(1,1,50);
 
-        source.setLooping(true);
-        source.play(buffer);
-        camera.setStandardPos();
         // ****************************************************
         // *******************Main Game Loop*******************
         // ****************************************************
 
-        while (!GLFW.glfwWindowShouldClose(window)){
-            camera.move(window, terrain);
-            picker.update();
-            ParticleMaster.update(camera);
-            AudioMaster.setListenerData(camera.getPosition().x, camera.getPosition().y, camera.getPosition().z, camera.getPitch(), camera.getYaw());
+        while (!GLFW.glfwWindowShouldClose(WindowManager.getWindow())){
 
-            Vector3f terrainPoint = picker.getCurrentTerrainPoint();
-            if(terrainPoint != null) {
-//                entities.get(3).setPosition(new Vector3f(terrainPoint.x, terrainPoint.y < -3 ? -3 : terrainPoint.y, terrainPoint.z));
-//                System.out.println(terrainPoint.x + " " + terrainPoint.z);
-            }
-            GL11.glEnable(GL30.GL_CLIP_DISTANCE0);
-
-            //render reflection texture
-            waterFbos.bindReflectionFrameBuffer();
-            //move camera under water to get right reflection
-            float distance = 2 * (camera.getPosition().y - waterTiles.get(0).getHeight());
-            camera.getPosition().y -= distance;
-            camera.invertPitch();
-            renderer.renderScene(entities, terrain, light, camera, new Vector4f(0, 1, 0, -waterTiles.get(0).getHeight() + 1f));
-            ParticleMaster.renderParticles(camera, 1);
-            //move camera back to normal
-            camera.getPosition().y += distance;
-            camera.invertPitch();
-
-            //render refraction texture
-            waterFbos.bindRefractionFrameBuffer();
-            renderer.renderScene(entities, terrain, light, camera, new Vector4f(0, -1, 0, waterTiles.get(0).getHeight()));
-            waterFbos.unbindCurrentFrameBuffer();
-            GL11.glDisable(GL30.GL_CLIP_DISTANCE0); //not all drivers support disabling, if it doesn't work set clipPlane when rendering to screen high enough so nothing gets clipped
-
-            system.generateParticles(new Vector3f());
-            playingField.render(renderer);
-//            new Particle(star, new Vector3f(camera.getPosition().x , camera.getPosition().y, camera.getPosition().z), new Vector3f(0, 30, 0), 1 ,4 ,0 ,1);
-
-
-            ship.getRotation().y += 0.1f;
-            playingField.moveCannonball();
-            cellIntersection = picker.getCurrentIntersectionPoint();
-            playingField.highligtCell(cellIntersection);
-
-            ships.moveCursorShip();
-
-            renderer.renderScene(entities, terrain, light, camera, new Vector4f(0, 0, 0, 0));
-
-
-            waterRenderer.render(waterTiles, camera, light);
-
-            ParticleMaster.renderParticles(camera, 1);
 
 //            fbo.unbindFrameBuffer();
 //            PostProcessing.doPostProcessing(fbo.getColorTexture());
+            GameManager.updateScene();
 
-            guiRenderer.render(guis);
-            TextMaster.render();
 
             WindowManager.updateWindow();
-            renderer.updateProjectionMatrix();
+
         }
 
         // *******************Clean up*******************
 
-        AudioMaster.cleanUp();
-        waterFbos.cleanUp();
-        waterShader.cleanUp();
-        PostProcessing.cleanUp();
-        fbo.cleanUp();
-        ParticleMaster.cleanUp();
-        TextMaster.cleanUp();
-        guiRenderer.cleanUp();
-        renderer.cleanUp();
-        loader.cleanUp();
+        GameManager.cleanUpIngameScene();
         //unload GLFW on window close
         GLFW.glfwTerminate();
         GLFW.glfwSetErrorCallback(null).free();

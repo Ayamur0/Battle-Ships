@@ -6,8 +6,10 @@ import com.battleships.gui.gameAssets.MainMenuGui.MainMenuManager;
 import com.battleships.gui.guis.GuiClickCallback;
 import com.battleships.gui.guis.GuiManager;
 import com.battleships.gui.main.SchiffeVersenken;
+import com.battleships.gui.models.TextureData;
 import com.battleships.gui.postProcessing.Fbo;
 import com.battleships.gui.renderingEngine.MasterRenderer;
+import com.battleships.gui.renderingEngine.TextureLoader;
 import com.battleships.gui.water.WaterFrameBuffers;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.*;
@@ -15,6 +17,7 @@ import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
 
+import java.io.InputStream;
 import java.nio.IntBuffer;
 
 public class WindowManager {
@@ -53,6 +56,16 @@ public class WindowManager {
         GLFW.glfwSetInputMode(window, GLFW.GLFW_STICKY_MOUSE_BUTTONS, GLFW.GLFW_TRUE);
         GL13.glEnable(GL13.GL_MULTISAMPLE);
         lastFrame = GLFW.glfwGetTime();
+        setIcon();
+    }
+
+    private static void setIcon(){
+        TextureData icon = TextureLoader.loadTextureData("/com/battleships/gui/res/textures/Icon2.png");
+        GLFWImage image = GLFWImage.malloc();
+        GLFWImage.Buffer imagebf = GLFWImage.malloc(1);
+        image.set(icon.getWidth(), icon.getHeight(), icon.getBuffer());
+        imagebf.put(0, image);
+        GLFW.glfwSetWindowIcon(window, imagebf);
     }
 
     public static void updateWindow(){
@@ -84,11 +97,11 @@ public class WindowManager {
         return window;
     }
 
-    static public void setCallbacks(Camera camera, GameManager gameManager, WaterFrameBuffers wFbo){
-        GLFW.glfwSetMouseButtonCallback(window, gameManager.testClick);
+    static public void setCallbacks(Camera camera, WaterFrameBuffers wFbo){
+        GLFW.glfwSetMouseButtonCallback(window, GameManager.testClick);
         //TODO set ingame clickcallback so that if on no gui, it gets checked if on playingfield
         GLFW.glfwSetScrollCallback(window, camera.scrollCallback);
-        GLFW.glfwSetKeyCallback(window, gameManager.keyCallback);
+        GLFW.glfwSetKeyCallback(window, GameManager.keyCallback);
         GLFW.glfwSetWindowSizeCallback(window, wFbo.sizeCallback);
     }
 

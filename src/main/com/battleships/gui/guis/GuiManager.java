@@ -23,10 +23,6 @@ public class GuiManager {
     private DoubleBuffer x = BufferUtils.createDoubleBuffer(1);
     private DoubleBuffer y = BufferUtils.createDoubleBuffer(1);
 
-    public GuiManager (GameManager gameManager){
-        gameManager.setGuiManager(this);
-    }
-
     /**
      * Add an action to a {@link GuiTexture} that gets execute when the gui element gets clicked on.
      * @param gui - The {@link GuiTexture} the action should be added to.

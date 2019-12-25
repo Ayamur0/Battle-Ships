@@ -10,7 +10,7 @@ import org.joml.Vector3f;
 
 public class Cannonball{
 
-    private static final float SPEED = 100.0f;
+    private static final float SPEED = 180.0f;
     private static final float DRAG = 0.1f;
     private static final float ANGLE = (float)Math.toRadians(75);
     private static final float MAXHEIGHT = 100;

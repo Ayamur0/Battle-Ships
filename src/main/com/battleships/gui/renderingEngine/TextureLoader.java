@@ -56,7 +56,7 @@ public class TextureLoader {
         return new ModelTexture(id);
     }
 
-    static TextureData loadTextureData(String fileName){
+    public static TextureData loadTextureData(String fileName){
 
         int width = 0;
         int height = 0;
@@ -89,7 +89,7 @@ public class TextureLoader {
     }
 
     private static ByteBuffer ioResourceToByteBuffer(InputStream source, int bufferSize) throws IOException {
-        ByteBuffer buffer = null;
+        ByteBuffer buffer;
 
         try (ReadableByteChannel rbc = Channels.newChannel(source)){
             buffer = BufferUtils.createByteBuffer(bufferSize);

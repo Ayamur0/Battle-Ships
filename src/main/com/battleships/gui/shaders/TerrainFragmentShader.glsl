@@ -10,7 +10,6 @@ in float visibility;
 
 out vec4 out_Color;
 
-uniform sampler2D waterTexture;
 uniform sampler2D pathTexture;
 uniform sampler2D gravelTexture;
 uniform sampler2D grassTexture;
@@ -28,7 +27,6 @@ void main(){
     vec4 blendMapColor = texture(blendMap, pass_textureCoords); //get color for pixel on blendMap
 
     //calculate how visible each texture should be for the pixel
-    float waterTextureAmount = 0;
 
     float pathTextureAmount = 0;
 
@@ -40,17 +38,7 @@ void main(){
 
     float sandTextureAmount = blendMapColor.r;
 
-//    if(blendMapColor.g * 255 + blendMapColor.b * 255 > 450 && blendMapColor.g * 255 + blendMapColor.b * 255 < 600){
-    if(blendMapColor.g == 1 && blendMapColor.b == 1){
-        waterTextureAmount = 1;
-        pathTextureAmount = 0;
-        gravelTextureAmount = 0;
-        grassTextureAmount = 0;
-        wetSandTextureAmount = 0;
-        sandTextureAmount = 0;
-    }
     if(blendMapColor.g * 255 + blendMapColor.r * 255 + blendMapColor.b * 255 > 700){
-        waterTextureAmount = 0;
         pathTextureAmount = 1;
         gravelTextureAmount = 0;
         grassTextureAmount = 0;
@@ -60,7 +48,6 @@ void main(){
 
     vec2 tiledCoords = pass_textureCoords * 40; //multiply with 40 to get texture Coords outside terrain texture, so textured gets tiled over terrain instad of stretched
     //calculate color for each texture depending on texture visibility
-    vec4 waterTextureColor = texture(waterTexture, tiledCoords) * waterTextureAmount;
     vec4 pathTextureColor = texture(pathTexture, tiledCoords) * pathTextureAmount;
     vec4 gravelTextureColor = texture(gravelTexture, tiledCoords) * gravelTextureAmount;
     vec4 grassTextureColor = texture(grassTexture, tiledCoords) * grassTextureAmount;
@@ -68,7 +55,7 @@ void main(){
     vec4 sandTextureColor = texture(sandTexture, tiledCoords) * sandTextureAmount;
 
     //calculate final color of pixel
-    vec4 totalColor = waterTextureColor + pathTextureColor + gravelTextureColor + grassTextureColor + wetSandTextureColor + sandTextureColor;
+    vec4 totalColor = pathTextureColor + gravelTextureColor + grassTextureColor + wetSandTextureColor + sandTextureColor;
 
     //normalize vectors, so xyz are between -1 and 1
     vec3 unitNormal = normalize(surfaceNormal);

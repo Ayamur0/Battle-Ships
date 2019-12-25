@@ -25,8 +25,7 @@ public class MousePicker {
     private Vector3f currentTerrainPoint;
     private Vector3f currentIntersectionPoint;
 
-    public MousePicker(Camera cam, Matrix4f projection, Terrain terrain, GameManager gameManager) {
-        gameManager.setMousePicker(this);
+    public MousePicker(Camera cam, Matrix4f projection, Terrain terrain) {
         camera = cam;
         projectionMatrix = projection;
         viewMatrix = Maths.createViewMatrix(camera);
