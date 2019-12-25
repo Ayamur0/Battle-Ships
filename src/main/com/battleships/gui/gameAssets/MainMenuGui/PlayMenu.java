@@ -59,6 +59,7 @@ public class PlayMenu extends Menu {
     @Override
     protected void clickAction() {
         if(buttonClicked == 0) {
+            Inits.setStartMenu(new AiVsAiMenu(guiManager,loader));
             //TODO open ai vs ai Settings
         }
         if(buttonClicked == 1){
