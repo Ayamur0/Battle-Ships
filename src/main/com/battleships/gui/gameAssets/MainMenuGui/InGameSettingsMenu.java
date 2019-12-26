@@ -10,20 +10,13 @@ import com.battleships.gui.renderingEngine.Loader;
 import org.joml.Vector2f;
 
 public class InGameSettingsMenu extends Menu {
-    protected int gameMode; //0 Singleplayer, 1 Multiplayer;
+    protected int gameMode; //0 Singleplayer, 1 Multiplayer, 2 Ai VS Ai;
 
     protected Slider playingFieldSize;
-
-    protected Slider difficulty;
+    protected Slider difficulty1;
+    protected Slider difficulty2; //needed for Ai VS Ai to remove the slider afterwords
 
     protected Vector2f sliderSize = new Vector2f(0.2f, 0.01f);
-
-    public Slider getPlayingFieldSize() {
-        return playingFieldSize;
-    }
-    public Slider getDifficulty() {
-        return difficulty;
-    }
 
     public InGameSettingsMenu(GuiManager guiManager, Loader loader,int gameMode) {
         super(guiManager, loader);
@@ -47,7 +40,7 @@ public class InGameSettingsMenu extends Menu {
         super.guiTexts.get(1).setTextString(String.format("%d", playingFieldSize.getValueAsInt()));
 
 
-        switch (difficulty.getValueAsInt()){
+        switch (difficulty1.getValueAsInt()){
             case 1: difficultyName = "Easy";
                     break;
             case 2: difficultyName = "Normal";
@@ -60,31 +53,30 @@ public class InGameSettingsMenu extends Menu {
         TextMaster.loadText(super.guiTexts.get(1));
         TextMaster.loadText(super.guiTexts.get(3));
     }
-
+    public boolean isRunning(){
+        if (difficulty2!=null)
+            return (playingFieldSize.isRunning()||difficulty1.isRunning()||difficulty2.isRunning());
+        else
+            return (playingFieldSize.isRunning()||difficulty1.isRunning());
+    }
 
     protected void createMenu() {
 
         playingFieldSize = new Slider(loader.loadTexture("Brick.jpg"), loader.loadTexture("Brick.jpg"), 5, 30,
                 15, sliderSize, super.standardButtonPos, guiManager, Inits.getPermanentGuiElements());
 
-        super.guiTexts.add(new GUIText("Size",2.5f, font,new Vector2f(playingFieldSize.getPositions().x-0.14f,playingFieldSize.getPositions().y) , 0.12f, true, outlineColor,0.0f, 0.1f,outlineColor, new Vector2f()));
-
-        difficulty = new Slider(loader.loadTexture("Brick.jpg"), loader.loadTexture("Brick.jpg"), 1, 3,
+        difficulty1 = new Slider(loader.loadTexture("Brick.jpg"), loader.loadTexture("Brick.jpg"), 1, 3,
                 2, sliderSize,new Vector2f(playingFieldSize.getPositions().x,playingFieldSize.getPositions().y+buttonGap), guiManager, Inits.getPermanentGuiElements());
 
+        super.guiTexts.add(new GUIText("Size",2.5f, font,new Vector2f(playingFieldSize.getPositions().x-0.14f,playingFieldSize.getPositions().y) , 0.12f, true, outlineColor,0.0f, 0.1f,outlineColor, new Vector2f()));
         super.guiTexts.add(new GUIText(String.format("%d", playingFieldSize.getValueAsInt()),2.5f, font, new Vector2f(playingFieldSize.getPositions().x+0.16f,playingFieldSize.getPositions().y), 0.12f, true, outlineColor,0.0f, 0.1f,outlineColor, new Vector2f()));
+        super.guiTexts.add(new GUIText("Difficulty",2.5f, font, new Vector2f(difficulty1.getPositions().x-0.165f, difficulty1.getPositions().y), 0.12f, true, outlineColor,0.0f, 0.1f,outlineColor, new Vector2f()));
+        super.guiTexts.add(new GUIText("Normal",2.5f, font, new Vector2f(difficulty1.getPositions().x+0.16f, difficulty1.getPositions().y), 0.12f, true, outlineColor,0.0f, 0.1f,outlineColor, new Vector2f()));
 
-
-        super.guiTexts.add(new GUIText("Difficulty",2.5f, font, new Vector2f(difficulty.getPositions().x-0.165f,difficulty.getPositions().y), 0.12f, true, outlineColor,0.0f, 0.1f,outlineColor, new Vector2f()));
-
-        super.guiTexts.add(new GUIText("Normal",2.5f, font, new Vector2f(difficulty.getPositions().x+0.16f,difficulty.getPositions().y), 0.12f, true, outlineColor,0.0f, 0.1f,outlineColor, new Vector2f()));
-
-        buttons.add(new GuiTexture(texture,new Vector2f(difficulty.getPositions().x,difficulty.getPositions().y+buttonGap),buttonSize));
-
-        super.guiTexts.add(new GUIText("Fight",2.5f, font, new Vector2f(buttons.get(0).getPositions().x,buttons.get(0).getPositions().y), 0.12f, true, outlineColor,0.0f, 0.1f,outlineColor, new Vector2f()));
-
+        buttons.add(new GuiTexture(texture,new Vector2f(difficulty1.getPositions().x, difficulty1.getPositions().y+buttonGap),buttonSize));
         buttons.add(new GuiTexture(texture,new Vector2f(buttons.get(0).getPositions().x,buttons.get(0).getPositions().y+buttonGap),buttonSize));
 
+        super.guiTexts.add(new GUIText("Fight",2.5f, font, new Vector2f(buttons.get(0).getPositions().x,buttons.get(0).getPositions().y), 0.12f, true, outlineColor,0.0f, 0.1f,outlineColor, new Vector2f()));
         super.guiTexts.add(new GUIText("Back",2.5f, font, new Vector2f(buttons.get(1).getPositions().x,buttons.get(1).getPositions().y), 0.12f, true, outlineColor,0.0f, 0.1f,outlineColor, new Vector2f()));
 
         super.createClickable();
@@ -106,28 +98,44 @@ public class InGameSettingsMenu extends Menu {
         if(gameMode == 0){
             if (super.buttonClicked == 0){
                 playingFieldSize.remove();
-                difficulty.remove();
+                difficulty1.remove();
                 Inits.setGlobalGameState(1);
                 //TODO set difficulty and size for offline game(need logic for that)
             }
             if (super.buttonClicked == 1){
                 playingFieldSize.remove();
-                difficulty.remove();
+                difficulty1.remove();
                 Inits.setStartMenu(new PlayMenu(super.guiManager,super.loader));
             }
         }
         else if(gameMode == 1){
             if (super.buttonClicked == 0){
                 playingFieldSize.remove();
-                difficulty.remove();
+                difficulty1.remove();
                 Inits.setGlobalGameState(1);
                 //TODO set difficulty and size for offline game(need logic for that)
                 //TODO add Connection overlay
             }
             if (super.buttonClicked == 1){
                 playingFieldSize.remove();
-                difficulty.remove();
+                difficulty1.remove();
                 Inits.setStartMenu(new MultiplayerMenu(super.guiManager,super.loader));
+            }
+        }
+        else if(gameMode == 2){
+            if (super.buttonClicked == 0){
+                playingFieldSize.remove();
+                difficulty1.remove();
+                difficulty2.remove();
+                Inits.setGlobalGameState(1);
+                //TODO set difficulty and size for offline game(need logic for that)
+                //TODO add Connection overlay
+            }
+            if (super.buttonClicked == 1){
+                playingFieldSize.remove();
+                difficulty1.remove();
+                difficulty2.remove();
+                Inits.setStartMenu(new PlayMenu(super.guiManager,super.loader));
             }
         }
     }

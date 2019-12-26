@@ -1,6 +1,7 @@
 package com.battleships.gui.main;
 
 import com.battleships.gui.fontRendering.TextMaster;
+import com.battleships.gui.gameAssets.MainMenuGui.AiVsAiMenu;
 import com.battleships.gui.gameAssets.MainMenuGui.InGameSettingsMenu;
 import com.battleships.gui.particles.ParticleMaster;
 import com.battleships.gui.postProcessing.PostProcessing;
@@ -32,9 +33,8 @@ public class MenuTest {
 //            new Particle(star, new Vector3f(camera.getPosition().x , camera.getPosition().y, camera.getPosition().z), new Vector3f(0, 30, 0), 1 ,4 ,0 ,1);
 
                 if(Inits.getStartMenu() instanceof InGameSettingsMenu){
-                    if (((InGameSettingsMenu) Inits.getStartMenu()).getPlayingFieldSize().isRunning() || ((InGameSettingsMenu) Inits.getStartMenu()).getDifficulty().isRunning())  {
+                    if (((InGameSettingsMenu)Inits.getStartMenu()).isRunning())
                         ((InGameSettingsMenu) Inits.getStartMenu()).RefreshSliderValue();
-                    }
                 }
 
                 inits.getGuiRenderer().render(inits.getPermanentGuiElements());
