@@ -2,6 +2,11 @@ package com.battleships.gui.particles;
 
 import java.util.List;
 
+/**
+ * Standard implementation of an Insertion Sort.
+ *
+ * @author Tim Staudenmaier
+ */
 public class InsertionSort {
 
     /**
@@ -20,6 +25,11 @@ public class InsertionSort {
         }
     }
 
+    /**
+     * Sort item at index i of the list to the right position.
+     * @param list - List to sort.
+     * @param i - Index of item to sort into right position.
+     */
     private static void sortUpHighToLow(List<Particle> list, int i) {
         Particle item = list.get(i);
         int attemptPos = i - 1;

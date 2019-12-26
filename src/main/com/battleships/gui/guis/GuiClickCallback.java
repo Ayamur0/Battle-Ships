@@ -11,6 +11,11 @@ import java.nio.DoubleBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Every gui class that needs to be clickable has to extends this class.
+ *
+ * @author Tim Staudenmaier
+ */
 public abstract class GuiClickCallback {
 
     /**

@@ -12,29 +12,64 @@ import org.lwjgl.glfw.GLFWScrollCallback;
 
 import java.nio.DoubleBuffer;
 
+/**
+ * This camera is needed for every scene.
+ * The scene always gets rendered, as if it was filmed with the camera.
+ *
+ * @author Tim Staudenmaier
+ */
 public class Camera {
 
     private static final float WALK_SPEED = 20;
     private static final int RUN_MULTIPLIER = 5;
+    /**
+     * Maximum and minimum y position (in world coordinates) the camera is able to reach in this game.
+     * The camera can't go above or below these y-coordinates.
+     */
     private static final float maxY = 315;
     private static final float minY = -3;
 
+    /**
+     * Zoom that was input by the user using the scroll wheel.
+     * This value always gets used in the next frame to determine how far the camera has to move.
+     * After the new position has been calculated this value will be set to 0 again.
+     */
     private float zoom = 0;
 
 
+    /**
+     * Position of the camera in the world.
+     */
     private Vector3f position = new Vector3f(0,4,0);
+    /**
+     * Pitch, yaw and roll of the camera.
+     */
     private float pitch, yaw, roll;
+    /**
+     * Current speed of the camera.
+     * Used to calculate new position of the camera, determined by currentSpeed
+     * and time passed.
+     */
     private float currentForwardSpeed;
     private float currentSidewaysSpeed;
     private float currentUpwardsSpeed;
 
-    private boolean turned;
+    /**
+     * In this game the camera is fixed on one circle.
+     * originX and originZ determine the center of this circle,
+     * radius determines the radius of the circle the camera can move on.
+     */
     private float originX;
     private float originZ;
     private float radius;
 
     private boolean mouseLocked = false;
 
+    /**
+     * Scroll Callback of GLFW that is needed to get notified when the user scroll.
+     * This callback also tells how far the scroll wheel was scrolled with the yOffset parameter.
+     * The yOffset is negative if the scroll wheel was scrolled downwards, else it's positive.
+     */
     public GLFWScrollCallback scrollCallback = new GLFWScrollCallback(){
         @Override
         public void invoke(long window, double xOffset, double yOffset) {
@@ -42,9 +77,14 @@ public class Camera {
         }
     };
 
-        public void move(long window, Terrain terrain){ //TODO limit zoom and pitch amount, keep movement in game area
-        calculatePitch(window);
-        calculatePosition(window);
+    /**
+     * Move the camera to the new position for the current frame, using all the data needed to calculate that position.
+     * (currentSpeed adjusted zoom, new rotation)
+     * @param terrain - Terrain the camera is moving on (needed, so camera can't move under terrain).
+     */
+        public void move(Terrain terrain){ //TODO limit zoom and pitch amount, keep movement in game area
+        calculatePitch();
+        calculatePosition();
         pitch %= 360;
         yaw %= 360;
         float deltaTime = WindowManager.getDeltaTime();
@@ -89,51 +129,59 @@ public class Camera {
         }
     }
 
+    /**
+     * Sets all speeds needed to calculate the new position of the camera by reading the inputs
+     * the user is currently making.
+     */
     //set speeds in the directions based in inputs
-    private void calculatePosition(long window){
+    private void calculatePosition(){
         int run = 1;
-        if(GLFW.glfwGetKey(window, GLFW.GLFW_KEY_LEFT_CONTROL) == GLFW.GLFW_PRESS){
+        if(GLFW.glfwGetKey(WindowManager.getWindow(), GLFW.GLFW_KEY_LEFT_CONTROL) == GLFW.GLFW_PRESS){
             run = RUN_MULTIPLIER;
         }
-        if(GLFW.glfwGetKey(window, GLFW.GLFW_KEY_W) == GLFW.GLFW_PRESS){
+        if(GLFW.glfwGetKey(WindowManager.getWindow(), GLFW.GLFW_KEY_W) == GLFW.GLFW_PRESS){
             currentForwardSpeed = WALK_SPEED * run;
         }
-        if(GLFW.glfwGetKey(window, GLFW.GLFW_KEY_S) == GLFW.GLFW_PRESS){
+        if(GLFW.glfwGetKey(WindowManager.getWindow(), GLFW.GLFW_KEY_S) == GLFW.GLFW_PRESS){
             currentForwardSpeed = -WALK_SPEED * run;
         }
-        if(GLFW.glfwGetKey(window, GLFW.GLFW_KEY_D) == GLFW.GLFW_PRESS){
+        if(GLFW.glfwGetKey(WindowManager.getWindow(), GLFW.GLFW_KEY_D) == GLFW.GLFW_PRESS){
             currentSidewaysSpeed = WALK_SPEED * run;
         }
-        if(GLFW.glfwGetKey(window, GLFW.GLFW_KEY_A) == GLFW.GLFW_PRESS){
+        if(GLFW.glfwGetKey(WindowManager.getWindow(), GLFW.GLFW_KEY_A) == GLFW.GLFW_PRESS){
             currentSidewaysSpeed = -WALK_SPEED * run;
         }
-        if(GLFW.glfwGetKey(window, GLFW.GLFW_KEY_SPACE) == GLFW.GLFW_PRESS){
+        if(GLFW.glfwGetKey(WindowManager.getWindow(), GLFW.GLFW_KEY_SPACE) == GLFW.GLFW_PRESS){
             currentUpwardsSpeed = WALK_SPEED;
         }
-        if(GLFW.glfwGetKey(window, GLFW.GLFW_KEY_LEFT_SHIFT) == GLFW.GLFW_PRESS || GLFW.glfwGetKey(window, GLFW.GLFW_KEY_RIGHT_SHIFT) == GLFW.GLFW_PRESS){
+        if(GLFW.glfwGetKey(WindowManager.getWindow(), GLFW.GLFW_KEY_LEFT_SHIFT) == GLFW.GLFW_PRESS || GLFW.glfwGetKey(WindowManager.getWindow(), GLFW.GLFW_KEY_RIGHT_SHIFT) == GLFW.GLFW_PRESS){
             currentUpwardsSpeed = -WALK_SPEED;
         }
-        if(GLFW.glfwGetKey(window, GLFW.GLFW_KEY_Q) == GLFW.GLFW_PRESS){
+        if(GLFW.glfwGetKey(WindowManager.getWindow(), GLFW.GLFW_KEY_Q) == GLFW.GLFW_PRESS){
             yaw -= 0.6f;
         }
-        if(GLFW.glfwGetKey(window, GLFW.GLFW_KEY_E) == GLFW.GLFW_PRESS){
+        if(GLFW.glfwGetKey(WindowManager.getWindow(), GLFW.GLFW_KEY_E) == GLFW.GLFW_PRESS){
             yaw += 0.6f;
         }
     }
 
-    private void calculatePitch(long window){
+    /**
+     * Calculates the new Rotation (pitch and yaw) of the by reading the inputs
+     * the user is currently making.
+     */
+    private void calculatePitch(){
         //hide cursor while holding right mouse button
         //center mouse and keep mouse in window
         //mouse moves camera while holding right mouse button
-        if(GLFW.glfwGetMouseButton(window, GLFW.GLFW_MOUSE_BUTTON_RIGHT) == GLFW.GLFW_PRESS && !mouseLocked) {
-            GLFW.glfwSetInputMode(window, GLFW.GLFW_CURSOR, GLFW.GLFW_CURSOR_DISABLED);
-            GLFW.glfwSetCursorPos(window, WindowManager.getWidth() / 2f, WindowManager.getHeight() / 2f);
+        if(GLFW.glfwGetMouseButton(WindowManager.getWindow(), GLFW.GLFW_MOUSE_BUTTON_RIGHT) == GLFW.GLFW_PRESS && !mouseLocked) {
+            GLFW.glfwSetInputMode(WindowManager.getWindow(), GLFW.GLFW_CURSOR, GLFW.GLFW_CURSOR_DISABLED);
+            GLFW.glfwSetCursorPos(WindowManager.getWindow(), WindowManager.getWidth() / 2f, WindowManager.getHeight() / 2f);
             mouseLocked = true;
         }
         if(mouseLocked){
             DoubleBuffer x = BufferUtils.createDoubleBuffer(1);
             DoubleBuffer y = BufferUtils.createDoubleBuffer(1);
-            GLFW.glfwGetCursorPos(window, x, y);
+            GLFW.glfwGetCursorPos(WindowManager.getWindow(), x, y);
             x.rewind();
             y.rewind();
 
@@ -153,15 +201,18 @@ public class Camera {
 
             yaw += deltaX * 0.1f;
 
-            GLFW.glfwSetCursorPos(window, WindowManager.getWidth() / 2f, WindowManager.getHeight() / 2f);
+            GLFW.glfwSetCursorPos(WindowManager.getWindow(), WindowManager.getWidth() / 2f, WindowManager.getHeight() / 2f);
         }
         //enable cursor on release of right mouse button and disable mouse moving camera
-        if(GLFW.glfwGetMouseButton(window, GLFW.GLFW_MOUSE_BUTTON_RIGHT) == GLFW.GLFW_RELEASE) {
-            GLFW.glfwSetInputMode(window, GLFW.GLFW_CURSOR, GLFW.GLFW_CURSOR_NORMAL);
+        if(GLFW.glfwGetMouseButton(WindowManager.getWindow(), GLFW.GLFW_MOUSE_BUTTON_RIGHT) == GLFW.GLFW_RELEASE) {
+            GLFW.glfwSetInputMode(WindowManager.getWindow(), GLFW.GLFW_CURSOR, GLFW.GLFW_CURSOR_NORMAL);
             mouseLocked = false;
         }
     }
 
+    /**
+     * Resets the camera to the standard position where it shows both grids of the players.
+     */
     public void setStandardPos(){
             radius = Math.abs(350 * ((float)GameManager.getPlayingField().getSize() + 1) / PlayingField.getMAXSIZE() - Math.abs(GameManager.getPlayingField().getOwn().getPosition().z));
             originZ = GameManager.getPlayingField().getOwn().getPosition().z;
@@ -172,6 +223,10 @@ public class Camera {
             yaw = 0;
     }
 
+    /**
+     * Turn the camera to be on the opposite side of the grids if camera was close to standard position.
+     * Resets the camera to standard position if it wasn't close to that position.
+     */
     public void turnCamera(){
             if(350 < yaw || yaw < 10)
                 yaw = 180;
@@ -179,22 +234,41 @@ public class Camera {
                 yaw = 0;
     }
 
+    /**
+     * Invert the pitch rotation of the camera.
+     */
     public void invertPitch(){
         this.pitch = -pitch;
     }
 
+    /**
+     *
+     * @return - Current position of the camera in world coordinates.
+     */
     public Vector3f getPosition() {
         return position;
     }
 
+    /**
+     *
+     * @return - Current pitch of the camera.
+     */
     public float getPitch() {
         return pitch;
     }
 
+    /**
+     *
+     * @return - Current yaw of the camera.
+     */
     public float getYaw() {
         return yaw;
     }
 
+    /**
+     *
+     * @return - Current roll of the camera.
+     */
     public float getRoll() {
         return roll;
     }

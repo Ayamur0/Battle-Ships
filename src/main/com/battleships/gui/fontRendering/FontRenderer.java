@@ -10,6 +10,11 @@ import org.lwjgl.opengl.GL30;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Renderer capable of rendering {@link GUIText}.
+ *
+ * @author Tim Staudenmaier
+ */
 public class FontRenderer {
 
     /**

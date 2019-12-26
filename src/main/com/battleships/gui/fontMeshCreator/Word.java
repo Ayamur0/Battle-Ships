@@ -3,7 +3,11 @@ package com.battleships.gui.fontMeshCreator;
 import java.util.ArrayList;
 import java.util.List;
 
-
+/**
+ * A Word consisting of multiple characters.
+ *
+ * @author Tim Staudenmaier
+ */
 public class Word {
 
     private List<Character> characters = new ArrayList<Character>();
@@ -28,14 +32,14 @@ public class Word {
     }
 
     /**
-     * @return list of all characters in the word
+     * @return - list of all characters in the word
      */
     protected List<Character> getCharacters(){
         return characters;
     }
 
     /**
-     * @return width of the word on the screen
+     * @return - width of the word on the screen
      */
     protected double getWordWidth(){
         return width;

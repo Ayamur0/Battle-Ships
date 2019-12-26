@@ -181,7 +181,7 @@ public class GameManager {
     }
 
     public static void updateScene(){
-        camera.move(WindowManager.getWindow(), terrain);
+        camera.move(terrain);
         mousePicker.update();
         AudioMaster.setListenerData(camera.getPosition().x, camera.getPosition().y, camera.getPosition().z, camera.getPitch(), camera.getYaw());
         renderEntities();

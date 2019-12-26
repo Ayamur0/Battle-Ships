@@ -49,7 +49,7 @@ public class MenuTest {
                 if (!inits.isGameInitDone()){
                     inits.initGame();
                 }
-                inits.getCamera().move(Inits.getWindow(), inits.getTerrain());
+                inits.getCamera().move(inits.getTerrain());
                 inits.getPicker().update();
                 ParticleMaster.update(inits.getCamera());
 

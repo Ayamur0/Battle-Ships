@@ -13,20 +13,37 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.openal.AL10;
 
+
+/**
+ * WaveData of a .wav file.
+ * Contains all necessary data of a .wav file so OpenAl is able to use this file as a sound buffer.
+ *
+ * @author Tim Staudenmaier
+ */
 public class WaveData {
 
+    /**
+     * Information on the format, samplerate, totalBytes and bytesPerFrame
+     * of the read .wav file.
+     */
     final int format;
     final int samplerate;
     final int totalBytes;
     final int bytesPerFrame;
+    /**
+     * ByteBuffer containing all the bytes of the actual sound of the .wav file.
+     */
     final ByteBuffer data;
 
+    /**
+     * AudioInputStream and byte array needed to read a .wav file.
+     */
     private final AudioInputStream audioStream;
     private final byte[] dataArray;
 
     /**
      * Create a waveData containing all data needed, to use a .wav file as sound.
-     * @param stream
+     * @param stream - Input stream containing the .wav file.
      */
     private WaveData(AudioInputStream stream) {
         this.audioStream = stream;

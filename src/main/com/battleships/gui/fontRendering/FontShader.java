@@ -4,11 +4,22 @@ import com.battleships.gui.shaders.ShaderProgram;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 
+/**
+ * Shader used by the {@link com.battleships.gui.guis.GuiRenderer}.
+ *
+ * @author Tim Staudenmaier
+ */
 public class FontShader extends ShaderProgram {
 
+    /**
+     * Constants containing the paths to the shader files.
+     */
     private static final String VERTEX_FILE = "/com/battleships/gui/fontRendering/fontVertexShader.glsl";
     private static final String FRAGMENT_FILE = "/com/battleships/gui/fontRendering/fontFragmentShader.glsl";
 
+    /**
+     * Location values for the uniform variables.
+     */
     private int location_color;
     private int location_translation;
     private int location_borderWidth;
@@ -87,6 +98,10 @@ public class FontShader extends ShaderProgram {
         super.loadVector(location_outlineColor, color);
     }
 
+    /**
+     * Load offset of character in textureAtlas to shader.
+     * @param offset - Offset of current character in textureAtlas.
+     */
     protected void loadOffset(Vector2f offset){
         super.load2DVector(location_offset, offset);
     }

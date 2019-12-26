@@ -14,29 +14,55 @@ import java.nio.FloatBuffer;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Renderer for rendering {@link Particle}.
+ *
+ * @author Tim Staudenmaier
+ */
 public class ParticleRenderer {
 
+    /**
+     * Vertices for a quad on which the particles can be rendered.
+     */
     private static final float[] VERTICES = {-0.5f, 0.5f, -0.5f, -0.5f, 0.5f, 0.5f, 0.5f, -0.5f};
-    //max number of particles on screen at once
+    /**
+     * Max number of particles that can be on the screen at once.
+     */
     private static final int MAX_INSTANCES = 10000;
-    //length of data for each particle
-    //16 floats for viewMatrix
-    //4 floats for the textureOffsets
-    //1 float for the blend value
+    /**
+     * length of data for each particle
+     * first 16 floats for viewMatrix
+     * 4 floats for the textureOffsets
+     * 1 float for the blend value
+     */
     private static final int INSTANCE_DATA_LENGTH = 21;
 
-    //float buffer needed to store data into vbo, created once so it doesn't need to be created each time to save performance
+    /**
+     * float buffer needed to store data into vbo, created once so it doesn't need to be created each time to save performance
+     */
     private static final FloatBuffer buffer = BufferUtils.createFloatBuffer(MAX_INSTANCES * INSTANCE_DATA_LENGTH);
 
     /**
-     * @param
+     * Model of the quad the particles are rendered on.
      */
-
     private RawModel quad;
+    /**
+     * Shader this renderer uses.
+     */
     private ParticleShader shader;
 
+    /**
+     * Loader to load new particles.
+     */
     private Loader loader;
+    /**
+     * vbo of the {@link Particle} that is currently being rendered.
+     */
     private int vbo;
+    /**
+     * Pointer where in the vbo the renderer is currently reading.
+     * Between 0 and {@value INSTANCE_DATA_LENGTH}
+     */
     private int pointer = 0;
 
     /**
@@ -92,14 +118,18 @@ public class ParticleRenderer {
         finishRendering();
     }
 
+    /**
+     * Clean up this renderer.
+     * Gets called by ParticleMaster on program exit.
+     */
     protected void cleanUp(){
         shader.cleanUp();
     }
 
     /**
      * Store texture data for current particle in float array so it can be used to render the particle with instanced rendering
-     * @param particle
-     * @param data
+     * @param particle - Particle that should be rendered next.
+     * @param data - Data of the particle.
      */
     private void updateTexCoordInfo(Particle particle, float[] data){
         data[pointer++] = particle.getTexOffset1().x;

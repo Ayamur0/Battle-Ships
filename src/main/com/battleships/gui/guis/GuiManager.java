@@ -16,6 +16,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
 
+/**
+ * This class is needed to determine what was clicked when the user clicks anywhere on the screen.
+ * Test if any Gui with click function was clicked.
+ *
+ * @author Tim Staudenmaier
+ */
 public class GuiManager {
 
     private Map<GuiTexture, Object> clickableGuis = new HashMap<>();
@@ -56,6 +62,7 @@ public class GuiManager {
      * Function that gets called if the user left clicks anywhere in the game.
      * Gets the cursor position and tests all guis with a click action if they were
      * clicked on and if one was clicked executes the click action of that gui.
+     * @return - {@code true} if any gui with click function was clicked, {@code false} else
      */
     public boolean testGuiClick (float x, float y) {
         for (GuiTexture texture : clickableGuis.keySet()) {

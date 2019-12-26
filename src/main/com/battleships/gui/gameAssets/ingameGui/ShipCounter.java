@@ -14,20 +14,49 @@ import org.joml.Vector3f;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Overlay during the shooting phase of the game. Contains all {@link GuiTexture} and their functions needed for this UI.
+ *
+ * @author Tim Staudenmaier
+ */
 public class ShipCounter extends GuiClickCallback implements Runnable{
 
+    /**
+     * Constants for the texture files, the text color and text outline.
+     */
     private static final String texture = "ShipCounter.png";
     private static final String hider = "ShipCounterHider.png";
-    private static final Vector3f BLACK = new Vector3f();
     private static final Vector3f GREY = new Vector3f(0.2f,0.2f,0.2f);
     private static final Vector2f OUTLINEOFFSET = new Vector2f();
 
+    /**
+     * {@code true} if the shipCounter is currently visible, {@code false} if it's hidden.
+     */
     private boolean visible = true;
+    /**
+     * GuiTexture for the Counter and the hideButton that hides the gui.
+     */
     private GuiTexture gui;
+    private GuiTexture hideButton;
+    /**
+     * List containing all the texts on the ShipCounter.
+     * (Remaining ship counts and label).
+     */
     private List<GUIText> texts = new ArrayList<>();
+    /**
+     * Array containing how many of each ship size are left on the opponents grid.
+     */
+    //TODO get from logic
     private GUIText[] counts = new GUIText[4];
 
+    /**
+     * {@link GuiManager} handling the click functions of this UI.
+     */
     private GuiManager guiManager;
+    /**
+     * List of guis these two symbols should get added to, this list needs to be passed to
+     * a {@link com.battleships.gui.guis.GuiRenderer} for these symbols to appear on screen.
+     */
     private List<GuiTexture> guis;
 
     /**
@@ -42,7 +71,7 @@ public class ShipCounter extends GuiClickCallback implements Runnable{
         this.guis = guis;
         gui = new GuiTexture(loader.loadTexture(texture), new Vector2f(0.5f, 0.15f));
         guis.add(gui);
-        GuiTexture hideButton = new GuiTexture(loader.loadTexture(hider), new Vector2f(gui.getPositions().x + gui.getScale().x / 2 + 0.02f, 0.05f));
+        hideButton = new GuiTexture(loader.loadTexture(hider), new Vector2f(gui.getPositions().x + gui.getScale().x / 2 + 0.02f, 0.05f));
         hideButton.getScale().x /= 2;
         hideButton.getScale().y /= 2;
         guis.add(hideButton);
@@ -114,6 +143,7 @@ public class ShipCounter extends GuiClickCallback implements Runnable{
     public void remove(){
         guiManager.removeClickableGui(gui);
         guis.remove(gui);
+        guis.remove(hideButton);
         for(GUIText t : texts)
             t.remove();
     }

@@ -8,6 +8,12 @@ import org.joml.Vector2f;
 import org.joml.Vector2i;
 import org.joml.Vector3f;
 
+/**
+ * Special {@link Entity} that is used to indicate shots made during game.
+ *
+ * @author Tim Staudenmaier
+ */
+
 public class Cannonball{
 
     private static final float SPEED = 180.0f;
@@ -15,15 +21,46 @@ public class Cannonball{
     private static final float ANGLE = (float)Math.toRadians(75);
     private static final float MAXHEIGHT = 100;
 
+    /**
+     * The Entity containing position, rotation,... for this cannonball.
+     */
     private Entity ball;
+    /**
+     * Destination of the cannonball in world coordinates.
+     */
     private Vector2f destination;
+    /**
+     * Destination of the cannonball as index on the opposite field.
+     */
     private Vector2i destinationCell;
+    /**
+     * Destination field the cannonball.
+     */
     private int destinationField;
+    /**
+     * Current horizontalVelocity of the cannonball.
+     * Decreases faster with higher DRAG.
+     */
     private Vector2f horizontalVelocity = new Vector2f();
+    /**
+     * Current position of the cannonball in the world.
+     */
     private Vector3f position = new Vector3f();
+    /**
+     * How far the cannonball has to travel to reach it's destination.
+     */
     private float sidewaysDistance;
+    /**
+     * The speed at which the cannonball starts (lower for smaller distances)
+     */
     private float startSpeed;
+    /**
+     * Current speed of the cannonball.
+     */
     private float currentSpeed;
+    /**
+     * Parameters of the parabola function, describing the curve the cannonball flies.
+     */
     private float a,b,c,x = 0;
 
 

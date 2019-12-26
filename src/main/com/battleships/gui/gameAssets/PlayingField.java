@@ -20,35 +20,75 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Class that contains the {@link Entity} for the grids of the player, as well as the highlighted cell and the ships placed on the grids.
+ * Contains all the visual functions related to grids, ships and shooting.
+ *
+ * @author Tim Staudenmaier
+ */
 public class PlayingField {
 
+    /**
+     * Grid related:
+     *          OWNFIELD                - Constant indicating the grid of the player.
+     *          OPPONENTFIELD           - Constant indicating the grid of the opponent.
+     *          MAXSIZE                 - Constant for the max size of a grid (including one row/column for labels).
+     *          own                     - Entity of the players grid
+     *          opponent                - Entity of the opponents grid.
+     *          size                    - Size of one grid (excluding row/column for labels).
+     *          scale                   - Scale of one grid, gets smaller if the grid size is smaller.
+     *          playingFieldTexturePath - Path of the texture for the grids.
+     *          VERTICES, INDICES, TEXTURECOORDS, NORMALS
+     *                                  - Data for creating rectangle vao on which the grid texture can be rendered.
+     */
     public static final int OWNFIELD = 0;
     public static final int OPPONENTFIELD = 1;
-
-    private static final String buoyModelOBJ = "buoy";
+    private static final int MAXSIZE = 31;
+    private Entity own;
+    private Entity opponent;
+    private int size;
+    private static float scale = 300;
     private static final String playingfieldTexturePath = "PlayingField.png";
-    private static final String highlightTexturePath = "cannonball.png";
     private static final float[] VERTICES = {-0.5f, 0.5f, 0, -0.5f, -0.5f, 0, 0.5f, -0.5f, 0, 0.5f, 0.5f, 0};
     private static final int[] INDICES = {0, 1, 3, 3, 1, 2};
     private static final float[] TEXTURECOORDS = {0, 0, 0, 1, 1, 1, 1, 0};
     private static final float[] NORMALS = {0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0};
-    private static final int MAXSIZE = 31;
 
-    private ModelTexture texture;
-    private Entity own;
-    private Entity opponent;
+
+
+    /**
+     * Ship related:
+     *          shipManager         - ShipManger that handles placing ships.
+     *          ships               - Lists containing all ships currently on the grids. Needed for easy rendering.
+     */
     private ShipManager shipManager;
-    private List<Entity> grids;
     private List<Entity> ships;
 
+    //TODO remove
     private boolean shipPlacingPhase;
 
+    /**
+     * Cannonball related:
+     *          ball                - Entity for creating cannonballs.
+     *          cannonballFlying    - {@code true} if there is already a cannonball flying
+     *          cannonball          - The cannonball currently flying {@code null} if no cannonball is flying.
+     *          fire                - ParticleSystem to indicate ships that were hit by having a fire burning on them.
+     *          burningFires        - HashMap containing all ParticleSystems for each ship.
+     *          burningFireSounds   - HashMap containing all the soundSources for each ships fires.
+     *          animation           - if this is {@code true} then the cannonball animation is shown, else a hitMarker is immediately played without animation.
+     *          cannon              - Source that can play the sound of a firing cannon.
+     *          cannonSound         - SoundBuffer of the cannonSound
+     *          waterSplash         - Source for playing either waterSplashSound or hitSound on cannonball impact
+     *          waterSplashSound    - SoundBuffer for a waterSplash
+     *          hitSound            - SoundBuffer for a sound of a cannonball hitting a ship.
+     *          fireSound           - SoundBuffer for a soun of a burning fire.
+     */
     private Entity ball;
     private boolean cannonballFlying;
     private Cannonball cannonball;
     private ParticleSystemComplex fire;
-    private Map<Integer, List<Vector3f>> burningFires = new HashMap<>();
-    private Map<Integer, List<Source>> burningFireSounds = new HashMap<>();
+    private Map<Entity, List<Vector3f>> burningFires = new HashMap<>();
+    private Map<Entity, List<Source>> burningFireSounds = new HashMap<>();
     private boolean animation = true;
     private Source cannon = new Source(1, 40, 500);
     private int cannonSound = AudioMaster.loadSound("Cannon");
@@ -57,20 +97,24 @@ public class PlayingField {
     private int hitSound = AudioMaster.loadSound("HitSoundShort");
     private int fireSound = AudioMaster.loadSound("fire");
 
+    /**
+     * Marker related:
+     *          highlightTexturePath- Texture of the highlighter that indicates which cell the mouse cursor is hovering over.
+     *          buoyModelOBJ        - path for the model of the markers.
+     *          markers             - List containing all Entities of the markers, needed for rendering.
+     *          highlighter         - Entity of the highlighter showing which cell currently is being hovered by the mouse cursor.
+     *          currentPointedCell  - Vector containing the index of the currently hovered cell as x and y values and the constant indicating on which grid the cell is as z value.
+     *          buoyModelWhite      - The texturedModel for water markers.
+     *          buoyModelRed        - The texturedModel for ship markers (used on opponents grid where ships aren't visible).
+     */
+    //TODO hightlighter Tex
+    private static final String highlightTexturePath = "cannonball.png";
+    private static final String buoyModelOBJ = "buoy";
     private List<Entity> markers;
     private Entity highlighter;
     private Vector3i currentPointedCell;
     private TexturedModel buoyModelWhite;
     private TexturedModel buoyModelRed;
-    private ModelTexture white;
-    private ModelTexture red;
-
-    private int size;
-    private int textureOffset;
-    private Vector3f ownPosition;
-    private Vector3f opponentPosition;
-    private Vector3f rotation;
-    private static float scale = 300;
 
     /**
      * Create the two grids, the game is played on.
@@ -78,16 +122,15 @@ public class PlayingField {
      * @param loader - Loader needed to load models.
      */
     public PlayingField(int size, Loader loader) {
-        this.grids = new ArrayList<>();
         this.ships = new ArrayList<>();
         this.markers = new ArrayList<>();
-        initializeGrids(grids, loader, size);
+        initializeGrids(loader, size);
 
         this.ball = loader.loadEntityfromOBJ("cannonball", "cannonball.png", 10, 1);
         shipPlacingPhase = true;
 
         initializeFireParticleSystem(loader);
-        initializeMarkers(loader, grids);
+        initializeMarkers(loader);
 
         this.shipManager = new ShipManager(loader, this);
     }
@@ -103,16 +146,24 @@ public class PlayingField {
         if(cannonballFlying)
             cannonball.render(renderer);
         renderer.processEntityList(ships);
-        renderer.processEntityList(grids);
+        renderer.processEntity(own);
+        renderer.processEntity(opponent);
+        renderer.processEntity(highlighter);
         renderer.processEntityList(markers);
         shipManager.renderCursorShip(renderer);
-        for (int i : burningFires.keySet()) {
-            for (Vector3f pos : burningFires.get(i)) {
+        for (Entity e : burningFires.keySet()) {
+            for (Vector3f pos : burningFires.get(e)) {
                 fire.generateParticles(pos);
             }
         }
     }
 
+    /**
+     * Function that determines what should happen when a cell is clicked depending on game phase.
+     * Call when a cell is clicked.
+     * @param index - Index of the cell that was clicked.
+     * @param field - Field the cell that was clicked is on.
+     */
     public void cellClicked(Vector2i index, int field){
         //TODO move to logic
         if(cannonballFlying)
@@ -179,7 +230,7 @@ public class PlayingField {
             better: only call this function from logic if shooting is allowed*/false)
             return;
 
-        Vector2f originIndex = origin == OWNFIELD ? new Vector2f(ownPosition.x, ownPosition.z) : new Vector2f(opponentPosition.x, opponentPosition.z);
+        Vector2f originIndex = origin == OWNFIELD ? new Vector2f(own.getPosition().x, own.getPosition().z) : new Vector2f(opponent.getPosition().x, opponent.getPosition().z);
 
         //calculate coordinate position of destination
         Vector2f  destinationCoords = convertIndextoCoords(new Vector2f(destinationCell), origin == OWNFIELD ? OPPONENTFIELD : OWNFIELD);
@@ -353,19 +404,19 @@ public class PlayingField {
      * whether there was a ship or not.
      */
     private void playHitEffect(Vector2f location){
-        int shipIndex = 0;
+        Entity ship = own; //TODO get ship from logic
         Source sound = new Source(1, 10, 300);
         sound.setPosition(location.x, 0, location.y);
         sound.setLooping(true);
         sound.play(fireSound);
-        if (burningFires.containsKey(shipIndex)) { //TODO test if ship has been destroyed (size of Vector List == size of ship) Logic?
-            burningFires.get(shipIndex).add(new Vector3f(location.x, 0, location.y));
-            burningFireSounds.get(shipIndex).add(sound);
+        if (burningFires.containsKey(ship)) { //TODO test if ship has been destroyed (size of Vector List == size of ship) Logic?
+            burningFires.get(ship).add(new Vector3f(location.x, 0, location.y));
+            burningFireSounds.get(ship).add(sound);
         } else {
-            burningFires.put(shipIndex, new ArrayList<>());
-            burningFires.get(shipIndex).add(new Vector3f(location.x, 0, location.y));
-            burningFireSounds.put(shipIndex, new ArrayList<>());
-            burningFireSounds.get(shipIndex).add(sound);
+            burningFires.put(ship, new ArrayList<>());
+            burningFires.get(ship).add(new Vector3f(location.x, 0, location.y));
+            burningFireSounds.put(ship, new ArrayList<>());
+            burningFireSounds.get(ship).add(sound);
         }
     }
 
@@ -396,14 +447,20 @@ public class PlayingField {
         Vector3f result = new Vector3f();
         int field;
 
-        if (coords.x > ownPosition.x - own.getScale() / 2 + own.getScale() / (size + 1)&& coords.x < ownPosition.x + own.getScale() / 2 && coords.z > ownPosition.z - own.getScale() / 2 + own.getScale() / (size + 1) && coords.z < ownPosition.z + own.getScale() / 2) {
+        if (coords.x > own.getPosition().x - own.getScale() / 2 + own.getScale() / (size + 1) &&
+                coords.x < own.getPosition().x + own.getScale() / 2 &&
+                coords.z > own.getPosition().z - own.getScale() / 2 + own.getScale() / (size + 1) &&
+                coords.z < own.getPosition().z + own.getScale() / 2) {
             field = OWNFIELD;
-            result.x = coords.x - ownPosition.x + own.getScale() / 2;
-            result.y = coords.z - ownPosition.z + own.getScale() / 2;
-        } else if (coords.x > opponentPosition.x - opponent.getScale() / 2 + own.getScale() / (size + 1) && coords.x < opponentPosition.x + opponent.getScale() / 2 && coords.z > opponentPosition.z - opponent.getScale() / 2  + own.getScale() / (size + 1) && coords.z < opponentPosition.z + opponent.getScale() / 2) {
+            result.x = coords.x - own.getPosition().x + own.getScale() / 2;
+            result.y = coords.z - own.getPosition().z + own.getScale() / 2;
+        } else if (coords.x > opponent.getPosition().x - opponent.getScale() / 2 + own.getScale() / (size + 1) &&
+                coords.x < opponent.getPosition().x + opponent.getScale() / 2 &&
+                coords.z > opponent.getPosition().z - opponent.getScale() / 2  + own.getScale() / (size + 1) &&
+                coords.z < opponent.getPosition().z + opponent.getScale() / 2) {
             field = OPPONENTFIELD;
-            result.x = coords.x - opponentPosition.x + opponent.getScale() / 2;
-            result.y = coords.z - opponentPosition.z + opponent.getScale() / 2;
+            result.x = coords.x - opponent.getPosition().x + opponent.getScale() / 2;
+            result.y = coords.z - opponent.getPosition().z + opponent.getScale() / 2;
         } else
             return null;
 
@@ -438,37 +495,31 @@ public class PlayingField {
      * @param loader - Loader to load models.
      * @param size - Count of rows/columns one grid should have.
      */
-    private void initializeGrids(List<Entity> grids, Loader loader, int size) {
+    private void initializeGrids(Loader loader, int size) {
         this.size = size;
-        this.rotation = new Vector3f();
-        this.texture = new ModelTexture(loader.loadTexture(playingfieldTexturePath));
+        ModelTexture texture = new ModelTexture(loader.loadTexture(playingfieldTexturePath));
         texture.setNumberOfRows((float)MAXSIZE / (size + 1));
         scale *= (size + 1) / (float)MAXSIZE;
-        this.ownPosition = new Vector3f(350, -2.5f, -450);
-        this.opponentPosition = new Vector3f(350 + scale + 5, -2.5f, -450);
-        this.textureOffset = (size + 1) / MAXSIZE;
+        Vector3f ownPosition = new Vector3f(350, -2.5f, -450);
+        Vector3f opponentPosition = new Vector3f(350 + scale + 5, -2.5f, -450);
         this.own = new Entity(new TexturedModel(loader.loadToVAO(VERTICES, TEXTURECOORDS, NORMALS, INDICES), texture), 0, ownPosition, new Vector3f(), scale);
         own.getRotation().x -= 90;
-        grids.add(own);
 
         this.opponent = new Entity(new TexturedModel(loader.loadToVAO(VERTICES, TEXTURECOORDS, NORMALS, INDICES), texture), 0, opponentPosition, new Vector3f(), scale);
         opponent.getRotation().x -= 90;
-        grids.add(opponent);
     }
 
     /**
      * Initialize the Entity that is used to highlight cells and the model for the buoyModels marking shot cells.
      * @param loader - Loader to load models.
-     * @param entities - List of entities, the highlighter entity should be saved to.
      */
-    private void initializeMarkers(Loader loader, List<Entity> entities) {
+    private void initializeMarkers(Loader loader) {
         ModelTexture highlightTex = new ModelTexture(loader.loadTexture(highlightTexturePath));
         highlighter = new Entity(new TexturedModel(loader.loadToVAO(VERTICES, TEXTURECOORDS, NORMALS, INDICES), highlightTex), new Vector3f(), new Vector3f(), scale / (size + 1));
         highlighter.getRotation().x -= 90;
-        entities.add(highlighter);
 
-        white = new ModelTexture(loader.loadTexture("white.png"));
-        red = new ModelTexture(loader.loadTexture("red.png"));
+        ModelTexture white = new ModelTexture(loader.loadTexture("white.png"));
+        ModelTexture red = new ModelTexture(loader.loadTexture("red.png"));
         buoyModelWhite = new TexturedModel(OBJLoader.loadObjModel(buoyModelOBJ), white);
         buoyModelRed = new TexturedModel(OBJLoader.loadObjModel(buoyModelOBJ), red);
     }

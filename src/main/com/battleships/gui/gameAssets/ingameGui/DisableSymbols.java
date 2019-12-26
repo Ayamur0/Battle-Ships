@@ -11,16 +11,40 @@ import org.joml.Vector2f;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * {@link GuiTexture} with functions for the symbols indicating if animation and sound are currently enabled or disabled.
+ *
+ * @author Tim Staudenmaier
+ */
 public class DisableSymbols extends GuiClickCallback {
 
+    /**
+     * Constants representing the two symbols.
+     */
     public static final int ANIMATION = 0;
     public static final int SOUND = 1;
 
+    /**
+     * TextureAtlas containing the 4 textures for the two symbols (two for each, enabled and disabled).
+     */
     private static final String textureAtlas = "DisableSymbolsWood.png";
+    /**
+     * List containing only the two symbols.
+     */
     private List<GuiTexture> currentSymbols = new ArrayList<>();
+    /**
+     * Used to determine which button was the last one that was clicked.
+     */
     private int buttonClicked;
 
+    /**
+     * List of guis these two symbols should get added to, this list needs to be passed to
+     * a {@link com.battleships.gui.guis.GuiRenderer} for these symbols to appear on screen.
+     */
     private List<GuiTexture> guis;
+    /**
+     * {@link GuiManager} that handles the clickFunctions of the symbols.
+     */
     private GuiManager guiManager;
 
     /**

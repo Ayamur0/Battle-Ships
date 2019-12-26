@@ -3,23 +3,31 @@ package com.battleships.gui.fontMeshCreator;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * One line of a {@link GUIText}
+ *
+ * @author Tim Staudenmaier
+ */
 public class Line {
 
     private double maxLength;
     private double spaceSize;
 
+    /**
+     * List of all the words in this line.
+     */
     private List<Word> words = new ArrayList<Word>();
+    /**
+     * How long the line is with the current words.
+     */
     private double currentLineLength = 0;
 
     /**
      * Create an empty line
      *
-     * @param spaceWidth
-     *            - width of a space character
-     * @param fontSize
-     *            - size of the font
-     * @param maxLength
-     *            - the maximum length of a line before a line break
+     * @param spaceWidth - width of a space character
+     * @param fontSize - size of the font
+     * @param maxLength - the maximum length of a line before a line break
      */
     protected Line(double spaceWidth, double fontSize, double maxLength) {
         this.spaceSize = spaceWidth * fontSize;
@@ -32,7 +40,7 @@ public class Line {
      *
      * @param word - what word to try adding
      *
-     * @return {@code true} if the word has been successfully added to the line
+     * @return - {@code true} if the word has been successfully added to the line
      */
     protected boolean attemptToAddWord(Word word) {
         double additionalLength = word.getWordWidth();
@@ -50,21 +58,21 @@ public class Line {
     }
 
     /**
-     * @return max length of the line before a line break
+     * @return - max length of the line before a line break
      */
     protected double getMaxLength() {
         return maxLength;
     }
 
     /**
-     * @return current length of the line
+     * @return - current length of the line
      */
     protected double getLineLength() {
         return currentLineLength;
     }
 
     /**
-     * @return list of all words in the line
+     * @return - list of all words in the line
      */
     protected List<Word> getWords() {
         return words;

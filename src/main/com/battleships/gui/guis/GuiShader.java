@@ -4,11 +4,22 @@ import com.battleships.gui.shaders.ShaderProgram;
 import org.joml.Matrix4f;
 import org.joml.Vector2f;
 
+/**
+ * Shader for Gui elements.
+ *
+ * @author Tim Staudenmaier
+ */
 public class GuiShader extends ShaderProgram {
 
+    /**
+     * Constants containing the paths to the shader files.
+     */
     private static final String VERTEX_FILE = "/com/battleships/gui/guis/guiVertexShader.glsl";
     private static final String FRAGMENT_FILE = "/com/battleships/gui/guis/guiFragmentShader.glsl";
 
+    /**
+     * Location values for the uniform variables.
+     */
     private int location_transformationMatrix;
     private int location_numberOfRows;
     private int location_offest;
@@ -65,7 +76,7 @@ public class GuiShader extends ShaderProgram {
     /**
      * Binds the attributes to the shader.
      * If a gui is rendered, it's vertex array object gets loaded. This vao contains
-     * 3 attribute the position. This attribute is then passed to the vertexShader as "in value", so it can process it.
+     * 1 attribute the position. This attribute is then passed to the vertexShader as "in value", so it can process it.
      */
     @Override
     protected void bindAttributes() {

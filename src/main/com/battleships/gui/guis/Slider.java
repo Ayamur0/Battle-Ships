@@ -8,20 +8,41 @@ import org.lwjgl.glfw.GLFW;
 import java.nio.DoubleBuffer;
 import java.util.List;
 
+/**
+ * Special GuiElement that takes user input.
+ * Sliders have a specified range of values that can be set by the user moving by moving the slider on its bar.
+ *
+ * @author Tim Staudenmaier
+ */
 public class Slider extends GuiClickCallback implements Runnable{
 
+    /**
+     * GuiTexture of the slider and the bar it is moving on.
+     */
     private GuiTexture slider;
     private GuiTexture bar;
 
+    /**
+     * minValue the slider has if it is completely to the left and maxValue if it is completely to the right.
+     */
     private int minValue;
     private int maxValue;
 
+    /**
+     * Coordinates of the maxPosition the slider can have if it is completely to the right, or min Position
+     * if it is completely to the left. (screen coordinates)
+     */
     private float maxPosX;
     private float minPosX;
 
-    private float mousePosX;
-
+    /**
+     * List of GuiTextures that contains the GuiTextures of this slider.
+     * Needs to be passed to a {@link GuiRenderer} for the slider to show on screen.
+     */
     private List<GuiTexture> guis;
+    /**
+     * GuiManager that handles the clickFunction of this slider.
+     */
     private GuiManager guiManager;
 
     private boolean running;
@@ -62,7 +83,7 @@ public class Slider extends GuiClickCallback implements Runnable{
      */
     @Override
     protected boolean isClickOnGui(GuiTexture gui, double x, double y) {
-        mousePosX = (float)x;
+        float mousePosX = (float) x;
         return super.isClickOnGui(gui, x, y) || super.isClickOnGui(bar, x, y);
     }
 

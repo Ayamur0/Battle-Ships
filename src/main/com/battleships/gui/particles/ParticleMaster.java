@@ -9,8 +9,17 @@ import org.lwjgl.opengl.GL13;
 
 import java.util.*;
 
+/**
+ * Class that is always needed before particles can be used.
+ * Handles rendering and updating all particles.
+ *
+ * @author Tim Staudenmaier
+ */
 public class ParticleMaster {
 
+    /**
+     * HashMap containing all particles for each ParticleTexture, for fast rendering.
+     */
     private static Map<ParticleTexture, List<Particle>> particles = new HashMap<>();
     private static ParticleRenderer renderer;
 
@@ -63,6 +72,10 @@ public class ParticleMaster {
         renderer.render(particles, camera);
     }
 
+    /**
+     * Clean up all particle related stuff.
+     * Needs to be called on program exit.
+     */
     public static void cleanUp(){
         renderer.cleanUp();
     }

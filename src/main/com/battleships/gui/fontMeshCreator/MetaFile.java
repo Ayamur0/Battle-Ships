@@ -6,34 +6,71 @@ import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * This class contains all the necessary information of a .fnt file so text can be rendered to the screen using that .fnt file.
+ * All .fnt files need to be distance font files for this implementation.
+ *
+ * @author Tim Staudenmaier
+ */
 public class MetaFile {
 
+    /**
+     * Indices at which the padding values of the font file are stored.
+     */
     private static final int PAD_TOP = 0;
     private static final int PAD_LEFT = 1;
     private static final int PAD_BOTTOM = 2;
     private static final int PAD_RIGHT = 3;
 
+    /**
+     * Padding value each .fnt file should have that is used with this class.
+     */
     private static final int DESIRED_PADDING = 8;
 
+    /**
+     * With which character all characters/numbers are separated in the .fnt file.
+     */
     private static final String SPLITTER = " ";
     private static final String NUMBER_SEPARATOR = ",";
 
+    /**
+     * Aspect ratio of the screen the text should be rendered on.
+     */
     private double aspectRatio;
 
+    /**
+     * How big each pixel of the font needs to be on the screen after rendering.
+     */
     private double verticalPerPixelSize;
     private double horizontalPerPixelSize;
+    /**
+     * Width of a space character.
+     */
     private double spaceWidth;
+    /**
+     * Actual padding values of the .fnt file.
+     */
     private int[] padding;
     private int paddingWidth;
     private int paddingHeight;
 
+    /**
+     * Map that contains all ASCII-Values of all characters, mapping them to their corresponding character.
+     */
     private Map<Integer, Character> metaData = new HashMap<>();
 
+    /**
+     * Reader to read file.
+     */
     private BufferedReader reader;
+    /**
+     * Map containing all the information read by the reader.
+     * First string is identifier of the value, second is the actual value.
+     */
     private Map<String, String> values = new HashMap<>();
 
     /**
-     * open a font file to read it
+     * open a font file to read it, read all needed data from it and save the read data into this Object.
      *
      * @param file - font file
      */
@@ -71,7 +108,7 @@ public class MetaFile {
     /**
      * read the next line and store the variable names and their values in the values hashMap
      *
-     * @return {@code true} if end of the file hasn't been reached
+     * @return - {@code true} if end of the file hasn't been reached
      */
     private boolean processNextLine() {
         values.clear();
@@ -96,9 +133,8 @@ public class MetaFile {
     /**
      * Get the {@code int} value of a variable with a certain name in the current line
      *
-     * @param variable
-     *            - the name of the variable
-     * @return The {@code int} value of the variable
+     * @param variable - the name of the variable
+     * @return - The {@code int} value of the variable
      */
     private int getValueOfVariable(String variable) {
         return Integer.parseInt(values.get(variable));
@@ -107,9 +143,8 @@ public class MetaFile {
     /**
      * Get array of ints from a variable in the current line
      *
-     * @param variable
-     *            - the name of the variable
-     * @return The int array of values from the variable, split at commas
+     * @param variable - the name of the variable
+     * @return - The int array of values from the variable, split at commas
      */
     private int[] getValuesOfVariable(String variable) {
         String[] numbers = values.get(variable).split(NUMBER_SEPARATOR);
@@ -177,9 +212,8 @@ public class MetaFile {
      * it all from 'pixels' to 'screen-space' before storing. Also remove padding
      * between characters
      *
-     * @param imageSize
-     *            - size of the texture atlas in pixels
-     * @return The data about the character as {@link Character}
+     * @param imageSize - size of the texture atlas in pixels
+     * @return - The data about the character as {@link Character}
      */
     private Character loadCharacter(int imageSize) {
         int id = getValueOfVariable("id");

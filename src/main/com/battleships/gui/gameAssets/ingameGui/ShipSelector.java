@@ -18,17 +18,45 @@ import java.util.List;
 
 public class ShipSelector extends GuiClickCallback {
 
+    /**
+     * Constants for the Color of the text and the outline of the text.
+     */
     private static final Vector3f BLACK = new Vector3f();
     private static final Vector2f OUTLINEOFFSET = new Vector2f();
 
+    /**
+     * Array containing the GuiTextures for all clickable elements of this UI.
+     */
     private GuiTexture[] buttons = new GuiTexture[4];
-    private List<GUIText> shipCountTexts = new ArrayList<>();
-    private int[] shipCounts;
-    private int buttonNumber;
-    private ShipManager shipManager;
+    /**
+     * Gui of the background behind the clickable buttons.
+     */
     private GuiTexture background;
+    /**
+     * List containing all texts on this UI.
+     */
+    private List<GUIText> shipCountTexts = new ArrayList<>();
+    /**
+     * Array containing how many ships of each size are left to place.
+     */
+    private int[] shipCounts;
+    /**
+     * Used to determine which button was the last one that was clicked.
+     */
+    private int buttonNumber;
+    /**
+     * ShipManager that handles the placing of the selected ships.
+     */
+    private ShipManager shipManager;
 
+    /**
+     * {@link GuiManager} handling the click functions of this UI.
+     */
     private GuiManager guiManager;
+    /**
+     * List of guis these two symbols should get added to, this list needs to be passed to
+     * a {@link com.battleships.gui.guis.GuiRenderer} for these symbols to appear on screen.
+     */
     private List<GuiTexture> guis;
 
     /**

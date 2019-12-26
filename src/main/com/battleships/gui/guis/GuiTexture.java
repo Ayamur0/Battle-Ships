@@ -7,13 +7,36 @@ import org.lwjgl.opengl.GL11;
 
 import java.nio.IntBuffer;
 
+/**
+ * All Gui elements in the game are instances of this class.
+ * Contains all information needed to create a 2D GUI.
+ *
+ * @author Tim Staudenmaier
+ */
+
 public class GuiTexture {
 
+    /**
+     * ID of the texture this gui uses.
+     */
     private int texture;
-    private Vector2f positions;
-    private Vector2f scale;
+    /**
+     * If texture us a texture atlas indicates the number of rows/columns that
+     * texture atlas contains. (1 if texture is no texture atlas)
+     */
     private int rows = 1;
+    /**
+     * Offset of the texture in the textureAtlas that is used (0 if no texture Atlas is used).
+     */
     private float offsetX = 0, offsetY = 0;
+    /**
+     * Position the middle of this gui is at (screen coordinates).
+     */
+    private Vector2f positions;
+    /**
+     * Scale of this gui (screen coordinates)
+     */
+    private Vector2f scale;
 
     /**
      * Create a new gui with a texture at the specified position and the specified scale.

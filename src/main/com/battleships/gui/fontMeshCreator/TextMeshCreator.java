@@ -4,15 +4,27 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This class can create the quads a text needs to be rendered on, depending on which characters are in the text.
+ * Each {@link FontType} has one TextMeshCreator to create the meshes for texts using that font.
+ *
+ * @author Tim Staudenmaier
+ */
 public class TextMeshCreator {
 
+    /**
+     * Height of a line in screen space.
+     */
     protected static final double LINE_HEIGHT = 0.03f;
+    /**
+     * ASCII-Code of the space character.
+     */
     protected static final int SPACE_ASCII = 32;
 
     private MetaFile metaData;
 
     /**
-     * @param metaFile - {@link MetaFile} containing all the information about the font and it's characters
+     * @param metaFile - {@link MetaFile} containing all the information about the font and it's characters.
      */
 
     protected TextMeshCreator(String metaFile) {

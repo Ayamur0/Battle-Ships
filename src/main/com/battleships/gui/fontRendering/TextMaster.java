@@ -11,6 +11,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Main class for all text related things, handles rendering of texts.
+ * This TextMaster needs to be always initialized before using texts.
+ *
+ * @author Tim Staudenmaier
+ */
+
 public class TextMaster {
 
     /**
