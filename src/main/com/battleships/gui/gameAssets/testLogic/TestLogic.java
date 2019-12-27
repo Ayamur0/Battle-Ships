@@ -2,7 +2,6 @@ package com.battleships.gui.gameAssets.testLogic;
 
 import com.battleships.gui.fontMeshCreator.MetaFile;
 import com.battleships.gui.gameAssets.GameManager;
-import com.battleships.gui.gameAssets.PlayingField;
 
 import java.io.BufferedReader;
 import java.io.IOException;
