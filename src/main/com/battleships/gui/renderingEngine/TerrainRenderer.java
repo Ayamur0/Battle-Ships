@@ -15,10 +15,21 @@ import org.lwjgl.opengl.GL30;
 
 import java.util.List;
 
+/**
+ * Renderer for rendering terrains. Uses a {@link TerrainShader} for rendering.
+ */
 public class TerrainRenderer {
 
+    /**
+     * Shader used for rendering.
+     */
     private TerrainShader shader;
 
+    /**
+     * Create a new renderer.
+     * @param shader TerrainShader for this renderer.
+     * @param projectionMatrix - Current projectionMatrix of the window.
+     */
     public TerrainRenderer(TerrainShader shader, Matrix4f projectionMatrix) {
         this.shader = shader;
         shader.start();
@@ -27,6 +38,10 @@ public class TerrainRenderer {
         shader.stop();
     }
 
+    /**
+     * Render terrains to the screen.
+     * @param terrains List containing all the terrains that should be rendered.
+     */
     public void render(List<Terrain> terrains){
         //prepare each terrain and render that terrain
         //only needs to load each model and texture once even if it's used multiple times
@@ -40,6 +55,11 @@ public class TerrainRenderer {
             unbindTerrain();
         }
     }
+
+    /**
+     * Prepare renderer to render a specific terrain.
+     * @param terrain Terrain that is rendered next.
+     */
     private void prepareTerrain(Terrain terrain){
         RawModel model = terrain.getModel();
         GL30.glBindVertexArray(model.getVaoID()); //bind vaos of model to be loaded
@@ -50,6 +70,10 @@ public class TerrainRenderer {
         shader.loadShineVariables(1, 0); //pass the shineDamper and reflectivity values from the texture to the shader
     }
 
+    /**
+     * Binds the textures of the terrain that gets rendered next.
+     * @param terrain Terrain that is rendered next.
+     */
     private void bindTextures(Terrain terrain){
         TerrainTexturePack texturePack = terrain.getTexturePack();
         int i = 0;
@@ -63,7 +87,10 @@ public class TerrainRenderer {
         GL13.glBindTexture(GL11.GL_TEXTURE_2D, terrain.getBlendMap().getTextureID());
     }
 
-    //disable currently loaded model vaos and then unbind them
+    /**
+     * Unbind the currently bound terrain.
+     * Needs to be called after the last terrain has been rendered.
+     */
     private void unbindTerrain(){
         GL20.glDisableVertexAttribArray(0); //disable position vao
         GL20.glDisableVertexAttribArray(1); //disable textureCoords vao
@@ -71,6 +98,10 @@ public class TerrainRenderer {
         GL30.glBindVertexArray(0); //unbind vaos
     }
 
+    /**
+     * Load the transformationMatrix of the terrain that gets rendered next.
+     * @param terrain Terrain that is rendered next.
+     */
     private void loadModelMatrix(Terrain terrain){
         //create transfMatrix with current position rotation and scale of entity
         Matrix4f transformationMatrix = Maths.createTransformationMatrix(new Vector3f(terrain.getX(), 0, terrain.getZ()),new Vector3f(), 1);

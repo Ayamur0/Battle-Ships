@@ -13,7 +13,7 @@ import java.util.Map;
 
 /**
  * Main class for all text related things, handles rendering of texts.
- * This TextMaster needs to be always initialized before using texts.
+ * Needs to be always initialized before using texts.
  *
  * @author Tim Staudenmaier
  */
@@ -21,7 +21,7 @@ import java.util.Map;
 public class TextMaster {
 
     /**
-     * @param texts - Stores all texts corresponding to a FontType that are currently rendered
+     * @param texts Stores all texts corresponding to a FontType that are currently rendered
      */
     private static Loader loader;
     private static Map<FontType, List<GUIText>> texts = new HashMap<>();
@@ -29,7 +29,7 @@ public class TextMaster {
 
     /**
      * Setup the TextMaster to be able to load and render text
-     * @param loader2 - the loader to be used when loading the quads for the text to be rendered on
+     * @param loader2 the loader to be used when loading the quads for the text to be rendered on
      */
     public static void init(Loader loader2){
         renderer = new FontRenderer();
@@ -47,7 +47,7 @@ public class TextMaster {
      * Load a text, create it's meshes store these to the text and add the text to the texts HashMap so it gets rendered.
      * If the HashMap doesn't contain an entry with the used font, create a new one.
      *
-     * @param text - the text to be loaded
+     * @param text the text to be loaded
      */
     public static void loadText(GUIText text){
         FontType font = text.getFont();
@@ -59,7 +59,7 @@ public class TextMaster {
 
     /**
      * Adds a already loaded Text to the HashMap to be rendered.
-     * @param text - text to add to the HashMap.
+     * @param text text to add to the HashMap.
      */
     public static void addText(GUIText text){
         FontType font = text.getFont();
@@ -73,7 +73,7 @@ public class TextMaster {
 
     /**
      * Remove a text from the texts hashMap so it doesn't get rendered anymore
-     * @param text - the text to be removed
+     * @param text the text to be removed
      */
     public static void removeText(GUIText text){
         List<GUIText> textBatch = texts.get(text.getFont());

@@ -8,7 +8,7 @@ import org.lwjgl.opengl.GL11;
 import java.nio.IntBuffer;
 
 /**
- * All Gui elements in the game are instances of this class.
+ * A simple 2D GUI element without any functions.
  * Contains all information needed to create a 2D GUI.
  *
  * @author Tim Staudenmaier
@@ -40,9 +40,9 @@ public class GuiTexture {
 
     /**
      * Create a new gui with a texture at the specified position and the specified scale.
-     * @param texture - The texture the gui should use.
-     * @param positions - Position of the center of the gui in screen coordinates (0,0) top left and (1,1) bottom right.
-     * @param scale - Scale for this gui as x and y values for horizontal and vertical scale.
+     * @param texture The texture the gui should use.
+     * @param positions Position of the center of the gui in screen coordinates (0,0) top left and (1,1) bottom right.
+     * @param scale Scale for this gui as x and y values for horizontal and vertical scale.
      *              Scale is percentage of the screen the gui should occupy, 1 for screen width/height.
      */
     public GuiTexture(int texture, Vector2f positions, Vector2f scale) {
@@ -54,8 +54,8 @@ public class GuiTexture {
     /**
      * Create a new gui with a texture at the specified position. The scale will be set
      * to the scale of the texture image.
-     * @param texture - The texture the gui should use.
-     * @param positions - Position of the center of the gui in screen coordinates (0,0) top left and (1,1) bottom right.
+     * @param texture The texture the gui should use.
+     * @param positions Position of the center of the gui in screen coordinates (0,0) top left and (1,1) bottom right.
      */
     public GuiTexture(int texture, Vector2f positions) {
         this.texture = texture;
@@ -65,21 +65,21 @@ public class GuiTexture {
     }
 
     /**
-     * @return - TextureID of this gui.
+     * @return TextureID of this gui.
      */
     public int getTexture() {
         return texture;
     }
 
     /**
-     * @return - Positions of the center of this gui
+     * @return Positions of the center of this gui
      */
     public Vector2f getPositions() {
         return positions;
     }
 
     /**
-     * @return - Scale of this gui as x and y values for horizontal and vertical scale in terms of screen space occupied (1 = screen width)
+     * @return Scale of this gui as x and y values for horizontal and vertical scale in terms of screen space occupied (1 = screen width)
      */
     public Vector2f getScale() {
         return scale;
@@ -107,7 +107,7 @@ public class GuiTexture {
     }
 
     /**
-     * @return - NumberOfRows this texture uses (1 if this isn't a texture atlas).
+     * @return NumberOfRows this texture uses (1 if this isn't a texture atlas).
      */
     public int getRows() {
         return rows;
@@ -115,14 +115,14 @@ public class GuiTexture {
 
     /**
      * Set amount of rows this texture uses (default 1, for no texture atlas).
-     * @param rows - numberOfRows this texture has.
+     * @param rows numberOfRows this texture has.
      */
     public void setRows(int rows) {
         this.rows = rows;
     }
 
     /**
-     * @return - The offset of the column in the textureAtlas for the texture this GUITexture uses.
+     * @return The offset of the column in the textureAtlas for the texture this GUITexture uses.
      */
     public float getOffsetX() {
         return offsetX / rows;
@@ -130,21 +130,21 @@ public class GuiTexture {
 
     /**
      * Sets the column of the texture in the Texture Atlas this GUITexture should use (default 0, for no texture atlas).
-     * @param offsetX - Column of texture to be used.
+     * @param offsetX Column of texture to be used.
      */
     public void setOffsetX(float offsetX) {
         this.offsetX = offsetX;
     }
 
     /**
-     * @return - The offset of the row in the textureAtlas for the texture this GUITexture uses.
+     * @return The offset of the row in the textureAtlas for the texture this GUITexture uses.
      */
     public float getOffsetY() {
         return offsetY / rows;
     }
     /**
      * Sets the row of the texture in the Texture Atlas this GUITexture should use (default 0, for no texture atlas).
-     * @param offsetY - Row of texture to be used.
+     * @param offsetY Row of texture to be used.
      */
     public void setOffsetY(float offsetY) {
         this.offsetY = offsetY;

@@ -1,7 +1,7 @@
 package com.battleships.gui.models;
 
 /**
- * Texture for {@link TexturedModel}.
+ * Texture for a {@link TexturedModel}.
  *
  * @author Tim Staudenmaier
  */
@@ -38,7 +38,7 @@ public class ModelTexture {
 
     /**
      * Create a new ModelTexture.
-     * @param textureID - Texture ID of the texture this ModelTexture should use.
+     * @param textureID Texture ID of the texture this ModelTexture should use.
      */
     public ModelTexture(int textureID) {
         this.textureID = textureID;
@@ -47,7 +47,7 @@ public class ModelTexture {
 
     /**
      *
-     * @return - Number of rows this textureAtlas has. 1 if it isn't a textureAtlas.
+     * @return Number of rows this textureAtlas has. 1 if it isn't a textureAtlas.
      */
     public float getNumberOfRows() {
         return numberOfRows;
@@ -55,7 +55,7 @@ public class ModelTexture {
 
     /**
      * Set the number of rows in this texture.
-     * @param numberOfRows - numberOfRows this texture has.
+     * @param numberOfRows numberOfRows this texture has.
      */
     public void setNumberOfRows(float numberOfRows) {
         this.numberOfRows = numberOfRows;
@@ -71,7 +71,7 @@ public class ModelTexture {
 
     /**
      * Set if this texture uses transparency.
-     * @param hasTransparency - {@code true} if this texture should use transparency.
+     * @param hasTransparency {@code true} if this texture should use transparency.
      */
     public void setHasTransparency(boolean hasTransparency) {
         this.hasTransparency = hasTransparency;
@@ -79,7 +79,7 @@ public class ModelTexture {
 
     /**
      *
-     * @return - {@code true} if this texture needs to use fake lighting.
+     * @return {@code true} if this texture needs to use fake lighting.
      */
     public boolean isUseFakeLighting() {
         return useFakeLighting;
@@ -87,7 +87,7 @@ public class ModelTexture {
 
     /**
      * Set if this texture needs to use fake lighting.
-     * @param useFakeLighting - {@code true} if this texture should use fake lighting.
+     * @param useFakeLighting {@code true} if this texture should use fake lighting.
      */
     public void setUseFakeLighting(boolean useFakeLighting) {
         this.useFakeLighting = useFakeLighting;
@@ -95,7 +95,7 @@ public class ModelTexture {
 
     /**
      *
-     * @return - The ID of the texture.
+     * @return The ID of the texture.
      */
     public int getID() {
         return textureID;
@@ -103,7 +103,7 @@ public class ModelTexture {
 
     /**
      *
-     * @return - The value of how much the light, reflected by entities with this texture, spreads.
+     * @return The value of how much the light, reflected by entities with this texture, spreads.
      */
     public float getShineDamper() {
         return shineDamper;
@@ -111,7 +111,7 @@ public class ModelTexture {
 
     /**
      * Set how much the light, reflected by entities with this texture, should spread.
-     * @param shineDamper - How much the light should spread.
+     * @param shineDamper How much the light should spread.
      */
     public void setShineDamper(float shineDamper) {
         this.shineDamper = shineDamper;
@@ -126,7 +126,7 @@ public class ModelTexture {
 
     /**
      * Set how much light should be reflected by entities with this texture.
-     * @param reflectivity - how much light should be reflected.
+     * @param reflectivity how much light should be reflected.
      */
     public void setReflectivity(float reflectivity) {
         this.reflectivity = reflectivity;

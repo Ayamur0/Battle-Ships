@@ -9,19 +9,41 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
 
+/**
+ * Main class for all post processing effects.
+ * Needs to always get initialized before any post processing is used.
+ *
+ * @author Tim Staudenmaier
+ */
+
 public class PostProcessing {
 
+    /**
+     * Positions so the image fully covers the window.
+     */
     private static final float[] POSITIONS = { -1, 1, -1, -1, 1, 1, 1, -1 };
+    /**
+     * Quad the image can get rendered on.
+     */
     private static RawModel quad;
+    /**
+     * ContrastChanger to influence contrast of the image.
+     */
     private static ContrastChanger contrastChanger;
+    /**
+     * Horizontal blur effect to blur the image horizontally.
+     */
     private static HorizontalBlur hBlur;
+    /**
+     * Vertical blur effect to blur the image vertically.
+     */
     private static VerticalBlur vBlur;
 //    private static HorizontalBlur hBlur2;
 //    private static VerticalBlur vBlur2;
     /**
      * Creates a quad that fills the whole screen to render the fbo on.
      * And initializes all post processing effects.
-     * @param loader - loader to load vao
+     * @param loader loader to load vao
      */
     public static void init(Loader loader){
         quad = loader.loadToVAO(POSITIONS, 2);
@@ -38,7 +60,7 @@ public class PostProcessing {
     /**
      * Do all post processing related things.
      * Render all post processing effects one after another.
-     * @param colorTexture - the current scene (fbo) as texture
+     * @param colorTexture the current scene (fbo) as texture
      */
     public static void doPostProcessing(int colorTexture){
         start();

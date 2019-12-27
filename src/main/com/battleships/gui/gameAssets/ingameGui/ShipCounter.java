@@ -15,18 +15,27 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Overlay during the shooting phase of the game. Contains all {@link GuiTexture} and their functions needed for this UI.
+ * Overlay during the shooting phase of the game. Contains all {@link GuiTexture}s and their functions needed for this UI.
  *
  * @author Tim Staudenmaier
  */
 public class ShipCounter extends GuiClickCallback implements Runnable{
 
     /**
-     * Constants for the texture files, the text color and text outline.
+     * Texture of the main UI.
      */
     private static final String texture = "ShipCounter.png";
+    /**
+     * Texture for the hide button of the UI.
+     */
     private static final String hider = "ShipCounterHider.png";
+    /**
+     * Color of all {@link GUIText}s on this UI.
+     */
     private static final Vector3f GREY = new Vector3f(0.2f,0.2f,0.2f);
+    /**
+     *  Color of the outline all {@link GUIText}s have on this UI.
+     */
     private static final Vector2f OUTLINEOFFSET = new Vector2f();
 
     /**
@@ -34,9 +43,12 @@ public class ShipCounter extends GuiClickCallback implements Runnable{
      */
     private boolean visible = true;
     /**
-     * GuiTexture for the Counter and the hideButton that hides the gui.
+     * GuiTexture for the Counter.
      */
     private GuiTexture gui;
+    /**
+     * GuiTexture for the hideButton that hides the gui
+     */
     private GuiTexture hideButton;
     /**
      * List containing all the texts on the ShipCounter.
@@ -61,9 +73,9 @@ public class ShipCounter extends GuiClickCallback implements Runnable{
 
     /**
      * Creates the gui, that shows the amount of enemy ships left.
-     * @param loader - Loader to load textures.
-     * @param guiManager - Manager to handle gui's with click action
-     * @param guis - List of guis, this one should be added to. This list needs to be
+     * @param loader Loader to load textures.
+     * @param guiManager Manager to handle gui's with click action
+     * @param guis List of guis, this one should be added to. This list needs to be
      *               passed to a renderer, for this gui to show on the screen.
      */
     public ShipCounter (Loader loader, GuiManager guiManager, List<GuiTexture> guis){
@@ -83,7 +95,7 @@ public class ShipCounter extends GuiClickCallback implements Runnable{
 
     /**
      * Decrement the count of alive ships, for a specific size.
-     * @param shipSize - shipSize for which the count of the ships left should be decremented.
+     * @param shipSize shipSize for which the count of the ships left should be decremented.
      */
     public void decrementCount(int shipSize){
         GUIText toChange = counts[shipSize - 2];

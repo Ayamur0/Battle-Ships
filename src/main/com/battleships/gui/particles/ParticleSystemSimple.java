@@ -12,14 +12,20 @@ import org.joml.Vector3f;
 public class ParticleSystemSimple {
 
     /**
-     * pps              - Particles emitted per second.
-     * Speed            - Speed each particle gets emitted at.
-     * gravityComplient - How much emitted particles are affected by gravity (negative for inverted gravity)
-     * lifeLength       - How long the particles are alive.
+     * Particles emitted per second.
      */
     private float pps;
+    /**
+     * Average Speed each particle gets emitted at.
+     */
     private float speed;
+    /**
+     * How much emitted particles are affected by gravity (negative for inverted gravity)
+     */
     private float gravityComplient;
+    /**
+     * How long in average the particles are alive.
+     */
     private float lifeLength;
 
     /**
@@ -29,11 +35,11 @@ public class ParticleSystemSimple {
 
     /**
      * Create a new particleSystem.
-     * @param texture - Texture all particles of this system should use.
-     * @param pps - How many particles should be emitted per second.
-     * @param speed - How fast the particles should be emitted.
-     * @param gravityComplient - How much the particles are influenced by gravity.
-     * @param lifeLength - How long the particles should live.
+     * @param texture Texture all particles of this system should use.
+     * @param pps How many particles should be emitted per second.
+     * @param speed How fast the particles should be emitted.
+     * @param gravityComplient How much the particles are influenced by gravity.
+     * @param lifeLength How long the particles should live.
      */
     public ParticleSystemSimple(ParticleTexture texture, float pps, float speed, float gravityComplient, float lifeLength) {
         this.texture = texture;
@@ -45,7 +51,7 @@ public class ParticleSystemSimple {
 
     /**
      * Generate particles using all the settings of this system.
-     * @param systemCenter - Center from which the particles should be generated.
+     * @param systemCenter Center from which the particles should be generated.
      */
     public void generateParticles(Vector3f systemCenter){
         float delta = WindowManager.getDeltaTime();
@@ -62,7 +68,7 @@ public class ParticleSystemSimple {
 
     /**
      * Emits one particle with the settings of this system.
-     * @param center - Position the particle is emitted from.
+     * @param center Position the particle is emitted from.
      */
     private void emitParticle(Vector3f center){
         float dirX = (float) Math.random() * 2f - 1f;

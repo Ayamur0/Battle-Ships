@@ -4,13 +4,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * One line of a {@link GUIText}
+ * One line of a {@link GUIText} consisting of multiple {@link Word}s.
  *
  * @author Tim Staudenmaier
  */
 public class Line {
 
+    /**
+     * Maximum length this lane can reach.
+     */
     private double maxLength;
+    /**
+     * Size of one space character.
+     */
     private double spaceSize;
 
     /**
@@ -25,9 +31,9 @@ public class Line {
     /**
      * Create an empty line
      *
-     * @param spaceWidth - width of a space character
-     * @param fontSize - size of the font
-     * @param maxLength - the maximum length of a line before a line break
+     * @param spaceWidth width of a space character
+     * @param fontSize size of the font
+     * @param maxLength the maximum length of a line before a line break
      */
     protected Line(double spaceWidth, double fontSize, double maxLength) {
         this.spaceSize = spaceWidth * fontSize;
@@ -38,9 +44,9 @@ public class Line {
      * Try to add a word to the line. If there is enough space for it, before the line
      * gets longer than the max length add the word and increase currentLineLength.
      *
-     * @param word - what word to try adding
+     * @param word what word to try adding
      *
-     * @return - {@code true} if the word has been successfully added to the line
+     * @return {@code true} if the word has been successfully added to the line
      */
     protected boolean attemptToAddWord(Word word) {
         double additionalLength = word.getWordWidth();
@@ -58,21 +64,21 @@ public class Line {
     }
 
     /**
-     * @return - max length of the line before a line break
+     * @return max length of the line before a line break
      */
     protected double getMaxLength() {
         return maxLength;
     }
 
     /**
-     * @return - current length of the line
+     * @return current length of the line
      */
     protected double getLineLength() {
         return currentLineLength;
     }
 
     /**
-     * @return - list of all words in the line
+     * @return list of all words in the line
      */
     protected List<Word> getWords() {
         return words;

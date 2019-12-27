@@ -22,32 +22,72 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Renderer that controls the main renderers needed for rendering a scene {@link EntityRenderer}, {@link TerrainRenderer} and {@link SkyboxRenderer}.
+ * Can render a whole scene using these renderers.
+ * 
+ * @author Tim Staudenmaier.
+ */
 public class MasterRenderer {
 
+    /**
+     * FOV the camera viewing the scene should have (degrees).
+     */
     private static final float FOV = 70;
+    /**
+     * Everything closer to the camera than this plane doesn't get rendered.
+     */
     private static final float NEAR_PLANE = 0.1f;
+    /**
+     * Everything further aways from the camera than this plane doesn't get rendered.
+     */
     private static final float FAR_PLANE = 1200;
 
-    private static final float RED = 0.4f;
-    private static final float GREEN = 0.5f;
-    private static final float BLUE = 0.8f;
+    /**
+     * Color of the void as rgb values (gets rendered if nothing else is at that spot).
+     */
+    private static final float RED = 0.4f, GREEN = 0.5f, BLUE = 0.8f;
 
+    /**
+     * Current projection matrix of the window.
+     */
     private static Matrix4f projectionMatrix;
 
+    /**
+     * Shader for rendering Entities.
+     */
     private StaticShader shader = new StaticShader();
+    /**
+     * Renderer for rendering entities.
+     */
     private EntityRenderer renderer;
 
+    /**
+     * Renderer for rendering terrains.
+     */
     private TerrainRenderer terrainRenderer;
+    /**
+     * Shader for rendering terrains.
+     */
     private TerrainShader terrainShader = new TerrainShader();
 
-    private Map<TexturedModel, List<Entity>> entities = new HashMap<>(); //list all entities in one entry, that use the same texture
+    /**
+     * Map containing all Entities in the world, grouped by their TexturedModels.
+     */
+    private Map<TexturedModel, List<Entity>> entities = new HashMap<>();
+    /**
+     * List containing all terrains in the world.
+     */
     private List<Terrain> terrains = new ArrayList<>();
 
+    /**
+     * Renderer for rendering the skybox.
+     */
     private SkyboxRenderer skyboxRenderer;
 
     /**
      * Create new MasterRenderer, that is capable of rendering entities, terrains, skyboxes and lights.
-     * @param loader - Loader to pass to pass to skyboxRenderer to load it's CubeMap
+     * @param loader Loader to pass to pass to skyboxRenderer to load it's CubeMap
      */
     public MasterRenderer(Loader loader){
         enableCulling();
@@ -78,11 +118,11 @@ public class MasterRenderer {
      * Add all elements of a scene consisting of many entities, one terrain, one light, one camera and a clipPlane
      * to the List/Hashmaps so they get passed to the corresponding renderers. After that call the render method
      * to actually render the scene.
-     * @param entities - All entities that should be added before rendering the scene.
-     * @param terrain - The terrain that should be added before rendering the scene.
-     * @param light - The light that lights the scene.
-     * @param camera - The camera, from which the scene should be rendered.
-     * @param clipPlane - Plane after which nothing should be rendered. x,y,z and w are the A, B, C and D of a plane
+     * @param entities All entities that should be added before rendering the scene.
+     * @param terrain The terrain that should be added before rendering the scene.
+     * @param light The light that lights the scene.
+     * @param camera The camera, from which the scene should be rendered.
+     * @param clipPlane Plane after which nothing should be rendered. x,y,z and w are the A, B, C and D of a plane
      *                  equation (Ax + By + Cz + D = 0), so x,y and z are the normal of the plane and D ist he signed distance
      *                  from the origin.
      */
@@ -95,9 +135,9 @@ public class MasterRenderer {
     /**
      * Start shaders and load everything needed to them, then render all currently saved entities and terrains to the
      * screen using the light and camera, as well as removing everything behind the clipPlane.
-     * @param light - Light that lights the scene.
-     * @param camera - Camera from which the scene should be rendered. (Picture on screen is what camera sees)
-     * @param clipPlane - Plane after which nothing gets rendered anymore.
+     * @param light Light that lights the scene.
+     * @param camera Camera from which the scene should be rendered. (Picture on screen is what camera sees)
+     * @param clipPlane Plane after which nothing gets rendered anymore.
      */
     public void render(Light light, Camera camera , Vector4f clipPlane){
         prepare();
@@ -123,7 +163,7 @@ public class MasterRenderer {
 
     /**
      * Add a terrain to the list of terrain that should be rendered, next time render() is called.
-     * @param terrain - Terrain to be added to the List of rendered terrains.
+     * @param terrain Terrain to be added to the List of rendered terrains.
      */
     public void processTerrain(Terrain terrain){
         terrains.add(terrain);
@@ -131,7 +171,7 @@ public class MasterRenderer {
 
     /**
      * Add a List of entities to the HashMap of entities that get rendered when render() is called.
-     * @param entities - List of entities that should be added.
+     * @param entities List of entities that should be added.
      */
     public void processEntityList(List<Entity> entities){
         for(Entity e : entities)
@@ -140,7 +180,7 @@ public class MasterRenderer {
 
     /**
      * Add one entity to the HashMap of entities that get rendered when render() is called.
-     * @param entity - Entity that should be added.
+     * @param entity Entity that should be added.
      */
     public void processEntity(Entity entity){
         TexturedModel entityModel = entity.getModel();
@@ -181,24 +221,6 @@ public class MasterRenderer {
      * This method needs to be called whenever the size of the window is changed.
      */
     public void updateProjectionMatrix(){
-//        IntBuffer w = BufferUtils.createIntBuffer(1);
-//        IntBuffer h = BufferUtils.createIntBuffer(1);
-//        GLFW.glfwGetWindowSize(WindowManager.getWindow(), w, h);
-//        int width = w.get(0);
-//        int height = h.get(0);
-//        float aspectRatio = (float) width / (float) height;
-//        float y_scale = (float) ((1f / Math.tan(Math.toRadians(FOV / 2f))) * aspectRatio);
-//        float x_scale = y_scale / aspectRatio;
-//        float frustum_length = FAR_PLANE - NEAR_PLANE;
-//
-//        projectionMatrix = new Matrix4f();
-//        projectionMatrix._m00(x_scale);
-//        projectionMatrix._m11(y_scale);
-//        projectionMatrix._m22(-((FAR_PLANE + NEAR_PLANE) / frustum_length));
-//        projectionMatrix._m23(-1);
-//        projectionMatrix._m32(-((2 * NEAR_PLANE * FAR_PLANE) / frustum_length));
-//        projectionMatrix._m33(0);
-
         projectionMatrix = new Matrix4f();
         projectionMatrix.setPerspective((float)Math.toRadians(FOV), (float) WindowManager.getWidth() / WindowManager.getHeight(), NEAR_PLANE, FAR_PLANE);
     }

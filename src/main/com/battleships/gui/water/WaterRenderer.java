@@ -16,21 +16,60 @@ import org.lwjgl.opengl.GL30;
 
 import java.util.List;
 
+/**
+ * Renderer for rendering {@link WaterTile}s. Uses a {@link WaterShader} amd {@link WaterFrameBuffers}.
+ *
+ * @author Tim Staudenmaier
+ */
 public class WaterRenderer {
 
-    private static final String DUDV_MAP = "waterDUDV1.png"; //TODO find best texture and tiling size
+    /**
+     * Path for the image containing the dudv map of the water (used for distortion and waves).
+     */
+    private static final String DUDV_MAP = "waterDUDV1.png";
+    /**
+     * Path for the image containing the normal map of the water.
+     */
     private static final String NORMAL_MAP = "normalMap1.png";
+    /**
+     * How fast the waves of the water move.
+     */
     private static final float WAVE_SPEED = 0.01f;
 
+    /**
+     * Quad on which the water textures get rendered.
+     */
     private RawModel quad;
+    /**
+     * Shader used for rendering.
+     */
     private WaterShader shader;
+    /**
+     * Frame buffers used to create reflection and refraction textures.
+     */
     private WaterFrameBuffers fbos;
 
+    /**
+     * How far the waves need to move depending on {@value WAVE_SPEED} and time passed since last frame.
+     */
     private float moveFactor = 0;
 
+    /**
+     * ID of the dudv texture.
+     */
     private int dudvTexture;
+    /**
+     * ID of the normalMap texture.
+     */
     private int normalMap;
 
+    /**
+     * Create a new WaterRenderer
+     * @param loader Loader to load model water is rendered on.
+     * @param shader Shader this rendered should use.
+     * @param projectionMatrix Current projectionMatrix of the window.
+     * @param fbos WaterFrameBuffers this renderer should use.
+     */
     public WaterRenderer(Loader loader, WaterShader shader, Matrix4f projectionMatrix, WaterFrameBuffers fbos) {
         this.shader = shader;
         this.fbos = fbos;
@@ -43,16 +82,27 @@ public class WaterRenderer {
         setUpVAO(loader);
     }
 
+    /**
+     * Render all {@link WaterTile}s in the List to the screen.
+     * @param water List containing all WaterTiles that should be rendered.
+     * @param camera Camera that is viewing the scene.
+     * @param sun Light that is lighting the scene.
+     */
     public void render(List<WaterTile> water, Camera camera, Light sun) {
         prepareRender(camera, sun);
         for (WaterTile tile : water) {
             Matrix4f modelMatrix = Maths.createTransformationMatrix(new Vector3f(tile.getX(), tile.getHeight(), tile.getZ()), new Vector3f(), WaterTile.TILE_SIZE);
-            shader.loadModelMatrix(modelMatrix);
+            shader.loadTransformationMatrix(modelMatrix);
             GL11.glDrawArrays(GL11.GL_TRIANGLES, 0, quad.getVertexCount());
         }
         unbind();
     }
 
+    /**
+     * Prepare the renderer for rendering with a specific camera and light.
+     * @param camera The camera used for rendering.
+     * @param sun The light used for rendering.
+     */
     private void prepareRender(Camera camera, Light sun){
         shader.start();
         shader.loadViewMatrix(camera);
@@ -79,6 +129,10 @@ public class WaterRenderer {
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
     }
 
+    /**
+     * Unbind the last rendered {@link WaterTile}.
+     * Needs to be called after last WaterTile has been rendered.
+     */
     private void unbind(){
         GL11.glDisable(GL11.GL_BLEND);
         GL20.glDisableVertexAttribArray(0);
@@ -86,6 +140,10 @@ public class WaterRenderer {
         shader.stop();
     }
 
+    /**
+     * Load the quad a {@link WaterTile} is rendered on.
+     * @param loader Loader that can load vaos.
+     */
     private void setUpVAO(Loader loader) {
         // Just x and z vectex positions here, y is set to 0 in v.shader
         float[] vertices = { -1, -1, -1, 1, 1, -1, 1, -1, -1, 1, 1, 1 };

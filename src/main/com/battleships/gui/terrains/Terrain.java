@@ -12,20 +12,65 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.Buffer;
 
+/**
+ * A terrain that can be placed in the world.
+ * Needs to be passed to a {@link com.battleships.gui.renderingEngine.TerrainRenderer} to be visible on screen.
+ *
+ * @author Tim Staudenmaier
+ */
 public class Terrain {
 
+    /**
+     * Size of one terrain in world coordinates.
+     */
     private static final float SIZE = 1600;
+    /**
+     * Maximum height a terrain can reach (world coordinates).
+     */
     private static final float MAX_HEIGHT = 40;
+    /**
+     * Maximum color a pixel on the terrain can have (white).
+     */
     private static final float MAX_PIXEL_COLOR = 256 * 256 * 256;
 
+    /**
+     * X position of the middle of the terrain.
+     */
     private float x;
+    /**
+     * Z position of the middle of the terrain.
+     */
     private float z;
+    /**
+     * Model of the terrain.
+     */
     private RawModel model;
+    /**
+     * TexturePack this terrain uses.
+     */
     private TerrainTexturePack texturePack;
+    /**
+     * BlendMap for mapping the textures onto the terrain.
+     */
     private TerrainTexture blendMap;
 
+    /**
+     * Height of each pixel of the terrain.
+     */
     private float[][] heights;
 
+    /**
+     * Create a new terrain.
+     * The world is split into different grids on which terrains can be placed.
+     * Grid indices increase in the same direction as the x and z values in the world do.
+     * @param gridX Index of the grid on the x axis this terrain should be placed in.
+     * @param gridZ Index of the grid on the z axis this terrain should be placed in.
+     * @param loader Loader to load the model.
+     * @param texturePack TexturePack this terrain should use.
+     * @param blendMap BlendMap texture for mapping the textures onto this terrain.
+     * @param heightMap Path to the heightMap image that specifies the heights of this terrain.
+     *                  The darker a pixel on this image is, the lower the terrain will be at that place.
+     */
     public Terrain(float gridX, float gridZ, Loader loader, TerrainTexturePack texturePack, TerrainTexture blendMap, String heightMap){
         this.blendMap = blendMap;
         this.texturePack = texturePack;
@@ -34,26 +79,47 @@ public class Terrain {
         this.model = generateTerrain(loader, heightMap);
     }
 
+    /**
+     * @return x position of this terrains middle in the world.
+     */
     public float getX() {
         return x;
     }
 
+    /**
+     * @return z position of this terrains middle in the world.
+     */
     public float getZ() {
         return z;
     }
 
+    /**
+     * @return The model of this terrain.
+     */
     public RawModel getModel() {
         return model;
     }
 
+    /**
+     * @return The texturePack this terrain uses.
+     */
     public TerrainTexturePack getTexturePack() {
         return texturePack;
     }
 
+    /**
+     * @return The BlendMap texture of this terrain.
+     */
     public TerrainTexture getBlendMap() {
         return blendMap;
     }
 
+    /**
+     * The height of this terrain at specific world coordinates.
+     * @param worldX x coordinate
+     * @param worldZ z coordinate
+     * @return Height of the terrain at the passed coordinates.
+     */
     public float getHeightOfTerrain(float worldX, float worldZ){
         //convert world position to terrain position
         float terrainX = worldX - this.x;
@@ -91,6 +157,12 @@ public class Terrain {
         return answer;
     }
 
+    /**
+     * Generate the model for this terrain from it's heightMap.
+     * @param loader Loader to load the model.
+     * @param heightMap Path to the image containing the height map of this terrain.
+     * @return The model this terrain needs to use to match the height map.
+     */
     private RawModel generateTerrain(Loader loader, String heightMap){
 
         //load height map
@@ -157,19 +229,33 @@ public class Terrain {
         return loader.loadToVAO(vertices, textureCoords, normals, indices);
     }
 
-    private Vector3f calculateNormal(int x, int z, BufferedImage image){
+    /**
+     * Calculate in which direction the normal vector needs to face at a specific point on the terrain.
+     * @param x x coordinate of the pixel on the image of the point he normal should be calculated for.
+     * @param y y coordinate of the pixel on the image of the point he normal should be calculated for.
+     * @param image Image containing the height map of this terrain.
+     * @return The normal vector the terrain needs to have at the passed pixel.
+     */
+    private Vector3f calculateNormal(int x, int y, BufferedImage image){
         //calculate height of 4 Pixels around the pixel the normal is calculated for
-        float heightL = getHeight(x-1, z, image);
-        float heightR = getHeight(x+1, z ,image);
-        float heightD = getHeight(x, z-1, image);
-        float heightU = getHeight(x, z+1, image);
+        float heightL = getHeight(x-1, y, image);
+        float heightR = getHeight(x+1, y ,image);
+        float heightD = getHeight(x, y-1, image);
+        float heightU = getHeight(x, y+1, image);
         //calculate normal relative to near pixels
         Vector3f normal = new Vector3f(heightL - heightR, 2f, heightD - heightU);
         normal.normalize();
         return normal;
     }
 
-    //convert height map color to height value
+    /**
+     * Converts a pixel on the height map image into an actual height value depending on how dark the pixel is.
+     * The darker the lower the terrain.
+     * @param x x coordinate of the pixel on the image the height should be calculated for.
+     * @param y y coordinate of the pixel on the image the height should be calculated for.
+     * @param image image containing the height map of this terrain.
+     * @return The height the terrain needs to have at the the passed pixel.
+     */
     private float getHeight(int x, int y, BufferedImage image){
         if(x < 0 || x >= image.getHeight() || y < 0 || y >= image.getHeight()){
             return 0;

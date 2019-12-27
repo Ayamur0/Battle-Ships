@@ -15,22 +15,41 @@ import java.util.Random;
 public class ParticleSystemComplex {
 
     /**
-     * pps              - Particles emitted per second.
-     * averageSpeed     - Average Speed each particle gets emitted at.
-     * gravityComplient - How much emitted particles are affected by gravity (negative for inverted gravity)
-     * averageLifeLength- How long in average the particles are alive.
-     * averageScale     - Average scale of the emitted particles.
+     * Particles emitted per second.
      */
-    private float pps, averageSpeed, gravityComplient, averageLifeLength, averageScale;
+    private float pps;
+    /**
+     * Average Speed each particle gets emitted at.
+     */
+    private float averageSpeed;
+    /**
+     * How much emitted particles are affected by gravity (negative for inverted gravity)
+     */
+    private float gravityComplient;
+    /**
+     * How long in average the particles are alive.
+     */
+    private float averageLifeLength;
+    /**
+     * Average scale of the emitted particles.
+     */
+    private float averageScale;
 
     /**
-     * speedError       - How much the speed can differ from the averageSpeed.
-     * lifeError        - How much the lifeLength can differ from the averageLifeLength.
-     * scaleError       - How much the scale can differ from the averageScale.
-     *
+     * How much the speed can differ from the averageSpeed.
+     * Use 0 as value if the value shouldn't differ from the average.
+     */
+    private float speedError;
+    /**
+     * How much the lifeLength can differ from the averageLifeLength.
      * Use 0 as value if the values shouldn't differ from the average.
      */
-    private float speedError, lifeError, scaleError = 0;
+    private float lifeError;
+    /**
+     * How much the scale can differ from the averageScale.
+     * Use 0 as value if the values shouldn't differ from the average.
+     */
+    private float scaleError;
     /**
      * {@code true} if the particles should be rotated randomly.
      */
@@ -56,12 +75,12 @@ public class ParticleSystemComplex {
 
     /**
      * Create a new particleSystem.
-     * @param texture - Texture all particles of this system should use.
-     * @param pps - How many particles should be emitted per second.
-     * @param speed - How fast the particles should be emitted on average.
-     * @param gravityComplient - How much the particles are influenced by gravity.
-     * @param lifeLength - How long the particles should live on average.
-     * @param scale - How large the particles should be on average.
+     * @param texture Texture all particles of this system should use.
+     * @param pps How many particles should be emitted per second.
+     * @param speed How fast the particles should be emitted on average.
+     * @param gravityComplient How much the particles are influenced by gravity.
+     * @param lifeLength How long the particles should live on average.
+     * @param scale How large the particles should be on average.
      */
     public ParticleSystemComplex(ParticleTexture texture, float pps, float speed, float gravityComplient, float lifeLength, float scale) {
         this.texture = texture;
@@ -73,8 +92,8 @@ public class ParticleSystemComplex {
     }
 
     /**
-     * @param direction - The average direction in which particles are emitted.
-     * @param deviation - A value between 0 and 1 indicating how far from the chosen direction particles can deviate.
+     * @param direction The average direction in which particles are emitted.
+     * @param deviation A value between 0 and 1 indicating how far from the chosen direction particles can deviate.
      */
     public void setDirection(Vector3f direction, float deviation) {
         this.direction = new Vector3f(direction);
@@ -89,21 +108,21 @@ public class ParticleSystemComplex {
     }
 
     /**
-     * @param error - A number between 0 and 1, where 0 means no error margin.
+     * @param error A number between 0 and 1, where 0 means no error margin.
      */
     public void setSpeedError(float error) {
         this.speedError = error * averageSpeed;
     }
 
     /**
-     * @param error - A number between 0 and 1, where 0 means no error margin.
+     * @param error A number between 0 and 1, where 0 means no error margin.
      */
     public void setLifeError(float error) {
         this.lifeError = error * averageLifeLength;
     }
 
     /**
-     * @param error - A number between 0 and 1, where 0 means no error margin.
+     * @param error A number between 0 and 1, where 0 means no error margin.
      */
     public void setScaleError(float error) {
         this.scaleError = error * averageScale;
@@ -111,7 +130,7 @@ public class ParticleSystemComplex {
 
     /**
      * Generate particles using all the settings of this system.
-     * @param systemCenter - Center from which the particles should be generated.
+     * @param systemCenter Center from which the particles should be generated.
      */
     public void generateParticles(Vector3f systemCenter) {
         float delta = WindowManager.getDeltaTime();
@@ -128,7 +147,7 @@ public class ParticleSystemComplex {
 
     /**
      * Emits one particle with the settings of this system.
-     * @param center - Position the particle is emitted from.
+     * @param center Position the particle is emitted from.
      */
     private void emitParticle(Vector3f center) {
         Vector3f velocity;
@@ -146,9 +165,9 @@ public class ParticleSystemComplex {
 
     /**
      * Generate a value, where the value is determined by the average value and the specified errorMargin.
-     * @param average - Average value
-     * @param errorMargin - Error margin for this value
-     * @return - A random value between (average - errorMargin) and (average + errorMargin).
+     * @param average Average value
+     * @param errorMargin Error margin for this value
+     * @return A random value between (average errorMargin) and (average + errorMargin).
      */
     private float generateValue(float average, float errorMargin) {
         float offset = (random.nextFloat() - 0.5f) * 2f * errorMargin;
@@ -156,7 +175,7 @@ public class ParticleSystemComplex {
     }
 
     /**
-     * @return - A random rotation value.
+     * @return A random rotation value.
      */
     private float generateRotation() {
         if (randomRotation) {
@@ -170,9 +189,9 @@ public class ParticleSystemComplex {
      * Generate a random direction at which a particle can be emitted.
      * This direction gets generated by using the general direction of the system and the deviation value, which means
      * the particles get emitted in a cone.
-     * @param coneDirection - General direction of the system.
-     * @param angle - Maximum allowed deviation angle from coneDirection.
-     * @return - A random normalized vector within the cone.
+     * @param coneDirection General direction of the system.
+     * @param angle Maximum allowed deviation angle from coneDirection.
+     * @return A random normalized vector within the cone.
      */
     private static Vector3f generateRandomUnitVectorWithinCone(Vector3f coneDirection, float angle) {
         float cosAngle = (float) Math.cos(angle);
@@ -199,7 +218,7 @@ public class ParticleSystemComplex {
     }
 
     /**
-     * @return - A random normalized vector.
+     * @return A random normalized vector.
      */
     private Vector3f generateRandomUnitVector() {
         float theta = (float) (random.nextFloat() * 2f * Math.PI);

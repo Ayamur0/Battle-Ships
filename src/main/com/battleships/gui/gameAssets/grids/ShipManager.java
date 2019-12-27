@@ -1,17 +1,14 @@
-package com.battleships.gui.gameAssets;
+package com.battleships.gui.gameAssets.grids;
 
 import com.battleships.gui.entities.Entity;
-import com.battleships.gui.gameAssets.ingameGui.ShipCounter;
+import com.battleships.gui.gameAssets.GameManager;
 import com.battleships.gui.gameAssets.ingameGui.ShipSelector;
-import com.battleships.gui.gameAssets.testLogic.TestLogic;
 import com.battleships.gui.models.TexturedModel;
 import com.battleships.gui.renderingEngine.Loader;
 import com.battleships.gui.renderingEngine.MasterRenderer;
 import com.battleships.logic.Ship;
 import org.joml.*;
 
-import java.util.ArrayList;
-import java.util.EmptyStackException;
 import java.util.List;
 
 /**
@@ -42,9 +39,9 @@ public class ShipManager {
     private TexturedModel[] ships;
 
     /**
-     * PlayingField this ShipManager should place the ships on.
+     * GridManager this ShipManager should place the ships with.
      */
-    private PlayingField ownPlayingField;
+    private GridManager gridManager;
     /**
      * ShipSelector GUI needed to select the ships.
      */
@@ -71,12 +68,12 @@ public class ShipManager {
     /**
      * Create a new shipManager for a PlayingField.
      * @param loader - Loader to load models.
-     * @param ownPlayingField - PlayingField this ShipManager should be created for.
+     * @param gridManager - GridManager this ShipManager should be created for.
      */
-    public ShipManager(Loader loader, PlayingField ownPlayingField){
+    public ShipManager(Loader loader, GridManager gridManager){
         cursorShipAttached = false;
-        this.ownPlayingField = ownPlayingField;
-        gridSize = ownPlayingField.getSize();
+        this.gridManager = gridManager;
+        gridSize = gridManager.getSize();
         ships = new TexturedModel[4];
         ships[0] = (loader.loadModelFromOBJ("ship2", "ship2.tga", 10, 1));
         ships[1] = (loader.loadModelFromOBJ("ship3", "ship3.jpg", 10, 1));
@@ -134,7 +131,7 @@ public class ShipManager {
             return;
         cursorShip.setAdditionalColorPercentage(0);
         shipSelector.decrementCount(cursorShipSize);
-        GameManager.placeShip(new Vector2i(ownPlayingField.getCurrentPointedCell().x, ownPlayingField.getCurrentPointedCell().y), cursorShipSize, cursorShipDirection, PlayingField.OWNFIELD);
+        GameManager.placeShip(new Vector2i(gridManager.getCurrentPointedCell().x, gridManager.getCurrentPointedCell().y), cursorShipSize, cursorShipDirection, GridManager.OWNFIELD);
         //ownPlayingField.placeShip(new Vector2i(ownPlayingField.getCurrentPointedCell().x, ownPlayingField.getCurrentPointedCell().y), cursorShipSize, cursorShipDirection);
         removeCursorShip();
     }
@@ -154,8 +151,8 @@ public class ShipManager {
     public void moveCursorShip(){
         if(!cursorShipAttached)
             return;
-        Vector3i currentCell = ownPlayingField.getCurrentPointedCell();
-        if(currentCell == null || currentCell.z == PlayingField.OPPONENTFIELD) {
+        Vector3i currentCell = gridManager.getCurrentPointedCell();
+        if(currentCell == null || currentCell.z == GridManager.OPPONENTFIELD) {
             cursorShipOnGrid = false;
             return;
         }
@@ -169,7 +166,7 @@ public class ShipManager {
             cursorShip.setAdditionalColorPercentage(MIXPERCENTAGE);
         }
         cursorShipOnGrid = true;
-        cursorShip.setPosition(ownPlayingField.calculateShipPosition(PlayingField.OWNFIELD, new Vector2i(currentCell.x, currentCell.y), cursorShipSize, cursorShipDirection));
+        cursorShip.setPosition(GridMaths.calculateShipPosition(gridManager.getGridByID(GridManager.OWNFIELD), new Vector2i(currentCell.x, currentCell.y), cursorShipSize, cursorShipDirection));
     }
 
     /**
@@ -180,7 +177,7 @@ public class ShipManager {
             return;
         cursorShipDirection++;
         cursorShipDirection %= 4;
-        cursorShip.getRotation().y = ownPlayingField.calculateShipRotation(cursorShipDirection);
+        cursorShip.getRotation().y = GridMaths.calculateShipRotation(cursorShipDirection);
     }
 
     /**

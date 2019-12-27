@@ -1,10 +1,9 @@
 package com.battleships.gui.gameAssets.ingameGui;
 
-import com.battleships.gui.fontMeshCreator.FontType;
 import com.battleships.gui.fontMeshCreator.GUIText;
 import com.battleships.gui.fontRendering.TextMaster;
 import com.battleships.gui.gameAssets.GameManager;
-import com.battleships.gui.gameAssets.ShipManager;
+import com.battleships.gui.gameAssets.grids.ShipManager;
 import com.battleships.gui.gameAssets.testLogic.TestLogic;
 import com.battleships.gui.guis.GuiClickCallback;
 import com.battleships.gui.guis.GuiManager;
@@ -16,12 +15,20 @@ import org.joml.Vector3f;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Overlay during the ship placing phase of the game. Contains all {@link GuiTexture}s and their functions needed for this UI.
+ *
+ * @author Tim Staudenmaier
+ */
 public class ShipSelector extends GuiClickCallback {
 
     /**
-     * Constants for the Color of the text and the outline of the text.
+     * Color of all {@link GUIText}s on this UI.
      */
     private static final Vector3f BLACK = new Vector3f();
+    /**
+     * Color of the outline of all {@link GUIText}s oon this UI.
+     */
     private static final Vector2f OUTLINEOFFSET = new Vector2f();
 
     /**
@@ -61,10 +68,10 @@ public class ShipSelector extends GuiClickCallback {
 
     /**
      * Create the gui used for ship selecting.
-     * @param loader - Loader needed to load textures.
-     * @param guiManager - GuiManager needed to link click functions to the gui elements.
-     * @param shipManager - ShipManager of the current game, needed for the click functions.
-     * @param guis - List of guis this gui should be saved to, this list needs to be rendered later to show this gui
+     * @param loader Loader needed to load textures.
+     * @param guiManager GuiManager needed to link click functions to the gui elements.
+     * @param shipManager ShipManager of the current game, needed for the click functions.
+     * @param guis List of guis this gui should be saved to, this list needs to be rendered later to show this gui
      *             on screen.
      */
     public ShipSelector(Loader loader, GuiManager guiManager, ShipManager shipManager, List<GuiTexture> guis) {
@@ -110,9 +117,9 @@ public class ShipSelector extends GuiClickCallback {
      * Function that gets called to test if a click was on this gui.
      * This gui has 4 individual buttons, so depending on which button was pressed, the buttonNumber
      * attribute gets set to the value for that button, so the clickAction() method knows, which button was clicked.
-     * @param gui - not used in this override, because the gui textures are saved in buttons[] array, so should be null.
-     * @param x - x position of the click in screen coordinates.
-     * @param y - y position of the click in screen coordinates.
+     * @param gui not used in this override, because the gui textures are saved in buttons[] array, so should be null.
+     * @param x x position of the click in screen coordinates.
+     * @param y y position of the click in screen coordinates.
      * @return {@code true} if the click was on one of the buttons of this gui, {@code false} else.
      */
     @Override
@@ -131,7 +138,7 @@ public class ShipSelector extends GuiClickCallback {
     /**
      * Gets called if one of the 4 buttons on this gui was clicked.
      * Adds a ship to the cursor and decrements the amount of ships left for that size.
-     * The size of the ship changes from 2 - 5 depending on which button was clicked.
+     * The size of the ship changes from 2 5 depending on which button was clicked.
      */
     @Override
     protected void clickAction(){
@@ -143,7 +150,7 @@ public class ShipSelector extends GuiClickCallback {
     /**
      * Change the text under the button for that ship size, so it shows that you can place one
      * ship less of that size than before.
-     * @param shipSize - Size of the ship for that the count should get decremented.
+     * @param shipSize Size of the ship for that the count should get decremented.
      */
     public void decrementCount(int shipSize){
         GUIText dummy = shipCountTexts.get(shipSize - 2);

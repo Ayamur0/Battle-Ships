@@ -4,15 +4,26 @@ import com.battleships.gui.postProcessing.ImageRenderer;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
 
+/**
+ * Effect that can be used by {@link com.battleships.gui.postProcessing.PostProcessing} to vertically blur the image.
+ *
+ * @author Tim Staudenmaier
+ */
 public class VerticalBlur {
 
+    /**
+     * Renderer that renders the image after postProcessing.
+     */
     private ImageRenderer renderer;
+    /**
+     * Shader needed for this effect.
+     */
     private VerticalBlurShader shader;
 
     /**
      * Create new VerticalBlur post processing effect.
-     * @param targetFboWidth - width of the fbo this effect should affect
-     * @param targetFboHeight - height of the fbo this effect should affect
+     * @param targetFboWidth width of the fbo this effect should affect
+     * @param targetFboHeight height of the fbo this effect should affect
      */
     public VerticalBlur(int targetFboWidth, int targetFboHeight){
         shader = new VerticalBlurShader();
@@ -24,7 +35,7 @@ public class VerticalBlur {
 
     /**
      * Render the vertical blur.
-     * @param texture - the texture of the current scene (fbo)
+     * @param texture the texture of the current scene (fbo)
      */
     public void render(int texture){
         shader.start();

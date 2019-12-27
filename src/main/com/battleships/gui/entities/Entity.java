@@ -5,8 +5,8 @@ import org.joml.Vector3f;
 import org.joml.Vector4f;
 
 /**
- * All Objects (Entities) that should be placed in the scene need to be instances of this class.
- * The entities all need to be passed to the {@link com.battleships.gui.renderingEngine.EntityRenderer} every frame,
+ * Object that can be placed in the world, rotated and scaled.
+ * All entities need to be passed to the {@link com.battleships.gui.renderingEngine.EntityRenderer} every frame,
  * so they are visible in the scene.
  *
  * @author Tim Staudenmaier
@@ -27,14 +27,16 @@ public class Entity {
     private float scale;
 
     /**
-     * These values can be used to overlay the normal texture of this model
-     * with another color. The color of the model gets mixed with this color using a ratio of
-     * additionalColorPercentage * additionalColor + 1 - additionalColorPercentage * originalColor.
+     * Additional color the model can be overlapped with.
+     */
+    private Vector3f additionalColor = new Vector3f();
+    /**
+     * The color of the model gets mixed with the additional color using a ratio of
+     * additionalColorPercentage * additionalColor + 1 additionalColorPercentage * originalColor.
      * If the additionalColorPercentage = 0, the model will have no additional color and if
      * additionalColorPercentage = 1, the model will completely have the additional color and none of it's
      * original colors.
      */
-    private Vector3f additionalColor = new Vector3f();
     private float additionalColorPercentage = 0;
 
     /**
@@ -46,10 +48,10 @@ public class Entity {
 
     /**
      * Create a new Entity for a TexturedModel without a textureAtlas.
-     * @param model - TextureModel containing the model and texture the entity should use.
-     * @param position - Position of the entity in the world.
-     * @param rotation - Rotation of the entity around x,y and z axis.
-     * @param scale - Scale of the model (1 for original model scale).
+     * @param model TextureModel containing the model and texture the entity should use.
+     * @param position Position of the entity in the world.
+     * @param rotation Rotation of the entity around x,y and z axis.
+     * @param scale Scale of the model (1 for original model scale).
      */
     public Entity(TexturedModel model, Vector3f position, Vector3f rotation, float scale) {
         this.model = model;
@@ -60,11 +62,11 @@ public class Entity {
 
     /**
      * Create a new Entity for a TexturedModel with a textureAtlas.
-     * @param model - TextureModel containing the model and texture the entity should use.
-     * @param index - Index of the texture in the textureAtlas this Entity should use.
-     * @param position - Position of the entity in the world.
-     * @param rotation - Rotation of the entity around x,y and z axis.
-     * @param scale - Scale of the model (1 for original model scale).
+     * @param model TextureModel containing the model and texture the entity should use.
+     * @param index Index of the texture in the textureAtlas this Entity should use.
+     * @param position Position of the entity in the world.
+     * @param rotation Rotation of the entity around x,y and z axis.
+     * @param scale Scale of the model (1 for original model scale).
      */
     public Entity(TexturedModel model, int index, Vector3f position, Vector3f rotation, float scale) {
         this.textureIndex = index;
@@ -76,7 +78,7 @@ public class Entity {
 
     /**
      *
-     * @return - The factor, that the x-textureCoordinate of this entity needs to be multiplied with, so the texture
+     * @return The factor, that the x-textureCoordinate of this entity needs to be multiplied with, so the texture
      *          is mapped to the correct texture in the texture Atlas.
      */
     public float getTextureXOffset(){
@@ -87,7 +89,7 @@ public class Entity {
 
     /**
      *
-     * @return - The factor, that the y-textureCoordinate of this entity needs to be multiplied with, so the texture
+     * @return The factor, that the y-textureCoordinate of this entity needs to be multiplied with, so the texture
      *          is mapped to the correct texture in the texture Atlas.
      */
     public float getTextureYOffset(){
@@ -97,9 +99,9 @@ public class Entity {
 
     /**
      * Increase the position of this entity (decreases for negative values)
-     * @param dx - How far to move this entity on the x-axis.
-     * @param dy - How far to move this entity on the y-axis.
-     * @param dz - How far to move this entity on the z-axis.
+     * @param dx How far to move this entity on the x-axis.
+     * @param dy How far to move this entity on the y-axis.
+     * @param dz How far to move this entity on the z-axis.
      */
     public void increasePosition(float dx, float dy, float dz){
         this.position.x += dx;
@@ -109,9 +111,9 @@ public class Entity {
 
     /**
      * Increase the rotation of this entity (decreases for negative values)
-     * @param dx - How far to rotate this entity along the x-axis.
-     * @param dy - How far to rotate this entity along the y-axis.
-     * @param dz - How far to rotate this entity along the z-axis.
+     * @param dx How far to rotate this entity along the x-axis.
+     * @param dy How far to rotate this entity along the y-axis.
+     * @param dz How far to rotate this entity along the z-axis.
      */
     public void increaseRotation(float dx, float dy, float dz){
         this.rotation.x += dx;
@@ -121,7 +123,7 @@ public class Entity {
 
     /**
      * Increase the scale (decrease for negative x)
-     * @param x - How much to increase the scale.
+     * @param x How much to increase the scale.
      */
     public void increaseScale(float x){
         this.scale += x;
@@ -129,7 +131,7 @@ public class Entity {
 
     /**
      *
-     * @return - TexturedModel this entity is using.
+     * @return TexturedModel this entity is using.
      */
     public TexturedModel getModel() {
         return model;
@@ -137,7 +139,7 @@ public class Entity {
 
     /**
      * Give this entity a new model that it should use.
-     * @param model - New TexturedModel of this entity
+     * @param model New TexturedModel of this entity
      */
     public void setModel(TexturedModel model) {
         this.model = model;
@@ -145,7 +147,7 @@ public class Entity {
 
     /**
      *
-     * @return - Current position of this entity in world coordinates.
+     * @return Current position of this entity in world coordinates.
      */
     public Vector3f getPosition() {
         return position;
@@ -153,7 +155,7 @@ public class Entity {
 
     /**
      * Set the position of this entity to a new position.
-     * @param position - new position of this entity (world coordinates)
+     * @param position new position of this entity (world coordinates)
      */
     public void setPosition(Vector3f position) {
         this.position = position;
@@ -161,7 +163,7 @@ public class Entity {
 
     /**
      *
-     * @return - The current rotation of this entity.
+     * @return The current rotation of this entity.
      */
     public Vector3f getRotation() {
         return rotation;
@@ -169,7 +171,7 @@ public class Entity {
 
     /**
      * Set the rotation of this entity to a new rotation.
-     * @param rotation - New rotation of this entity.
+     * @param rotation New rotation of this entity.
      */
     public void setRotation(Vector3f rotation) {
         this.rotation = rotation;
@@ -177,7 +179,7 @@ public class Entity {
 
     /**
      *
-     * @return - The current scale of this entity.
+     * @return The current scale of this entity.
      */
     public float getScale() {
         return scale;
@@ -185,7 +187,7 @@ public class Entity {
 
     /**
      * Set scale of this entity to a new value.
-     * @param scale - New scale.
+     * @param scale New scale.
      */
     public void setScale(float scale) {
         this.scale = scale;
@@ -193,7 +195,7 @@ public class Entity {
 
     /**
      *
-     * @return - The additional color this entity is overlapped with.
+     * @return The additional color this entity is overlapped with.
      */
     public Vector3f getAdditionalColor() {
         return additionalColor;
@@ -201,7 +203,7 @@ public class Entity {
 
     /**
      * Set the color this entity is overlapped with to a new color.
-     * @param additionalColor - New color this entity should be overlapped with.
+     * @param additionalColor New color this entity should be overlapped with.
      */
     public void setAdditionalColor(Vector3f additionalColor) {
         this.additionalColor = additionalColor;
@@ -209,7 +211,7 @@ public class Entity {
 
     /**
      *
-     * @return - How much of the additional color should be used on this entity (between 0 for none and 1 for only this color).
+     * @return How much of the additional color should be used on this entity (between 0 for none and 1 for only this color).
      */
     public float getAdditionalColorPercentage() {
         return additionalColorPercentage;
@@ -217,7 +219,7 @@ public class Entity {
 
     /**
      * Set how much of the additional color should be used on this entity.
-     * @param additionalColorPercentage - How much color should be used  (between 0 for none and 1 for only this color).
+     * @param additionalColorPercentage How much color should be used  (between 0 for none and 1 for only this color).
      */
     public void setAdditionalColorPercentage(float additionalColorPercentage) {
         this.additionalColorPercentage = additionalColorPercentage;

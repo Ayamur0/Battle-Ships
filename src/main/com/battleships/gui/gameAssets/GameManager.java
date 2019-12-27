@@ -5,33 +5,29 @@ import com.battleships.gui.entities.Camera;
 import com.battleships.gui.entities.Entity;
 import com.battleships.gui.entities.Light;
 import com.battleships.gui.fontMeshCreator.FontType;
-import com.battleships.gui.fontMeshCreator.GUIText;
 import com.battleships.gui.fontRendering.TextMaster;
 import com.battleships.gui.gameAssets.MainMenuGui.ESCMenu;
+import com.battleships.gui.gameAssets.grids.GridManager;
+import com.battleships.gui.gameAssets.grids.ShipManager;
 import com.battleships.gui.gameAssets.ingameGui.DisableSymbols;
 import com.battleships.gui.gameAssets.ingameGui.ShipCounter;
 import com.battleships.gui.gameAssets.ingameGui.ShipSelector;
-import com.battleships.gui.gameAssets.testLogic.TestLogic;
-import com.battleships.gui.guis.GuiClickCallback;
 import com.battleships.gui.guis.GuiManager;
 import com.battleships.gui.guis.GuiRenderer;
 import com.battleships.gui.guis.GuiTexture;
 import com.battleships.gui.main.Inits;
 import com.battleships.gui.particles.ParticleMaster;
-import com.battleships.gui.postProcessing.PostProcessing;
 import com.battleships.gui.renderingEngine.Loader;
 import com.battleships.gui.renderingEngine.MasterRenderer;
 import com.battleships.gui.terrains.Terrain;
 import com.battleships.gui.terrains.TerrainTexture;
 import com.battleships.gui.terrains.TerrainTexturePack;
 import com.battleships.gui.toolbox.MousePicker;
-import com.battleships.gui.toolbox.ParallelTasks;
 import com.battleships.gui.water.WaterFrameBuffers;
 import com.battleships.gui.water.WaterRenderer;
 import com.battleships.gui.water.WaterShader;
 import com.battleships.gui.water.WaterTile;
 import com.battleships.gui.window.WindowManager;
-import com.sun.org.apache.xml.internal.security.Init;
 import org.joml.*;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.GLFW;
@@ -44,38 +40,115 @@ import java.nio.DoubleBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Main class that controls the game from the gui side.
+ * Contains all functions needed by the logic to control the gui for the game.
+ * 
+ * @author Tim Staudenmaier
+ */
 public class GameManager {
 
-    public static final int MENU = 0;
-    public static final int SHIPLACING = 1;
-    public static final int SHOOTING = 2;
+    /**
+     * Constants indicating the different game states the gui can be in.
+     */
+    public static final int MENU = 0, SHIPLACING = 1, SHOOTING = 2;
 
-    private static DoubleBuffer x = BufferUtils.createDoubleBuffer(1);
-    private static DoubleBuffer y = BufferUtils.createDoubleBuffer(1);
+    /**
+     * DoubleBuffers used to read position of the mouse from GLFW.
+     */
+    private static DoubleBuffer x = BufferUtils.createDoubleBuffer(1), y = BufferUtils.createDoubleBuffer(1);
 
+    /**
+     * Indicates the current game state of the gui.
+     */
     private static int gameState;
 
+    /**
+     * Main font used in this game
+     */
     private static FontType pirateFont;
+    /**
+     * Loader for loading models and textures.
+     */
     private static Loader loader;
+    /**
+     * GuiManager that handles guis with click functions.
+     */
     private static GuiManager guiManager;
-    private static PlayingField playingField;
+    /**
+     * GridManager that handles the grids the game is played on.
+     */
+    private static GridManager gridManager;
+    /**
+     * MousePicker to get the position of the mouse cursor in the 3D world.
+     */
     private static MousePicker mousePicker;
+    /**
+     * ShipManager that handles placing the ships.
+     */
     private static ShipManager shipManager;
+    /**
+     * ShipCounter gui that is used during shooting phase.
+     */
     private static ShipCounter shipCounter;
+    /**
+     * ShipSelector gui that is used during ship placing phase.
+     */
     private static ShipSelector shipSelector;
+    /**
+     * Symbols that indicate whether sound and animations are currently
+     * enabled or disabled.
+     */
     private static DisableSymbols disableSymbols;
+    /**
+     * Renderer that handles rendering of entities, terrains ans skyboxes.
+     */
     private static MasterRenderer renderer;
+    /**
+     * Camera through which the scene is viewed.
+     */
     private static Camera camera;
+    /**
+     * List containing all {@link GuiTexture}s on the screen.
+     */
     private static List<GuiTexture> guis = new ArrayList<>();
+    /**
+     * Light that lights the scene (sun).
+     */
     private static Light light;
+    /**
+     * Terrain the game is played on.
+     */
     private static Terrain terrain;
+    /**
+     * List containing all entities currently in the scene.
+     */
     private static List<Entity> entities = new ArrayList<>();
+    /**
+     * List that contains all {@link WaterTile}s of the scene.
+     */
     private static List<WaterTile> waterTiles = new ArrayList<>();
+    /**
+     * Renderer for rendering the {@link WaterTile}s.
+     */
     private static WaterRenderer waterRenderer;
+    /**
+     * FrameBuffers that create the reflection and refraction texture for the {@link WaterTile}s.
+     */
     private static WaterFrameBuffers waterFbos;
+    /**
+     * Renderer for rendering all {@link GuiTexture}s.
+     */
     private static GuiRenderer guiRenderer;
+    /**
+     * Shader used by the {@link WaterRenderer}.
+     */
     private static WaterShader waterShader;
 
+    /**
+     * Initialize the GameManager and all needed components.
+     * Needs to be called when the game is started.
+     */
     public static void init() {
         WindowManager.initialize();
         loader = new Loader();
@@ -89,33 +162,51 @@ public class GameManager {
         waterShader = new WaterShader();
         waterRenderer = new WaterRenderer(loader, waterShader, MasterRenderer.getProjectionMatrix(), waterFbos);
         ParticleMaster.init(loader, MasterRenderer.getProjectionMatrix());
-
     }
 
+    /**
+     * GridManager places a ship.
+     * @param index Index of the cell the stern of the ship is on.
+     * @param size Size of the ship.
+     * @param direction Direction the ship is facing (constants in {@link ShipManager}).
+     * @param field ID of the grid the ship is placed on.
+     */
     public static void placeShip(Vector2i index, int size, int direction, int field){
-        if(field == PlayingField.OPPONENTFIELD) {
+        if(field == GridManager.OPPONENTFIELD) {
             //TestLogic.opponent.placeShip(index.x, index.y, size, direction);
         }
-        if(field == PlayingField.OWNFIELD){
-            playingField.placeShip(index, size, direction);
+        if(field == GridManager.OWNFIELD){
+            gridManager.placeShip(index, size, direction);
             //TestLogic.own.placeShip(index.x, index.y, size, direction);
         }
     }
 
+    /**
+     * Starts the ship placing phase.
+     * Creates gui needed for that phase and destroys unneeded guis.
+     */
     public static void startShipPlacementPhase(){
         if(shipCounter != null)
             shipCounter.remove();
-        playingField.setShipPlacingPhase(true);
+        gridManager.setShipPlacingPhase(true);
         shipSelector = new ShipSelector(loader, guiManager, shipManager, guis);
     }
 
+    /**
+     * Starts the shooting phase.
+     * Creates gui needed for that phase and destroys unneeded guis.
+     */
     public static void startPlayPhase(){
-        playingField.setShipPlacingPhase(false);
+        gridManager.setShipPlacingPhase(false);
         if(shipSelector != null)
             shipSelector.remove();
         shipCounter = new ShipCounter(loader, guiManager, guis);
     }
 
+    /**
+     * Loads the main scene the game is played in.
+     * This scene mainly consists of a terrain, water, a light and a camera.
+     */
     public static void loadIngameScene(){
         disableSymbols = new DisableSymbols(loader, guiManager, guis);
         camera = new Camera();
@@ -134,8 +225,8 @@ public class GameManager {
 
         light = new Light(new Vector3f(20000,20000,2000), new Vector3f(1,1,1));
 
-        playingField =  new PlayingField(30, loader);
-        shipManager = playingField.getShipManager();
+        gridManager =  new GridManager(loader, 30);
+        shipManager = gridManager.getShipManager();
 
         waterTiles.add(new WaterTile(0, 0, -3));
         waterTiles.add(new WaterTile(800, 0, -3));
@@ -146,6 +237,9 @@ public class GameManager {
         WindowManager.setCallbacks(camera, waterFbos);
     }
 
+    /**
+     * Renders all the {@link WaterTile}s of the scene.
+     */
     public static void renderWater(){
         GL11.glEnable(GL30.GL_CLIP_DISTANCE0);
 
@@ -169,17 +263,26 @@ public class GameManager {
         waterRenderer.render(waterTiles, camera, light);
     }
 
+    /**
+     * Renders all the {@link Entity} of the scene.
+     */
     public static void renderEntities(){
-        playingField.render(renderer);
+        gridManager.render(renderer);
         shipManager.moveCursorShip();
         renderer.renderScene(entities, terrain, light, camera, new Vector4f(0, 0, 0, 0));
     }
 
+    /**
+     * Renders all the {@link com.battleships.gui.particles.Particle}s of the scene.
+     */
     public static void renderParticles(){
         ParticleMaster.update(camera);
         ParticleMaster.renderParticles(camera, 1);
     }
 
+    /**
+     * Updates everything in the scene and then renders everything.
+     */
     public static void updateScene(){
         camera.move(terrain);
         mousePicker.update();
@@ -192,6 +295,10 @@ public class GameManager {
         renderer.updateProjectionMatrix();
     }
 
+    /**
+     * Cleans up everything that was used in the ingame scene.
+     * Needs to be called when the ingame scene isn't needed anymore.
+     */
     public static void cleanUpIngameScene(){
         if(shipCounter != null)
             shipCounter.remove();
@@ -209,27 +316,27 @@ public class GameManager {
     }
 
     /**
-     * Shoot method, that passes the shoot command to the playingfield.
-     * @param originField - Field the shot originates from (0 for own, 1 for opponent).
-     * @param destinationIndex - Index of the field that should get shot.
+     * Shoot method, that passes the shoot command to the {@link GridManager}.
+     * @param originField ID of the grid the shot originates from.
+     * @param destinationIndex Index of the cell that should get shot.
      */
     public static void shoot(int originField, Vector2i destinationIndex){
-        playingField.shoot(originField, destinationIndex);
+        gridManager.shoot(originField, destinationIndex);
     }
 
     /**
-     * Passes the command to place a marker, at the specified index, to the playingfield.
-     * @param shipHit - {@code true} if a ship was hit, so marker should be red. {@code false} if no ship was hit, so marker should be white.
-     * @param index - Index where the marker should be placed.
-     * @param field - Field the marker should be placed on (0 for own, 1 for opponent).
+     * Passes the command to place a marker, at the specified index, to the {@link GridManager}.
+     * @param shipHit {@code true} if a ship was hit, so marker should be red. {@code false} if no ship was hit, so marker should be white.
+     * @param index Index where the marker should be placed.
+     * @param field ID of the grid the marker should be placed on.
      */
     public static void placeMarker(boolean shipHit, Vector2i index, int field){
-        playingField.placeMarker(shipHit, index, field);
+        gridManager.placeMarker(shipHit, index, field);
     }
 
     /**
      * Finishes the game and shows endscreen.
-     * @param won - {@code true} if the player has won, {@code false} else.
+     * @param won {@code true} if the player has won, {@code false} else.
      */
     public static void finishGame(boolean won){
         //TODO
@@ -237,7 +344,7 @@ public class GameManager {
 
     /**
      * Decrement the count, that keeps track of how many enemy ships of each size are alive.
-     * @param size - Size of ship the count should be decremented for.
+     * @param size Size of ship the count should be decremented for.
      */
     public static void decrementAliveShip(int size){
         shipCounter.decrementCount(size);
@@ -271,15 +378,18 @@ public class GameManager {
                 if (guiManager.testGuiClick(xpos, ypos))
                     return;
 
-                Vector3f cellIntersection = mousePicker.getCurrentIntersectionPoint();
-                Vector3i pointedCell = playingField.calculatePointedCell(cellIntersection);
+                Vector3i pointedCell = gridManager.getCurrentPointedCell();
                 if (pointedCell != null) {
-                    playingField.cellClicked(new Vector2i(pointedCell.x, pointedCell.y), pointedCell.z);
+                    gridManager.cellClicked(new Vector2i(pointedCell.x, pointedCell.y), pointedCell.z);
                 }
             }
         }
     };
 
+    /**
+     * Function that gets called if the user presses any key on the keyboard.
+     * Calls the corresponding function if a key that has a function was pressed.
+     */
     public static GLFWKeyCallback keyCallback = new GLFWKeyCallback() {
         @Override
         public void invoke(long window, int key, int scanCode, int action, int mods) {
@@ -302,22 +412,39 @@ public class GameManager {
         }
     };
 
+    /**
+     * Toggle the animations of the game and the symbol indicating
+     * if animation are on or off.
+     */
     public static void toggleAnimations() {
-        playingField.toggleShootingAnimation();
+        gridManager.toggleShootingAnimation();
+        disableSymbols.toggleSymbol(DisableSymbols.ANIMATION);
     }
 
+    /**
+     * @return The main font this game uses.
+     */
     public static FontType getPirateFont() {
         return pirateFont;
     }
 
-    public static PlayingField getPlayingField() {
-        return playingField;
+    /**
+     * @return The GridManager of this game.
+     */
+    public static GridManager getGridManager() {
+        return gridManager;
     }
 
+    /**
+     * @return All guis currently on the screen.
+     */
     public static List<GuiTexture> getGuis() {
         return guis;
     }
 
+    /**
+     * @return The mouse picker of the game.
+     */
     public static MousePicker getPicker() {
         return mousePicker;
     }

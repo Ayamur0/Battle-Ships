@@ -69,8 +69,8 @@ public class ParticleRenderer {
      * Load a quad model using VERTICES to render particles on.
      * Create vbo to save all particle instance attributes in
      * Create new shader program and add projection matrix to it.
-     * @param loader - Loader to load models
-     * @param projectionMatrix - ProjectionMatrix for shader
+     * @param loader Loader to load models
+     * @param projectionMatrix ProjectionMatrix for shader
      */
     protected ParticleRenderer(Loader loader, Matrix4f projectionMatrix){
         this.loader = loader;
@@ -97,8 +97,8 @@ public class ParticleRenderer {
      * together, so texture only needs to be changed once for each particle group, for better performance.
      * Bind texture and store viewMatrix data and texture data in float array for instanced rendering.
      * Then loop through list of particles with that texture and render them using instanced rendering.
-     * @param particles - HashMap of textures and their corresponding list of particles to be rendered on screen
-     * @param camera - camera that displays particles
+     * @param particles HashMap of textures and their corresponding list of particles to be rendered on screen
+     * @param camera camera that displays particles
      */
     protected void render(Map<ParticleTexture, List<Particle>> particles, Camera camera){
         Matrix4f viewMatrix = Maths.createViewMatrix(camera);
@@ -128,8 +128,8 @@ public class ParticleRenderer {
 
     /**
      * Store texture data for current particle in float array so it can be used to render the particle with instanced rendering
-     * @param particle - Particle that should be rendered next.
-     * @param data - Data of the particle.
+     * @param particle Particle that should be rendered next.
+     * @param data Data of the particle.
      */
     private void updateTexCoordInfo(Particle particle, float[] data){
         data[pointer++] = particle.getTexOffset1().x;
@@ -143,7 +143,7 @@ public class ParticleRenderer {
     /**
      *  Set OpenGL mode to add color of particles if additive is {@code true} in texture or render particles over each other.
      *  Bind texture to OpenGL and upload numberOfRows of texture (textureAtlas) to the shader.
-     * @param texture - texture to bind to openGL
+     * @param texture texture to bind to openGL
      */
 
     private void bindTexture(ParticleTexture texture){
@@ -162,11 +162,11 @@ public class ParticleRenderer {
      * Update viewMatrix for particle that should currently be rendered, to make particle move, scale and rotate.
      * Changes the viewMatrix (rotation part which is top left 3x3) so particle always faces camera.
      * Coverts viewMatrix to float array to make it usable with instanced rendering.
-     * @param position - new position of the particle
-     * @param rotation - new rotation of the particle (only Z rotation)
-     * @param scale - scale of the particle (1 is standard)
-     * @param viewMatrix - viewMatrix currently used by the camera
-     * @param vboData - float array to safe the data to, so it can be used to render particles with instanced rendering.
+     * @param position new position of the particle
+     * @param rotation new rotation of the particle (only Z rotation)
+     * @param scale scale of the particle (1 is standard)
+     * @param viewMatrix viewMatrix currently used by the camera
+     * @param vboData float array to safe the data to, so it can be used to render particles with instanced rendering.
      */
     private void updateModelViewMatrix(Vector3f position, float rotation, float scale, Matrix4f viewMatrix, float[] vboData){
         Matrix4f modelMatrix = new Matrix4f();
@@ -188,8 +188,8 @@ public class ParticleRenderer {
     /**
      * Store all values from a matrix in a float array.
      * Values are ordered by columns, so first 4 values in array are first column from matrix.
-     * @param matrix - matrix to convert to float array
-     * @param vboData - float array matrix values should be saved to
+     * @param matrix matrix to convert to float array
+     * @param vboData float array matrix values should be saved to
      */
     private void storeMatrixData(Matrix4f matrix, float[] vboData){
         vboData[pointer++] = matrix.m00();

@@ -13,14 +13,36 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.FloatBuffer;
 
+/**
+ * Every shader should extend this ShaderProgram. Contains all the necessary methods every shader needs to have.
+ *
+ * @author Tim Staudenmaier
+ */
 public abstract class ShaderProgram {
 
+    /**
+     * ID of this shaderProgram.
+     */
     private int programID;
+    /**
+     * ID of the vertex shader of this program.
+     */
     private int vertexShaderID;
+    /**
+     * ID of the fragment shader of this program.
+     */
     private int fragmentShaderID;
 
+    /**
+     * Buffer needed to load matrices to uniform variables.
+     */
     private static FloatBuffer matrixBuffer = BufferUtils.createFloatBuffer(16);
 
+    /**
+     * Create a new OpenGL Shader program that uses the two specified shader files.
+     * @param vertexFile Path to the vertex file the shader should use.
+     * @param fragmentFile Path to the fragment file the shader should use.
+     */
     public ShaderProgram(String vertexFile, String fragmentFile){
         //get shader ids
         vertexShaderID = loadShader(vertexFile, GL20.GL_VERTEX_SHADER);
@@ -46,20 +68,35 @@ public abstract class ShaderProgram {
      */
     protected abstract void getAllUniformLocations();
 
+    /**
+     * Gets the location at which a specific uniform variable needs to be saved.
+     * @param uniformName Name of the uniform variable of which the location is needed.
+     * @return Location of the uniform variable.
+     */
     protected int getUniformLocation(String uniformName){
         return GL20.glGetUniformLocation(programID, uniformName);
     }
 
+    /**
+     * Starts this shader program.
+     */
     public void start(){
         //start program in OpenGL
         GL20.glUseProgram(programID);
     }
 
+    /**
+     * Stops this shader program.
+     */
     public void stop(){
         //stop program
         GL20.glUseProgram(0);
     }
 
+    /**
+     * Cleans up this shader program.
+     * Needs to be called on program exit.
+     */
     public void cleanUp(){
         //stop shaders, detach them and delete shaders and this program
         stop();
@@ -79,30 +116,65 @@ public abstract class ShaderProgram {
      */
     protected abstract void bindAttributes();
 
+    /**
+     * Bind an attribute to a variable name in the shader.
+     * @param attribute ID of the attribute that should be bound.
+     * @param variableName Name of the variable in the shader for this attribute
+     */
     protected void bindAttribute(int attribute, String variableName){
         GL20.glBindAttribLocation(programID, attribute, variableName);
     }
 
+    /**
+     * Load a float value into a uniform variable using its location.
+     * @param location Location of the uniform variable the value should be loaded to.
+     * @param value Value that should be loaded.
+     */
     protected void loadFloat(int location, float value){
         GL20.glUniform1f(location, value);
     }
 
+    /**
+     * Load a int value into a uniform variable using its location.
+     * @param location Location of the uniform variable the value should be loaded to.
+     * @param value Value that should be loaded.
+     */
     protected void loadInt(int location, int value){
         GL20.glUniform1i(location, value);
     }
 
+    /**
+     * Load a 3D vector into a uniform variable using its location.
+     * @param location Location of the uniform variable the vector should be loaded to.
+     * @param vector Vector that should be loaded.
+     */
     protected void loadVector(int location, Vector3f vector){
         GL20.glUniform3f(location, vector.x, vector.y, vector.z);
     }
 
+    /**
+     * Load a 4D vector into a uniform variable using its location.
+     * @param location Location of the uniform variable the vector should be loaded to.
+     * @param vector Vector that should be loaded.
+     */
     protected void loadVector(int location, Vector4f vector){
         GL20.glUniform4f(location, vector.x, vector.y, vector.z, vector.w);
     }
 
+    /**
+     * Load a 2D vector into a uniform variable using its location.
+     * @param location Location of the uniform variable the vector should be loaded to.
+     * @param vector Vector that should be loaded.
+     */
     protected void load2DVector(int location, Vector2f vector){
         GL20.glUniform2f(location, vector.x, vector.y);
     }
 
+    /**
+     * Load a boolean into a uniform variable using its location.
+     * @param location Location of the uniform variable the boolean should be loaded to.
+     * @param value value of the boolean that should be loaded.
+     */
     protected void loadBoolean(int location, boolean value){
         float toLoad = 0;
         if(value)
@@ -110,12 +182,23 @@ public abstract class ShaderProgram {
         GL20.glUniform1f(location, toLoad);
     }
 
+    /**
+     * Load a 4D matrix into a uniform variable using its location.
+     * @param location Location of the uniform variable the matrix should be loaded to.
+     * @param matrix Matrix that should be loaded.
+     */
     protected void loadMatrix(int location, Matrix4f matrix){
         //upload float values from Matrix one by one
         //first load into MATRIX_BUFFER so it's possible to upload one by one
         GL20.glUniformMatrix4fv(location, false, matrix.get(matrixBuffer));
     }
 
+    /**
+     * Load a shader from a shader file.
+     * @param file File containing the shader.
+     * @param type OpenGl type of the shader.
+     * @return ID of the loaded shader.
+     */
     private static int loadShader(String file, int type){
         StringBuilder shaderSource = new StringBuilder();
         try{
@@ -139,27 +222,4 @@ public abstract class ShaderProgram {
         }
         return shaderID;
     }
-//        try{
-//            //convert Shader from file to String
-//            BufferedReader reader = new BufferedReader(new InputStreamReader(ShaderProgram.class.getResourceAsStream(file)));
-//            StringBuilder builder = new StringBuilder();
-//            while(reader.ready()){
-//                builder.append(reader.readLine() + System.lineSeparator());
-//            }
-//            reader.close();
-//
-//            //compile shader
-//            int shaderID = GL20.glCreateShader(type);
-//            GL20.glShaderSource(shaderID, builder);
-//            GL20.glCompileShader(shaderID);
-//            if(GL20.glGetShaderi(shaderID, GL20.GL_COMPILE_STATUS) == GL11.GL_FALSE){
-//                throw new RuntimeException("Failed to compile shader: " + System.lineSeparator() + GL20.glGetShaderInfoLog(shaderID));
-//            }
-//
-//            return shaderID;
-//        }
-//        catch(IOException e){
-//            throw new RuntimeException(e);
-//        }
-//    }
 }

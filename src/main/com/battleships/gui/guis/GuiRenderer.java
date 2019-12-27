@@ -30,7 +30,7 @@ public class GuiRenderer {
 
     /**
      * Create a new GuiRenderer.
-     * @param loader - Loader to load rectangles on which {@link GuiTexture} gets rendered on.
+     * @param loader Loader to load rectangles on which {@link GuiTexture} gets rendered on.
      */
     public GuiRenderer (Loader loader){
         float[] positions = {-1, 1, -1, -1, 1, 1, 1, -1};
@@ -40,7 +40,7 @@ public class GuiRenderer {
 
     /**
      * Renders the {@link GuiTexture} to the screen using the {@link GuiShader}.
-     * @param guis - List containing all guiTextures that should be rendered.
+     * @param guis List containing all guiTextures that should be rendered.
      */
     public void render(List<GuiTexture> guis){
         shader.start();

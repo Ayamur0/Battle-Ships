@@ -14,7 +14,7 @@ public class InsertionSort {
      * from the camera are first, and the particles with the shortest distance
      * are last.
      *
-     * @param list - the list of particles to sort.
+     * @param list the list of particles to sort.
      */
     public static void sortHighToLow(List<Particle> list) {
         for (int i = 1; i < list.size(); i++) {
@@ -27,8 +27,8 @@ public class InsertionSort {
 
     /**
      * Sort item at index i of the list to the right position.
-     * @param list - List to sort.
-     * @param i - Index of item to sort into right position.
+     * @param list List to sort.
+     * @param i Index of item to sort into right position.
      */
     private static void sortUpHighToLow(List<Particle> list, int i) {
         Particle item = list.get(i);

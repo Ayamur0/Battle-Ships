@@ -2,20 +2,27 @@ package com.battleships.gui.postProcessing;
 
 import org.lwjgl.opengl.GL11;
 
+/**
+ * Renderer than can render the image a {@link Fbo} contains to the screen.
+ *
+ * @author Tim Staudenmaier
+ */
+
 public class ImageRenderer {
 
+    /**
+     * Fbo containing the images for this renderer.
+     */
     private Fbo fbo;
 
     /**
      * Create a ImageRenderer which is used to render fbos.
-     * @param width - width of the image that should be rendered
-     * @param height - height of the image that should be rendered
+     * @param width width of the image that should be rendered
+     * @param height height of the image that should be rendered
      */
     public ImageRenderer(int width, int height) {
         this.fbo = new Fbo(width, height, Fbo.NONE);
     }
-
-    public ImageRenderer() {}
 
     /**
      * Render a quad to the screen, on which the image texture can be rendered

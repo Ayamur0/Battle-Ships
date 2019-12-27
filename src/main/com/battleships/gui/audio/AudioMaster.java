@@ -13,14 +13,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * This AudioMaster is the main class for all audio related things.
- * It is always needed if any sound should be played in the game.
+ * Main class for all audio related things, has functions that are required for using sound in 3D worlds.
+ * Before any sound can be used, this class needs to be initialized.
+ *
  *
  * @author Tim Staudenmaier
  */
 public class AudioMaster {
 
+    /**
+     * OpenAl device ID.
+     */
     private static long device;
+    /**
+     * OpenAl context ID.
+     */
     private static long context;
 
     /**
@@ -29,7 +36,7 @@ public class AudioMaster {
     private static float SFXVolume = 1;
 
     /**
-     * List containing all loaded buffers for sounds.
+     * List containing all loaded buffers of sounds.
      */
     private static List<Integer> buffers = new ArrayList<>();
     /**
@@ -60,12 +67,12 @@ public class AudioMaster {
 
     /**
      * Set the data of the listener. Sound gets played so it sounds correctly in relation to
-     * the position and rotation of the listener.
-     * @param x - x-coordinate of the listeners position (in world coordinates)
-     * @param y - y-coordinate of the listeners position (in world coordinates)
-     * @param z - z-coordinate of the listeners position (in world coordinates)
-     * @param pitch - pitch of the listener
-     * @param yaw - yaw of the listener
+     * this position and rotation of the listener.
+     * @param x x-coordinate of the listeners position (in world coordinates)
+     * @param y y-coordinate of the listeners position (in world coordinates)
+     * @param z z-coordinate of the listeners position (in world coordinates)
+     * @param pitch pitch of the listener
+     * @param yaw yaw of the listener
      */
     public static void setListenerData(float x, float y, float z, float pitch, float yaw){
         AL10.alListener3f(AL10.AL_POSITION, x, y, z);
@@ -82,8 +89,8 @@ public class AudioMaster {
     /**
      * Loads a sound file, to make it playable through a source.
      * Sound files need to be in .wav format.
-     * @param file - Name of the sound file to load.
-     * @return - ID of the buffer containing the data for the sound file. Needs to be given to a source
+     * @param file Name of the sound file to load.
+     * @return ID of the buffer containing the data for the sound file. Needs to be given to a source
      *          to play the sound.
      */
     public static int loadSound(String file){
@@ -97,7 +104,7 @@ public class AudioMaster {
 
     /**
      * Change the volume of all sources and set standard volume for new sources.
-     * @param volume - New volume (0 for no sound, 1 is standard)
+     * @param volume New volume (0 for no sound, 1 is standard)
      */
     public static void changeVolume(float volume){
         SFXVolume = volume;
@@ -108,7 +115,7 @@ public class AudioMaster {
 
     /**
      *
-     * @return - Current volume level.
+     * @return Current volume level.
      */
     public static float getSFXVolume() {
         return SFXVolume;
@@ -116,7 +123,7 @@ public class AudioMaster {
 
     /**
      * Adds a source to this audioManager, so it can control the volume of the source and cleanUp the source on exit.
-     * @param source - The source to add
+     * @param source The source to add
      */
     public static void addSource(Source source){
         sources.add(source);

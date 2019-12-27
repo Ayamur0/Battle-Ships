@@ -12,16 +12,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * {@link GuiTexture} with functions for the symbols indicating if animation and sound are currently enabled or disabled.
+ * {@link GuiTexture}that holds symbols indicating if animation and sound are currently enabled or disabled.
+ * Has a click function to change the state of these symbols.
  *
  * @author Tim Staudenmaier
  */
 public class DisableSymbols extends GuiClickCallback {
 
     /**
-     * Constants representing the two symbols.
+     * Constant value for animation symbol.
      */
     public static final int ANIMATION = 0;
+    /**
+     * Constant value for sound symbol.
+     */
     public static final int SOUND = 1;
 
     /**
@@ -49,9 +53,9 @@ public class DisableSymbols extends GuiClickCallback {
 
     /**
      * Creates the gui-elements for the symbols that show whether sound or animations are enabled or disabled.
-     * @param loader - Loader needed to load textures
-     * @param guiManager - GuiManager that should handle the click function of these guis.
-     * @param guis - List of guis that these should be added to. This list needs to be rendered so these guis show on screen.
+     * @param loader Loader needed to load textures
+     * @param guiManager GuiManager that should handle the click function of these guis.
+     * @param guis List of guis that these should be added to. This list needs to be rendered so these guis show on screen.
      */
     public DisableSymbols (Loader loader, GuiManager guiManager, List<GuiTexture> guis){
         this.guiManager = guiManager;
@@ -75,10 +79,10 @@ public class DisableSymbols extends GuiClickCallback {
 
     /**
      * Tests if the click was on either of the symbols.
-     * @param gui - The gui to test for if the click was on it.
-     * @param x - xPos of the click (left of screen = 0, right of screen = 1).
-     * @param y - yPos of the click (top of screen = 0, bottom of screen = 1).
-     * @return - {@code true} if the click was on either symbol, {@code false} else.
+     * @param gui The gui to test for if the click was on it.
+     * @param x xPos of the click (left of screen = 0, right of screen = 1).
+     * @param y yPos of the click (top of screen = 0, bottom of screen = 1).
+     * @return {@code true} if the click was on either symbol, {@code false} else.
      */
     @Override
     protected boolean isClickOnGui(GuiTexture gui, double x, double y) {
@@ -113,7 +117,7 @@ public class DisableSymbols extends GuiClickCallback {
 
     /**
      * Swaps the texture of a symbol between on and off.
-     * @param symbol - number of the symbol that should be toggled.
+     * @param symbol number of the symbol that should be toggled.
      */
     public void toggleSymbol(int symbol){
         currentSymbols.get(symbol).setOffsetX((currentSymbols.get(symbol).getOffsetX() * currentSymbols.get(symbol).getRows() + 1) % 2);

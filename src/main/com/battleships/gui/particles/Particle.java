@@ -7,6 +7,7 @@ import org.joml.Vector3f;
 
 /**
  * 2D Particle. Can be used in {@link ParticleSystemComplex} or {@link ParticleSystemSimple} to create particle effects.
+ * Before using any Particles the {@link ParticleMaster} needs to be initialized!
  *
  * @author Tim Staudenmier
  */
@@ -19,9 +20,12 @@ public class Particle {
     private static final float GRAVITY = -50;
 
     /**
-     * Position and velocity of the particle.
+     * Position of the particle (world coordinates).
      */
     private Vector3f position;
+    /**
+     * Velocity of the particle.
+     */
     private Vector3f velocity;
     /**
      * How much the particle is influenced by gravity.
@@ -47,9 +51,12 @@ public class Particle {
     private ParticleTexture texture;
 
     /**
-     * Texture in the textureAtlas this particle uses.
+     * First texture in the textureAtlas this particle uses.
      */
     private Vector2f texOffset1 = new Vector2f();
+    /**
+     * Texture in the textureAtlas that gets blended over the first one.
+     */
     private Vector2f texOffset2 = new Vector2f();
     /**
      * How much the next texture in the textureAtlas should be blended
@@ -68,13 +75,13 @@ public class Particle {
 
     /**
      * Create a new particle.
-     * @param texture - TextureAtlas of this particle.
-     * @param position - Position at which this particle should start.
-     * @param velocity - Velocity this particle should start with.
-     * @param gravityEffect - how much this particle should be influenced by gravity.
-     * @param lifeLength  - How long this particle should live in seconds.
-     * @param rotation - Rotation of this particle.
-     * @param scale - Scale of this particle
+     * @param texture TextureAtlas of this particle.
+     * @param position Position at which this particle should start.
+     * @param velocity Velocity this particle should start with.
+     * @param gravityEffect how much this particle should be influenced by gravity.
+     * @param lifeLength  How long this particle should live in seconds.
+     * @param rotation Rotation of this particle.
+     * @param scale Scale of this particle
      */
     public Particle(ParticleTexture texture, Vector3f position, Vector3f velocity, float gravityEffect, float lifeLength, float rotation, float scale) {
         this.texture = texture; //TODO rather than creating new particle reset values in dead one to save performance
@@ -90,14 +97,14 @@ public class Particle {
 
     /**
      *
-     * @return - The distance from this particle to the camera.
+     * @return The distance from this particle to the camera.
      */
     public float getDistance() {
         return distance;
     }
 
     /**
-     * @return - The textureOffset of the currently used texture in the TextureAtlas.
+     * @return The textureOffset of the currently used texture in the TextureAtlas.
      */
     public Vector2f getTexOffset1() {
         return texOffset1;
@@ -105,7 +112,7 @@ public class Particle {
 
     /**
      *
-     * @return - The textureOffset of the texture that is blended onto the normal texture of this particle (next texture in the textureAtlas).
+     * @return The textureOffset of the texture that is blended onto the normal texture of this particle (next texture in the textureAtlas).
      */
     public Vector2f getTexOffset2() {
         return texOffset2;
@@ -113,7 +120,7 @@ public class Particle {
 
     /**
      *
-     * @return - How much the next texture is blended over the current one.
+     * @return How much the next texture is blended over the current one.
      */
     public float getBlend() {
         return blend;
@@ -121,7 +128,7 @@ public class Particle {
 
     /**
      *
-     * @return - The TextureAtlas of this particle.
+     * @return The TextureAtlas of this particle.
      */
     public ParticleTexture getTexture() {
         return texture;
@@ -129,7 +136,7 @@ public class Particle {
 
     /**
      *
-     * @return - The current position of this particle.
+     * @return The current position of this particle.
      */
     public Vector3f getPosition() {
         return position;
@@ -137,7 +144,7 @@ public class Particle {
 
     /**
      *
-     * @return - The current rotation of this particle.
+     * @return The current rotation of this particle.
      */
     public float getRotation() {
         return rotation;
@@ -145,7 +152,7 @@ public class Particle {
 
     /**
      *
-     * @return - The scale of this particle.
+     * @return The scale of this particle.
      */
     public float getScale() {
         return scale;
@@ -156,7 +163,7 @@ public class Particle {
      * delta time (time elapsed during last frame) and the velocity and gravity values.
      * Also calculate how far away particle is from camera and safe to distance.
      * Save elapsedTime to keep track of how long particle is alive.
-     * @return - {@code true} if the particle is still alive in this frame,
+     * @return {@code true} if the particle is still alive in this frame,
      *           {@code false} if the particle is alive longer than his lifeLength so he needs to be removed
      */
     protected boolean update(Camera camera){
@@ -197,8 +204,8 @@ public class Particle {
      * First get number of row and column as integers.
      * Then divide by number of rows so number and row are between 0 and 1,
      * because the textureCoords are all between 0 and 1.
-     * @param offset - Vector to save the calculated offset to
-     * @param index - index of the current texture in the texture Atlas
+     * @param offset Vector to save the calculated offset to
+     * @param index index of the current texture in the texture Atlas
      */
     private void setTextureOffset(Vector2f offset, int index){
         int column = index % texture.getNumberOfRows();

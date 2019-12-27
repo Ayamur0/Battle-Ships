@@ -1,32 +1,41 @@
 package com.battleships.gui.entities;
 
 import com.battleships.gui.gameAssets.GameManager;
-import com.battleships.gui.gameAssets.PlayingField;
+import com.battleships.gui.gameAssets.grids.GridManager;
 import com.battleships.gui.terrains.Terrain;
 import com.battleships.gui.window.WindowManager;
 import org.joml.Vector3f;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.GLFW;
-import org.lwjgl.glfw.GLFWKeyCallback;
 import org.lwjgl.glfw.GLFWScrollCallback;
 
 import java.nio.DoubleBuffer;
 
 /**
- * This camera is needed for every scene.
  * The scene always gets rendered, as if it was filmed with the camera.
+ * To render a scene a camera is mandatory.
  *
  * @author Tim Staudenmaier
  */
 public class Camera {
 
+    /**
+     * How fast the camera moves if the player is walking.
+     */
     private static final float WALK_SPEED = 20;
+    /**
+     * Factor by that the speed is multiplied if the player is running.
+     */
     private static final int RUN_MULTIPLIER = 5;
     /**
-     * Maximum and minimum y position (in world coordinates) the camera is able to reach in this game.
-     * The camera can't go above or below these y-coordinates.
+     * Maximum y position (in world coordinates) the camera is able to reach in this game.
+     * The camera can't go above this y-coordinate.
      */
     private static final float maxY = 315;
+    /**
+     * Minimum y position (in world coordinates) the camera is able to reach in this game.
+     * The camera can't go below this y-coordinate.
+     */
     private static final float minY = -3;
 
     /**
@@ -46,23 +55,40 @@ public class Camera {
      */
     private float pitch, yaw, roll;
     /**
-     * Current speed of the camera.
+     * Current ForwardSpeed of the camera.
      * Used to calculate new position of the camera, determined by currentSpeed
      * and time passed.
      */
     private float currentForwardSpeed;
+    /**
+     * Current SidewaysSpeed of the camera.
+     * Used to calculate new position of the camera, determined by currentSpeed
+     * and time passed.
+     */
     private float currentSidewaysSpeed;
+    /**
+     * Current UpwardsSpeed of the camera.
+     * Used to calculate new position of the camera, determined by currentSpeed
+     * and time passed.
+     */
     private float currentUpwardsSpeed;
 
     /**
      * In this game the camera is fixed on one circle.
-     * originX and originZ determine the center of this circle,
-     * radius determines the radius of the circle the camera can move on.
+     * originX is the x coordinate of the center of this circle.
      */
     private float originX;
+    /**
+     * In this game the camera is fixed on one circle.
+     * originZ is the z coordinate of the center of this circle.
+     */
     private float originZ;
+    /**
+     * Determines the radius of the circle the camera can move on.
+     */
     private float radius;
 
+    //TODO remove
     private boolean mouseLocked = false;
 
     /**
@@ -80,7 +106,7 @@ public class Camera {
     /**
      * Move the camera to the new position for the current frame, using all the data needed to calculate that position.
      * (currentSpeed adjusted zoom, new rotation)
-     * @param terrain - Terrain the camera is moving on (needed, so camera can't move under terrain).
+     * @param terrain Terrain the camera is moving on (needed, so camera can't move under terrain).
      */
         public void move(Terrain terrain){ //TODO limit zoom and pitch amount, keep movement in game area
         calculatePitch();
@@ -214,11 +240,12 @@ public class Camera {
      * Resets the camera to the standard position where it shows both grids of the players.
      */
     public void setStandardPos(){
-            radius = Math.abs(350 * ((float)GameManager.getPlayingField().getSize() + 1) / PlayingField.getMAXSIZE() - Math.abs(GameManager.getPlayingField().getOwn().getPosition().z));
-            originZ = GameManager.getPlayingField().getOwn().getPosition().z;
-            originX = position.x = (GameManager.getPlayingField().getOwn().getPosition().x + GameManager.getPlayingField().getOpponent().getPosition().x) / 2f;
-            position.y = 255f * ((float)GameManager.getPlayingField().getSize() + 1) / PlayingField.getMAXSIZE();
-            position.z = -350 + 0.5f * -350f * (1 - ((float)GameManager.getPlayingField().getSize() + 1) / PlayingField.getMAXSIZE());
+        GridManager gridManager = GameManager.getGridManager();
+            radius = Math.abs(350 * ((float) gridManager.getSize() + 1) / GridManager.getMAXSIZE() - Math.abs(gridManager.getOwnGrid().getPosition().z));
+            originZ = gridManager.getOwnGrid().getPosition().z;
+            originX = position.x = (gridManager.getOwnGrid().getPosition().x + gridManager.getOpponentGrid().getPosition().x) / 2f;
+            position.y = 255f * ((float)gridManager.getSize() + 1) / GridManager.getMAXSIZE();
+            position.z = -350 + 0.5f * -350f * (1 - ((float)gridManager.getSize() + 1) / GridManager.getMAXSIZE());
             pitch = 70;
             yaw = 0;
     }
@@ -243,7 +270,7 @@ public class Camera {
 
     /**
      *
-     * @return - Current position of the camera in world coordinates.
+     * @return Current position of the camera in world coordinates.
      */
     public Vector3f getPosition() {
         return position;
@@ -251,7 +278,7 @@ public class Camera {
 
     /**
      *
-     * @return - Current pitch of the camera.
+     * @return Current pitch of the camera.
      */
     public float getPitch() {
         return pitch;
@@ -259,7 +286,7 @@ public class Camera {
 
     /**
      *
-     * @return - Current yaw of the camera.
+     * @return Current yaw of the camera.
      */
     public float getYaw() {
         return yaw;
@@ -267,7 +294,7 @@ public class Camera {
 
     /**
      *
-     * @return - Current roll of the camera.
+     * @return Current roll of the camera.
      */
     public float getRoll() {
         return roll;

@@ -12,17 +12,26 @@ import org.joml.Vector2f;
 public class GuiShader extends ShaderProgram {
 
     /**
-     * Constants containing the paths to the shader files.
+     * Path for the vertex shader file.
      */
     private static final String VERTEX_FILE = "/com/battleships/gui/guis/guiVertexShader.glsl";
+    /**
+     * Path for the fragment shader file.
+     */
     private static final String FRAGMENT_FILE = "/com/battleships/gui/guis/guiFragmentShader.glsl";
 
     /**
-     * Location values for the uniform variables.
+     * Location value for the uniform variable transformationMatrix, that holds the transformationMatrix of the {@link GuiTexture}.
      */
     private int location_transformationMatrix;
+    /**
+     * Location value for the uniform variable numberOfRows, that holds the amount of rows in the textureAtlas of the {@link GuiTexture}.
+     */
     private int location_numberOfRows;
-    private int location_offest;
+    /**
+     * Location value for the uniform variable offset, that holds the offset of the texture for this {@link GuiTexture} in the textureAtlas.
+     */
+    private int location_offset;
 
     /**
      * Initialize the shader for GUI's.
@@ -51,14 +60,14 @@ public class GuiShader extends ShaderProgram {
     protected void getAllUniformLocations() {
         location_transformationMatrix = super.getUniformLocation("transformationMatrix");
         location_numberOfRows = super.getUniformLocation("numberOfRows");
-        location_offest = super.getUniformLocation("offset");
+        location_offset = super.getUniformLocation("offset");
     }
 
     /**
      * Load the numberOfRows of a texture atlas into the uniform variable.
      * Needed so the shader can calculate the part of a texture atlas, it needs to but
      * on the model.
-     * @param numberOfRows - Number of rows the used texture atlas contains (1 if it's a normal texture).
+     * @param numberOfRows Number of rows the used texture atlas contains (1 if it's a normal texture).
      */
     public void loadNumberOfRows(int numberOfRows){
         super.loadInt(location_numberOfRows, numberOfRows);
@@ -66,11 +75,11 @@ public class GuiShader extends ShaderProgram {
 
     /**
      * Load the offset of the texture that should be used in a texture atlas into the uniform variable.
-     * @param x - column of the texture that should be used (0 if it's a normal texture).
-     * @param y - row of the texture (0 if it's a normal texture).
+     * @param x column of the texture that should be used (0 if it's a normal texture).
+     * @param y row of the texture (0 if it's a normal texture).
      */
     public void loadOffset(float x, float y){
-        super.load2DVector(location_offest, new Vector2f(x, y));
+        super.load2DVector(location_offset, new Vector2f(x, y));
     }
 
     /**

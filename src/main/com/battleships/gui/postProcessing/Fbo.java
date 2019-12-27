@@ -8,32 +8,79 @@ import org.lwjgl.opengl.GL30;
 
 import java.nio.ByteBuffer;
 
+/**
+ * FrameBufferObject a scene can be rendered to instead of the screen.
+ * Can be used to edit the scene with post processing effects before showing it on the screen.
+ * Before using post processing {@link PostProcessing} needs to be initialized!
+ * 
+ * @author Tim Staudenmaier
+ */
+
 public class Fbo {
 
+    /**
+     * No DepthBuffer
+     */
     public static final int NONE = 0;
+    /**
+     * Use a DepthTexture. With this texture the rendered image
+     * can be edited in the shaders before showing it on screen.
+     */
     public static final int DEPTH_TEXTURE = 1;
+    /**
+     * Use a DepthRenderBuffer. With this buffer the rendered image
+     * can't be edited in the shaders.
+     */
     public static final int DEPTH_RENDER_BUFFER = 2;
 
+    /**
+     * Width of the image this fbo renders to.
+     */
     private int width;
+    /**
+     * Height of the image this fbo renders to.
+     */
     private int height;
 
+    /**
+     * Type of DepthBuffer this fbo uses.
+     */
     private int type;
 
+    /**
+     * OpenGL ID of this frameBuffer
+     */
     private int frameBuffer;
 
+    /**
+     * ID of the color texture of this frame buffer.
+     */
     private int colorTexture;
+    /**
+     * ID of the depth texture of this frame buffer.
+     * Only used with a depthTexture. 
+     * If this isn't used the ID is 0.
+     */
     private int depthTexture;
 
+    /**
+     * ID of the depth buffer this frame buffer uses.
+     * Only used with a depthRenderBuffer. 
+     * If this isn't used the ID is 0.
+     */
     private int depthBuffer;
+    /**
+     * ID of the color buffer this frame buffer uses.
+     */
     private int colorBuffer;
 
     /**
      * Creates an FBO of a specified width and height, with the desired type of
      * depth buffer attachment.
      *
-     * @param width - the width of the FBO.
-     * @param height - the height of the FBO.
-     * @param depthBufferType - an int indicating the type of depth buffer attachment that this FBO should use.
+     * @param width the width of the FBO.
+     * @param height the height of the FBO.
+     * @param depthBufferType an int indicating the type of depth buffer attachment that this FBO should use.
      */
     public Fbo(int width, int height, int depthBufferType) {
         this.width = width;
@@ -105,7 +152,7 @@ public class Fbo {
      * Creates the FBO along with a color buffer texture attachment, and
      * possibly a depth buffer.
      *
-     * @param type - the type of depth buffer attachment to be attached to the FBO (0-2).
+     * @param type the type of depth buffer attachment to be attached to the FBO (0-2).
      */
     private void initializeFrameBuffer(int type) {
         createFrameBuffer();

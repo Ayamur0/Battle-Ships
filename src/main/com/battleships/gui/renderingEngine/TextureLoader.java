@@ -19,9 +19,18 @@ import java.nio.IntBuffer;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
 
+/**
+ * Loader for converting images to textures formatted for OpenGL.
+ *
+ * @author Tim Staudenmaier
+ */
 public class TextureLoader {
 
-
+    /**
+     * Load a texture from an image (.jpg or .tga images).
+     * @param filename Path to the image for the texture.
+     * @return A ModelTexture containing the loaded image converted into a texture.
+     */
     static ModelTexture loadTexture(String filename){
 
         //create usable TextureLoader for OpenGl from image
@@ -30,8 +39,8 @@ public class TextureLoader {
             throw new RuntimeException("Resource not found: " + filename);
         ByteBuffer rawBytes;
         try {
-            rawBytes = ioResourceToByteBuffer(is, 16384);
-        } catch (IOException e) {
+            rawBytes = ioResourceToByteBuffer(is);
+        } catch (NullPointerException e) {
             throw new RuntimeException(e);
         }
 
@@ -56,6 +65,11 @@ public class TextureLoader {
         return new ModelTexture(id);
     }
 
+    /**
+     * Load the data from an image needed to create a texture from it.
+     * @param fileName Path to the image the data should be loaded from.
+     * @return A TextureData containing all the data needed from the image.
+     */
     public static TextureData loadTextureData(String fileName){
 
         int width = 0;
@@ -79,6 +93,11 @@ public class TextureLoader {
         return new TextureData(buffer, width, height);
     }
 
+    /**
+     * Load a texture from an image (.png images).
+     * @param fileName Path to the image for the texture.
+     * @return A ModelTexture containing the loaded image converted into a texture.
+     */
     public static ModelTexture loadPNGTexture(String fileName){
         TextureData data = loadTextureData("/com/battleships/gui/res/textures/" + fileName );
         int id = GL11.glGenTextures();
@@ -88,11 +107,17 @@ public class TextureLoader {
         return new ModelTexture(id);
     }
 
-    private static ByteBuffer ioResourceToByteBuffer(InputStream source, int bufferSize) throws IOException {
+    /**
+     * Loads all the data an InputStream contains into a ByteBuffer.
+     * @param source InputStream containing the data.
+     * @return A ByteBuffer containing all the bytes from the InputStream.
+     * @throws NullPointerException If the passed InputStream doesn't exist.
+     */
+    private static ByteBuffer ioResourceToByteBuffer(InputStream source) throws NullPointerException{
         ByteBuffer buffer;
 
         try (ReadableByteChannel rbc = Channels.newChannel(source)){
-            buffer = BufferUtils.createByteBuffer(bufferSize);
+            buffer = BufferUtils.createByteBuffer(16384);
 
             while (true) {
                 int bytes = rbc.read(buffer);
@@ -111,6 +136,13 @@ public class TextureLoader {
         return buffer;
     }
 
+    /**
+     * Increases the size of a byteBuffer if the buffer was to small for the data
+     * that should be written to it.
+     * @param buffer The buffer whose size should be increased.
+     * @param newCapacity The new size the buffer should have.
+     * @return A buffer containing all the data from the buffer that was passed with a new size.
+     */
     private static ByteBuffer resizeBuffer(ByteBuffer buffer, int newCapacity){
         ByteBuffer newBuffer = BufferUtils.createByteBuffer(newCapacity);
         buffer.flip();

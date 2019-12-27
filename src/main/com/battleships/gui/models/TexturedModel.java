@@ -1,7 +1,7 @@
 package com.battleships.gui.models;
 
 /**
- * TexturedModel needed for {@link com.battleships.gui.entities.Entity}.
+ * TexturedModel needed for creating an {@link com.battleships.gui.entities.Entity}.
  *
  * @author Tim Staudenmaier
  */
@@ -18,8 +18,8 @@ public class TexturedModel {
 
     /**
      * Create a new TexturedModel.
-     * @param rawModel - Model
-     * @param texture - Texture
+     * @param rawModel Model
+     * @param texture Texture
      */
     public TexturedModel(RawModel rawModel, ModelTexture texture) {
         this.rawModel = rawModel;
@@ -28,7 +28,7 @@ public class TexturedModel {
 
     /**
      *
-     * @return - The model of this texturedModel.
+     * @return The model of this texturedModel.
      */
     public RawModel getRawModel() {
         return rawModel;
@@ -36,7 +36,7 @@ public class TexturedModel {
 
     /**
      *
-     * @return - The textures of this texturedModel.
+     * @return The textures of this texturedModel.
      */
     public ModelTexture getTexture() {
         return texture;

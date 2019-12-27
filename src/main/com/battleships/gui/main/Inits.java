@@ -8,8 +8,7 @@ import com.battleships.gui.gameAssets.GameManager;
 import com.battleships.gui.gameAssets.MainMenuGui.Menu;
 import com.battleships.gui.gameAssets.MainMenuGui.MainMenuManager;
 import com.battleships.gui.gameAssets.MainMenuGui.MainMenu;
-import com.battleships.gui.gameAssets.PlayingField;
-import com.battleships.gui.gameAssets.ShipManager;
+import com.battleships.gui.gameAssets.grids.ShipManager;
 import com.battleships.gui.gameAssets.ingameGui.ShipSelector;
 import com.battleships.gui.guis.GuiManager;
 import com.battleships.gui.guis.GuiRenderer;
@@ -74,7 +73,6 @@ public class Inits {
     private List<Entity> entities;
     private Entity ship;
 
-    private PlayingField playingField;
 
     private Vector3f cellIntersection;
     private Vector3f pointedCell;
@@ -166,9 +164,6 @@ public class Inits {
         return entities;
     }
 
-    public PlayingField getPlayingField() {
-        return playingField;
-    }
 
     public Vector3f getCellIntersection() {
         return cellIntersection;
@@ -285,13 +280,6 @@ public class Inits {
 
         entities = new ArrayList<>();
 
-        ship = loader.loadEntityfromOBJ("ship4", "ship4.tga", 10, 1);
-        ship.setPosition(new Vector3f(0,0,-40));
-
-        entities.add(ship);
-
-        playingField =  new PlayingField(30, loader);
-        ships = playingField.getShipManager();
         shipSelector = new ShipSelector(loader, guiManager, ships, permanentGuiElements);
 //        ShipManager ships = new ShipManager(loader);
 //        playingField.placeShip(entities, ships, 0, 7,2);

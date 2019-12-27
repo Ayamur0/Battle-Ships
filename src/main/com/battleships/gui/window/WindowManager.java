@@ -20,19 +20,45 @@ import org.lwjgl.opengl.GL13;
 import java.io.InputStream;
 import java.nio.IntBuffer;
 
+/**
+ * First class that is needed after starting the program.
+ * Handles all window related things.
+ *
+ * @author Tim Staudenmaier
+ */
 public class WindowManager {
 
+    /**
+     * OpenGl ID of this window
+     */
     private static long window;
+    /**
+     * Current Width and Height of this window in pixels.
+     */
     private static int width = 1280, height = 720; //get Width + Height from Settings
+    /**
+     * Standard width and height for this window in pixels.
+     */
     private static final int StandardWIDTH = 1280, StandardHEIGHT = 720; //To reset Width + Height to standard
+    /**
+     * {@code true} if the window is currently in fullScreen mode.
+     */
     private static boolean fullScreen;
-    private static boolean changeFullScreen;
 
+    /**
+     * Time at which the last frame had finished rendering.
+     */
     private static double lastFrame;
+    /**
+     * Time that has passed since the last frame had finished rendering in seconds.
+     */
     private static double deltaTime;
 
 
-
+    /**
+     * Initialize the main window the game is played in.
+     * Needs to be called at start of the program!
+     */
     public static void initialize(){
         //initialize GLFW
         GLFWErrorCallback.createPrint(System.err).set();
@@ -59,6 +85,9 @@ public class WindowManager {
         setIcon();
     }
 
+    /**
+     * Set the icon of the window.
+     */
     private static void setIcon(){
         TextureData icon = TextureLoader.loadTextureData("/com/battleships/gui/res/textures/Icon2.png");
         GLFWImage image = GLFWImage.malloc();
@@ -68,6 +97,10 @@ public class WindowManager {
         GLFW.glfwSetWindowIcon(window, imagebf);
     }
 
+    /**
+     * Update the window to show the next frame.
+     * Needs to be called as last method every frame!
+     */
     public static void updateWindow(){
         GLFW.glfwSwapBuffers(window);
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
@@ -83,20 +116,33 @@ public class WindowManager {
 
         if(width <= 1920 && height <= 1080)
             GL11.glViewport(0, 0, width, height);
+        //TODO restrict resolution
 
         double currentFrame = GLFW.glfwGetTime();
         deltaTime = currentFrame - lastFrame;
         lastFrame = currentFrame;
     }
 
+    /**
+     * @return Time that has passed since last frame finished rendering in seconds.
+     */
     public static float getDeltaTime() {
         return (float)deltaTime;
     }
 
+    /**
+     * @return ID of this window.
+     */
     public static long getWindow() {
         return window;
     }
 
+    /**
+     * Sets the Callbacks for user inputs.
+     * Sets callbacks for mouse, keyboard and window resizing.
+     * @param camera Camera that views the scene and should be moved by user input.
+     * @param wFbo WaterFBOs that handle the reflection and refraction of water.
+     */
     static public void setCallbacks(Camera camera, WaterFrameBuffers wFbo){
         GLFW.glfwSetMouseButtonCallback(window, GameManager.testClick);
         //TODO set ingame clickcallback so that if on no gui, it gets checked if on playingfield
@@ -105,22 +151,39 @@ public class WindowManager {
         GLFW.glfwSetWindowSizeCallback(window, wFbo.sizeCallback);
     }
 
+    /**
+     * ets the Callbacks for user inputs in the MainMenu.
+     * @param mainMenuManager Manager that handles clicks in the main menu.
+     */
     static public void setMainMenuCallbacks(MainMenuManager mainMenuManager){
         GLFW.glfwSetMouseButtonCallback(window, mainMenuManager.testClick);
     }
 
+    /**
+     * @return Width of the window in pixels.
+     */
     public static int getWidth() {
         return width;
     }
 
+    /**
+     * @return Height of the window in pixels.
+     */
     public static int getHeight() {
         return height;
     }
 
+    /**
+     * @return {@code true} if the window is in fullscreen.
+     */
     public static boolean isFullscreen() {
         return fullScreen;
     }
 
+    /**
+     * Set the window to be fullscreen or to exit fullscreen.
+     * @param fullS {@code true} if the window should enter fullscreen, {@code false} if the window should exit fullscreen.
+     */
     public static void setFullScreen (boolean fullS) {
         if(fullS){
             GLFWVidMode vidMode = GLFW.glfwGetVideoMode(GLFW.glfwGetPrimaryMonitor());

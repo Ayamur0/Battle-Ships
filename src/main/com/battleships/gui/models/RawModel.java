@@ -18,8 +18,8 @@ public class RawModel {
 
     /**
      * Create a new model.
-     * @param vaoID - vaoId for this model.
-     * @param vertexCount - Vertex count this model should have.
+     * @param vaoID vaoId for this model.
+     * @param vertexCount Vertex count this model should have.
      */
     public RawModel (int vaoID, int vertexCount){
         this.vaoID = vaoID;
@@ -28,7 +28,7 @@ public class RawModel {
 
     /**
      *
-     * @return - ID of the vao of this model.
+     * @return ID of the vao of this model.
      */
     public int getVaoID() {
         return vaoID;
@@ -36,7 +36,7 @@ public class RawModel {
 
     /**
      *
-     * @return - Amount of vertices in this model.
+     * @return Amount of vertices in this model.
      */
     public int getVertexCount() {
         return vertexCount;

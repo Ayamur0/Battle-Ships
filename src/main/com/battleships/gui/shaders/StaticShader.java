@@ -11,18 +11,30 @@ import org.joml.Vector4f;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Shader used by the {@link com.battleships.gui.renderingEngine.EntityRenderer}.
+ * 
+ * @author Tim Staudenmaier
+ */
 public class StaticShader extends ShaderProgram {
 
-    private static final Vector3f UP_VECTOR = new Vector3f(0, 1, 0); //Vector looking straight up
-
+    /**
+     * Path for the vertex shader file.
+     */
     private static final String VERTEX_FILE = "/com/battleships/gui/shaders/vertexShader.glsl";
+    /**
+     * Path for the fragment shader file.
+     */
     private static final String FRAGMENT_FILE = "/com/battleships/gui/shaders/fragmentShader.glsl";
 
+    /**
+     * Map containing the names of all uniform variables and their location.
+     */
     private Map<String, Integer> uniformLocations;
 
 
     /**
-     * Creates a new shader by loading the two core shader files, need for this type of shader and binding them to
+     * Creates a new static shader by loading the two core shader files, need for this type of shader and binding them to
      * OpenGl so it can access these shader files.
      */
     public StaticShader() {
@@ -64,8 +76,8 @@ public class StaticShader extends ShaderProgram {
     /**
      * Load additional color values for a entity, that are mixed with the given
      * percentage with the normal color of the entity. Can be used for graying of objects for example.
-     * @param color - The color the entities color should be mixed with.
-     * @param percentage - How much of this color should be used (0-1).
+     * @param color The color the entities color should be mixed with.
+     * @param percentage How much of this color should be used (0-1).
      */
     public void loadMixColor(Vector3f color, float percentage){
         super.loadVector(uniformLocations.get("mixColor"), color);
@@ -76,7 +88,7 @@ public class StaticShader extends ShaderProgram {
      * Load ClipPlane vector to shader.
      * All vertices of entities that are on the opposite site the normal vector of the clip plane is
      * facing, will not be rendered.
-     * @param plane - the vector for the clip plane
+     * @param plane the vector for the clip plane
      */
     public void loadClipPlane(Vector4f plane){
         super.loadVector(uniformLocations.get("plane"), plane);
@@ -86,7 +98,7 @@ public class StaticShader extends ShaderProgram {
      * Load the numberOfRows of a texture atlas into the uniform variable.
      * Needed so the shader can calculate the part of a texture atlas, it needs to but
      * on the model.
-     * @param numberOfRows - Number of rows the used texture atlas contains (1 if it's a normal texture).
+     * @param numberOfRows Number of rows the used texture atlas contains (1 if it's a normal texture).
      */
     public void loadNumberOfRows(float numberOfRows){
         super.loadFloat(uniformLocations.get("numberOfRows"), numberOfRows);
@@ -94,8 +106,8 @@ public class StaticShader extends ShaderProgram {
 
     /**
      * Load the offset of the texture that should be used in a texture atlas into the uniform variable.
-     * @param x - column of the texture that should be used (0 if it's a normal texture).
-     * @param y - row of the texture (0 if it's a normal texture).
+     * @param x column of the texture that should be used (0 if it's a normal texture).
+     * @param y row of the texture (0 if it's a normal texture).
      */
     public void loadOffset(float x, float y){
         super.load2DVector(uniformLocations.get("offset"), new Vector2f(x, y));
@@ -103,9 +115,9 @@ public class StaticShader extends ShaderProgram {
 
     /**
      * Loads the color that the shader should use for the sky into the uniform variable.
-     * @param r - red value of the color (0-1)
-     * @param g - green value of the color (0-1)
-     * @param b - blue value of the color (0-1)
+     * @param r red value of the color (0-1)
+     * @param g green value of the color (0-1)
+     * @param b blue value of the color (0-1)
      */
     public void loadSkyColor(float r, float g, float b){
         super.loadVector(uniformLocations.get("skyColor"), new Vector3f(r,g,b));
@@ -113,8 +125,8 @@ public class StaticShader extends ShaderProgram {
 
     /**
      * Loads the values specifying the entity reflectivity to their uniform variables.
-     * @param damper - How damped the reflected light should look.
-     * @param reflectivity - How much light should get reflected.
+     * @param damper How much the reflected light spreads.
+     * @param reflectivity How much light should get reflected.
      */
     public void loadShineVariables(float damper, float reflectivity){
         super.loadFloat(uniformLocations.get("shineDamper"), damper);
@@ -123,9 +135,8 @@ public class StaticShader extends ShaderProgram {
 
     /**
      * Loads the position and color of the light into the uniform variables.
-     * @param light - The light the scene should use.
+     * @param light The light the scene should use.
      */
-    //load light Position and Color vectors into shader uniforms
     public void loadLight(Light light){
         super.loadVector(uniformLocations.get("lightPosition"), light.getPosition());
         super.loadVector(uniformLocations.get("lightColor"), light.getColor());
@@ -133,41 +144,25 @@ public class StaticShader extends ShaderProgram {
 
     /**
      * Loads the transformation Matrix of the currently rendered entity to the uniform variable.
-     * @param matrix - transformation matrix of the entity, containing position, rotation and scale.
+     * @param matrix transformation matrix of the entity, containing position, rotation and scale.
      */
-    //load matrix needed to process scaling, moving or rotating a model
     public void loadTransformationMatrix(Matrix4f matrix){
         super.loadMatrix(uniformLocations.get("transformationMatrix"), matrix);
     }
 
     /**
      * Loads the current view matrix into the uniform variable.
-     * @param camera - Camera that the scene is viewed through, containing viewMatrix
+     * @param camera Camera that the scene is viewed through, containing viewMatrix
      *               that manipulates entities, so it looks like the scene is viewed from the camera.
      */
     public void loadViewMatrix(Camera camera){
         Matrix4f viewMatrix = Maths.createViewMatrix(camera);
         super.loadMatrix(uniformLocations.get("viewMatrix"), viewMatrix);
-//        Matrix4f viewMatrix = new Matrix4f();
-//        Vector3f position = new Vector3f(0,0,0);
-//        Vector3f direction = new Vector3f(0,0,0);
-//        Vector3f rotation = new Vector3f(0,0,0);
-//        double pitch = Math.toRadians(rotation.x);
-//        double yaw = Math.toRadians(rotation.y);
-//        //don't convert z rotation, because it's not used as it's close to the same as x rotation
-//
-//        //convert rotations into direction vectors
-//        direction.x = (float) (Math.cos(pitch) * Math.sin(yaw));
-//        direction.y = (float) Math.sin(pitch);
-//        direction.z = (float) (Math.cos(pitch) * Math.cos(yaw));
-//        Vector3f target = new Vector3f(0,0,0);
-//        viewMatrix.setLookAt(new Vector3f (0,0,0), position.add(direction, target), UP_VECTOR);
-//        super.loadMatrix(location_viewMatrix, viewMatrix);
     }
 
     /**
      * Loads the current projection Matrix.
-     * @param projection - current projection Matrix, only changes if window is resized.
+     * @param projection current projection Matrix, only changes if window is resized.
      */
     public void loadProjectionMatrix(Matrix4f projection){
         super.loadMatrix(uniformLocations.get("projectionMatrix"), projection);
@@ -176,7 +171,7 @@ public class StaticShader extends ShaderProgram {
     /**
      * Puts a value into the uniform variable that decides whether the object should use fake lighting
      * (mostly used for objects that are only one face thick so they don't appear dark).
-     * @param useFake - boolean whether to use fake lighting or not.
+     * @param useFake boolean whether to use fake lighting or not.
      */
     public void loadFakeLightingVariable(boolean useFake){
         super.loadBoolean(uniformLocations.get("useFakeLighting"), useFake);

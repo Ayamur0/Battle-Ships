@@ -23,12 +23,20 @@ import org.lwjgl.openal.AL10;
 public class WaveData {
 
     /**
-     * Information on the format, samplerate, totalBytes and bytesPerFrame
-     * of the read .wav file.
+     * Information on the format of the read .wav file.
      */
     final int format;
+    /**
+     * Information on the samplerate of the read .wav file.
+     */
     final int samplerate;
+    /**
+     * Information on the totalBytes of the read .wav file.
+     */
     final int totalBytes;
+    /**
+     * Information on the bytesPerFrame of the read .wav file.
+     */
     final int bytesPerFrame;
     /**
      * ByteBuffer containing all the bytes of the actual sound of the .wav file.
@@ -36,14 +44,17 @@ public class WaveData {
     final ByteBuffer data;
 
     /**
-     * AudioInputStream and byte array needed to read a .wav file.
+     * AudioInputStream needed to read a .wav file.
      */
     private final AudioInputStream audioStream;
+    /**
+     * Data array the audioStream can read to.
+     */
     private final byte[] dataArray;
 
     /**
      * Create a waveData containing all data needed, to use a .wav file as sound.
-     * @param stream - Input stream containing the .wav file.
+     * @param stream Input stream containing the .wav file.
      */
     private WaveData(AudioInputStream stream) {
         this.audioStream = stream;
@@ -71,7 +82,7 @@ public class WaveData {
 
     /**
      * Load data from .wav file into this WaveData.
-     * @return - A ByteBuffer containing all the data.
+     * @return A ByteBuffer containing all the data.
      */
     private ByteBuffer loadData() {
         try {
@@ -89,8 +100,8 @@ public class WaveData {
 
     /**
      * Create WaveData from a .wav file.
-     * @param file - File to create the WaveData for.
-     * @return - WaveData containing all information about the passed .wav file.
+     * @param file File to create the WaveData for.
+     * @return WaveData containing all information about the passed .wav file.
      */
     public static WaveData create(String file){
         InputStream stream = WaveData.class.getResourceAsStream(file);
@@ -111,9 +122,9 @@ public class WaveData {
 
     /**
      *
-     * @param channels - How many channels the audio should use (1 for mono, 2 or more stereo)
-     * @param bitsPerSample - How many bits are used per sample (8 or 16)
-     * @return - An Integer representing the audio format in OpenAl Constants ({@code AL10.AL_FORMAT_MONO16} or  {@code AL10.AL_FORMAT_STEREO16})
+     * @param channels How many channels the audio should use (1 for mono, 2 or more stereo)
+     * @param bitsPerSample How many bits are used per sample (8 or 16)
+     * @return An Integer representing the audio format in OpenAl Constants ({@code AL10.AL_FORMAT_MONO16} or  {@code AL10.AL_FORMAT_STEREO16})
      */
     private static int getOpenAlFormat(int channels, int bitsPerSample) {
         if (channels == 1) {

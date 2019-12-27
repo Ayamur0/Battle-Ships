@@ -11,20 +11,47 @@ import org.lwjgl.glfw.GLFW;
 
 import java.nio.DoubleBuffer;
 
+/**
+ * Mouse picker that translates the position of the mouse cursor on the screen to a position inside the 3D world.
+ *
+ * @author Tim Staudenmaier
+ */
 public class MousePicker {
     private static final int RECURSION_COUNT = 200;
     private static final float RAY_RANGE = 600;
 
+    /**
+     * Current vector that describes the line in the world, pointed by the mouse cursor.
+     */
     private Vector3f currentRay = new Vector3f();
 
+    /**
+     * Current projectionMatrix of the window.
+     */
     private Matrix4f projectionMatrix;
+    /**
+     * Current viewMatrix of the camera.
+     */
     private Matrix4f viewMatrix;
+    /**
+     * Camera that views the scene.
+     */
     private Camera camera;
 
     private Terrain terrain;
     private Vector3f currentTerrainPoint;
+    /**
+     * Point at which the ray the mouse creates intersects with the y-level,
+     * at which the water and grids are located.
+     */
     private Vector3f currentIntersectionPoint;
 
+    /**
+     * Create a new MousePicker
+     * @param cam Camera viewing the scene.
+     * @param projection Current projectionMatrix of the window.
+     * @param terrain
+     */
     public MousePicker(Camera cam, Matrix4f projection, Terrain terrain) {
         camera = cam;
         projectionMatrix = projection;
@@ -36,6 +63,10 @@ public class MousePicker {
         return currentTerrainPoint;
     }
 
+    /**
+     * @return Point at which the ray the mouse creates intersects with the y-level,
+     *  at which the water and grids are located.
+     */
     public Vector3f getCurrentIntersectionPoint() {
         return currentIntersectionPoint;
     }
@@ -45,6 +76,10 @@ public class MousePicker {
 
     }
 
+    /**
+     * Update the mouse ray and calculate new intersection point to match the current
+     * view- and projectionMatrix as well as the current cursor position.
+     */
     public void update() {
         projectionMatrix = MasterRenderer.getProjectionMatrix();
         viewMatrix = Maths.createViewMatrix(camera);
@@ -62,6 +97,10 @@ public class MousePicker {
 //            System.out.println(currentTerrainPoint.x + " " + currentTerrainPoint.y + " " + currentTerrainPoint.z);
     }
 
+    /**
+     * Calculates the current ray the mouse is pointing along in the 3D world.
+     * @return
+     */
     private Vector3f calculateMouseRay() {
         DoubleBuffer x = BufferUtils.createDoubleBuffer(1);
         DoubleBuffer y = BufferUtils.createDoubleBuffer(1);
@@ -82,6 +121,11 @@ public class MousePicker {
         return worldRay;
     }
 
+    /**
+     * Convert coordinates from eyeSpaceCoordinates to worldCoordinates.
+     * @param eyeCoords coordinates in eyeSpace
+     * @return Corresponding coordinates in worldCoordinates.
+     */
     private Vector3f toWorldCoords(Vector4f eyeCoords) {
         Matrix4f invertedView = new Matrix4f();
         viewMatrix.invert(invertedView);
@@ -94,6 +138,11 @@ public class MousePicker {
 
     }
 
+    /**
+     * Convert coordinates from clipCoordinates to eyeCoordinates.
+     * @param clipCoords Coordinates as clipCoordinates.
+     * @return Corresponding coordinates in eyeCoordinates.
+     */
     private Vector4f toEyeCoords(Vector4f clipCoords) {
         Matrix4f invertedProjection = new Matrix4f();
         projectionMatrix.invert(invertedProjection);
@@ -102,6 +151,12 @@ public class MousePicker {
         return new Vector4f(eyeCoords.x, eyeCoords.y, -1f, 0f);
     }
 
+    /**
+     * Convert a mouse position to normalizedDeviceCoordinates.
+     * @param mouseX x coordinate of the mouse position.
+     * @param mouseY y coordinate of the mouse position.
+     * @return The corresponding normalizedDeviceCoordinates.
+     */
     private Vector2f getNormalizedDeviceCoordinates(float mouseX, float mouseY) {
         float x = (2.0f * mouseX) / WindowManager.getWidth() - 1f;
         float y = (2.0f * mouseY) / WindowManager.getHeight() - 1f;

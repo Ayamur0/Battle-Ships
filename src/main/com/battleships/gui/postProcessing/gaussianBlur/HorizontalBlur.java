@@ -4,15 +4,26 @@ import com.battleships.gui.postProcessing.ImageRenderer;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
 
+/**
+ * Effect that can be used by {@link com.battleships.gui.postProcessing.PostProcessing} to horizontally blur the image.
+ * 
+ * @author Tim Staudenmaier
+ */
 public class HorizontalBlur {
 
+    /**
+     * Renderer that renders the image after postProcessing.
+     */
     private ImageRenderer renderer;
+    /**
+     * Shader needed for this effect.
+     */
     private HorizontalBlurShader shader;
 
     /**
      * Create new HorizontalBlur post processing effect.
-     * @param targetFboWidth - width of the fbo this effect should affect
-     * @param targetFboHeight - height of the fbo this effect should affect
+     * @param targetFboWidth width of the fbo this effect should affect
+     * @param targetFboHeight height of the fbo this effect should affect
      */
     public HorizontalBlur(int targetFboWidth, int targetFboHeight){
         shader = new HorizontalBlurShader();
@@ -24,7 +35,7 @@ public class HorizontalBlur {
 
     /**
      * Render the horizontal blur.
-     * @param texture - the texture of the current scene (fbo)
+     * @param texture the texture of the current scene (fbo)
      */
     public void render(int texture){
         shader.start();

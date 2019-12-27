@@ -2,11 +2,25 @@ package com.battleships.gui.postProcessing.gaussianBlur;
 
 import com.battleships.gui.shaders.ShaderProgram;
 
+/**
+ * Shader for the {@link VerticalBlur} post processing effect.
+ *
+ * @author Tim Staudenmaier
+ */
 public class VerticalBlurShader extends ShaderProgram {
 
+    /**
+     * Path for the vertex shader file.
+     */
     private static final String VERTEX_FILE = "/com/battleships/gui/postProcessing/gaussianBlur/verticalBlurVertexShader.glsl";
+    /**
+     * Path for the fragment shader file.
+     */
     private static final String FRAGMENT_FILE = "/com/battleships/gui/postProcessing/gaussianBlur/blurFragmentShader.glsl";
 
+    /**
+     * Location value for the uniform variable targetHeight, that contains the height of the fbo this effect is used on.
+     */
     private int location_targetHeight;
 
     /**
@@ -18,7 +32,7 @@ public class VerticalBlurShader extends ShaderProgram {
 
     /**
      * Load the height of the fbo that this effect is used for to the shader.
-     * @param height - width of the fbo
+     * @param height width of the fbo
      */
     protected void loadTargetHeight(float height){
         super.loadFloat(location_targetHeight, height);

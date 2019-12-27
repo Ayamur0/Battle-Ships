@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * This class contains all the necessary information of a .fnt file so text can be rendered to the screen using that .fnt file.
+ * This class contains all the necessary information of a .fnt file so a {@link GUIText} can be rendered using that .fnt file.
  * All .fnt files need to be distance font files for this implementation.
  *
  * @author Tim Staudenmaier
@@ -15,11 +15,20 @@ import java.util.Map;
 public class MetaFile {
 
     /**
-     * Indices at which the padding values of the font file are stored.
+     * Index at which the padding value of the padding above a character is stored.
      */
     private static final int PAD_TOP = 0;
+    /**
+     * Index at which the padding value of the padding to the left of a character is stored.
+     */
     private static final int PAD_LEFT = 1;
+    /**
+     * Index at which the padding value of the padding below a character is stored.
+     */
     private static final int PAD_BOTTOM = 2;
+    /**
+     * Index at which the padding value of the padding to the right of a character is stored.
+     */
     private static final int PAD_RIGHT = 3;
 
     /**
@@ -28,9 +37,12 @@ public class MetaFile {
     private static final int DESIRED_PADDING = 8;
 
     /**
-     * With which character all characters/numbers are separated in the .fnt file.
+     * Character with which all characters are separated in the .fnt file.
      */
     private static final String SPLITTER = " ";
+    /**
+     * Character with which all numbers are separated in the .fnt file.
+     */
     private static final String NUMBER_SEPARATOR = ",";
 
     /**
@@ -39,9 +51,12 @@ public class MetaFile {
     private double aspectRatio;
 
     /**
-     * How big each pixel of the font needs to be on the screen after rendering.
+     * How big each pixel of the font needs to be on the screen vertically after rendering.
      */
     private double verticalPerPixelSize;
+    /**
+     * How big each pixel of the font needs to be on the screen horizontally after rendering.
+     */
     private double horizontalPerPixelSize;
     /**
      * Width of a space character.
@@ -51,7 +66,13 @@ public class MetaFile {
      * Actual padding values of the .fnt file.
      */
     private int[] padding;
+    /**
+     * Vertical padding between two characters.
+     */
     private int paddingWidth;
+    /**
+     * Horizontal padding between two characters.
+     */
     private int paddingHeight;
 
     /**
@@ -72,7 +93,7 @@ public class MetaFile {
     /**
      * open a font file to read it, read all needed data from it and save the read data into this Object.
      *
-     * @param file - font file
+     * @param file font file
      */
     protected MetaFile(String file) {
         this.aspectRatio = (double) WindowManager.getWidth() / (double) WindowManager.getHeight();
@@ -97,8 +118,8 @@ public class MetaFile {
     }
 
     /**
-     * @param ascii - the ascii value of the character
-     * @return - the character for the ascii value
+     * @param ascii the ascii value of the character
+     * @return the character for the ascii value
      */
 
     protected Character getCharacter(int ascii) {
@@ -108,7 +129,7 @@ public class MetaFile {
     /**
      * read the next line and store the variable names and their values in the values hashMap
      *
-     * @return - {@code true} if end of the file hasn't been reached
+     * @return {@code true} if end of the file hasn't been reached
      */
     private boolean processNextLine() {
         values.clear();
@@ -133,8 +154,8 @@ public class MetaFile {
     /**
      * Get the {@code int} value of a variable with a certain name in the current line
      *
-     * @param variable - the name of the variable
-     * @return - The {@code int} value of the variable
+     * @param variable the name of the variable
+     * @return The {@code int} value of the variable
      */
     private int getValueOfVariable(String variable) {
         return Integer.parseInt(values.get(variable));
@@ -143,8 +164,8 @@ public class MetaFile {
     /**
      * Get array of ints from a variable in the current line
      *
-     * @param variable - the name of the variable
-     * @return - The int array of values from the variable, split at commas
+     * @param variable the name of the variable
+     * @return The int array of values from the variable, split at commas
      */
     private int[] getValuesOfVariable(String variable) {
         String[] numbers = values.get(variable).split(NUMBER_SEPARATOR);
@@ -193,7 +214,7 @@ public class MetaFile {
      * Loads in data about each character and stores the data in the {@link Character} class and in
      * the metaData hashMap with the characters ascii value
      *
-     * @param imageWidth - the width of the texture atlas in pixels
+     * @param imageWidth the width of the texture atlas in pixels
      */
     private void loadCharacterData(int imageWidth) {
         //ship first 2 info lines
@@ -212,8 +233,8 @@ public class MetaFile {
      * it all from 'pixels' to 'screen-space' before storing. Also remove padding
      * between characters
      *
-     * @param imageSize - size of the texture atlas in pixels
-     * @return - The data about the character as {@link Character}
+     * @param imageSize size of the texture atlas in pixels
+     * @return The data about the character as {@link Character}
      */
     private Character loadCharacter(int imageSize) {
         int id = getValueOfVariable("id");

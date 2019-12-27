@@ -12,15 +12,21 @@ import org.joml.Vector2f;
 public class ParticleShader extends ShaderProgram {
 
     /**
-     * Constants containing the paths to the shader files.
+     * Path for the vertex shader file.
      */
     private static final String VERTEX_FILE = "/com/battleships/gui/particles/particleVertexShader.glsl";
+    /**
+     * Path for the fragment shader file.
+     */
     private static final String FRAGMENT_FILE = "/com/battleships/gui/particles/particleFragmentShader.glsl";
 
     /**
-     * Location values for the uniform variables.
+     * Location value for the uniform variable numberOfRows, that contains the amount of rows in the textureAtlas of the {@link ParticleTexture}.
      */
     private int location_numberOfRows;
+    /**
+     * Location value for the uniform variable projectionMatrix, that holds the projectionMatrix of the {@link Particle}.
+     */
     private int location_projectionMatrix;
 
     /**
@@ -61,7 +67,7 @@ public class ParticleShader extends ShaderProgram {
 
     /**
      * Load number of rows to shader.
-     * @param numberOfRows - number of rows of the current texture atlas
+     * @param numberOfRows number of rows of the current texture atlas
      */
 
     protected void loadNumberOfRows(float numberOfRows){
@@ -70,7 +76,7 @@ public class ParticleShader extends ShaderProgram {
 
     /**
      * Load a matrix as projectionMatrix for the shader.
-     * @param projectionMatrix - Matrix to be loaded, is used to convert eye space to viewport space (2D screen)
+     * @param projectionMatrix Matrix to be loaded, is used to convert eye space to viewport space (2D screen)
      */
 
     protected void loadProjectionMatrix(Matrix4f projectionMatrix){

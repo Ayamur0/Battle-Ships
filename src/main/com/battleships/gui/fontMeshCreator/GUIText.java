@@ -5,12 +5,19 @@ import org.joml.Vector2f;
 import org.joml.Vector3f;
 
 /**
- * All texts that should be rendered on the screen need to be instances of this class.
- * All instances of this class need to be passed to a {@link com.battleships.gui.guis.GuiRenderer} to be visible on screen.
+ * 2D text that can be rendered to the screen.
+ * All GuiTexts need to be passed to a {@link com.battleships.gui.fontRendering.FontRenderer} to be visible on screen.
+ * Before using GUITexts {@link TextMaster} needs to be initialized!
  */
 public class GUIText {
 
+    /**
+     * Actual text
+     */
     private String textString;
+    /**
+     * Font size of this text
+     */
     private float fontSize;
 
     /**
@@ -22,36 +29,71 @@ public class GUIText {
      */
     private int vertexCount;
 
+    /**
+     * Color of the text
+     */
     private Vector3f color;
 
+    /**
+     * Center position of the text in screen coordinates
+     */
     private Vector2f position;
+    /**
+     * Max size of one line in screen space
+     */
     private float lineMaxSize;
+    /**
+     * Max amount of lines
+     */
     private int numberOfLines;
 
+    /**
+     * Font for this text
+     */
     private FontType font;
 
+    /**
+     * {@code true} if the text should be centered, {@code false} for the text to be on the left.
+     */
     private boolean centerText;
+    /**
+     * Width of the outline around the characters.
+     * 0 if characters have no outline.
+     */
     private float outlineWidth;
+    /**
+     * Size of the edge transitioning from character to whatever is behind it,
+     * so the transition doesn't look to sharp.
+     * Needs to be above 0, recommended value is 0.1
+     */
     private float outlineEdge;
+    /**
+     * Color of the outline around the characters.
+     * As r, g, b values (all between 0 and 1)
+     */
     private Vector3f outlineColor;
+    /**
+     * Offset of the outline from the characters.
+     * Can be used to create shadow effects.
+     */
     private Vector2f outlineOffset;
 
     /**
      * Creates a new text, loads the text's quads into a VAO, and adds the text
      * to the screen
      *
-     * @param text - the string this text should read
-     * @param fontSize - the font size of the text, 1 is default size
-     * @param font - the font to use for this text
-     * @param position - the position on the screen where the top left corner of the
+     * @param text the string this text should read
+     * @param fontSize the font size of the text, 1 is default size
+     * @param font the font to use for this text
+     * @param position the position on the screen where the top left corner of the
      *            text should be rendered. (top left corner (0,0) bottom right (1,1))
-     * @param maxLineLength - max length of one line, relative to screen is (1 is full screen width).
+     * @param maxLineLength max length of one line, relative to screen is (1 is full screen width).
      *            If a word in a line exceeds this limit the word is put into a new line
-     * @param centered - whether the text should be centered or not
-     * @param outlineWidth - width of the outline of the text, 0 for no outline
-     * @param outlineEdge - size of the smooth transition edge around the outline
-     * @param outlineColor - color of the outline
-     * @param outlineOffset - offset of the outline to create a shadow effect
+     * @param centered whether the text should be centered or not
+     * @param outlineWidth width of the outline of the text, 0 for no outline
+     * @param outlineEdge size of the smooth transition edge around the outline
+     * @param outlineColor color of the outline
+     * @param outlineOffset offset of the outline to create a shadow effect
      */
     public GUIText(String text, float fontSize, FontType font, Vector2f position, float maxLineLength,
                    boolean centered, Vector3f color, float outlineWidth, float outlineEdge, Vector3f outlineColor, Vector2f outlineOffset) {
@@ -79,46 +121,47 @@ public class GUIText {
     }
 
     /**
-     * @return - The font used by this text
+     * @return The font used by this text
      */
     public FontType getFont() {
         return font;
     }
 
     /**
-     * Set the color of the text
+     * Set the color of the text as r, g, b values.
+     * All values need to be between 0 and 1.
      *
-     * @param r - red value, between 0 and 1
-     * @param g - green value, between 0 and 1
-     * @param b - blue value, between 0 and 1
+     * @param r red value
+     * @param g green value
+     * @param b blue value
      */
     public void setColor(float r, float g, float b) {
         color.set(r, g, b);
     }
 
     /**
-     * @return - the color of the text
+     * @return the color of the text
      */
     public Vector3f getColor() {
         return color;
     }
 
     /**
-     * @return - The number of lines of text after it has been loaded. Changes corresponding to maxLineLength
+     * @return The number of lines of text after it has been loaded. Changes corresponding to maxLineLength
      */
     public int getNumberOfLines() {
         return numberOfLines;
     }
 
     /**
-     * @return - The position of the top-left corner of the text on the screen
+     * @return The position of the top-left corner of the text on the screen
      */
     public Vector2f getPosition() {
         return position;
     }
 
     /**
-     * @return - the ID of the text's VAO, containing all the quads the text will be rendered on
+     * @return the ID of the text's VAO, containing all the quads the text will be rendered on
      */
     public int getMesh() {
         return textMeshVao;
@@ -127,9 +170,9 @@ public class GUIText {
     /**
      * Set the VAO and vertex count for this text
      *
-     * @param vao - the VAO containing all the vertex data for the quads the
+     * @param vao the VAO containing all the vertex data for the quads the
      *            text will be rendered on
-     * @param verticesCount - total number of vertices in all of the quads
+     * @param verticesCount total number of vertices in all of the quads
      */
     public void setMeshInfo(int vao, int verticesCount) {
         this.textMeshVao = vao;
@@ -137,14 +180,14 @@ public class GUIText {
     }
 
     /**
-     * @return - The total number of vertices in all of the texts quads
+     * @return The total number of vertices in all of the texts quads
      */
     public int getVertexCount() {
         return this.vertexCount;
     }
 
     /**
-     * @return - the font size of the text (1 is standard)
+     * @return the font size of the text (1 is standard)
      */
     protected float getFontSize() {
         return fontSize;
@@ -154,28 +197,28 @@ public class GUIText {
      * Sets the number of lines that this text covers (method used only in
      * loading)
      *
-     * @param number - number of lines
+     * @param number number of lines
      */
     protected void setNumberOfLines(int number) {
         this.numberOfLines = number;
     }
 
     /**
-     * @return - {@code true} if the text should be centered
+     * @return {@code true} if the text should be centered
      */
     protected boolean isCentered() {
         return centerText;
     }
 
     /**
-     * @return - The maximum length of a line of this text
+     * @return The maximum length of a line of this text
      */
     protected float getMaxLineSize() {
         return lineMaxSize;
     }
 
     /**
-     * @return - The string of text
+     * @return The string of text
      */
     protected String getTextString() {
         return textString;
@@ -183,7 +226,7 @@ public class GUIText {
 
     /**
      *
-     * @return - The width of the outline
+     * @return The width of the outline
      */
     public float getOutlineWidth() {
         return outlineWidth;
@@ -191,7 +234,7 @@ public class GUIText {
 
     /**
      *
-     * @return - The size of the edge around the outline
+     * @return The size of the edge around the outline
      */
     public float getOutlineEdge() {
         return outlineEdge;
@@ -199,7 +242,7 @@ public class GUIText {
 
     /**
      *
-     * @return - The color of the outline as rgb values between 0 and 1
+     * @return The color of the outline as rgb values between 0 and 1
      */
     public Vector3f getOutlineColor() {
         return outlineColor;
@@ -207,7 +250,7 @@ public class GUIText {
 
     /**
      *
-     * @return - The offset of the outline for this text
+     * @return The offset of the outline for this text
      */
     public Vector2f getOutlineOffset() {
         return outlineOffset;
@@ -215,7 +258,7 @@ public class GUIText {
 
     /**
      *
-     * @return - Max length of a line in this text.
+     * @return Max length of a line in this text.
      */
     public float getLineMaxSize() {
         return lineMaxSize;
@@ -224,7 +267,7 @@ public class GUIText {
     /**
      * Change the text, after changing the text, this GUIText needs to be
      * removed from the TextMaster and then be loaded again to use the new text.
-     * @param textString - new text string
+     * @param textString new text string
      */
     public void setTextString(String textString) {
         this.textString = textString;

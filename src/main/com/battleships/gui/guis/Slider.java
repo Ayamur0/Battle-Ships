@@ -17,22 +17,30 @@ import java.util.List;
 public class Slider extends GuiClickCallback implements Runnable{
 
     /**
-     * GuiTexture of the slider and the bar it is moving on.
+     * GuiTexture of the slider.
      */
     private GuiTexture slider;
+    /**
+     * GuiTexture of the bar the slider is moving on.
+     */
     private GuiTexture bar;
 
     /**
-     * minValue the slider has if it is completely to the left and maxValue if it is completely to the right.
+     * minValue the slider has if it is completely to the left.
      */
     private int minValue;
+    /**
+     * maxValue if the slider is completely to the right.
+     */
     private int maxValue;
 
     /**
-     * Coordinates of the maxPosition the slider can have if it is completely to the right, or min Position
-     * if it is completely to the left. (screen coordinates)
+     * Coordinates of the maxPosition the slider can have if it is completely to the right (screen coordinates).
      */
     private float maxPosX;
+    /**
+     * min Position the slider can have if it is completely to the left (screen coordinates).
+     */
     private float minPosX;
 
     /**
@@ -45,19 +53,22 @@ public class Slider extends GuiClickCallback implements Runnable{
      */
     private GuiManager guiManager;
 
+    /**
+     * {@code true} if this slider is currently being moved by the user.
+     */
     private boolean running;
 
     /**
      * Creates a slider gui element, used to enter values that have to be within a specific range.
-     * @param sliderTexture - Texture Id for the texture of the slider.
-     * @param barTexture - Texture Id for the texture of the bar the slider is moving on.
-     * @param minValue - lowest value the slider can have (when slider is completely to the left)
-     * @param maxValue - highest value the slider can have (when slider is completely to the right)
-     * @param defaultValue - value the slider start at, before it's moved by the user.
-     * @param scale - How much space of the screen this slider should occupy (1 is full screen width).
-     * @param position - Position of the center of this slider on the screen (Screen coordinates).
-     * @param guiManager - GuiManager that should handle the click function of this slider.
-     * @param guis - List of guis this slider should be added to. Needs to be passed to a renderer for this slider to show on screen.
+     * @param sliderTexture Texture Id for the texture of the slider.
+     * @param barTexture Texture Id for the texture of the bar the slider is moving on.
+     * @param minValue lowest value the slider can have (when slider is completely to the left)
+     * @param maxValue highest value the slider can have (when slider is completely to the right)
+     * @param defaultValue value the slider start at, before it's moved by the user.
+     * @param scale How much space of the screen this slider should occupy (1 is full screen width).
+     * @param position Position of the center of this slider on the screen (Screen coordinates).
+     * @param guiManager GuiManager that should handle the click function of this slider.
+     * @param guis List of guis this slider should be added to. Needs to be passed to a renderer for this slider to show on screen.
      */
     public Slider(int sliderTexture, int barTexture, int minValue, int maxValue, int defaultValue, Vector2f scale, Vector2f position, GuiManager guiManager, List<GuiTexture> guis) {
         bar = new GuiTexture(barTexture, new Vector2f(position), scale);
@@ -76,10 +87,10 @@ public class Slider extends GuiClickCallback implements Runnable{
 
     /**
      * Tests if the click of the user was either on the slider or the bar.
-     * @param gui - GuiElement on which the click should be (in this case the slider)
-     * @param x - xPos of the click.
-     * @param y - yPos of the click.
-     * @return - {@code true} if the click was on the slider or bar, {@code false} else.
+     * @param gui GuiElement on which the click should be (in this case the slider)
+     * @param x xPos of the click.
+     * @param y yPos of the click.
+     * @return {@code true} if the click was on the slider or bar, {@code false} else.
      */
     @Override
     protected boolean isClickOnGui(GuiTexture gui, double x, double y) {
@@ -129,7 +140,7 @@ public class Slider extends GuiClickCallback implements Runnable{
 
     /**
      *
-     * @return - Current value of the slider as float value.
+     * @return Current value of the slider as float value.
      */
     public float getValueAsFloat(){
         float percentage = (slider.getPositions().x - minPosX) / (maxPosX - minPosX);
@@ -138,7 +149,7 @@ public class Slider extends GuiClickCallback implements Runnable{
 
     /**
      *
-     * @return - Current value of the slider rounded to an int value.
+     * @return Current value of the slider rounded to an int value.
      */
     public int getValueAsInt(){
         float fValue = getValueAsFloat();
@@ -147,7 +158,7 @@ public class Slider extends GuiClickCallback implements Runnable{
 
     /**
      * Sets the slider position to a specific value.
-     * @param value - Value the slider should be set to.
+     * @param value Value the slider should be set to.
      */
     public void setToValue(float value){
         float percentage = (value - minValue) / ((maxValue - minValue));
@@ -156,7 +167,7 @@ public class Slider extends GuiClickCallback implements Runnable{
 
     /**
      *
-     * @return - {@code true} is the slider is currently moving, {@code false} else.
+     * @return {@code true} is the slider is currently moving, {@code false} else.
      */
     public boolean isRunning() {
         return running;
@@ -164,7 +175,7 @@ public class Slider extends GuiClickCallback implements Runnable{
 
     /**
      *
-     * @return - Removes the guiTextures of this slider from guis List and removes clickFunction of slider in the guiManager.
+     * @return Removes the guiTextures of this slider from guis List and removes clickFunction of slider in the guiManager.
      */
     public boolean remove(){
         return guis.remove(bar) && guis.remove(slider) && guiManager.removeClickableGui(slider);
@@ -172,7 +183,7 @@ public class Slider extends GuiClickCallback implements Runnable{
 
     /**
      *
-     * @return - Returns screen coordinates of the slider.
+     * @return Returns screen coordinates of the slider.
      */
     public Vector2f getPositions(){
         return bar.getPositions();

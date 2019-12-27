@@ -9,8 +9,18 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Loader that can convert a OBJFile into a {@link RawModel}.
+ * 
+ * @author Tim Staudenmaier
+ */
 public class OBJLoader {
 
+    /**
+     * Loads all the data contained in the .obj file into a {@link RawModel}.
+     * @param fileName Path to the OBJFile.
+     * @return A RawModel containing all the data from the .obj.
+     */
     public static RawModel loadObjModel(String fileName){
 
         InputStream is = OBJLoader.class.getResourceAsStream("/com/battleships/gui/res/models/"+ fileName +".obj");  //read file with file reader
@@ -98,6 +108,18 @@ public class OBJLoader {
         return loader.loadToVAO(verticesArray, textureArray, normalsArray, indicesArray);
     }
 
+    /**
+     * Combine the right textureCoords, index and normals for a vertex because they are not stored in the same line in an .obj file.
+     * @param vertexData String of the line in the .obj containing the index of the vertex and the indices for the texture and normals data of this vertex.
+     * @param indices List the index of this vertex should be added to.
+     * @param textures List of all read textureCoords from the .obj File
+     *                sorted by the order in which they were read (first line at index 0, ...).
+     * @param normals List of all read normals from the .obj File
+     *               sorted by the order in which they were read (first line at index 0, ...).
+     * @param textureArray Array the texture coords for this array should be added to
+     * @param normalsArray Array the normals for this vertex should be added to
+     *                     both arrays contain the data for all vertices in the same order (ordered by indices)
+     */
     //sort vertex, texture and normals in array in right order by giving indices to the element in the lists
     private static void processVertex(String[] vertexData, List<Integer> indices, List<Vector2f> textures, List<Vector3f> normals, float[] textureArray, float[] normalsArray){
         int currentVertexPointer = Integer.parseInt(vertexData[0]) - 1; //get index for current vertex (-1 because obj lines start with 1 instead of 0)

@@ -9,20 +9,56 @@ import org.lwjgl.opengl.GL32;
 
 import java.nio.ByteBuffer;
 
+/**
+ * Frame buffers for water reflection and refraction.
+ * Contains the textures for reflection and refraction and the capability to create these textures.
+ *
+ * @author Tim Staudenmaier
+ */
 public class WaterFrameBuffers {
 
-    protected static int REFLECTION_WIDTH = 320;
+    /**
+     * Width of the reflection texture in pixels.
+     */
+    private static int REFLECTION_WIDTH = 320;
+    /**
+     * Height of the reflection texture in pixels.
+     */
     private static int REFLECTION_HEIGHT = 180;
 
-    protected static int REFRACTION_WIDTH = 1280;
+    /**
+     * Width of the refraction texture in pixels.
+     */
+    private static int REFRACTION_WIDTH = 1280;
+    /**
+     * Height of the refraction texture in pixels.
+     */
     private static int REFRACTION_HEIGHT = 720;
 
+    /**
+     * ID of the frame buffer the reflection texture is rendered to.
+     */
     private int reflectionFrameBuffer;
+    /**
+     * ID of the texture of the reflection texture.
+     */
     private int reflectionTexture;
+    /**
+     * ID of the depth buffer of the reflection.
+     */
     private int reflectionDepthBuffer;
 
+    /**
+     * ID of the frame buffer the refraction texture is rendered to.
+     */
     private int refractionFrameBuffer;
+    /**
+     * ID of the texture of the refraction texture.
+     */
     private int refractionTexture;
+    /**
+     * ID of the depth buffer of the refraction.
+     */
     private int refractionDepthTexture;
 
     /**
@@ -33,6 +69,9 @@ public class WaterFrameBuffers {
         initializeRefractionFrameBuffer();
     }
 
+    /**
+     * Updates the sizes of the frame buffers to match the current window size.
+     */
     public void updateFrameBuffers(){
         REFLECTION_WIDTH = WindowManager.getWidth() / 4;
         REFLECTION_HEIGHT = WindowManager.getHeight() / 4;
@@ -197,6 +236,10 @@ public class WaterFrameBuffers {
         return depthBuffer;
     }
 
+    /**
+     * Method that gets called every time the window is resized by the user.
+     * Needed to adjust resolution of frameBuffers corresponding to resolution of the window.
+     */
     public GLFWWindowSizeCallback sizeCallback = new GLFWWindowSizeCallback() {
         @Override
         public void invoke(long window, int width, int height) {

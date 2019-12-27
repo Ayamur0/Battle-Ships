@@ -5,6 +5,7 @@ import org.lwjgl.openal.AL10;
 /**
  * Sources are the main tool for emitting sound in the world.
  * A source can play sounds with different settings at one spot in the world.
+ * {@link AudioMaster} needs to be initialized before any sources can be used!
  *
  * @author Tim Staudenmaier
  */
@@ -14,9 +15,9 @@ public class Source {
 
     /**
      * Create a source that is capable of playing a sound.
-     * @param rolloff - How fast the volume decreases if the listener goes further away from the source. (Higher means faster decrease)
-     * @param referenceDist - The distance at which the sound volume matches the standard volume of the AudioManager
-     * @param maxDist - The maximum Distance at which the sound can be heard, after this the sound cannot be heard
+     * @param rolloff How fast the volume decreases if the listener goes further away from the source. (Higher means faster decrease)
+     * @param referenceDist The distance at which the sound volume matches the standard volume of the AudioManager
+     * @param maxDist The maximum Distance at which the sound can be heard, after this the sound cannot be heard
      *                even if it would have benn loud enough.
      */
     public Source(float rolloff, float referenceDist, float maxDist) {
@@ -30,7 +31,7 @@ public class Source {
 
     /**
      * This source starts playing the given sound with it's current settings.
-     * @param buffer - The buffer containing the sound that should be played.
+     * @param buffer The buffer containing the sound that should be played.
      *                (Buffers for sound files can be generated using the AudioManager)
      */
     public void play(int buffer){
@@ -70,7 +71,7 @@ public class Source {
 
     /**
      * Sets whether the sound of this source should be looped after it's over.
-     * @param looping - {@code true} if the source should start playing from the beginning after the sound is over, {@code false} if the source
+     * @param looping {@code true} if the source should start playing from the beginning after the sound is over, {@code false} if the source
      *                  should stop playing after the sound is over.
      */
     public void setLooping(boolean looping){
@@ -79,7 +80,7 @@ public class Source {
 
     /**
      *
-     * @return - {@code true} if this source is currently playing a sound.
+     * @return {@code true} if this source is currently playing a sound.
      */
     public boolean isPlaying(){
         return AL10.alGetSourcei(sourceId, AL10.AL_SOURCE_STATE) == AL10.AL_PLAYING;
@@ -87,7 +88,7 @@ public class Source {
 
     /**
      * Set the volume of this source.
-     * @param volume - New volume for this source.
+     * @param volume New volume for this source.
      */
     public void setVolume(float volume){
         AL10.alSourcef(sourceId, AL10.AL_GAIN, volume);
@@ -95,9 +96,9 @@ public class Source {
 
     /**
      * Set the position of this source.
-     * @param x - x-position of this source (world coordinates)
-     * @param y - y-position of this source (world coordinates)
-     * @param z - z-position of this source (world coordinates)
+     * @param x x-position of this source (world coordinates)
+     * @param y y-position of this source (world coordinates)
+     * @param z z-position of this source (world coordinates)
      */
     public void setPosition(float x, float y, float z){
         AL10.alSource3f(sourceId, AL10.AL_POSITION, x, y, z);

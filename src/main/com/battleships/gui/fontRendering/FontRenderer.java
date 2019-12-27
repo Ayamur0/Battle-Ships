@@ -11,16 +11,20 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Renderer capable of rendering {@link GUIText}.
+ * Renderer capable of rendering {@link GUIText}s.
  *
  * @author Tim Staudenmaier
  */
 public class FontRenderer {
 
     /**
-     * @param shader - shader to be used when rendering a text/font
+     * @param shader shader to be used when rendering a text/font
      */
     private FontShader shader;
+
+    /**
+     * Creates a new FontRenderer using the {@link FontShader}.
+     */
 
     public FontRenderer() {
         shader = new FontShader();
@@ -30,7 +34,7 @@ public class FontRenderer {
      * Iterate over the fonts and the texts using this font, then bind texture for current font
      * and render all texts for that font. Then use the next font.
      *
-     * @param texts - HashMap containing all fonts and the texts using that font that should be rendered
+     * @param texts HashMap containing all fonts and the texts using that font that should be rendered
      */
     public void render(Map<FontType, List<GUIText>> texts){
         prepare();
@@ -66,7 +70,7 @@ public class FontRenderer {
      * Then load color and position(translation) to the shader and render the text.
      * After rendering disable vbos and unbind vao.
      *
-     * @param text - text to be rendered
+     * @param text text to be rendered
      */
     private void renderText(GUIText text){
         GL30.glBindVertexArray(text.getMesh());

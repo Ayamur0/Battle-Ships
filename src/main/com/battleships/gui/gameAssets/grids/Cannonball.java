@@ -1,7 +1,7 @@
-package com.battleships.gui.gameAssets;
+package com.battleships.gui.gameAssets.grids;
 
 import com.battleships.gui.entities.Entity;
-import com.battleships.gui.renderingEngine.MasterRenderer;
+import com.battleships.gui.renderingEngine.Loader;
 import com.battleships.gui.window.WindowManager;
 import org.apache.commons.math3.linear.*;
 import org.joml.Vector2f;
@@ -9,22 +9,30 @@ import org.joml.Vector2i;
 import org.joml.Vector3f;
 
 /**
- * Special {@link Entity} that is used to indicate shots made during game.
+ * Specific {@link Entity} that is used to indicate shots made during game.
  *
  * @author Tim Staudenmaier
  */
 
-public class Cannonball{
-
-    private static final float SPEED = 180.0f;
-    private static final float DRAG = 0.1f;
-    private static final float ANGLE = (float)Math.toRadians(75);
-    private static final float MAXHEIGHT = 100;
+public class Cannonball extends Entity implements Runnable {
 
     /**
-     * The Entity containing position, rotation,... for this cannonball.
+     * Standard speed the cannonball starts at.
      */
-    private Entity ball;
+    private static final float SPEED = 180.0f;
+    /**
+     * How much the air slows the speed of the cannonball.
+     */
+    private static final float DRAG = 0.1f;
+    /**
+     * Angle at which the cannonball gets shot.
+     */
+    private static final float ANGLE = (float)Math.toRadians(75);
+    /**
+     * Maximum height the cannonball reaches during the flight (world coordinates).
+     */
+    private static final float MAXHEIGHT = 100;
+
     /**
      * Destination of the cannonball in world coordinates.
      */
@@ -34,9 +42,9 @@ public class Cannonball{
      */
     private Vector2i destinationCell;
     /**
-     * Destination field the cannonball.
+     * Destination grid of the cannonball.
      */
-    private int destinationField;
+    private int destinationGrid;
     /**
      * Current horizontalVelocity of the cannonball.
      * Decreases faster with higher DRAG.
@@ -62,27 +70,52 @@ public class Cannonball{
      * Parameters of the parabola function, describing the curve the cannonball flies.
      */
     private float a,b,c,x = 0;
+    /**
+     * GridManager this cannonball belongs to.
+     */
+    private GridManager gridManager;
+    /**
+     * {@code true} if this cannonball is currently flying.
+     */
+    private boolean flying;
 
 
     /**
-     * Creates a new Cannonball Entity, that flies from the origin to the
-     * destination in a parabola.
-     * @param ball - the entity of this cannonball
-     * @param destination - destination where the cannonball should land
-     * @param origin - where the cannonball is fired from
+     * Creates a new cannonball entity.
+     * @param loader Loader to load model.
+     * @param gridManager GridManager this cannonball belongs to.
      */
-    public Cannonball(Entity ball, Vector2f destination, Vector2f origin, Vector2i destinationCell, int destinationField) {
-        this.ball = ball;
+    public Cannonball(Loader loader, GridManager gridManager) {
+        super(loader.loadModelFromOBJ("cannonball", "cannonball.png", 10, 1), new Vector3f(), new Vector3f(), 1);
+        this.gridManager = gridManager;
+    }
+
+    /**
+     * Start the shooting animation of this cannonball.
+     * Doesn't work if this cannonball is already flying.
+     * If animations are disabled the animation is not played an the {@link #cannonballHit()} function is immediately called.
+     * @param destination Destination the ball is heading in world coordinates (x,z).
+     * @param origin Origin where the ball starts in world coordinates (x,z)
+     * @param destinationCell Index of the cell the ball is heading to.
+     * @param destinationField ID of the grid the ball is heading to.
+     */
+    public void start(Vector2f destination, Vector2f origin, Vector2i destinationCell, int destinationField){
+        flying = true;
         this.destination = destination;
         this.destinationCell = destinationCell;
-        this.destinationField = destinationField;
+        this.destinationGrid = destinationField;
+
+        if(!gridManager.isAnimation()) {
+            cannonballHit();
+            return;
+        }
 
         //position of the cannonball that gets updated every frame
         //start by setting position to origin
         position.x = origin.x;
         position.y = -2.5f;
         position.z = origin.y;
-        ball.setPosition(position);
+        super.setPosition(position);
 
         //calculate the distance the cannonball has to move horizontally
         sidewaysDistance = Math.abs(origin.x - destination.x) + Math.abs(origin.y - destination.y);
@@ -106,14 +139,17 @@ public class Cannonball{
         //calculate the parameters of a parabola function that describes the flight
         //of the cannonball. This function is used to calculate the y value of the ball
         calculateParabolaFunction();
-    }
 
+
+        Thread t = new Thread(this);
+        t.start();
+    }
     /**
      * Calculate with how much speed (strength) the cannonball needs to be shot, so it always reaches it's destination in the
      * same time.
      */
     private void calculateSpeed(){
-        float averageDistance = PlayingField.getScale();
+        float averageDistance = gridManager.getScale();
         float shotStrength = sidewaysDistance / averageDistance;
         startSpeed = shotStrength * SPEED;
         currentSpeed = startSpeed;
@@ -160,70 +196,70 @@ public class Cannonball{
     }
 
     /**
-     * Update the position of the flying cannonball.
-     * Needs to be called every frame while the cannonball is flying.
-     * @return {@code true} if cannonball has reached it's destination and hit the playingField
+     * Updates the position of the flying cannonball.
+     * Stops as soon as the cannonball has reached its destination and then calls the {@link #cannonballHit()} method.
      */
-    public boolean update(){
-        //update x,z positions of cannonball using horizontalVelocity
-        position.x += horizontalVelocity.x * WindowManager.getDeltaTime();
-        position.z += horizontalVelocity.y * WindowManager.getDeltaTime();
+    public void run(){
+        do{
+            //update x,z positions of cannonball using horizontalVelocity
+            position.x += horizontalVelocity.x * WindowManager.getDeltaTime();
+            position.z += horizontalVelocity.y * WindowManager.getDeltaTime();
 
-        //calculate y position of cannonball using parabola function
-        x += (Math.abs(horizontalVelocity.x) + Math.abs(horizontalVelocity.y)) * WindowManager.getDeltaTime();
-        position.y = a*x*x + b*x + c;
+            //calculate y position of cannonball using parabola function
+            x += (Math.abs(horizontalVelocity.x) + Math.abs(horizontalVelocity.y)) * WindowManager.getDeltaTime();
+            position.y = a * x * x + b * x + c;
 
 //        System.out.println(position.x + " " + position.y + " " + position.z);
-        ball.setPosition(position);
+            super.setPosition(position);
 
-        updateVelocities();
+            updateVelocities();
+            try {
+                Thread.sleep((long)(WindowManager.getDeltaTime() * 1000));
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }while(position.y > -5);
+        x = 0;
+        this.cannonballHit();
+    }
 
-        //if ball is below this y value it has hit a ship or water
-        if(position.y < -5) {
-            return true;
-        }
-        return false;
+    /**
+     * Method that gets called if the cannonball has hit its target.
+     * Plays sound depending on what has been hit and places a correct marker.
+     */
+    private void cannonballHit(){
+        boolean shipHit = false; //TODO get from logic
+        if(shipHit && destinationGrid == GridManager.OWNFIELD)
+            gridManager.playFireEffect(destination);
+        gridManager.placeMarker(shipHit, destinationCell, destinationGrid);
+        if(shipHit)
+            gridManager.playSound(new Vector3f(destination.x, GridManager.getGRIDHEIGHT(), destination.y), CannonSounds.HITSOUND);
+        else
+            gridManager.playSound(new Vector3f(destination.x, GridManager.getGRIDHEIGHT(), destination.y), CannonSounds.WATERSPLASH);
+        flying = false;
+        remove();
     }
 
     /**
      * Update the velocity values, according to the drag and speed during last update.
      */
-    public void updateVelocities(){
+    private void updateVelocities(){
         currentSpeed -= WindowManager.getDeltaTime() * DRAG;
         horizontalVelocity.x *=  currentSpeed / startSpeed;
         horizontalVelocity.y *=  currentSpeed / startSpeed;
     }
 
     /**
-     *
-     * @return - The index of the cell the cannonball is flying towards.
+     * Removes the cannonball from the scene by moving under the terrain.
      */
-    public Vector2f getDestination() {
-        return destination;
+    public void remove(){
+        super.getPosition().y = -1000;
     }
 
     /**
-     *
-     * @return - Render the cannonball if one exists.
+     * @return {@code true} if this cannonball is currently flying.
      */
-    public void render(MasterRenderer renderer) {
-        if(ball != null)
-            renderer.processEntity(ball);
-    }
-
-    /**
-     *
-     * @return - The index of the destination cell.
-     */
-    public Vector2i getDestinationCell() {
-        return destinationCell;
-    }
-
-    /**
-     *
-     * @return - The field the destination is on.
-     */
-    public int getDestinationField() {
-        return destinationField;
+    public boolean isFlying() {
+        return flying;
     }
 }
