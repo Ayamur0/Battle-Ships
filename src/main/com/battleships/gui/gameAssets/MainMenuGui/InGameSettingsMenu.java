@@ -99,7 +99,7 @@ public class InGameSettingsMenu extends Menu {
             if (super.buttonClicked == 0){
                 playingFieldSize.remove();
                 difficulty1.remove();
-                Inits.setGlobalGameState(1);
+                //Inits.setGlobalGameState(1);
                 //TODO set difficulty and size for offline game(need logic for that)
             }
             if (super.buttonClicked == 1){
@@ -110,10 +110,11 @@ public class InGameSettingsMenu extends Menu {
         }
         else if(gameMode == 1){
             if (super.buttonClicked == 0){
-                playingFieldSize.remove();
-                difficulty1.remove();
-                Inits.setGlobalGameState(1);
-                //TODO set difficulty and size for offline game(need logic for that)
+                Inits.setStartMenu(new WaitingConnection(super.guiManager,super.loader));
+                //playingFieldSize.remove();
+                //difficulty1.remove();
+                //Inits.setGlobalGameState(1);
+                //TODO set difficulty and size for Multiplayer game(need logic for that)
                 //TODO add Connection overlay
             }
             if (super.buttonClicked == 1){
@@ -127,7 +128,7 @@ public class InGameSettingsMenu extends Menu {
                 playingFieldSize.remove();
                 difficulty1.remove();
                 difficulty2.remove();
-                Inits.setGlobalGameState(1);
+                //Inits.setGlobalGameState(1);
                 //TODO set difficulty and size for offline game(need logic for that)
                 //TODO add Connection overlay
             }
@@ -139,5 +140,4 @@ public class InGameSettingsMenu extends Menu {
             }
         }
     }
-
 }
