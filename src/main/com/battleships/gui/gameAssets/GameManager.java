@@ -7,6 +7,7 @@ import com.battleships.gui.entities.Light;
 import com.battleships.gui.fontMeshCreator.FontType;
 import com.battleships.gui.fontRendering.TextMaster;
 import com.battleships.gui.gameAssets.MainMenuGui.ESCMenu;
+import com.battleships.gui.gameAssets.MainMenuGui.MainMenuManager;
 import com.battleships.gui.gameAssets.grids.GridManager;
 import com.battleships.gui.gameAssets.grids.ShipManager;
 import com.battleships.gui.gameAssets.ingameGui.DisableSymbols;
@@ -146,6 +147,11 @@ public class GameManager {
     private static WaterShader waterShader;
 
     /**
+     * Manager for loading and handling main menu.
+     */
+    private static MainMenuManager mainMenuManager;
+
+    /**
      * Initialize the GameManager and all needed components.
      * Needs to be called when the game is started.
      */
@@ -208,6 +214,7 @@ public class GameManager {
      * This scene mainly consists of a terrain, water, a light and a camera.
      */
     public static void loadIngameScene(){
+        clearScene();
         disableSymbols = new DisableSymbols(loader, guiManager, guis);
         camera = new Camera();
         mousePicker = new MousePicker(camera, MasterRenderer.getProjectionMatrix(), terrain);
@@ -235,6 +242,22 @@ public class GameManager {
 
         camera.setStandardPos();
         WindowManager.setCallbacks(camera, waterFbos);
+    }
+
+    /**
+     * Removes everything from the scene.
+     */
+    public static void clearScene(){
+        guiManager.clearClickableGuis();
+        waterTiles.clear();
+        entities.clear();
+        terrain = null;
+        guis.clear();
+        camera = null;
+        mousePicker = null;
+        gridManager = null;
+        shipManager = null;
+        light = null;
     }
 
     /**
@@ -339,6 +362,8 @@ public class GameManager {
      * @param won {@code true} if the player has won, {@code false} else.
      */
     public static void finishGame(boolean won){
+        if(shipCounter != null)
+            shipCounter.remove();
         FinishGame f = new FinishGame();
         f.finishGame(loader, guiManager, won);
     }
@@ -452,5 +477,12 @@ public class GameManager {
      */
     public static MousePicker getPicker() {
         return mousePicker;
+    }
+
+    /**
+     * @return The main menu manager handling the main menu.
+     */
+    public static MainMenuManager getMainMenuManager() {
+        return mainMenuManager;
     }
 }
