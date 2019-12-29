@@ -176,7 +176,6 @@ public class GameManager {
         TextMaster.init(loader);
         guiManager = new GuiManager();
         guiRenderer = new GuiRenderer(loader);
-        mainMenuManager = new MainMenuManager(guiManager,loader);
         AudioMaster.init();
         waterFbos = new WaterFrameBuffers();
         waterShader = new WaterShader();
@@ -185,6 +184,7 @@ public class GameManager {
         loading = true;
         blur = new Fbo(WindowManager.getWidth(), WindowManager.getHeight(), Fbo.DEPTH_RENDER_BUFFER);
         PostProcessing.init(loader);
+        mainMenuManager = new MainMenuManager(guiManager,loader,waterFbos);
     }
 
     /**
@@ -534,4 +534,5 @@ public class GameManager {
     public static boolean getLoading(){
         return loading;
     }
+
 }
