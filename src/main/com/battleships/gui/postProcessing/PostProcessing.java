@@ -47,12 +47,11 @@ public class PostProcessing {
      */
     public static void init(Loader loader){
         quad = loader.loadToVAO(POSITIONS, 2);
-        contrastChanger = new ContrastChanger();
         //divide width and height to make texture smaller, so it gets scaled when being put on the screen
         //which makes it blurrier while saving performance
         //use two blur stages to decrease flickering after the blur because of the low res texture
-        hBlur = new HorizontalBlur(WindowManager.getWidth() / 8, WindowManager.getHeight() / 8);
-        vBlur = new VerticalBlur(WindowManager.getWidth() / 8, WindowManager.getHeight() / 8);
+        hBlur = new HorizontalBlur(WindowManager.getWidth(), WindowManager.getHeight());
+        vBlur = new VerticalBlur(WindowManager.getWidth(), WindowManager.getHeight());
 //        hBlur2 = new HorizontalBlur(WindowManager.getWidth() / 8, WindowManager.getHeight() / 8);
 //        vBlur2 = new VerticalBlur(WindowManager.getWidth() / 8, WindowManager.getHeight() / 8);
     }
@@ -64,11 +63,10 @@ public class PostProcessing {
      */
     public static void doPostProcessing(int colorTexture){
         start();
-//        hBlur.render(colorTexture);
-//        vBlur.render(hBlur.getOutputTexture());
+        hBlur.render(colorTexture);
+        vBlur.render(hBlur.getOutputTexture());
 //        hBlur2.render(vBlur.getOutputTexture());
 //        vBlur2.render(hBlur2.getOutputTexture());
-        contrastChanger.render(colorTexture);
         end();
     }
 

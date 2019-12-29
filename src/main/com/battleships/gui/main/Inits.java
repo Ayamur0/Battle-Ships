@@ -93,7 +93,7 @@ public class Inits {
         // *******************Callbacks initialization*******************
         mainMenuManager = new MainMenuManager(guiManager,loader);
 
-        WindowManager.setMainMenuCallbacks(mainMenuManager);
+        WindowManager.setMainMenuCallbacks(mainMenuManager, null);
 
         menuInitDone = true;
     }

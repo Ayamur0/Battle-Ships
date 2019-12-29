@@ -24,6 +24,8 @@ public class ImageRenderer {
         this.fbo = new Fbo(width, height, Fbo.NONE);
     }
 
+    public ImageRenderer(){}
+
     /**
      * Render a quad to the screen, on which the image texture can be rendered
      */

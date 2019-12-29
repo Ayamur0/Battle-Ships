@@ -141,7 +141,7 @@ public class WindowManager {
      * @param camera Camera that views the scene and should be moved by user input.
      * @param wFbo WaterFBOs that handle the reflection and refraction of water.
      */
-    static public void setCallbacks(Camera camera, WaterFrameBuffers wFbo){
+    public static void setCallbacks(Camera camera, WaterFrameBuffers wFbo){
         GLFW.glfwSetMouseButtonCallback(window, GameManager.testClick);
         GLFW.glfwSetScrollCallback(window, camera.scrollCallback);
         GLFW.glfwSetKeyCallback(window, GameManager.keyCallback);
@@ -149,11 +149,22 @@ public class WindowManager {
     }
 
     /**
-     * ets the Callbacks for user inputs in the MainMenu.
+     * Sets the Callbacks for user inputs in the MainMenu.
      * @param mainMenuManager Manager that handles clicks in the main menu.
      */
-    static public void setMainMenuCallbacks(MainMenuManager mainMenuManager){
+    public static void setMainMenuCallbacks(MainMenuManager mainMenuManager, WaterFrameBuffers wFbo){
         GLFW.glfwSetMouseButtonCallback(window, mainMenuManager.testClick);
+        GLFW.glfwSetWindowSizeCallback(window, wFbo.sizeCallback);
+    }
+
+    /**
+     * st
+     */
+    public static void clearCallbacks(){
+        GLFW.glfwSetMouseButtonCallback(window, null);
+        GLFW.glfwSetScrollCallback(window, null);
+        GLFW.glfwSetKeyCallback(window, null);
+        GLFW.glfwSetWindowSizeCallback(window, null);
     }
 
     /**

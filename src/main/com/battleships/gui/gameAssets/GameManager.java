@@ -18,6 +18,8 @@ import com.battleships.gui.guis.GuiRenderer;
 import com.battleships.gui.guis.GuiTexture;
 import com.battleships.gui.main.Inits;
 import com.battleships.gui.particles.ParticleMaster;
+import com.battleships.gui.postProcessing.Fbo;
+import com.battleships.gui.postProcessing.PostProcessing;
 import com.battleships.gui.renderingEngine.Loader;
 import com.battleships.gui.renderingEngine.MasterRenderer;
 import com.battleships.gui.terrains.Terrain;
@@ -64,10 +66,10 @@ public class GameManager {
      */
     private static int gameState;
 
-    private static boolean loading;
     /**
      * Indicates if game is loading
      */
+    private static boolean loading;
 
     /**
      * Main font used in this game
@@ -157,6 +159,12 @@ public class GameManager {
     private static MainMenuManager mainMenuManager;
 
     /**
+     * Frame buffer for applying the blur effect to the scene
+     * during main menu.
+     */
+    private static Fbo blur;
+
+    /**
      * Initialize the GameManager and all needed components.
      * Needs to be called when the game is started.
      */
@@ -175,6 +183,8 @@ public class GameManager {
         waterRenderer = new WaterRenderer(loader, waterShader, MasterRenderer.getProjectionMatrix(), waterFbos);
         ParticleMaster.init(loader, MasterRenderer.getProjectionMatrix());
         loading = true;
+        blur = new Fbo(WindowManager.getWidth(), WindowManager.getHeight(), Fbo.DEPTH_RENDER_BUFFER);
+        PostProcessing.init(loader);
     }
 
     /**
@@ -271,7 +281,7 @@ public class GameManager {
     /**
      * Renders all the {@link WaterTile}s of the scene.
      */
-    public static void renderWater(){
+    public static void prepareWater(){
         GL11.glEnable(GL30.GL_CLIP_DISTANCE0);
 
         //render reflection texture
@@ -313,13 +323,37 @@ public class GameManager {
 
     /**
      * Updates everything in the scene and then renders everything.
+     * This render method blurs the scene, so it can be used as a background image.
+     */
+    public static void updateSceneBlurred(){
+        blur.updateSize();
+        camera.move(terrain);
+        mousePicker.update();
+        AudioMaster.setListenerData(camera.getPosition().x, camera.getPosition().y, camera.getPosition().z, camera.getPitch(), camera.getYaw());
+        blur.bindFrameBuffer();
+        renderEntities();
+        blur.unbindFrameBuffer();
+        prepareWater();
+        blur.bindFrameBuffer();
+        waterRenderer.render(waterTiles, camera, light);
+        renderParticles();
+        blur.unbindFrameBuffer();
+        guiRenderer.render(guis);
+        TextMaster.render();
+        renderer.updateProjectionMatrix();
+        PostProcessing.doPostProcessing(blur.getColorTexture());
+    }
+
+    /**
+     * Updates everything in the scene and then renders everything.
      */
     public static void updateScene(){
         camera.move(terrain);
         mousePicker.update();
         AudioMaster.setListenerData(camera.getPosition().x, camera.getPosition().y, camera.getPosition().z, camera.getPitch(), camera.getYaw());
         renderEntities();
-        renderWater();
+        prepareWater();
+        waterRenderer.render(waterTiles, camera, light);
         renderParticles();
         guiRenderer.render(guis);
         TextMaster.render();

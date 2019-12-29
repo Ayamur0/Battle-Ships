@@ -89,7 +89,13 @@ public class Fbo {
         initializeFrameBuffer(depthBufferType);
     }
 
+    /**
+     * Update size of this fbo to match current window size.
+     */
     public void updateSize(){
+        if(this.height == WindowManager.getHeight() && this.width == WindowManager.getWidth())
+            return;
+        cleanUp();
         this.width = WindowManager.getWidth();
         this.height = WindowManager.getHeight();
         initializeFrameBuffer(type);
