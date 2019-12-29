@@ -13,8 +13,6 @@ public class PlayMenu extends Menu {
     public PlayMenu(GuiManager guiManager, Loader loader) {
         super(guiManager, loader);
 
-        TextMaster.clear();
-
         this.createMenu();
 
         SetTextColor();
@@ -58,20 +56,20 @@ public class PlayMenu extends Menu {
     protected void clickAction() {
         if(buttonClicked == 0) {
             super.clearMenu();
-            Inits.setStartMenu(new AiVsAiMenu(guiManager,loader));
+            MainMenuManager.setMenu(new AiVsAiMenu(guiManager,loader));
             //TODO open ai vs ai Settings
         }
         if(buttonClicked == 1){
             super.clearMenu();
-            Inits.setStartMenu(new InGameSettingsMenu(guiManager,loader,0));
+            MainMenuManager.setMenu(new InGameSettingsMenu(guiManager,loader,0));
         }
         if (super.buttonClicked == 2){
             super.clearMenu();
-            Inits.setStartMenu(new MultiplayerMenu(guiManager,loader));
+            MainMenuManager.setMenu(new MultiplayerMenu(guiManager,loader));
         }
         if (super.buttonClicked == 3){
             super.clearMenu();
-            Inits.setStartMenu(new MainMenu(guiManager,loader));
+            MainMenuManager.setMenu(new MainMenu(guiManager,loader));
         }
     }
 

@@ -12,8 +12,6 @@ public class OptionMenu extends Menu {
     public OptionMenu(GuiManager guiManager, Loader loader) {
         super(guiManager, loader);
 
-        TextMaster.clear();
-
         this.createMenu();
 
         SetTextColor();
@@ -41,8 +39,7 @@ public class OptionMenu extends Menu {
     protected void clickAction() {
         if (super.buttonClicked == 0){
             super.clearMenu();
-            Inits.setStartMenu(new PlayMenu(guiManager,loader));
-
+            MainMenuManager.setMenu(new PlayMenu(guiManager,loader));
         }
 
     }

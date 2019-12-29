@@ -74,7 +74,7 @@ public class ESCMenu extends Menu {
         }
         if (super.buttonClicked == 2){
             super.clearMenu();
-            Inits.setStartMenu(new MainMenu(guiManager,loader));
+            MainMenuManager.setMenu(new MainMenu(guiManager,loader));
         }
         if(buttonClicked == 3){
             GLFW.glfwSetWindowShouldClose(WindowManager.getWindow(),true);

@@ -21,8 +21,6 @@ public class MainMenu extends Menu {
         
         fc = new JFileChooser();
 
-        TextMaster.clear();
-
         this.createMenu();
 
         SetTextColor();
@@ -70,11 +68,11 @@ public class MainMenu extends Menu {
         }
         if(buttonClicked == 1){
             super.clearMenu();
-            Inits.setStartMenu(new PlayMenu(guiManager,loader));
+            MainMenuManager.setMenu(new PlayMenu(guiManager,loader));
         }
         if (super.buttonClicked == 2){
             super.clearMenu();
-            Inits.setStartMenu(new OptionMenu(guiManager,loader));
+            MainMenuManager.setMenu(new OptionMenu(guiManager,loader));
         }
         if(buttonClicked == 3){
             GLFW.glfwSetWindowShouldClose(WindowManager.getWindow(),true);
