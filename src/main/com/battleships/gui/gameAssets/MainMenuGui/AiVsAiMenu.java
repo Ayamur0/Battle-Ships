@@ -37,6 +37,7 @@ public class AiVsAiMenu extends InGameSettingsMenu {
         super.guiTexts.add(new GUIText("Fight",2.5f, font, new Vector2f(buttons.get(0).getPositions().x,buttons.get(0).getPositions().y), 0.12f, true, outlineColor,0.0f, 0.1f,outlineColor, new Vector2f()));
         super.guiTexts.add(new GUIText("Back",2.5f, font, new Vector2f(buttons.get(1).getPositions().x,buttons.get(1).getPositions().y), 0.12f, true, outlineColor,0.0f, 0.1f,outlineColor, new Vector2f()));
 
+        GameManager.getGuis().addAll(buttons);
         super.createClickable();
     }
     @Override

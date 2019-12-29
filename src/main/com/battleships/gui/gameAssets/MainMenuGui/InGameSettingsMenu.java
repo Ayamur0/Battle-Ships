@@ -24,8 +24,6 @@ public class InGameSettingsMenu extends Menu {
 
         this.gameMode = gameMode;
 
-        TextMaster.clear();
-
         this.createMenu();
 
         SetTextColor();
@@ -107,7 +105,7 @@ public class InGameSettingsMenu extends Menu {
                 super.clearMenu();
                 playingFieldSize.remove();
                 difficulty1.remove();
-                Inits.setStartMenu(new PlayMenu(super.guiManager,super.loader));
+                MainMenuManager.setMenu(new PlayMenu(super.guiManager,super.loader));
             }
         }
         else if(gameMode == 1){
@@ -115,7 +113,7 @@ public class InGameSettingsMenu extends Menu {
                 super.clearMenu();
                 playingFieldSize.remove();
                 difficulty1.remove();
-                Inits.setStartMenu(new WaitingConnection(super.guiManager,super.loader));
+                MainMenuManager.setMenu(new WaitingConnection(super.guiManager,super.loader));
                 //Inits.setGlobalGameState(1);
                 //TODO set difficulty and size for Multiplayer game(need logic for that)
                 //TODO add Connection overlay
@@ -124,7 +122,7 @@ public class InGameSettingsMenu extends Menu {
                 super.clearMenu();
                 playingFieldSize.remove();
                 difficulty1.remove();
-                Inits.setStartMenu(new MultiplayerMenu(super.guiManager,super.loader));
+                MainMenuManager.setMenu(new MultiplayerMenu(super.guiManager,super.loader));
             }
         }
         else if(gameMode == 2){
@@ -142,7 +140,7 @@ public class InGameSettingsMenu extends Menu {
                 playingFieldSize.remove();
                 difficulty1.remove();
                 difficulty2.remove();
-                Inits.setStartMenu(new PlayMenu(super.guiManager,super.loader));
+                MainMenuManager.setMenu(new PlayMenu(super.guiManager,super.loader));
             }
         }
     }
