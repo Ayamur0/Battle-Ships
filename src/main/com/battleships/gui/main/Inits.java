@@ -1,106 +1,61 @@
 package com.battleships.gui.main;
 
-import com.battleships.gui.entities.Camera;
-import com.battleships.gui.entities.Entity;
-import com.battleships.gui.entities.Light;
 import com.battleships.gui.fontRendering.TextMaster;
 import com.battleships.gui.gameAssets.GameManager;
+import com.battleships.gui.gameAssets.MainMenuGui.InGameSettingsMenu;
 import com.battleships.gui.gameAssets.MainMenuGui.Menu;
 import com.battleships.gui.gameAssets.MainMenuGui.MainMenuManager;
 import com.battleships.gui.gameAssets.MainMenuGui.MainMenu;
-import com.battleships.gui.gameAssets.grids.ShipManager;
-import com.battleships.gui.gameAssets.ingameGui.ShipSelector;
 import com.battleships.gui.guis.GuiManager;
 import com.battleships.gui.guis.GuiRenderer;
 import com.battleships.gui.guis.GuiTexture;
-import com.battleships.gui.particles.ParticleMaster;
-import com.battleships.gui.particles.ParticleSystemComplex;
-import com.battleships.gui.particles.ParticleTexture;
 import com.battleships.gui.postProcessing.Fbo;
 import com.battleships.gui.postProcessing.PostProcessing;
 import com.battleships.gui.renderingEngine.Loader;
 import com.battleships.gui.renderingEngine.MasterRenderer;
-import com.battleships.gui.terrains.Terrain;
-import com.battleships.gui.terrains.TerrainTexture;
-import com.battleships.gui.terrains.TerrainTexturePack;
-import com.battleships.gui.toolbox.MousePicker;
-import com.battleships.gui.water.WaterFrameBuffers;
-import com.battleships.gui.water.WaterRenderer;
-import com.battleships.gui.water.WaterShader;
-import com.battleships.gui.water.WaterTile;
 import com.battleships.gui.window.WindowManager;
-import org.joml.Vector3f;
+import org.lwjgl.glfw.GLFW;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL30;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Inits {
-    public static int GlobalGameState = 0; //0 = Main Menu, 1 = InGame
-
-    private static long window;
-
-    private boolean menuInitDone;
-    private boolean gameInitDone;
+    private static boolean menuInitDone;
 
     private static Loader loader = new Loader();
-    private MasterRenderer renderer;
-    private Fbo fbo;
+    private static MasterRenderer renderer;
+    private static Fbo fbo;
 
-    private GuiManager guiManager;
+    private static GuiManager guiManager;
     private static List<GuiTexture> permanentGuiElements;
+
+
+
+    private static Menu startMenu;
+    private static GuiRenderer guiRenderer;
+
+
+    private static MainMenuManager mainMenuManager;
+    private static GameManager gameManager;
 
     public static void setStartMenu(Menu startMenu) {
         Inits.startMenu = startMenu;
     }
-
-    private static Menu startMenu;
-    private GuiRenderer guiRenderer;
-
-
-    private static MainMenuManager mainMenuManager;
-    private GameManager gameManager;
-
-    private ShipManager ships;
-    private ShipSelector shipSelector;
-
-    private Camera camera;
-    private Light light;
-
-    private TerrainTexturePack texturePack;
-    private TerrainTexture blendMap;
-    private Terrain terrain;
-
-    private List<Entity> entities;
-    private Entity ship;
-
-
-    private Vector3f cellIntersection;
-    private Vector3f pointedCell;
-
-    private WaterFrameBuffers waterFbos;
-    private WaterShader waterShader;
-    private WaterRenderer waterRenderer;
-    private List<WaterTile> waterTiles;
-
-    private ParticleTexture fire;
-
-    private ParticleSystemComplex system;
-
-    private MousePicker picker;
-
     public static Loader getLoader() {
         return loader;
     }
 
-    public MasterRenderer getRenderer() {
+    public static MasterRenderer getRenderer() {
         return renderer;
     }
 
-    public Fbo getFbo() {
+    public static Fbo getFbo() {
         return fbo;
     }
 
-    public GuiManager getGuiManager() {
+    public static GuiManager getGuiManager() {
         return guiManager;
     }
 
@@ -112,110 +67,16 @@ public class Inits {
         return startMenu;
     }
 
-    public GuiRenderer getGuiRenderer() {
+    public static GuiRenderer getGuiRenderer() {
         return guiRenderer;
     }
 
-    public static int getGlobalGameState() {
-        return GlobalGameState;
-    }
-
-    public static long getWindow() {
-        return window;
-    }
-
-    public boolean isMenuInitDone() {
-        return menuInitDone;
-    }
-
-    public boolean isGameInitDone() {
-        return gameInitDone;
-    }
-
-    public ShipManager getShips() {
-        return ships;
-    }
-
-    public ShipSelector getShipSelector() {
-        return shipSelector;
-    }
-
-    public Camera getCamera() {
-        return camera;
-    }
-
-    public Light getLight() {
-        return light;
-    }
-
-    public TerrainTexturePack getTexturePack() {
-        return texturePack;
-    }
-
-    public TerrainTexture getBlendMap() {
-        return blendMap;
-    }
-
-    public Terrain getTerrain() {
-        return terrain;
-    }
-
-    public List<Entity> getEntities() {
-        return entities;
-    }
-
-
-    public Vector3f getCellIntersection() {
-        return cellIntersection;
-    }
-
-    public Vector3f getPointedCell() {
-        return pointedCell;
-    }
-
-    public WaterFrameBuffers getWaterFbos() {
-        return waterFbos;
-    }
-
-    public WaterShader getWaterShader() {
-        return waterShader;
-    }
-
-    public WaterRenderer getWaterRenderer() {
-        return waterRenderer;
-    }
-
-    public List<WaterTile> getWaterTiles() {
-        return waterTiles;
-    }
-
-    public ParticleTexture getFire() {
-        return fire;
-    }
-
-    public ParticleSystemComplex getSystem() {
-        return system;
-    }
-
-    public MousePicker getPicker() {
-        return picker;
-    }
-
-    public void setCellIntersection(Vector3f cellIntersection) {
-        this.cellIntersection = cellIntersection;
-    }
-
-    public void setPointedCell(Vector3f pointedCell) {
-        this.pointedCell = pointedCell;
-    }
-
-    public void initMenu(){
+    public static void init(){
 
         WindowManager.initialize();
-
-        window = WindowManager.getWindow();
-
         // *******************Main stuff initialization*******************
+
+        gameManager = new GameManager();
 
         loader = new Loader();
         renderer = new MasterRenderer(loader);
@@ -239,80 +100,33 @@ public class Inits {
 
         menuInitDone = true;
     }
+    public static void render(){
+        GL11.glEnable(GL30.GL_CLIP_DISTANCE0);
 
-    public Entity getShip() {
-        return ship;
+        //render refraction texture
+        GL11.glDisable(GL30.GL_CLIP_DISTANCE0); //not all drivers support disabling, if it doesn't work set clipPlane when rendering to screen high enough so nothing gets clipped
+        //background.render();
+//            new Particle(star, new Vector3f(camera.getPosition().x , camera.getPosition().y, camera.getPosition().z), new Vector3f(0, 30, 0), 1 ,4 ,0 ,1);
+
+        if (Inits.getStartMenu() instanceof InGameSettingsMenu) {
+            if (((InGameSettingsMenu) Inits.getStartMenu()).isRunning())
+                ((InGameSettingsMenu) Inits.getStartMenu()).RefreshSliderValue();
+        }
+
+        guiRenderer.render(permanentGuiElements);
+        guiManager.renderClickableGuis(guiRenderer);
+        TextMaster.render();
+        renderer.updateProjectionMatrix();
     }
 
-    public static void setGlobalGameState(int globalGameState) {
-        GlobalGameState = globalGameState;
-    }
-
-    public void initGame(){
-
-        // *******************Camera initialization*******************
-
-        camera = new Camera();
-        camera.getPosition().x = 350f;
-        camera.getPosition().y = 100f;
-        camera.getPosition().z = -450f;
-
-        // *******************Light initialization*******************
-
-        light = new Light(new Vector3f(20000,20000,2000), new Vector3f(1,1,1));
-
-        // *******************Terrain initialization*******************
-
-        TerrainTexture texture1 = new TerrainTexture(loader.loadTexture("path.jpg"));
-        TerrainTexture texture2 = new TerrainTexture(loader.loadTexture("Gravel.jpg"));
-        TerrainTexture texture3 = new TerrainTexture(loader.loadTexture("Grass.jpg"));
-        TerrainTexture texture4 = new TerrainTexture(loader.loadTexture("WetSand.jpg"));
-        TerrainTexture texture5 = new TerrainTexture(loader.loadTexture("Sand.jpg"));
-
-        texturePack = new TerrainTexturePack(texture1, texture2, texture3, texture4, texture5);
-
-        blendMap = new TerrainTexture(loader.loadTexture("BlendMap.tga")); //TODO change blendMap to remove water texture
-
-        terrain = new Terrain(0,-1, loader, texturePack, blendMap, "HeightMap.jpg");
-//        Terrain terrain2 = new Terrain(-1,-1, loader, texturePack, blendMap, "HeightMap.jpg");
-
-        // *******************Entity initialization*******************
-
-        entities = new ArrayList<>();
-
-        shipSelector = new ShipSelector(loader, guiManager, ships, permanentGuiElements);
-//        ShipManager ships = new ShipManager(loader);
-//        playingField.placeShip(entities, ships, 0, 7,2);
-//        playingField.placeShip(entities, ships, 0, 9,3);
-//        playingField.placeShip(entities, ships, 0, 11,5);
-
-        // *******************Water initialization*******************
-        waterFbos = new WaterFrameBuffers();
-
-        waterShader = new WaterShader();
-        waterRenderer = new WaterRenderer(loader, waterShader, renderer.getProjectionMatrix(), waterFbos);
-        waterTiles = new ArrayList<>();
-        waterTiles.add(new WaterTile(400, -400, -3));
-
-
-        // *******************Particle initialization*******************
-        ParticleMaster.init(loader, renderer.getProjectionMatrix());
-        fire = new ParticleTexture(loader.loadTexture("particles/fire.png"), 8, true);
-        system = new ParticleSystemComplex(fire,20, 3.5f, -0.05f, 2f, 17);
-        system.setLifeError(0.3f);
-        system.setScaleError(0.3f);
-        system.setSpeedError(0.15f);
-        system.randomizeRotation();
-        system.setDirection(new Vector3f(0.1f,1, 0.1f), -0.15f);
-
-        // *******************Callbacks initialization*******************
-
-        picker = new MousePicker(camera, renderer.getProjectionMatrix(), terrain);
-
-        WindowManager.setCallbacks(camera, waterFbos);
-
-
-        gameInitDone = true;
-
+    public static void cleanUp(){
+        fbo.cleanUp();
+        TextMaster.cleanUp();
+        guiRenderer.cleanUp();
+        renderer.cleanUp();
+        loader.cleanUp();
+        //unload GLFW on window close
+        GLFW.glfwTerminate();
+        GLFW.glfwSetErrorCallback(null).free();
     }
 }
