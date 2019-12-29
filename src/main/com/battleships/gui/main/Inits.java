@@ -91,7 +91,7 @@ public class Inits {
         PostProcessing.init(loader);
 
         // *******************Callbacks initialization*******************
-        mainMenuManager = new MainMenuManager(guiManager,loader);
+        //mainMenuManager = new MainMenuManager(guiManager,loader);
 
         WindowManager.setMainMenuCallbacks(mainMenuManager, null);
 
