@@ -2,6 +2,7 @@ package com.battleships.gui.gameAssets.MainMenuGui;
 
 import com.battleships.gui.fontMeshCreator.GUIText;
 import com.battleships.gui.fontRendering.TextMaster;
+import com.battleships.gui.gameAssets.GameManager;
 import com.battleships.gui.guis.GuiManager;
 import com.battleships.gui.guis.GuiTexture;
 import com.battleships.gui.guis.Slider;
@@ -17,11 +18,11 @@ public class AiVsAiMenu extends InGameSettingsMenu {
     protected void createMenu(){
 
         super.playingFieldSize = new Slider(loader.loadTexture("Brick.jpg"), loader.loadTexture("Brick.jpg"), 5, 30,
-                15, super.sliderSize, new Vector2f(super.standardButtonPos.x,super.standardButtonPos.y-0.15f), guiManager, Inits.getPermanentGuiElements());
+                15, super.sliderSize, new Vector2f(super.standardButtonPos.x,super.standardButtonPos.y-0.15f), guiManager, GameManager.getGuis());
         super.difficulty1 = new Slider(loader.loadTexture("Brick.jpg"), loader.loadTexture("Brick.jpg"), 1, 3,
-                2, super.sliderSize,new Vector2f(playingFieldSize.getPositions().x,playingFieldSize.getPositions().y+buttonGap), guiManager, Inits.getPermanentGuiElements());
+                2, super.sliderSize,new Vector2f(playingFieldSize.getPositions().x,playingFieldSize.getPositions().y+buttonGap), guiManager, GameManager.getGuis());
         super.difficulty2 = new Slider(loader.loadTexture("Brick.jpg"), loader.loadTexture("Brick.jpg"), 1, 3,
-                2, super.sliderSize,new Vector2f(difficulty1.getPositions().x, difficulty1.getPositions().y+buttonGap), guiManager, Inits.getPermanentGuiElements());
+                2, super.sliderSize,new Vector2f(difficulty1.getPositions().x, difficulty1.getPositions().y+buttonGap), guiManager, GameManager.getGuis());
 
         super.guiTexts.add(new GUIText("Size",2.5f, font,new Vector2f(playingFieldSize.getPositions().x-0.14f,playingFieldSize.getPositions().y) , 0.12f, true, outlineColor,0.0f, 0.1f,outlineColor, new Vector2f()));
         super.guiTexts.add(new GUIText(String.format("%d", playingFieldSize.getValueAsInt()),2.5f, font, new Vector2f(playingFieldSize.getPositions().x+0.16f,playingFieldSize.getPositions().y), 0.12f, true, outlineColor,0.0f, 0.1f,outlineColor, new Vector2f()));

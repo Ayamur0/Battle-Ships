@@ -3,6 +3,7 @@ package com.battleships.gui.gameAssets.MainMenuGui;
 import com.battleships.gui.fontMeshCreator.FontType;
 import com.battleships.gui.fontMeshCreator.GUIText;
 import com.battleships.gui.fontRendering.TextMaster;
+import com.battleships.gui.gameAssets.GameManager;
 import com.battleships.gui.guis.GuiClickCallback;
 import com.battleships.gui.guis.GuiManager;
 import com.battleships.gui.guis.GuiTexture;
@@ -46,8 +47,8 @@ public abstract class Menu extends GuiClickCallback {
         buttons.add(new GuiTexture(texture, standardButtonPos, buttonSize));
         for (int i = 0;i < anzahl-1; i++){
             buttons.add(new GuiTexture(texture,new Vector2f(buttons.get(i).getPositions().x,buttons.get(i).getPositions().y+buttonGap),buttonSize));
-
         }
+        GameManager.getGuis().addAll(buttons);
     }
 
     protected void CreateTextLabels() {
@@ -66,6 +67,16 @@ public abstract class Menu extends GuiClickCallback {
     protected void createClickable() {
         for (GuiTexture i : buttons) {
             guiManager.createClickableGui(i, () -> this);
+        }
+    }
+    protected void clearMenu(){
+        for (GUIText gui : guiTexts){
+            TextMaster.removeText(gui);
+            gui.remove();
+        }
+        for (GuiTexture gui : buttons){
+            guiManager.removeClickableGui(gui);
+            GameManager.getGuis().remove(gui);
         }
     }
 }

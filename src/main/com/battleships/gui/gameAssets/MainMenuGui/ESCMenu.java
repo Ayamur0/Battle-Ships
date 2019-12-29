@@ -2,6 +2,7 @@ package com.battleships.gui.gameAssets.MainMenuGui;
 
 import com.battleships.gui.fontMeshCreator.GUIText;
 import com.battleships.gui.fontRendering.TextMaster;
+import com.battleships.gui.gameAssets.GameManager;
 import com.battleships.gui.guis.GuiManager;
 import com.battleships.gui.guis.GuiTexture;
 import com.battleships.gui.main.Inits;
@@ -14,8 +15,6 @@ public class ESCMenu extends Menu {
     public ESCMenu(GuiManager guiManager, Loader loader) {
         super(guiManager, loader);
 
-        guiManager.clearClickableGuis();
-
         this.createMenu();
 
         SetTextColor();
@@ -26,6 +25,11 @@ public class ESCMenu extends Menu {
     private void createMenu(){
 
         super.CreateButtonTextures(4);
+
+        for(int i = 0; i < buttons.size(); i++){
+            GameManager.getGuis().add(buttons.get(i));
+        }
+
 
 
         super.guiTexts.add(new GUIText("Save", 3, font, new Vector2f(buttons.get(0).getPositions().x,buttons.get(0).getPositions().y), 0.12f, true,outlineColor, 0.0f, 0.1f,outlineColor, new Vector2f()));
@@ -65,14 +69,11 @@ public class ESCMenu extends Menu {
             //TODO adding save thing
         }
         if(buttonClicked == 1){
-            guiManager.clearClickableGuis();
-            for(int i =0; i < super.buttons.size(); i++){
-                super.guiTexts.get(i).remove();
-                TextMaster.removeText(super.guiTexts.get(i));
-            }
+            super.clearMenu();
             //TODO check with tim
         }
         if (super.buttonClicked == 2){
+            super.clearMenu();
             Inits.setStartMenu(new MainMenu(guiManager,loader));
         }
         if(buttonClicked == 3){

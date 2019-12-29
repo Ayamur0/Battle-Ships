@@ -13,8 +13,6 @@ public class MultiplayerMenu extends Menu {
         public MultiplayerMenu(GuiManager guiManager, Loader loader){
         super(guiManager, loader);
 
-        guiManager.clearClickableGuis();
-
         TextMaster.clear();
 
         this.createMenu();
@@ -52,6 +50,7 @@ public class MultiplayerMenu extends Menu {
     protected void clickAction() {
         System.out.println(buttonClicked);
         if (super.buttonClicked == 0){
+            super.clearMenu();
             //TODO Set mode to multiplayer
             Inits.setStartMenu(new InGameSettingsMenu(super.guiManager,super.loader,1));
             //TODO Adding host game creation
@@ -62,6 +61,7 @@ public class MultiplayerMenu extends Menu {
             //TODO Adding ip thingi
         }
         if (super.buttonClicked == 2) {
+            super.clearMenu();
             Inits.setStartMenu(new PlayMenu(guiManager,loader));
         }
     }

@@ -13,8 +13,6 @@ public class PlayMenu extends Menu {
     public PlayMenu(GuiManager guiManager, Loader loader) {
         super(guiManager, loader);
 
-        guiManager.clearClickableGuis();
-
         TextMaster.clear();
 
         this.createMenu();
@@ -59,16 +57,20 @@ public class PlayMenu extends Menu {
     @Override
     protected void clickAction() {
         if(buttonClicked == 0) {
+            super.clearMenu();
             Inits.setStartMenu(new AiVsAiMenu(guiManager,loader));
             //TODO open ai vs ai Settings
         }
         if(buttonClicked == 1){
+            super.clearMenu();
             Inits.setStartMenu(new InGameSettingsMenu(guiManager,loader,0));
         }
         if (super.buttonClicked == 2){
+            super.clearMenu();
             Inits.setStartMenu(new MultiplayerMenu(guiManager,loader));
         }
         if (super.buttonClicked == 3){
+            super.clearMenu();
             Inits.setStartMenu(new MainMenu(guiManager,loader));
         }
     }

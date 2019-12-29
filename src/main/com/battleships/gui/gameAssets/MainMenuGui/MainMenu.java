@@ -21,8 +21,6 @@ public class MainMenu extends Menu {
         
         fc = new JFileChooser();
 
-        guiManager.clearClickableGuis();
-
         TextMaster.clear();
 
         this.createMenu();
@@ -71,9 +69,11 @@ public class MainMenu extends Menu {
             fc.showOpenDialog(null);
         }
         if(buttonClicked == 1){
+            super.clearMenu();
             Inits.setStartMenu(new PlayMenu(guiManager,loader));
         }
         if (super.buttonClicked == 2){
+            super.clearMenu();
             Inits.setStartMenu(new OptionMenu(guiManager,loader));
         }
         if(buttonClicked == 3){

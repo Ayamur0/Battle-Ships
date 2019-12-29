@@ -75,9 +75,6 @@ public class Inits {
 
         WindowManager.initialize();
         // *******************Main stuff initialization*******************
-
-        gameManager = new GameManager();
-
         loader = new Loader();
         renderer = new MasterRenderer(loader);
         TextMaster.init(loader);
@@ -94,7 +91,7 @@ public class Inits {
         PostProcessing.init(loader);
 
         // *******************Callbacks initialization*******************
-        mainMenuManager = new MainMenuManager(guiManager);
+        mainMenuManager = new MainMenuManager(guiManager,loader);
 
         WindowManager.setMainMenuCallbacks(mainMenuManager);
 

@@ -64,6 +64,11 @@ public class GameManager {
      */
     private static int gameState;
 
+    private static boolean loading;
+    /**
+     * Indicates if game is loading
+     */
+
     /**
      * Main font used in this game
      */
@@ -163,11 +168,13 @@ public class GameManager {
         TextMaster.init(loader);
         guiManager = new GuiManager();
         guiRenderer = new GuiRenderer(loader);
+        mainMenuManager = new MainMenuManager(guiManager,loader);
         AudioMaster.init();
         waterFbos = new WaterFrameBuffers();
         waterShader = new WaterShader();
         waterRenderer = new WaterRenderer(loader, waterShader, MasterRenderer.getProjectionMatrix(), waterFbos);
         ParticleMaster.init(loader, MasterRenderer.getProjectionMatrix());
+        loading = true;
     }
 
     /**
@@ -242,6 +249,7 @@ public class GameManager {
 
         camera.setStandardPos();
         WindowManager.setCallbacks(camera, waterFbos);
+        loading = false;
     }
 
     /**
@@ -484,5 +492,12 @@ public class GameManager {
      */
     public static MainMenuManager getMainMenuManager() {
         return mainMenuManager;
+    }
+
+    /**
+     * @return The boolean indicating if game is loading
+     */
+    public static boolean getLoading(){
+        return loading;
     }
 }
