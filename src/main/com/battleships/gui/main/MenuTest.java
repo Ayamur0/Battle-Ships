@@ -2,6 +2,7 @@ package com.battleships.gui.main;
 
 import com.battleships.gui.gameAssets.GameManager;
 import com.battleships.gui.gameAssets.MainMenuGui.MainMenuManager;
+import com.battleships.gui.gameAssets.grids.GridManager;
 import com.battleships.gui.guis.GuiRenderer;
 import com.battleships.gui.guis.GuiTexture;
 import com.battleships.gui.renderingEngine.Loader;
@@ -17,8 +18,6 @@ import java.util.List;
 
 public class MenuTest {
 
-
-
     public static void main(String[] args) {
         GameManager.init();
         Loader loader = new Loader();
@@ -27,18 +26,19 @@ public class MenuTest {
 
         //GameManager.loadIngameScene();
         guis.add(new GuiTexture(loader.loadTexture("Brick.jpg"), new Vector2f(0.5f, 0.5f), new Vector2f(0.5f, 0.5f)));
-        GameManager.getGuis().clear();
-        MainMenuManager.LoadMainMenu();
         while (!GLFW.glfwWindowShouldClose(WindowManager.getWindow())){
             if (GameManager.getLoading()){
                 GLFW.glfwShowWindow(WindowManager.getWindow());
                 guiRenderer.render(guis);
                 WindowManager.updateWindow();
                 GameManager.loadIngameScene();
+                GameManager.getGuis().clear();
+                GridManager.setIsBackground(true);
+                WindowManager.clearCallbacks();
+                MainMenuManager.LoadMainMenu();
                 continue;
             }
-            GLFW.glfwMakeContextCurrent(WindowManager.getWindow());
-            GameManager.updateScene();
+            GameManager.updateSceneBlurred();
 
 
             WindowManager.updateWindow();

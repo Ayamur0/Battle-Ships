@@ -106,6 +106,11 @@ public class GridManager {
     private List<Entity> markers = new ArrayList<>();
 
     /**
+     * {@code true} if these grids are only used as background for the main menu.
+     */
+    private static boolean isBackground;
+
+    /**
      * Create a new GridManager.
      * Creates the two grids the game is played on, as well as all other entities needed for the game.
      * @param loader Loader to load models.
@@ -128,7 +133,9 @@ public class GridManager {
      * @param renderer Renderer that the entities should be added to, this renderer needs to render the scene later.
      */
     public void render(MasterRenderer renderer){
-        highlighter.highligtCell(GameManager.getPicker().getCurrentIntersectionPoint());
+        if(!isBackground) {
+            highlighter.highligtCell(GameManager.getPicker().getCurrentIntersectionPoint());
+        }
         renderer.processEntity(cannonball);
         renderer.processEntityList(ships);
         renderer.processEntity(ownGrid);
@@ -349,5 +356,13 @@ public class GridManager {
      */
     public static int getMAXSIZE() {
         return MAXSIZE;
+    }
+
+    /**
+     * Set if these grids are only used as a background.
+     * @param isBackground {@code true} if these grids are only used as a background.
+     */
+    public static void setIsBackground(boolean isBackground) {
+        GridManager.isBackground = isBackground;
     }
 }

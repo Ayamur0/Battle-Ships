@@ -338,10 +338,10 @@ public class GameManager {
         waterRenderer.render(waterTiles, camera, light);
         renderParticles();
         blur.unbindFrameBuffer();
-        guiRenderer.render(guis);
-        TextMaster.render();
         renderer.updateProjectionMatrix();
         PostProcessing.doPostProcessing(blur.getColorTexture());
+        guiRenderer.render(guis);
+        TextMaster.render();
     }
 
     /**
