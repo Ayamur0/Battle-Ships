@@ -25,7 +25,7 @@ public class MenuTest {
         GuiRenderer guiRenderer = new GuiRenderer(loader);
 
         //GameManager.loadIngameScene();
-        guis.add(new GuiTexture(loader.loadTexture("Brick.jpg"), new Vector2f(0.5f, 0.5f), new Vector2f(0.5f, 0.5f)));
+        guis.add(new GuiTexture(loader.loadTexture("StartIcon.png"), new Vector2f(0.5f, 0.5f), new Vector2f(0.5f, 0.5f)));
         while (!GLFW.glfwWindowShouldClose(WindowManager.getWindow())){
             if (GameManager.getLoading()){
                 GLFW.glfwShowWindow(WindowManager.getWindow());
@@ -36,6 +36,7 @@ public class MenuTest {
                 GridManager.setIsBackground(true);
                 WindowManager.clearCallbacks();
                 MainMenuManager.LoadMainMenu();
+                GLFW.glfwSetWindowAttrib(WindowManager.getWindow(), GLFW.GLFW_DECORATED, GLFW.GLFW_TRUE);
                 continue;
             }
             GameManager.updateSceneBlurred();

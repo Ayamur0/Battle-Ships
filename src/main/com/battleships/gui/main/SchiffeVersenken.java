@@ -2,9 +2,13 @@ package com.battleships.gui.main;
 
 import com.battleships.gui.gameAssets.GameManager;
 import com.battleships.gui.gameAssets.testLogic.TestLogic;
+import com.battleships.gui.guis.GuiRenderer;
+import com.battleships.gui.renderingEngine.Loader;
 import com.battleships.gui.window.WindowManager;
 import org.joml.Vector3f;
 import org.lwjgl.glfw.GLFW;
+
+import java.util.ArrayList;
 
 public class SchiffeVersenken {
 
