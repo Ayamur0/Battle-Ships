@@ -50,8 +50,8 @@ public class PostProcessing {
         //divide width and height to make texture smaller, so it gets scaled when being put on the screen
         //which makes it blurrier while saving performance
         //use two blur stages to decrease flickering after the blur because of the low res texture
-        hBlur = new HorizontalBlur(WindowManager.getWidth(), WindowManager.getHeight());
-        vBlur = new VerticalBlur(WindowManager.getWidth(), WindowManager.getHeight());
+        hBlur = new HorizontalBlur(WindowManager.getWidth() / 4, WindowManager.getHeight() / 4);
+        vBlur = new VerticalBlur(WindowManager.getWidth() / 4, WindowManager.getHeight() / 4);
 //        hBlur2 = new HorizontalBlur(WindowManager.getWidth() / 8, WindowManager.getHeight() / 8);
 //        vBlur2 = new VerticalBlur(WindowManager.getWidth() / 8, WindowManager.getHeight() / 8);
     }

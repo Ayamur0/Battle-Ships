@@ -328,6 +328,8 @@ public class GameManager {
     public static void updateSceneBlurred(){
         blur.updateSize();
         camera.move(terrain);
+        camera.addYaw(0.1f);
+        camera.scrollCallback.invoke(0,0,-0.05f);
         mousePicker.update();
         AudioMaster.setListenerData(camera.getPosition().x, camera.getPosition().y, camera.getPosition().z, camera.getPitch(), camera.getYaw());
         blur.bindFrameBuffer();

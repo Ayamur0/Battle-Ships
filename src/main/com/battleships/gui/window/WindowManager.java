@@ -5,20 +5,25 @@ import com.battleships.gui.gameAssets.GameManager;
 import com.battleships.gui.gameAssets.MainMenuGui.MainMenuManager;
 import com.battleships.gui.guis.GuiClickCallback;
 import com.battleships.gui.guis.GuiManager;
+import com.battleships.gui.guis.GuiRenderer;
+import com.battleships.gui.guis.GuiTexture;
 import com.battleships.gui.main.SchiffeVersenken;
 import com.battleships.gui.models.TextureData;
 import com.battleships.gui.postProcessing.Fbo;
+import com.battleships.gui.renderingEngine.Loader;
 import com.battleships.gui.renderingEngine.MasterRenderer;
 import com.battleships.gui.renderingEngine.TextureLoader;
 import com.battleships.gui.water.WaterFrameBuffers;
+import org.joml.Vector2f;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.*;
-import org.lwjgl.opengl.GL;
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL13;
+import org.lwjgl.opengl.*;
+import org.lwjgl.system.windows.User32;
 
 import java.io.InputStream;
 import java.nio.IntBuffer;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * First class that is needed after starting the program.
@@ -54,6 +59,16 @@ public class WindowManager {
      */
     private static double deltaTime;
 
+    /**
+     * Window ID of the loading screen window.
+     */
+    private static long loadingScreen;
+
+    /**
+     * Information about the monitor the game is on.
+     */
+    private static GLFWVidMode vidMode;
+
 
     /**
      * Initialize the main window the game is played in.
@@ -67,12 +82,10 @@ public class WindowManager {
         GLFW.glfwWindowHint(GLFW.GLFW_SAMPLES, 4);
 
         //create centered window
-        GLFW.glfwWindowHint(GLFW.GLFW_TRANSPARENT_FRAMEBUFFER, GLFW.GLFW_TRUE);
         //GLFW.glfwWindowHint(GLFW.GLFW_OPACITY, 23);
         GLFW.glfwWindowHint(GLFW.GLFW_VISIBLE, GLFW.GLFW_FALSE);
-        GLFW.glfwWindowHint(GLFW.GLFW_DECORATED, GLFW.GLFW_FALSE);
         window = GLFW.glfwCreateWindow(width, height, "Schiffe Versenken", 0, 0);
-        GLFWVidMode vidMode = GLFW.glfwGetVideoMode(GLFW.glfwGetPrimaryMonitor());
+        vidMode = GLFW.glfwGetVideoMode(GLFW.glfwGetPrimaryMonitor());
         GLFW.glfwSetWindowPos(window, vidMode.width() / 2 - width / 2, vidMode.height() / 2 - height / 2);
         GLFW.glfwMakeContextCurrent(window);
 
@@ -88,6 +101,41 @@ public class WindowManager {
         GL13.glEnable(GL13.GL_MULTISAMPLE);
         lastFrame = GLFW.glfwGetTime();
         setIcon();
+    }
+
+    /**
+     * Creates a separate Window acting as loading screen.
+     * The loading texture is rendered to this window once.
+     * Needs to be destroyed after loading is done.
+     */
+    public static void createLoadingScreen(){
+        GLFW.glfwWindowHint(GLFW.GLFW_TRANSPARENT_FRAMEBUFFER, GLFW.GLFW_TRUE);
+        GLFW.glfwWindowHint(GLFW.GLFW_VISIBLE, GLFW.GLFW_FALSE);
+        GLFW.glfwWindowHint(GLFW.GLFW_DECORATED, GLFW.GLFW_FALSE);
+
+        loadingScreen = GLFW.glfwCreateWindow(width, height, "loading", 0, 0);
+        GLFW.glfwSetWindowPos(loadingScreen, vidMode.width() / 2 - width / 2, vidMode.height() / 2 - height / 2);
+        GLFW.glfwMakeContextCurrent(loadingScreen);
+        setIcon();
+
+        List<GuiTexture> guis = new ArrayList<>();
+        Loader loader = new Loader();
+        GuiRenderer guiRenderer = new GuiRenderer(loader);
+        guis.add(new GuiTexture(loader.loadTexture("StartIcon.png"), new Vector2f(0.5f, 0.5f), new Vector2f(0.5f, 0.5f)));
+
+        GLFW.glfwShowWindow(loadingScreen);
+        guiRenderer.render(guis);
+        GLFW.glfwSwapBuffers(loadingScreen);
+
+        GLFW.glfwMakeContextCurrent(window);
+    }
+
+    /**
+     * Destroys the loading screen window and shows the game window.
+     */
+    public static void destroyLoadingScreen(){
+        GLFW.glfwDestroyWindow(loadingScreen);
+        GLFW.glfwShowWindow(window);
     }
 
     /**

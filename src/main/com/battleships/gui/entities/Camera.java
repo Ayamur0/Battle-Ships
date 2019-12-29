@@ -293,6 +293,14 @@ public class Camera {
     }
 
     /**
+     * Increases the yaw of this camera.
+     * @param degrees By how many degrees the yaw should be increased.
+     */
+    public void addYaw(float degrees){
+        yaw += degrees;
+    }
+
+    /**
      *
      * @return Current roll of the camera.
      */

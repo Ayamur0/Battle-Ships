@@ -20,27 +20,22 @@ public class MenuTest {
 
     public static void main(String[] args) {
         GameManager.init();
-        Loader loader = new Loader();
-        List<GuiTexture> guis = new ArrayList<>();
-        GuiRenderer guiRenderer = new GuiRenderer(loader);
 
-        //GameManager.loadIngameScene();
-        guis.add(new GuiTexture(loader.loadTexture("StartIcon.png"), new Vector2f(0.5f, 0.5f), new Vector2f(0.5f, 0.5f)));
         while (!GLFW.glfwWindowShouldClose(WindowManager.getWindow())){
             if (GameManager.getLoading()){
-                GLFW.glfwShowWindow(WindowManager.getWindow());
-                guiRenderer.render(guis);
-                WindowManager.updateWindow();
+
+                WindowManager.createLoadingScreen();
+
                 GameManager.loadIngameScene();
                 GameManager.getGuis().clear();
                 GridManager.setIsBackground(true);
                 WindowManager.clearCallbacks();
                 MainMenuManager.LoadMainMenu();
-                GLFW.glfwSetWindowAttrib(WindowManager.getWindow(), GLFW.GLFW_DECORATED, GLFW.GLFW_TRUE);
+
+                WindowManager.destroyLoadingScreen();
                 continue;
             }
             GameManager.updateSceneBlurred();
-
 
             WindowManager.updateWindow();
 
