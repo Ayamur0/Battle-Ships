@@ -23,7 +23,7 @@ public abstract class Menu extends GuiClickCallback {
     protected Loader loader;
     protected FontType font;
 
-    protected int texture;
+    protected static int texture;
     protected Vector3f outlineColor;
 
     protected List<GuiTexture> buttons = new ArrayList<>();
@@ -34,8 +34,12 @@ public abstract class Menu extends GuiClickCallback {
     public Menu(GuiManager guiManager, Loader loader) {
         this.guiManager = guiManager;
         this.loader = loader;
-        this.font = new FontType(loader.loadFontTexture("font/pirate.png"), "pirate");
-        this.texture = loader.loadTexture("WoodButton.png");
+        if (GameManager.getPirateFont()==null)
+            this.font = new FontType(loader.loadFontTexture("font/pirate.png"), "pirate");
+        else
+            this.font=GameManager.getPirateFont();
+        if (texture == 0)
+            texture = loader.loadTexture("WoodButton.png");
         this.outlineColor = new Vector3f(1.0f, 0.0f, 0.0f);
 
         this.buttonSize = new Vector2f(0.16f, 0.12f);

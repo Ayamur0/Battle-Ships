@@ -14,7 +14,7 @@ import javax.swing.*;
 
 public class MainMenu extends Menu {
 
-    JFileChooser fc;
+    private JFileChooser fc;
 
     public MainMenu(GuiManager guiManager, Loader loader) {
         super(guiManager, loader);

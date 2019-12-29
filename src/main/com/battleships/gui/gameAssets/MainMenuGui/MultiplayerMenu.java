@@ -46,7 +46,6 @@ public class MultiplayerMenu extends Menu {
     }
     @Override
     protected void clickAction() {
-        System.out.println(buttonClicked);
         if (super.buttonClicked == 0){
             super.clearMenu();
             //TODO Set mode to multiplayer
@@ -56,7 +55,7 @@ public class MultiplayerMenu extends Menu {
         }
         if (super.buttonClicked == 1){
             String ip = TinyFileDialogs.tinyfd_inputBox("Connect", "Enter ip Address", "");
-            //TODO Adding ip thingi
+            //TODO Adding ip thingi (need logic or network for that
         }
         if (super.buttonClicked == 2) {
             super.clearMenu();
