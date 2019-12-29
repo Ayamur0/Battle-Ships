@@ -84,7 +84,7 @@ public class Particle {
      * @param scale Scale of this particle
      */
     public Particle(ParticleTexture texture, Vector3f position, Vector3f velocity, float gravityEffect, float lifeLength, float rotation, float scale) {
-        this.texture = texture; //TODO rather than creating new particle reset values in dead one to save performance
+        this.texture = texture;
         this.position = position;
         this.velocity = velocity;
         this.gravityEffect = gravityEffect;
@@ -168,7 +168,7 @@ public class Particle {
      */
     protected boolean update(Camera camera){
         velocity.y += GRAVITY * gravityEffect * WindowManager.getDeltaTime();
-        Vector3f change = new Vector3f(velocity); //TODO make reusable Vector3f's to improve performance
+        Vector3f change = new Vector3f(velocity);
         change.mul(WindowManager.getDeltaTime());
         change.add(position, position);
         Vector3f distanceVector = new Vector3f();

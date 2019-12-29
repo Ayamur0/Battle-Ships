@@ -111,7 +111,7 @@ public class ShipCounter extends GuiClickCallback implements Runnable{
     @Override
     protected void clickAction() {
         Thread t = new Thread(this);
-        t.start(); //TODO more parallel tasks
+        t.start();
     }
 
     /**

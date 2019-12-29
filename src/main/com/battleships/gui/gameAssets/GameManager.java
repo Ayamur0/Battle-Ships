@@ -219,7 +219,7 @@ public class GameManager {
 
         TerrainTexturePack texturePack = new TerrainTexturePack(texture1, texture2, texture3, texture4, texture5);
 
-        TerrainTexture blendMap = new TerrainTexture(loader.loadTexture("BlendMapLarge.tga")); //TODO change blendMap to remove water texture
+        TerrainTexture blendMap = new TerrainTexture(loader.loadTexture("BlendMapLarge.tga"));
 
         terrain = new Terrain(-0.25f,-0.75f, loader, texturePack, blendMap, "HeightMapLarge.jpg");
 
@@ -339,7 +339,8 @@ public class GameManager {
      * @param won {@code true} if the player has won, {@code false} else.
      */
     public static void finishGame(boolean won){
-        //TODO
+        FinishGame f = new FinishGame();
+        f.finishGame(loader, guiManager, won);
     }
 
     /**
@@ -409,6 +410,10 @@ public class GameManager {
                 camera.turnCamera();
             if(key == GLFW.GLFW_KEY_ESCAPE && action == GLFW.GLFW_PRESS)
                 Inits.setStartMenu(new ESCMenu(guiManager,Inits.getLoader()));
+            if(key == GLFW.GLFW_KEY_K && action == GLFW.GLFW_PRESS) {
+                FinishGame f = new FinishGame();
+                f.finishGame(loader, guiManager, false);
+            }
         }
     };
 

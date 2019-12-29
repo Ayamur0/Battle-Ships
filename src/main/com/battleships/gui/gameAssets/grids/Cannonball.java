@@ -228,14 +228,17 @@ public class Cannonball extends Entity implements Runnable {
      * Plays sound depending on what has been hit and places a correct marker.
      */
     private void cannonballHit(){
-        boolean shipHit = false; //TODO get from logic
-        if(shipHit && destinationGrid == GridManager.OWNFIELD)
+        boolean shipHit = true; //TODO get from logic
+        if(shipHit && destinationGrid == GridManager.OWNFIELD) {
             gridManager.playFireEffect(destination);
-        gridManager.placeMarker(shipHit, destinationCell, destinationGrid);
-        if(shipHit)
-            gridManager.playSound(new Vector3f(destination.x, GridManager.getGRIDHEIGHT(), destination.y), CannonSounds.HITSOUND);
-        else
-            gridManager.playSound(new Vector3f(destination.x, GridManager.getGRIDHEIGHT(), destination.y), CannonSounds.WATERSPLASH);
+        }
+        else {
+            gridManager.placeMarker(shipHit, destinationCell, destinationGrid);
+            if (shipHit)
+                gridManager.playSound(new Vector3f(destination.x, GridManager.getGRIDHEIGHT(), destination.y), CannonSounds.HITSOUND);
+            else
+                gridManager.playSound(new Vector3f(destination.x, GridManager.getGRIDHEIGHT(), destination.y), CannonSounds.WATERSPLASH);
+        }
         flying = false;
         remove();
     }

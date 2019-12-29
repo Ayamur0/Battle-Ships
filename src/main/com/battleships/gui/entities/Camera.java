@@ -108,7 +108,7 @@ public class Camera {
      * (currentSpeed adjusted zoom, new rotation)
      * @param terrain Terrain the camera is moving on (needed, so camera can't move under terrain).
      */
-        public void move(Terrain terrain){ //TODO limit zoom and pitch amount, keep movement in game area
+        public void move(Terrain terrain){
         calculatePitch();
         calculatePosition();
         pitch %= 360;

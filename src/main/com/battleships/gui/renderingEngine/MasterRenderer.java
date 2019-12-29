@@ -221,6 +221,8 @@ public class MasterRenderer {
      * This method needs to be called whenever the size of the window is changed.
      */
     public void updateProjectionMatrix(){
+        if(WindowManager.getWidth() > 1920 || WindowManager.getHeight() > 1080)
+            return;
         projectionMatrix = new Matrix4f();
         projectionMatrix.setPerspective((float)Math.toRadians(FOV), (float) WindowManager.getWidth() / WindowManager.getHeight(), NEAR_PLANE, FAR_PLANE);
     }

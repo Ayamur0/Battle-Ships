@@ -36,7 +36,7 @@ public class Highlighter extends Entity {
     /**
      * Texture of the highlighter that indicates which cell the mouse cursor is hovering over.
      */
-    private static final String highlightTexturePath = "cannonball.png"; //TODO
+    private static final String highlightTexturePath = "transparentBlack.png";
 
     /**
      * Vector containing the cell the mouse is currently pointing at.

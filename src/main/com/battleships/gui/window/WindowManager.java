@@ -114,9 +114,7 @@ public class WindowManager {
         width = widthBuffer.get(0);
         height = heightBuffer.get(0);
 
-        if(width <= 1920 && height <= 1080)
-            GL11.glViewport(0, 0, width, height);
-        //TODO restrict resolution
+        GL11.glViewport(0, 0, width, height);
 
         double currentFrame = GLFW.glfwGetTime();
         deltaTime = currentFrame - lastFrame;
@@ -145,7 +143,6 @@ public class WindowManager {
      */
     static public void setCallbacks(Camera camera, WaterFrameBuffers wFbo){
         GLFW.glfwSetMouseButtonCallback(window, GameManager.testClick);
-        //TODO set ingame clickcallback so that if on no gui, it gets checked if on playingfield
         GLFW.glfwSetScrollCallback(window, camera.scrollCallback);
         GLFW.glfwSetKeyCallback(window, GameManager.keyCallback);
         GLFW.glfwSetWindowSizeCallback(window, wFbo.sizeCallback);
