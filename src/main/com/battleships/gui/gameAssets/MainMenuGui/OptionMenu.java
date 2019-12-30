@@ -7,6 +7,7 @@ import com.battleships.gui.guis.GuiTexture;
 import com.battleships.gui.main.Inits;
 import com.battleships.gui.renderingEngine.Loader;
 import org.joml.Vector2f;
+import sun.applet.Main;
 
 public class OptionMenu extends Menu {
     private static final int BACK = 0;
@@ -41,7 +42,7 @@ public class OptionMenu extends Menu {
     protected void clickAction() {
         if (super.buttonClicked == BACK){
             super.clearMenu();
-            MainMenuManager.setMenu(new PlayMenu(guiManager,loader));
+            MainMenuManager.setMenu(new MainMenu(guiManager,loader));
         }
 
     }
