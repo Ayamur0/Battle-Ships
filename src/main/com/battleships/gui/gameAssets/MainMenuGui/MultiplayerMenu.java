@@ -10,6 +10,10 @@ import org.joml.Vector2f;
 import org.lwjgl.util.tinyfd.TinyFileDialogs;
 
 public class MultiplayerMenu extends Menu {
+        private static final int HOST = 0;
+        private static final int CLIENT = 1;
+        private static final int BACK = 2;
+
         public MultiplayerMenu(GuiManager guiManager, Loader loader){
         super(guiManager, loader);
 
@@ -46,18 +50,18 @@ public class MultiplayerMenu extends Menu {
     }
     @Override
     protected void clickAction() {
-        if (super.buttonClicked == 0){
+        if (super.buttonClicked == HOST){
             super.clearMenu();
             //TODO Set mode to multiplayer
             MainMenuManager.setMenu(new InGameSettingsMenu(super.guiManager,super.loader,1));
             //TODO Adding host game creation
 
         }
-        if (super.buttonClicked == 1){
+        if (super.buttonClicked == CLIENT){
             String ip = TinyFileDialogs.tinyfd_inputBox("Connect", "Enter ip Address", "");
             //TODO Adding ip thingi (need logic or network for that
         }
-        if (super.buttonClicked == 2) {
+        if (super.buttonClicked == BACK) {
             super.clearMenu();
             MainMenuManager.setMenu(new PlayMenu(guiManager,loader));
         }

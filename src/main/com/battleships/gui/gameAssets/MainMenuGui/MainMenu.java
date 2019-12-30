@@ -13,6 +13,10 @@ import org.lwjgl.glfw.GLFW;
 import javax.swing.*;
 
 public class MainMenu extends Menu {
+    private static final int LOAD = 0;
+    private static final int PLAY = 1;
+    private static final int OPTIONS = 2;
+    private static final int EXIT = 3;
 
     private JFileChooser fc;
 
@@ -63,18 +67,18 @@ public class MainMenu extends Menu {
 
     @Override
     protected void clickAction() {
-        if(buttonClicked == 0) {
+        if(buttonClicked == LOAD) {
             fc.showOpenDialog(null);
         }
-        if(buttonClicked == 1){
+        if(buttonClicked == PLAY){
             super.clearMenu();
             MainMenuManager.setMenu(new PlayMenu(guiManager,loader));
         }
-        if (super.buttonClicked == 2){
+        if (super.buttonClicked == OPTIONS){
             super.clearMenu();
             MainMenuManager.setMenu(new OptionMenu(guiManager,loader));
         }
-        if(buttonClicked == 3){
+        if(buttonClicked == EXIT){
             GLFW.glfwSetWindowShouldClose(WindowManager.getWindow(),true);
         }
     }

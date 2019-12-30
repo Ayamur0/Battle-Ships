@@ -9,6 +9,8 @@ import com.battleships.gui.renderingEngine.Loader;
 import org.joml.Vector2f;
 
 public class OptionMenu extends Menu {
+    private static final int BACK = 0;
+
     public OptionMenu(GuiManager guiManager, Loader loader) {
         super(guiManager, loader);
 
@@ -37,7 +39,7 @@ public class OptionMenu extends Menu {
 
     @Override
     protected void clickAction() {
-        if (super.buttonClicked == 0){
+        if (super.buttonClicked == BACK){
             super.clearMenu();
             MainMenuManager.setMenu(new PlayMenu(guiManager,loader));
         }

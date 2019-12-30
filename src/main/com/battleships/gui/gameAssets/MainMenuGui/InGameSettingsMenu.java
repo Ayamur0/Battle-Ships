@@ -11,6 +11,8 @@ import com.battleships.gui.renderingEngine.Loader;
 import org.joml.Vector2f;
 
 public class InGameSettingsMenu extends Menu {
+    private static final int FIGHT = 0;
+    private static final int BACK = 1;
     protected int gameMode; //0 Singleplayer, 1 Multiplayer, 2 Ai VS Ai;
 
     protected Slider playingFieldSize;
@@ -94,14 +96,14 @@ public class InGameSettingsMenu extends Menu {
     @Override
     protected void clickAction() {
         if(gameMode == 0){
-            if (super.buttonClicked == 0){
+            if (super.buttonClicked == FIGHT){
                 super.clearMenu();
                 playingFieldSize.remove();
                 difficulty1.remove();
                 //Inits.setGlobalGameState(1);
                 //TODO set difficulty and size for offline game(need logic for that)
             }
-            if (super.buttonClicked == 1){
+            if (super.buttonClicked == BACK){
                 super.clearMenu();
                 playingFieldSize.remove();
                 difficulty1.remove();
@@ -109,7 +111,7 @@ public class InGameSettingsMenu extends Menu {
             }
         }
         else if(gameMode == 1){
-            if (super.buttonClicked == 0){
+            if (super.buttonClicked == FIGHT){
                 super.clearMenu();
                 playingFieldSize.remove();
                 difficulty1.remove();
@@ -118,7 +120,7 @@ public class InGameSettingsMenu extends Menu {
                 //TODO set difficulty and size for Multiplayer game(need logic for that)
                 //TODO add Connection overlay
             }
-            if (super.buttonClicked == 1){
+            if (super.buttonClicked == BACK){
                 super.clearMenu();
                 playingFieldSize.remove();
                 difficulty1.remove();
@@ -126,7 +128,7 @@ public class InGameSettingsMenu extends Menu {
             }
         }
         else if(gameMode == 2){
-            if (super.buttonClicked == 0){
+            if (super.buttonClicked == FIGHT){
                 super.clearMenu();
                 playingFieldSize.remove();
                 difficulty1.remove();
@@ -135,7 +137,7 @@ public class InGameSettingsMenu extends Menu {
                 //TODO set difficulty and size for offline game(need logic for that)
                 //TODO add Connection overlay
             }
-            if (super.buttonClicked == 1){
+            if (super.buttonClicked == BACK){
                 super.clearMenu();
                 playingFieldSize.remove();
                 difficulty1.remove();

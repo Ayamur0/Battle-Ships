@@ -9,6 +9,10 @@ import com.battleships.gui.renderingEngine.Loader;
 import org.joml.Vector2f;
 
 public class PlayMenu extends Menu {
+    private static final int AIVSAI = 0;
+    private static final int SINGLEPLAYER = 1;
+    private static final int MULTIPLAYER = 2;
+    private static final int BACK = 3;
 
     public PlayMenu(GuiManager guiManager, Loader loader) {
         super(guiManager, loader);
@@ -54,20 +58,20 @@ public class PlayMenu extends Menu {
 
     @Override
     protected void clickAction() {
-        if(buttonClicked == 0) {
+        if(buttonClicked == AIVSAI) {
             super.clearMenu();
             MainMenuManager.setMenu(new AiVsAiMenu(guiManager,loader));
             //TODO open ai vs ai Settings
         }
-        if(buttonClicked == 1){
+        if(buttonClicked == SINGLEPLAYER){
             super.clearMenu();
             MainMenuManager.setMenu(new InGameSettingsMenu(guiManager,loader,0));
         }
-        if (super.buttonClicked == 2){
+        if (super.buttonClicked == MULTIPLAYER){
             super.clearMenu();
             MainMenuManager.setMenu(new MultiplayerMenu(guiManager,loader));
         }
-        if (super.buttonClicked == 3){
+        if (super.buttonClicked == BACK){
             super.clearMenu();
             MainMenuManager.setMenu(new MainMenu(guiManager,loader));
         }

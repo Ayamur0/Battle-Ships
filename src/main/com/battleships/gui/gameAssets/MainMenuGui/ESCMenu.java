@@ -12,6 +12,10 @@ import org.joml.Vector2f;
 import org.lwjgl.glfw.GLFW;
 
 public class ESCMenu extends Menu {
+    private static final int SAVE = 0;
+    private static final int RESUME = 1;
+    private static final int BACK = 2;
+    private static final int EXIT = 3;
     public ESCMenu(GuiManager guiManager, Loader loader) {
         super(guiManager, loader);
 
@@ -65,18 +69,18 @@ public class ESCMenu extends Menu {
 
     @Override
     protected void clickAction() {
-        if(buttonClicked == 0) {
+        if(buttonClicked == SAVE) {
             //TODO adding save thing
         }
-        if(buttonClicked == 1){
+        if(buttonClicked == RESUME){
             super.clearMenu();
             //TODO check with tim
         }
-        if (super.buttonClicked == 2){
+        if (super.buttonClicked == BACK){
             super.clearMenu();
             MainMenuManager.setMenu(new MainMenu(guiManager,loader));
         }
-        if(buttonClicked == 3){
+        if(buttonClicked == EXIT){
             GLFW.glfwSetWindowShouldClose(WindowManager.getWindow(),true);
         }
     }
