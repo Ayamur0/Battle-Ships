@@ -24,6 +24,7 @@ public abstract class Menu extends GuiClickCallback {
     protected FontType font;
 
     protected static int texture;
+    protected static int scrollBackground;
     protected Vector3f outlineColor;
 
     protected List<GuiTexture> buttons = new ArrayList<>();
@@ -40,6 +41,8 @@ public abstract class Menu extends GuiClickCallback {
             this.font=GameManager.getPirateFont();
         if (texture == 0)
             texture = loader.loadTexture("WoodButton.png");
+        if (scrollBackground == 0)
+            scrollBackground = loader.loadTexture("paperBackground.png");
         this.outlineColor = new Vector3f(1.0f, 0.0f, 0.0f);
 
         this.buttonSize = new Vector2f(0.16f, 0.12f);
@@ -48,6 +51,9 @@ public abstract class Menu extends GuiClickCallback {
     }
 
     protected void CreateButtonTextures(int anzahl){
+        GuiTexture test = new GuiTexture(scrollBackground,new Vector2f(0.5f,0.6f),new Vector2f(0.3f,0.75f));
+        //TODO Change scale and position
+        GameManager.getGuis().add(test);
         buttons.add(new GuiTexture(texture, standardButtonPos, buttonSize));
         for (int i = 0;i < anzahl-1; i++){
             buttons.add(new GuiTexture(texture,new Vector2f(buttons.get(i).getPositions().x,buttons.get(i).getPositions().y+buttonGap),buttonSize));

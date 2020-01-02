@@ -20,6 +20,8 @@ public class MenuTest {
 
     public static void main(String[] args) {
         GameManager.init();
+        Loader loader= new Loader();
+
 
         while (!GLFW.glfwWindowShouldClose(WindowManager.getWindow())){
             if (GameManager.getLoading()){
