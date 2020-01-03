@@ -49,6 +49,7 @@ public class ShipSelector extends GuiClickCallback {
     private int[] shipCounts;
     /**
      * Used to determine which button was the last one that was clicked.
+     * ButtonNumbers correspond to ship sizes.
      */
     private int buttonNumber;
     /**

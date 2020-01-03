@@ -22,6 +22,7 @@ public class SchiffeVersenken {
         TestLogic.init(20);
         GameManager.init();
         GameManager.loadIngameScene();
+        WindowManager.destroyLoadingScreen();
 
         // *******************GUI initialization*******************
 
