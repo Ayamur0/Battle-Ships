@@ -6,14 +6,27 @@ import com.battleships.gui.gameAssets.GameManager;
 import com.battleships.gui.guis.GuiManager;
 import com.battleships.gui.guis.GuiTexture;
 import com.battleships.gui.guis.Slider;
-import com.battleships.gui.main.Inits;
 import com.battleships.gui.renderingEngine.Loader;
 import org.joml.Vector2f;
 
+/**
+ * Setting menu for the Ai VS Ai game mode
+ *
+ * @author Sascha Mößle
+ */
 public class AiVsAiMenu extends InGameSettingsMenu {
+    /**
+     * Creates the Ai Vs Ai menu
+     * @param guiManager GuiManager that should handle the click function of these guis.
+     * @param loader Loader needed to load textures
+     */
     public AiVsAiMenu(GuiManager guiManager, Loader loader) {
         super(guiManager, loader,2);
     }
+
+    /**
+     * Creates the {@link Slider}, adds {@link GUIText}as labels and adds the {@link GuiTexture} for the buttons.
+     */
     @Override
     protected void createMenu(){
 
@@ -40,6 +53,10 @@ public class AiVsAiMenu extends InGameSettingsMenu {
         GameManager.getGuis().addAll(buttons);
         super.createClickable();
     }
+
+    /**
+     * Refreshes the {@link GUIText} that show the Value from the {@link Slider} of the Sliders in the current Menu
+     */
     @Override
     public void RefreshSliderValue(){
         String difficultyName = "";

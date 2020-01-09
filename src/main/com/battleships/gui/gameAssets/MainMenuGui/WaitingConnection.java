@@ -4,7 +4,6 @@ import com.battleships.gui.fontMeshCreator.GUIText;
 import com.battleships.gui.gameAssets.GameManager;
 import com.battleships.gui.guis.GuiManager;
 import com.battleships.gui.guis.GuiTexture;
-import com.battleships.gui.main.Inits;
 import com.battleships.gui.renderingEngine.Loader;
 import org.joml.Vector2f;
 
