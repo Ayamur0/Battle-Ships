@@ -29,20 +29,21 @@ public class AiVsAiMenu extends InGameSettingsMenu {
      */
     @Override
     protected void createMenu(){
+        //TODO make menu great again
 
         super.playingFieldSize = new Slider(loader.loadTexture("Brick.jpg"), loader.loadTexture("Brick.jpg"), 5, 30,
-                15, super.sliderSize, new Vector2f(super.standardButtonPos.x,super.standardButtonPos.y-0.15f), guiManager, GameManager.getGuis());
+                15, super.sliderSize, new Vector2f(super.standardButtonPos.x,super.standardButtonPos.y), guiManager, GameManager.getGuis());
         super.difficulty1 = new Slider(loader.loadTexture("Brick.jpg"), loader.loadTexture("Brick.jpg"), 1, 3,
                 2, super.sliderSize,new Vector2f(playingFieldSize.getPositions().x,playingFieldSize.getPositions().y+buttonGap), guiManager, GameManager.getGuis());
         super.difficulty2 = new Slider(loader.loadTexture("Brick.jpg"), loader.loadTexture("Brick.jpg"), 1, 3,
                 2, super.sliderSize,new Vector2f(difficulty1.getPositions().x, difficulty1.getPositions().y+buttonGap), guiManager, GameManager.getGuis());
 
-        super.guiTexts.add(new GUIText("Size",2.5f, font,new Vector2f(playingFieldSize.getPositions().x-0.14f,playingFieldSize.getPositions().y) , 0.12f, true, outlineColor,0.0f, 0.1f,outlineColor, new Vector2f()));
-        super.guiTexts.add(new GUIText(String.format("%d", playingFieldSize.getValueAsInt()),2.5f, font, new Vector2f(playingFieldSize.getPositions().x+0.16f,playingFieldSize.getPositions().y), 0.12f, true, outlineColor,0.0f, 0.1f,outlineColor, new Vector2f()));
-        super.guiTexts.add(new GUIText("Difficulty AI 1",2.5f, font, new Vector2f(difficulty1.getPositions().x-0.185f, difficulty1.getPositions().y), 0.16f, true, outlineColor,0.0f, 0.1f,outlineColor, new Vector2f()));
-        super.guiTexts.add(new GUIText("Normal",2.5f, font, new Vector2f(difficulty1.getPositions().x+0.16f, difficulty1.getPositions().y), 0.12f, true, outlineColor,0.0f, 0.1f,outlineColor, new Vector2f()));
-        super.guiTexts.add(new GUIText("Difficulty AI 2",2.5f, font, new Vector2f(difficulty2.getPositions().x-0.185f,difficulty2.getPositions().y), 0.16f, true, outlineColor,0.0f, 0.1f,outlineColor, new Vector2f()));
-        super.guiTexts.add(new GUIText("Normal",2.5f, font, new Vector2f(difficulty2.getPositions().x+0.16f,difficulty2.getPositions().y), 0.12f, true, outlineColor,0.0f, 0.1f,outlineColor, new Vector2f()));
+        super.guiTexts.add(new GUIText("Size: "+playingFieldSize.getValueAsInt(),2.5f, font,new Vector2f(playingFieldSize.getPositions().x,playingFieldSize.getPositions().y-0.06f) , 0.12f, true, outlineColor,0.0f, 0.1f,outlineColor, new Vector2f()));
+        //super.guiTexts.add(new GUIText(String.format("%d", playingFieldSize.getValueAsInt()),2.5f, font, new Vector2f(playingFieldSize.getPositions().x+0.16f,playingFieldSize.getPositions().y), 0.12f, true, outlineColor,0.0f, 0.1f,outlineColor, new Vector2f()));
+        super.guiTexts.add(new GUIText("Difficulty AI 1: Normal",2.5f, font, new Vector2f(difficulty1.getPositions().x, difficulty1.getPositions().y-0.06f), 0.3f, true, outlineColor,0.0f, 0.1f,outlineColor, new Vector2f()));
+        //super.guiTexts.add(new GUIText("Normal",2.5f, font, new Vector2f(difficulty1.getPositions().x+0.16f, difficulty1.getPositions().y), 0.12f, true, outlineColor,0.0f, 0.1f,outlineColor, new Vector2f()));
+        super.guiTexts.add(new GUIText("Difficulty AI 2: Normal",2.5f, font, new Vector2f(difficulty2.getPositions().x,difficulty2.getPositions().y-0.06f), 0.3f, true, outlineColor,0.0f, 0.1f,outlineColor, new Vector2f()));
+        //super.guiTexts.add(new GUIText("Normal",2.5f, font, new Vector2f(difficulty2.getPositions().x+0.16f,difficulty2.getPositions().y), 0.12f, true, outlineColor,0.0f, 0.1f,outlineColor, new Vector2f()));
 
         buttons.add(new GuiTexture(texture,new Vector2f(difficulty2.getPositions().x,difficulty2.getPositions().y+buttonGap),buttonSize));
         buttons.add(new GuiTexture(texture,new Vector2f(buttons.get(0).getPositions().x,buttons.get(0).getPositions().y+buttonGap),buttonSize));
@@ -61,8 +62,8 @@ public class AiVsAiMenu extends InGameSettingsMenu {
     public void RefreshSliderValue(){
         String difficultyName = "";
 
-        super.guiTexts.get(1).remove();
-        super.guiTexts.get(1).setTextString(String.format("%d", playingFieldSize.getValueAsInt()));
+        super.guiTexts.get(0).remove();
+        super.guiTexts.get(0).setTextString("Size: "+playingFieldSize.getValueAsInt());
 
 
         switch (difficulty1.getValueAsInt()){
@@ -73,8 +74,8 @@ public class AiVsAiMenu extends InGameSettingsMenu {
             case 3: difficultyName = "Hard";
                 break;
         }
-        super.guiTexts.get(3).remove();
-        super.guiTexts.get(3).setTextString(difficultyName);
+        super.guiTexts.get(1).remove();
+        super.guiTexts.get(1).setTextString("Difficulty AI 1: "+difficultyName);
         switch (difficulty2.getValueAsInt()){
             case 1: difficultyName = "Easy";
                 break;
@@ -83,10 +84,10 @@ public class AiVsAiMenu extends InGameSettingsMenu {
             case 3: difficultyName = "Hard";
                 break;
         }
-        super.guiTexts.get(5).remove();
-        super.guiTexts.get(5).setTextString(difficultyName);
+        super.guiTexts.get(2).remove();
+        super.guiTexts.get(2).setTextString("Difficulty AI 2: "+difficultyName);
+        TextMaster.loadText(super.guiTexts.get(0));
         TextMaster.loadText(super.guiTexts.get(1));
-        TextMaster.loadText(super.guiTexts.get(3));
-        TextMaster.loadText(super.guiTexts.get(5));
+        TextMaster.loadText(super.guiTexts.get(2));
     }
 }

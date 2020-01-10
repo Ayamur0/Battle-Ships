@@ -30,13 +30,16 @@ public class WaitingConnection extends Menu{
     public WaitingConnection(GuiManager guiManager, Loader loader) {
         super(guiManager, loader);
 
+
         buttons.add(new GuiTexture(super.texture,new Vector2f(0.5f,0.7f),super.buttonSize));
 
         super.guiTexts.add(new GUIText("Waiting for Connection",2.5f, font, new Vector2f(0.5f,0.5f), 0.5f, true, outlineColor,0.0f, 0.1f,outlineColor, new Vector2f()));
-        super.guiTexts.add(new GUIText("Cancel",2.5f, font, buttons.get(0).getPositions(), 0.5f, true, outlineColor,0.0f, 0.1f,outlineColor, new Vector2f()));
+        super.guiTexts.add(new GUIText("Cancel",2.5f, font, new Vector2f(buttons.get(0).getPositions()), 0.12f, true, outlineColor,0.0f, 0.1f,outlineColor, new Vector2f()));
         super.createClickable();
 
         GameManager.getGuis().addAll(buttons);
+
+        SetTextColor();
 
     }
 

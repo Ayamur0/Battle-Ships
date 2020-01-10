@@ -71,11 +71,10 @@ public class OptionMenu extends InGameSettingsMenu {
         }
         volume = new Slider(loader.loadTexture("Brick.jpg"), loader.loadTexture("Brick.jpg"), 0, 100,
                 saveVolume, new Vector2f(0.2f, 0.01f), super.standardButtonPos, guiManager, GameManager.getGuis());
-        super.guiTexts.add(new GUIText("Volume",2.5f, font,new Vector2f(volume.getPositions().x-0.14f,volume.getPositions().y) , 0.12f, true, outlineColor,0.0f, 0.1f,outlineColor, new Vector2f()));
-        super.guiTexts.add(new GUIText(String.format("%d", volume.getValueAsInt()),2.5f, font, new Vector2f(volume.getPositions().x+0.16f,volume.getPositions().y), 0.12f, true, outlineColor,0.0f, 0.1f,outlineColor, new Vector2f()));
+        super.guiTexts.add(new GUIText("Volume: "+volume.getValueAsInt(),2.5f, font,new Vector2f(volume.getPositions().x,volume.getPositions().y-0.06f) , 0.12f, true, outlineColor,0.0f, 0.1f,outlineColor, new Vector2f()));
 
-        super.buttons.add(new GuiTexture(texture,new Vector2f(volume.getPositions().x,volume.getPositions().y+buttonGap),new Vector2f(0.1f,0.1f)));
-        super.guiTexts.add(new GUIText("Potato mode",2.5f, font,new Vector2f(volume.getPositions().x-0.14f,volume.getPositions().y+buttonGap) , 0.12f, true, outlineColor,0.0f, 0.1f,outlineColor, new Vector2f()));
+        super.buttons.add(new GuiTexture(texture,new Vector2f(volume.getPositions().x+0.06f,volume.getPositions().y+buttonGap),new Vector2f(0.1f,0.1f)));
+        super.guiTexts.add(new GUIText("Potato mode",2.5f, font,new Vector2f(buttons.get(0).getPositions().x-0.14f,buttons.get(0).getPositions().y) , 0.12f, true, outlineColor,0.0f, 0.1f,outlineColor, new Vector2f()));
 
 
 
@@ -101,12 +100,12 @@ public class OptionMenu extends InGameSettingsMenu {
     @Override
     public void RefreshSliderValue(){
 
-        super.guiTexts.get(1).remove();
-        super.guiTexts.get(1).setTextString(String.format("%d", volume.getValueAsInt()));
+        super.guiTexts.get(0).remove();
+        super.guiTexts.get(0).setTextString("Volume: "+volume.getValueAsInt());
 
         saveVolume = volume.getValueAsInt();
 
-        TextMaster.loadText(super.guiTexts.get(1));
+        TextMaster.loadText(super.guiTexts.get(0));
     }
     /**
      * Indicates if the {@link Slider} is moving

@@ -6,6 +6,7 @@ import com.battleships.gui.guis.GuiTexture;
 import com.battleships.gui.renderingEngine.Loader;
 import org.joml.Vector2f;
 import org.lwjgl.util.tinyfd.TinyFileDialogs;
+import sun.applet.Main;
 
 /**
  * Menu to choose if you host a game or connect to a game
@@ -35,8 +36,6 @@ public class MultiplayerMenu extends Menu {
         super(guiManager, loader);
 
         this.createMenu();
-
-        SetTextColor();
 
         CreateTextLabels();
     }
@@ -93,6 +92,8 @@ public class MultiplayerMenu extends Menu {
         if (super.buttonClicked == CLIENT){
             String ip = TinyFileDialogs.tinyfd_inputBox("Connect", "Enter ip Address", "");
             //TODO Adding ip thingi (need logic or network for that
+            super.clearMenu();
+            MainMenuManager.setMenu(new WaitingConnection(guiManager,loader));
         }
         if (super.buttonClicked == BACK) {
             super.clearMenu();

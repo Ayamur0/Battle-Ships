@@ -23,6 +23,7 @@ public class MainMenuManager {
     public static void setMenu(Menu menu){
         MainMenuManager.menu = menu;
     }
+    public static Menu getMenu(){return MainMenuManager.menu;}
 
     public MainMenuManager(GuiManager guiManager, Loader loader, WaterFrameBuffers wFbo) {
         MainMenuManager.guiManager = guiManager;

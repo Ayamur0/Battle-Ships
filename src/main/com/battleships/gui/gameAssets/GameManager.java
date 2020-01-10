@@ -7,6 +7,7 @@ import com.battleships.gui.entities.Light;
 import com.battleships.gui.fontMeshCreator.FontType;
 import com.battleships.gui.fontRendering.TextMaster;
 import com.battleships.gui.gameAssets.MainMenuGui.ESCMenu;
+import com.battleships.gui.gameAssets.MainMenuGui.InGameSettingsMenu;
 import com.battleships.gui.gameAssets.MainMenuGui.MainMenuManager;
 import com.battleships.gui.gameAssets.grids.GridManager;
 import com.battleships.gui.gameAssets.grids.ShipManager;
@@ -335,6 +336,11 @@ public class GameManager {
         renderEntities();
         blur.unbindFrameBuffer();
         prepareWater();
+        if (MainMenuManager.getMenu() instanceof InGameSettingsMenu){
+            if (((InGameSettingsMenu) MainMenuManager.getMenu()).isRunning()){
+                ((InGameSettingsMenu) MainMenuManager.getMenu()).RefreshSliderValue();
+            }
+        }
         blur.bindFrameBuffer();
         waterRenderer.render(waterTiles, camera, light);
         renderParticles();

@@ -92,9 +92,7 @@ public abstract class Menu extends GuiClickCallback {
      * @param anzahl how many button textures should be created
      */
     protected void CreateButtonTextures(int anzahl){
-        GuiTexture scroll = new GuiTexture(scrollBackground,new Vector2f(0.5f,0.54f),new Vector2f(0.65f,1f));
-        //TODO Change scale and position
-        GameManager.getGuis().add(scroll);
+        addBackground();
         buttons.add(new GuiTexture(texture, standardButtonPos, buttonSize));
         for (int i = 0;i < anzahl-1; i++){
             buttons.add(new GuiTexture(texture,new Vector2f(buttons.get(i).getPositions().x,buttons.get(i).getPositions().y+buttonGap),buttonSize));
@@ -102,6 +100,14 @@ public abstract class Menu extends GuiClickCallback {
         GameManager.getGuis().addAll(buttons);
     }
 
+    /**
+     * adds a {@link GuiTexture} behind the buttons as background
+     */
+    protected void addBackground(){
+        GuiTexture scroll = new GuiTexture(scrollBackground,new Vector2f(0.5f,0.54f),new Vector2f(0.36f,1f));
+        //TODO Change scale and position
+        GameManager.getGuis().add(scroll);
+    }
     /**
      * adds all labels the the {@link TextMaster} to render
      */

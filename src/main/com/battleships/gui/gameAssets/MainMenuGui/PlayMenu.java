@@ -38,8 +38,6 @@ public class PlayMenu extends Menu {
 
         this.createMenu();
 
-        SetTextColor();
-
         CreateTextLabels();
     }
     /**

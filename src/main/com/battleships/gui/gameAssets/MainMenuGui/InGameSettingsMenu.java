@@ -9,6 +9,8 @@ import com.battleships.gui.guis.Slider;
 import com.battleships.gui.renderingEngine.Loader;
 import org.joml.Vector2f;
 
+import javax.xml.soap.Text;
+
 /**
  * Contains all functions needed for an settings menu
  *
@@ -23,6 +25,10 @@ public class InGameSettingsMenu extends Menu {
      * Constant value for back button
      */
     private static final int BACK = 1;
+    /**
+     * The offset used too set the {@link GUIText} above the {@link Slider}
+     */
+    private float sliderOffset = 0.04f;
     /**
      * Indicates if the settings are for Singleplayer, Multiplayer or Ai VS Ai
      */
@@ -59,9 +65,9 @@ public class InGameSettingsMenu extends Menu {
 
         this.createMenu();
 
-        SetTextColor();
-
         CreateTextLabels();
+
+        super.guiTexts.get(0).setColor(0f,0f,0f);
     }
 
     /**
@@ -70,9 +76,10 @@ public class InGameSettingsMenu extends Menu {
     public void RefreshSliderValue(){
         String difficultyName = "";
 
-        super.guiTexts.get(1).remove();
-        super.guiTexts.get(1).setTextString(String.format("%d", playingFieldSize.getValueAsInt()));
-
+        //super.guiTexts.get(1).remove();
+        //super.guiTexts.get(1).setTextString(String.format("%d", playingFieldSize.getValueAsInt()));
+        super.guiTexts.get(0).remove();
+        super.guiTexts.get(0).setTextString("Size: "+playingFieldSize.getValueAsInt());
 
         switch (difficulty1.getValueAsInt()){
             case 1: difficultyName = "Easy";
@@ -82,10 +89,14 @@ public class InGameSettingsMenu extends Menu {
             case 3: difficultyName = "Hard";
                 break;
         }
-        super.guiTexts.get(3).remove();
-        super.guiTexts.get(3).setTextString(difficultyName);
+        super.guiTexts.get(1).remove();
+        super.guiTexts.get(1).setTextString("Difficulty: "+difficultyName);
+        TextMaster.loadText(super.guiTexts.get(0));
         TextMaster.loadText(super.guiTexts.get(1));
-        TextMaster.loadText(super.guiTexts.get(3));
+        //super.guiTexts.get(3).remove();
+        //super.guiTexts.get(3).setTextString(difficultyName);
+        //TextMaster.loadText(super.guiTexts.get(1));
+        //TextMaster.loadText(super.guiTexts.get(3));
     }
 
     /**
@@ -110,10 +121,8 @@ public class InGameSettingsMenu extends Menu {
         difficulty1 = new Slider(loader.loadTexture("Brick.jpg"), loader.loadTexture("Brick.jpg"), 1, 3,
                 2, sliderSize,new Vector2f(playingFieldSize.getPositions().x,playingFieldSize.getPositions().y+buttonGap), guiManager, GameManager.getGuis());
 
-        super.guiTexts.add(new GUIText("Size",2.5f, font,new Vector2f(playingFieldSize.getPositions().x-0.14f,playingFieldSize.getPositions().y) , 0.12f, true, outlineColor,0.0f, 0.1f,outlineColor, new Vector2f()));
-        super.guiTexts.add(new GUIText(String.format("%d", playingFieldSize.getValueAsInt()),2.5f, font, new Vector2f(playingFieldSize.getPositions().x+0.16f,playingFieldSize.getPositions().y), 0.12f, true, outlineColor,0.0f, 0.1f,outlineColor, new Vector2f()));
-        super.guiTexts.add(new GUIText("Difficulty",2.5f, font, new Vector2f(difficulty1.getPositions().x-0.165f, difficulty1.getPositions().y), 0.12f, true, outlineColor,0.0f, 0.1f,outlineColor, new Vector2f()));
-        super.guiTexts.add(new GUIText("Normal",2.5f, font, new Vector2f(difficulty1.getPositions().x+0.16f, difficulty1.getPositions().y), 0.12f, true, outlineColor,0.0f, 0.1f,outlineColor, new Vector2f()));
+        super.guiTexts.add(new GUIText("Size: "+playingFieldSize.getValueAsInt(),2.5f, font,new Vector2f(playingFieldSize.getPositions().x,playingFieldSize.getPositions().y-0.04f) , 0.12f, true, outlineColor,0.0f, 0.1f,outlineColor, new Vector2f()));
+        super.guiTexts.add(new GUIText("Difficulty: Normal",2.5f, font, new Vector2f(difficulty1.getPositions().x, difficulty1.getPositions().y-0.04f), 0.4f, true, outlineColor,0.0f, 0.1f,outlineColor, new Vector2f()));
 
         buttons.add(new GuiTexture(texture,new Vector2f(difficulty1.getPositions().x, difficulty1.getPositions().y+buttonGap),buttonSize));
         buttons.add(new GuiTexture(texture,new Vector2f(buttons.get(0).getPositions().x,buttons.get(0).getPositions().y+buttonGap),buttonSize));

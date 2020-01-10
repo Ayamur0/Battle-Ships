@@ -50,8 +50,6 @@ public class MainMenu extends Menu {
 
         this.createMenu();
 
-        SetTextColor();
-
         CreateTextLabels();
     }
 
