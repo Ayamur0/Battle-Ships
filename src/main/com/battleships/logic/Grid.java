@@ -181,7 +181,7 @@ public class Grid {
     }
 
     /**
-     * Blocks all empty cell around the specified cell. Can be used to mark cell around sunk ship with water
+     * Blocks all empty cell around the specified cell. Can be used to mark cell around sunk ship with water (SHOT block type needed)
      * or to block cell around a placed ship, so no other ship can be placed there.
      * @param x x index of cell around which all cells should be blocked (1-size)
      * @param y y index of cell around which all cells should be blocked (1-size)
@@ -195,9 +195,9 @@ public class Grid {
         int[] toBlock = {x-1, y-1, x, y-1, x+1, y-1, x-1, y, x+1, y, x-1, y+1, x, y+1, x+1, y+1};
         for(int i = 0; i < toBlock.length; i += 2){
             if(toBlock[i] >= 0 && toBlock[i] < grid.length && toBlock[i+1] >= 0 && toBlock[i+1] < grid.length && grid[toBlock[i+1]][toBlock[i]].state != SHIP) {
-                grid[toBlock[i + 1]][toBlock[i]].state = blockType;
                 if(visible && grid[toBlock[i+1]][toBlock[i]].state != SHOT)
                     GameManager.placeMarker(false, new Vector2i(toBlock[i]+1, toBlock[i+1]+1), GameManager.getLogic().getGridID(this));
+                grid[toBlock[i + 1]][toBlock[i]].state = blockType;
             }
         }
     }
@@ -211,8 +211,7 @@ public class Grid {
     private void sinkShip(int x, int y){
         shipsAlive[getCell(x,y).ship.getSize() - 2]--;
         for(Cell c : getCell(x,y).ship.getOccupiedCells()){
-            blockFieldsAroundIndex(c.y+1, c.x+1, WATER, true);
-            GameManager.placeMarker(false, new Vector2i(x,y), owner);
+            blockFieldsAroundIndex(c.y+1, c.x+1, SHOT, true);
         }
     }
 

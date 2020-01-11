@@ -67,19 +67,19 @@ public class FinishGame extends GuiClickCallback {
         Stats stats = GameManager.getLogic().getStats();
         stats.updateStats();
         addBlackText("Time played:", new Vector2f(0.625f, 0.35f));
-        addBlackText(stats.getPlayTime()/60 + ":" + stats.getPlayTime() % 60, new Vector2f(0.825f, 0.35f));
+        addBlackText(stats.getPlayTime()/60 + ":" + (stats.getPlayTime() % 60 < 10 ? "0" + stats.getPlayTime() % 60 : stats.getPlayTime() % 60) , new Vector2f(0.825f, 0.35f));
         addBlackText("Rounds played:", new Vector2f(0.625f, 0.45f));
         addBlackText(""+stats.getRounds(), new Vector2f(0.825f, 0.45f));
         if(won){
             addBlackText("Ships Left alive:", new Vector2f(0.625f, 0.55f));
-            addBlackText(stats.getShipsAlive()+"/"+stats.getMaxShips(), new Vector2f(0.825f, 0.55f));
+            addBlackText(stats.getShipsAlive()+"/"+stats.getMaxShipsSum(), new Vector2f(0.825f, 0.55f));
         }
         else{
             addBlackText("Ships destroyed:", new Vector2f(0.625f, 0.55f));
-            addBlackText(stats.getShipsDestroyed()+"/"+stats.getMaxShips(), new Vector2f(0.825f, 0.55f));
+            addBlackText(stats.getShipsDestroyed()+"/"+stats.getMaxShipsSum(), new Vector2f(0.825f, 0.55f));
         }
         addBlackText("Accuracy", new Vector2f(0.625f, 0.65f));
-        addBlackText(stats.getAccuracy()*100+"%", new Vector2f(0.825f, 0.65f));
+        addBlackText((int)stats.getAccuracy()*100+"%", new Vector2f(0.825f, 0.65f));
     }
 
     /**

@@ -148,6 +148,7 @@ public class Camera {
         position.x = originX + (float)Math.cos(Math.toRadians(yaw + 90))*radius;
         position.z = originZ + (float)Math.sin(Math.toRadians(yaw + 90))*radius;
 
+
         //don't allow to get under terrain
         float terrainHeight = terrain.getHeightOfTerrain(position.x, position.z);
         if(position.y < terrainHeight + 1){
@@ -241,13 +242,13 @@ public class Camera {
      */
     public void setStandardPos(){
         GridManager gridManager = GameManager.getGridManager();
-            radius = Math.abs(350 * ((float) gridManager.getSize() + 1) / GridManager.getMAXSIZE() - Math.abs(gridManager.getOwnGrid().getPosition().z));
-            originZ = gridManager.getOwnGrid().getPosition().z;
-            originX = position.x = (gridManager.getOwnGrid().getPosition().x + gridManager.getOpponentGrid().getPosition().x) / 2f;
-            position.y = 255f * ((float)gridManager.getSize() + 1) / GridManager.getMAXSIZE();
-            position.z = -350 + 0.5f * -350f * (1 - ((float)gridManager.getSize() + 1) / GridManager.getMAXSIZE());
-            pitch = 70;
-            yaw = 0;
+        radius = Math.abs(350 * ((float) gridManager.getSize() + 1) / GridManager.getMAXSIZE() * 0.4f);
+        originZ = gridManager.getOwnGrid().getPosition().z;
+        originX = position.x = (gridManager.getOwnGrid().getPosition().x + gridManager.getOpponentGrid().getPosition().x) / 2f;
+        position.y = 255f * ((float)gridManager.getSize() + 1) / GridManager.getMAXSIZE();
+        position.z = -350 + 0.5f*-350f * (1 - ((float)gridManager.getSize() + 1) / GridManager.getMAXSIZE());
+        pitch = 70;
+        yaw = 0;
     }
 
     /**

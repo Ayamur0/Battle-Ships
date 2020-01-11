@@ -29,10 +29,15 @@ public class Cannonball extends Entity implements Runnable {
      * Angle at which the cannonball gets shot.
      */
     private static final float ANGLE = (float)Math.toRadians(75);
+
     /**
-     * Maximum height the cannonball reaches during the flight (world coordinates).
+     * Maximum height the cannonball is allowed to reach during the flight (world coordinates).
      */
     private static final float MAXHEIGHT = 100;
+    /**
+     * Maximum height the cannonball reaches during the flight with this gridSize (world coordinates).
+     */
+    private float maxheight = 100;
 
     /**
      * Destination of the cannonball in world coordinates.
@@ -101,6 +106,7 @@ public class Cannonball extends Entity implements Runnable {
      * @param destinationField ID of the grid the ball is heading to.
      */
     public void start(Vector2f destination, Vector2f origin, Vector2i destinationCell, int destinationField){
+        maxheight = (float)gridManager.getSize() / GridManager.getMAXSIZE() * MAXHEIGHT;
         flying = true;
         this.destination = destination;
         this.destinationCell = destinationCell;
@@ -172,7 +178,7 @@ public class Cannonball extends Entity implements Runnable {
         x2 = sidewaysDistance;
         y2 = -2.5f;
         x3 = 0.5f * sidewaysDistance;
-        y3 = MAXHEIGHT;
+        y3 = maxheight;
 
         //create matrix left side where one row contains the parabola function of one point
         //parabola function: y = ax^2 + bx + c

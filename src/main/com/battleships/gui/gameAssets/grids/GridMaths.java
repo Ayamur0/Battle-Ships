@@ -81,12 +81,11 @@ public class GridMaths {
      */
     public static Vector2f convertIndextoCoords(Vector2f i, GuiGrid field) {
         int size = gridManager.getSize();
-        float offset = size % 2 == 0 ? 0 : 0.5f;
         Vector2f index = new Vector2f(i.x, i.y);
         index.x -= size / 2f;
         index.y -= size / 2f;
-        index.x = field.getPosition().x + (index.x + offset) * field.getScale() / (size + 1);
-        index.y = field.getPosition().z + (index.y + offset) * field.getScale() / (size + 1);
+        index.x = field.getPosition().x + (index.x) * field.getScale() / (size + 1);
+        index.y = field.getPosition().z + (index.y) * field.getScale() / (size + 1);
         return index;
     }
 
@@ -109,15 +108,15 @@ public class GridMaths {
                 coords.z >  ownGrid.getPosition().z -  ownGrid.getScale() / 2 +  ownGrid.getScale() / (size + 1) &&
                 coords.z <  ownGrid.getPosition().z +  ownGrid.getScale() / 2) {
             field =  GridManager.OWNFIELD;
-            result.x = coords.x -  ownGrid.getPosition().x +  ownGrid.getScale() / 2;
-            result.y = coords.z -  ownGrid.getPosition().z +  ownGrid.getScale() / 2;
+            result.x = coords.x -  ownGrid.getPosition().x +  ownGrid.getScale() / 2f;
+            result.y = coords.z -  ownGrid.getPosition().z +  ownGrid.getScale() / 2f;
         } else if (coords.x > opponentGrid.getPosition().x -  opponentGrid.getScale() / 2 +  opponentGrid.getScale() / (size + 1) &&
                 coords.x <  opponentGrid.getPosition().x +  opponentGrid.getScale() / 2 &&
                 coords.z >  opponentGrid.getPosition().z -  opponentGrid.getScale() / 2  +  opponentGrid.getScale() / (size + 1) &&
                 coords.z <  opponentGrid.getPosition().z +  opponentGrid.getScale() / 2) {
             field = GridManager.OPPONENTFIELD;
-            result.x = coords.x -  opponentGrid.getPosition().x +  opponentGrid.getScale() / 2;
-            result.y = coords.z -  opponentGrid.getPosition().z +  opponentGrid.getScale() / 2;
+            result.x = coords.x -  opponentGrid.getPosition().x +  opponentGrid.getScale() / 2f;
+            result.y = coords.z -  opponentGrid.getPosition().z +  opponentGrid.getScale() / 2f;
         } else
             return null;
 

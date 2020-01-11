@@ -5,6 +5,7 @@ import com.battleships.gui.gameAssets.GameManager;
 import com.battleships.gui.gameAssets.grids.GridManager;
 import com.battleships.gui.gameAssets.grids.ShipManager;
 import com.battleships.logic.AI.AIEasy;
+import com.battleships.logic.AI.AIHard;
 import org.joml.Vector2i;
 
 import java.util.Random;
@@ -44,7 +45,7 @@ public class LogicManager {
     public void init(Settings settings) {
         playerGrid = new Grid(settings.getSize(), GridManager.OWNFIELD);
         opponentGrid = new Grid(settings.getSize(), GridManager.OPPONENTFIELD);
-        turnHandler.setOpponentAI(new AIEasy(1, settings.getSize(), this));
+        turnHandler.setOpponentAI(new AIHard(1, settings.getSize(), this));
         stats = new Stats();
         stats.init();
     }
@@ -72,14 +73,20 @@ public class LogicManager {
     /**
      * Tests if the game is over.
      * If game is over executes finishGame method to end the game.
+     * @return {@code true} if the game is finished {@code false} else.
      */
-    public void testEndOfGame(){
+    public boolean testEndOfGame(){
         int[] shipsAlive = playerGrid.getShipsAlive();
-        if(shipsAlive[0]+shipsAlive[1]+shipsAlive[2]+shipsAlive[3]==0)
+        if(shipsAlive[0]+shipsAlive[1]+shipsAlive[2]+shipsAlive[3]==0) {
             GameManager.finishGame(false);
+            return true;
+        }
         shipsAlive = opponentGrid.getShipsAlive();
-        if(shipsAlive[0]+shipsAlive[1]+shipsAlive[2]+shipsAlive[3]==0)
+        if(shipsAlive[0]+shipsAlive[1]+shipsAlive[2]+shipsAlive[3]==0) {
             GameManager.finishGame(true);
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -115,7 +122,7 @@ public class LogicManager {
         int[] shipsToPlace = grid.getShipsAlive();
         int size = grid.getSize();
 
-        for(int i = 2; i <= 5; i++){
+        for(int i = 5; i >= 2; i--){
             for(int j = 0; j < shipsToPlace[i-2]; j++){
                 int x = random.nextInt(size)+1;
                 int y = random.nextInt(size)+1;
@@ -246,8 +253,9 @@ public class LogicManager {
     public void advanceTurn(){
         if(!isPlayerTurn())
             stats.addRound();
-        testEndOfGame();
         GameManager.updateAliveShip();
+        if(testEndOfGame())
+            return;
         turnHandler.advanceTurnOrder();
     }
 
@@ -255,6 +263,9 @@ public class LogicManager {
      * Same player is allowed to shoot again, call if player hit a ship.
      */
     public void repeatTurn(){
+        GameManager.updateAliveShip();
+        if(testEndOfGame())
+            return;
         turnHandler.makeAiTurns();
     }
 

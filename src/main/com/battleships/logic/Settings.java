@@ -11,13 +11,18 @@ public class Settings {
     private static final int EASY = 0, MEDIUM = 1, HARD = 2;
 
     /**
-     * Level the ai's in the current game use.
+     * Level the ai for the player in the current game use.
      */
-    private int aiLevel;
+    private int aiLevelP;
+
+    /**
+     * Level the ai for the opponent in the current game use.
+     */
+    private int aiLevelO;
     /**
      * Size the grid of the next game should have.
      */
-    private int size = 30;
+    private int size = 12;
     /**
      * {@code true} if the game is played online, {@code false} if the game is played offline.
      */
@@ -39,18 +44,33 @@ public class Settings {
     }
 
     /**
-     * @return Level the AI's in the current game use.
+     * @return Level the AI of the player in the current game uses.
      */
-    public int getAiLevel() {
-        return aiLevel;
+    public int getAiLevelP() {
+        return aiLevelP;
     }
 
     /**
-     * Sets the level the AI's should use during the next game.
-     * @param aiLevel Level the AI's in the next game should use.
+     * Sets the level the AI for the player should use during the next game.
+     * @param aiLevel Level the AI for the player in the next game should use.
      */
-    public void setAiLevel(int aiLevel) {
-        this.aiLevel = aiLevel;
+    public void setAiLevelP(int aiLevel) {
+        this.aiLevelP = aiLevel;
+    }
+
+    /**
+     * @return Level the AI of the opponent in the current game uses.
+     */
+    public int getAiLevelO() {
+        return aiLevelO;
+    }
+
+    /**
+     * Sets the level the AI for the opponent should use during the next game.
+     * @param aiLevelO Level the AI for the opponent in the next game should use.
+     */
+    public void setAiLevelO(int aiLevelO) {
+        this.aiLevelO = aiLevelO;
     }
 
     /**

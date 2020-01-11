@@ -278,7 +278,7 @@ public class GameManager {
 
         light = new Light(new Vector3f(20000,20000,2000), new Vector3f(1,1,1));
 
-        gridManager =  new GridManager(loader, 30);
+        gridManager =  new GridManager(loader, settings.getSize());
         shipManager = gridManager.getShipManager();
 
         waterTiles.add(new WaterTile(0, 0, -3));

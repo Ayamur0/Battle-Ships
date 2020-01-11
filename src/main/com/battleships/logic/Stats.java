@@ -1,10 +1,8 @@
 package com.battleships.logic;
 
 import com.battleships.gui.gameAssets.GameManager;
-import com.battleships.gui.window.WindowManager;
 import org.lwjgl.glfw.GLFW;
 
-import java.sql.Time;
 import java.util.stream.IntStream;
 
 /**
@@ -33,7 +31,12 @@ public class Stats{
     /**
      * Max amount of ships each player has.
      */
-    private int maxShips;
+    private int maxShipsSum;
+
+    /**
+     * Max amount of ships each player has ordered by size.
+     */
+    private int[] maxShips = new int[4];
     /**
      * Ships of the player that are still alive.
      */
@@ -54,8 +57,9 @@ public class Stats{
     public void init(){
         startTime = (int)GLFW.glfwGetTime();
         rounds = 0;
-        maxShips = IntStream.of(GameManager.getLogic().getEnemyShipsLeft()).sum();
-        shipsAlive = maxShips;
+        maxShipsSum = IntStream.of(GameManager.getLogic().getEnemyShipsLeft()).sum();
+        System.arraycopy(GameManager.getLogic().getEnemyShipsLeft(),0,maxShips,0,4);
+        shipsAlive = maxShipsSum;
         shipsDestroyed = 0;
         accuracy = 1;
     }
@@ -82,11 +86,11 @@ public class Stats{
         endTime = (int)GLFW.glfwGetTime();
         playTime += endTime - startTime;
         shipsAlive = IntStream.of(GameManager.getLogic().getPlayerShipsLeft()).sum();
-        shipsDestroyed = maxShips - IntStream.of(GameManager.getLogic().getEnemyShipsLeft()).sum();
+        shipsDestroyed = maxShipsSum - IntStream.of(GameManager.getLogic().getEnemyShipsLeft()).sum();
         int shipsHit  = 0;
         int[] enemyShips = GameManager.getLogic().getEnemyShipsLeft();
         for (int i = 0; i < enemyShips.length; i++){
-            shipsHit += enemyShips[i] * (i + 2);
+            shipsHit += (maxShips[i] - enemyShips[i]) * (i + 2);
         }
         accuracy = (float) shipsHit / rounds;
     }
@@ -115,8 +119,8 @@ public class Stats{
     /**
      * @return Amount of ships a player had at the beginning.
      */
-    public int getMaxShips() {
-        return maxShips;
+    public int getMaxShipsSum() {
+        return maxShipsSum;
     }
 
     /**
