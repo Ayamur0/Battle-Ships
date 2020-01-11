@@ -1,4 +1,19 @@
 package com.battleships.logic.AI;
 
-public class AIHard implements AI {
+import com.battleships.logic.LogicManager;
+
+public class AIHard extends AI {
+    public AIHard(int team, int gridSize, LogicManager manager) {
+        super(team, gridSize, manager);
+    }
+
+    @Override
+    void makeTurn() {
+
+    }
+
+    @Override
+    public void placeShips() {
+        super.placeShips();
+    }
 }
