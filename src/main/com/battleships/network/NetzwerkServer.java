@@ -22,6 +22,7 @@ public class NetzwerkServer extends Network {
 
 
 
+
     private ServerSocket serverSocket;
     private Socket clientSocket;
 

@@ -14,6 +14,7 @@ public class NetzwerkClient extends Network{
 
 
 
+
     private PrintWriter out;
 
     private Socket clientSocket;
