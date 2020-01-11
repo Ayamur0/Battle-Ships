@@ -124,6 +124,16 @@ public class GridManager {
     }
 
     /**
+     * Changes the size of the grids.
+     * @param loader Loader to load models.
+     * @param size New size on grid should have.
+     */
+    public void resizeGrid(Loader loader, int size){
+        initializeGrids(loader, size);
+        highlighter = new Highlighter(loader, scale / (size + 1), this);
+    }
+
+    /**
      * Adds all entities related to this GridManager to the entity list in the renderer, so they get
      * rendered to the scene. Also renders all fires by creating particles emitted by the particle systems.
      * @param renderer Renderer that the entities should be added to, this renderer needs to render the scene later.
@@ -379,5 +389,58 @@ public class GridManager {
      */
     public List<Entity> getShips() {
         return ships;
+    }
+
+    /**
+     * @return List containing positions of all Fires on the grid grouped by the ships they are on.
+     */
+    public Map<Entity, List<Vector3f>> getBurningFires() {
+        return burningFires;
+    }
+
+    /**
+     * Set the fires on the players grid (when loading a game).
+     * @param burningFires List containing new positions for the fires grouped by ships they are on.
+     */
+    public void setBurningFires(Map<Entity, List<Vector3f>> burningFires) {
+        this.burningFires = burningFires;
+    }
+
+    /**
+     * @return List containing positions of all Firesounds on the grid grouped by the ships they are on.
+     */
+    public Map<Entity, List<Source>> getBurningFireSounds() {
+        return burningFireSounds;
+    }
+
+    /**
+     * Set the firesounds on the players grid (when loading a game).
+     * @param burningFireSounds List containing new positions for the firesounds grouped by ships they are on.
+     */
+    public void setBurningFireSounds(Map<Entity, List<Source>> burningFireSounds) {
+        this.burningFireSounds = burningFireSounds;
+    }
+
+    /**
+     * Set the List for all ships on the players grid (when loading a game).
+     * @param ships List containing all Entities for the ships on the players grid.
+     */
+    public void setShips(List<Entity> ships) {
+        this.ships = ships;
+    }
+
+    /**
+     * @return List containing Entities for all markers on the grids.
+     */
+    public List<Entity> getMarkers() {
+        return markers;
+    }
+
+    /**
+     * Set List containing Entities for the markers on the grids (when loading a game).
+     * @param markers List containing new entities for the markers.
+     */
+    public void setMarkers(List<Entity> markers) {
+        this.markers = markers;
     }
 }

@@ -287,6 +287,15 @@ public class GameManager {
     }
 
     /**
+     * Changes the size of the grids..
+     * @param size New size on grid should have.
+     */
+    public static void resizeGrid(int size){
+        gridManager.resizeGrid(loader,size);
+        camera.setStandardPos();
+    }
+
+    /**
      * Removes everything from the scene.
      */
     public static void clearScene(){

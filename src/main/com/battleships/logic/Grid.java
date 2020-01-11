@@ -8,17 +8,49 @@ import org.joml.Vector2i;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Grids the game is played on.
+ * Contain all necessary logic operations needed for the game.
+ *
+ * @author Tim Staudenmaier
+ */
 public class Grid {
 
+    /**
+     * Constants for states a cell on this grid can be in.
+     */
     public static final int WATER = 0;
+    /**
+     * Constants for states a cell on this grid can be in.
+     */
     public static final int SHIP = 1;
+    /**
+     * Constants for states a cell on this grid can be in.
+     */
     public static final int BLOCKED = 2;
+    /**
+     * Constants for states a cell on this grid can be in.
+     */
     public static final int SHOT = 3;
 
+    /**
+     * Array containing all cells on this grid.
+     */
     private Cell[][] grid;
+    /**
+     * ID of the owner of this grid (contsants in {@link com.battleships.gui.gameAssets.grids.GridManager})
+     */
     private int owner;
+    /**
+     * Array containing amount of ships still alive on this grid, ordered by size from small to large.
+     */
     private int[] shipsAlive;
 
+    /**
+     * Creates a new grid.
+     * @param size Size this grid should have.
+     * @param owner ID of the owner this grid is created for.
+     */
     public Grid (int size, int owner){
         this.owner = owner;
         grid = new Cell[size][size];
@@ -30,6 +62,15 @@ public class Grid {
         shipsAlive = ShipAmountLoader.getShipAmounts(size);
     }
 
+    /**
+     * Can be used to test if a ship can be placed in it's current spot
+     * without altering the grid.
+     * @param x x index of the stern of the ship (1-size)
+     * @param y y index of the stern of the ship (1-size)
+     * @param size size of the ship (2-5)
+     * @param direction direction the ship is facing (constants in {@link ShipManager}.
+     * @return {@code true} if the ship can be placed at it's current spot, {@code false} else.
+     */
     public boolean canShipBePlaced(int x, int y, int size, int direction){
         int directionFactor = getDirectionFactor(direction);
         try {
@@ -54,6 +95,16 @@ public class Grid {
         return true;
     }
 
+    /**
+     * Places a ship at a specified spot.
+     * @param x x index of the stern of the ship (1-size)
+     * @param y y index of the stern of the ship (1-size)
+     * @param size size of the ship (2-5)
+     * @param direction direction the ship is facing (constants in {@link ShipManager}.
+     * @param entity Entity of this ship in the GUI, if ship is on enemy grid and is not represented
+     *               visually this value should be {@code null}
+     * @return {@code true} if the ship was placed at it's current spot, {@code false} if it couldn't be placed.
+     */
     public boolean placeShip(int x, int y, int size, int direction, Entity entity){
         if(!canShipBePlaced(x, y, size, direction))
             return false;
@@ -80,6 +131,10 @@ public class Grid {
         return true;
     }
 
+    /**
+     * Removes a ship form the grid.
+     * @param ship Ship to remove from the grid.
+     */
     public void removeShip(Ship ship){
         for(Cell c : ship.getOccupiedCells()){
             c.state = WATER;
@@ -87,10 +142,22 @@ public class Grid {
         }
     }
 
+    /**
+     * Determines whether a specific cell on the grid can be shot.
+     * @param x x index of cell that should be tested (1-size)
+     * @param y y index of cell that should be tested (1-size)
+     * @return {@code true} if the cell can still be shot, {@code false} if the cell was already shot or marked with water.
+     */
     public boolean canBeShot(int x, int y){
         return getCell(x,y).state != SHOT;
     }
 
+    /**
+     * Shoot a specific cell and place markers depending on what was hit.
+     * @param x x index of cell that should be shot (1-size)
+     * @param y y index of cell that should be shot (1-size)
+     * @return {@code true} if the cell was shot, {@code false} if the cell was already shot or marked with water and thus couldn't be shot.
+     */
     public boolean shoot(int x, int y){
         if(!canBeShot(x, y))
             return false;
@@ -103,10 +170,25 @@ public class Grid {
         return shipHit;
     }
 
-    public boolean shipHit(int x, int y){
+    /**
+     * Tests if there is a ship in a specific cell that would be hit by a shot.
+     * @param x x index of cell that should be tested (1-size)
+     * @param y y index of cell that should be tested (1-size)
+     * @return {@code true} if there is a ship on that cell, {@code false} else.
+     */
+    private boolean shipHit(int x, int y){
         return getCell(x,y).state == SHIP;
     }
 
+    /**
+     * Blocks all empty cell around the specified cell. Can be used to mark cell around sunk ship with water
+     * or to block cell around a placed ship, so no other ship can be placed there.
+     * @param x x index of cell around which all cells should be blocked (1-size)
+     * @param y y index of cell around which all cells should be blocked (1-size)
+     * @param blockType State to which the blocked cells should be set.
+     * @param visible {@code true} if the markers should be visible on the gui (will be water markers), {@code false} if they should
+     *                            be invisible on the gui.
+     */
     private void blockFieldsAroundIndex(int x, int y, int blockType, boolean visible){
         x-=1;
         y-=1;
@@ -120,6 +202,12 @@ public class Grid {
         }
     }
 
+    /**
+     * Sinks the ship that is on the specified cell.
+     * Places water markers around the while ship.
+     * @param x x index of one of the cell the ship is on (1-size)
+     * @param y y index of one of the cell the ship is on (1-size)
+     */
     private void sinkShip(int x, int y){
         shipsAlive[getCell(x,y).ship.getSize() - 2]--;
         for(Cell c : getCell(x,y).ship.getOccupiedCells()){
@@ -128,6 +216,12 @@ public class Grid {
         }
     }
 
+    /**
+     * Converts a direction constans (from {@link ShipManager}) to a direction factor, to calculate the
+     * sign the index on the grid array needs to be altered with.
+     * @param direction Direction the ship is facing (from {@link ShipManager})
+     * @return -1 if the rest of the ship is to the left or above this part in the grid array, 1 for right or below.
+     */
     private int getDirectionFactor(int direction){
         switch (direction){
             case ShipManager.NORTH: return -1;
@@ -138,9 +232,16 @@ public class Grid {
         }
     }
 
+    /**
+     * Tests if the ship at the specified cell has been sunk.
+     * @param x x index of one of the cell the ship is on (1-size)
+     * @param y y index of one of the cell the ship is on (1-size)
+     * @return {@code true} if this ship has been sunk, {@code false} else.
+     */
     private boolean isShipSunk(int x, int y){
         return getCell(x,y).ship.isSunk();
     }
+
 
     @Override
     public String toString() {
@@ -163,14 +264,26 @@ public class Grid {
         return builder.toString();
     }
 
+    /**
+     * Converts the standard x and y index into the y-1,x-1 index in the 2D-Array and returns the corresponding cell.
+     * @param x x index of the cell that is needed.
+     * @param y y index of the cell that is needed.
+     * @return The cell at that index.
+     */
     public Cell getCell(int x, int y){
         return grid[y-1][x-1];
     }
 
+    /**
+     * @return Array containing amount of ships still alive on this grid, ordered by size from small to large.
+     */
     public int[] getShipsAlive() {
         return shipsAlive;
     }
 
+    /**
+     * @return Size of this grid.
+     */
     public int getSize(){
         return grid.length;
     }

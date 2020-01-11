@@ -6,6 +6,7 @@ import com.battleships.gui.guis.GuiClickCallback;
 import com.battleships.gui.guis.GuiManager;
 import com.battleships.gui.guis.GuiTexture;
 import com.battleships.gui.renderingEngine.Loader;
+import com.battleships.logic.Stats;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 
@@ -41,6 +42,7 @@ public class FinishGame extends GuiClickCallback {
      * @param won {@code true} if the player has won.
      */
     public void finishGame(Loader loader, GuiManager guiManager, boolean won){
+        GameManager.getLogic().advanceGamePhase();
         GuiTexture background = new GuiTexture(loader.loadTexture("EndScroll.png"), new Vector2f(0.5f,0.5f), new Vector2f(0.5f,0.8f));
         GameManager.getGuis().add(background);
         if(won) {
@@ -62,20 +64,22 @@ public class FinishGame extends GuiClickCallback {
      * @param won {@code true} if the player has won.
      */
     private void addStats(boolean won){
+        Stats stats = GameManager.getLogic().getStats();
+        stats.updateStats();
         addBlackText("Time played:", new Vector2f(0.625f, 0.35f));
-        addBlackText("5:18", new Vector2f(0.825f, 0.35f));
+        addBlackText(stats.getPlayTime()/60 + ":" + stats.getPlayTime() % 60, new Vector2f(0.825f, 0.35f));
         addBlackText("Rounds played:", new Vector2f(0.625f, 0.45f));
-        addBlackText("20", new Vector2f(0.825f, 0.45f));
+        addBlackText(""+stats.getRounds(), new Vector2f(0.825f, 0.45f));
         if(won){
             addBlackText("Ships Left alive:", new Vector2f(0.625f, 0.55f));
-            addBlackText("7/10", new Vector2f(0.825f, 0.55f));
+            addBlackText(stats.getShipsAlive()+"/"+stats.getMaxShips(), new Vector2f(0.825f, 0.55f));
         }
         else{
             addBlackText("Ships destroyed:", new Vector2f(0.625f, 0.55f));
-            addBlackText("7/10", new Vector2f(0.825f, 0.55f));
+            addBlackText(stats.getShipsDestroyed()+"/"+stats.getMaxShips(), new Vector2f(0.825f, 0.55f));
         }
         addBlackText("Accuracy", new Vector2f(0.625f, 0.65f));
-        addBlackText("20%", new Vector2f(0.825f, 0.65f));
+        addBlackText(stats.getAccuracy()*100+"%", new Vector2f(0.825f, 0.65f));
     }
 
     /**
