@@ -440,6 +440,14 @@ public class GameManager {
     }
 
     /**
+     * Method to process answer of shots made through internet connection.
+     * @param shipHit {@code true} if the shot hit a ship, {@code false} else.
+     */
+    public static void processShootAnswer(boolean shipHit){
+        gridManager.getCannonball().cannonballHit2(shipHit);
+    }
+
+    /**
      * Function to tell GameManager that cannonball has reached it's destination.
      * Needed to exit the second thread in which the cannonball was moved, so OpenGL function can be used.
      * Only used if animations are enabled.

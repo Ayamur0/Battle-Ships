@@ -3,8 +3,8 @@ package com.battleships.logic;
 import com.battleships.gui.entities.Entity;
 import com.battleships.gui.gameAssets.GameManager;
 import com.battleships.gui.gameAssets.grids.GridManager;
-import com.battleships.gui.gameAssets.grids.GridMaths;
 import com.battleships.gui.gameAssets.grids.ShipManager;
+import com.battleships.logic.AI.AIEasy;
 import org.joml.Vector2i;
 
 import java.util.Random;
@@ -55,11 +55,13 @@ public class LogicManager {
      * @param x X index of the cell that should be shot.
      * @param y Y index of the cell that should be shot.
      * @param grid ID of the grid the cell is on (one of constants in {@link GridManager}.
-     * @return {@code true} if shot could be made, {@code false} else.
+     * @return {@code true} if a ship was hit, {@code false} if no ship was hit or shot couldn't be made.
      */
     public boolean shoot(int x, int y, int grid){
-        //if(GameManager.getSettings().isOnline() && grid == GridManager.OWNFIELD)
-          //  return ; //TODO
+        if(x < 1 || y < 1 || x > playerGrid.getSize() ||y > playerGrid.getSize())
+            return false;
+        if(GameManager.getSettings().isOnline() && grid == GridManager.OWNFIELD)
+            return false;
         if(grid == GridManager.OWNFIELD)
             return playerGrid.shoot(x,y);
         if(grid == GridManager.OPPONENTFIELD)

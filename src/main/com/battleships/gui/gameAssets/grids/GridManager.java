@@ -443,4 +443,11 @@ public class GridManager {
     public void setMarkers(List<Entity> markers) {
         this.markers = markers;
     }
+
+    /**
+     * @return The cannonball of this gridManager.
+     */
+    public Cannonball getCannonball() {
+        return cannonball;
+    }
 }

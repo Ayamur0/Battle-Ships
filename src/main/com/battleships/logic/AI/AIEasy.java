@@ -1,7 +1,8 @@
-package com.battleships.logic;
+package com.battleships.logic.AI;
 
 import com.battleships.gui.gameAssets.GameManager;
 import com.battleships.gui.gameAssets.grids.GridManager;
+import com.battleships.logic.LogicManager;
 import org.joml.Vector2i;
 
 import java.util.Random;
@@ -12,26 +13,7 @@ import java.util.Random;
  *
  * @author Tim Staudenmaier
  */
-public class AIEasy implements AI{
-
-    /**
-     * Random number generator for determining cell that gets shot next.
-     */
-    Random random = new Random();
-    /**
-     * ID of the team this AI plays for.
-     * One of the constants in hte {@link GridManager} (0 or 1).
-     */
-    private int team;
-    /**
-     * Size of the grid this ai plays on.
-     */
-    private int gridSize;
-    /**
-     * LogicManager this ai uses to shoot and place ships.
-     */
-    private LogicManager manager;
-
+public class AIEasy extends AI{
     /**
      * Creates a new AI with easy difficulty.
      * @param team Team this ai should play for (0 or 1 as in {@link GridManager})
@@ -39,9 +21,7 @@ public class AIEasy implements AI{
      * @param manager LogicManager this ai should use to shoot and place ships.
      */
     public AIEasy(int team, int gridSize, LogicManager manager) {
-        this.team = team;
-        this.gridSize = gridSize;
-        this.manager = manager;
+        super(team, gridSize, manager);
     }
 
     /**
@@ -63,12 +43,4 @@ public class AIEasy implements AI{
                 x+=1;
         }
     }
-
-    /**
-     * This AI places it's ships.
-     */
-    public void placeShips(){
-        manager.placeRandomShips(team);
-    }
-
 }

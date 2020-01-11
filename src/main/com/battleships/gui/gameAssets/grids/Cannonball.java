@@ -230,6 +230,16 @@ public class Cannonball extends Entity implements Runnable {
      */
     private void cannonballHit(){
         boolean shipHit = GameManager.getLogic().shoot(destinationCell.x, destinationCell.y, destinationGrid);
+        if(GameManager.getSettings().isOnline())
+            return;
+        cannonballHit2(shipHit);
+    }
+
+    /**
+     * Method that executes the effects needed if a cannonball has hit.
+     * @param shipHit {@code true} if the cannonball hit a ship, {@code false} else.
+     */
+    public void cannonballHit2(boolean shipHit){
         if(shipHit && destinationGrid == GridManager.OWNFIELD) {
             gridManager.playFireEffect(destination, destinationCell);
         }

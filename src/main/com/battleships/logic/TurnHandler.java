@@ -1,5 +1,7 @@
 package com.battleships.logic;
 
+import com.battleships.logic.AI.AI;
+
 /**
  * Class for handling turn order and ai turns during shooting phase.
  *

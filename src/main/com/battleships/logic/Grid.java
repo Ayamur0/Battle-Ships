@@ -156,7 +156,7 @@ public class Grid {
      * Shoot a specific cell and place markers depending on what was hit.
      * @param x x index of cell that should be shot (1-size)
      * @param y y index of cell that should be shot (1-size)
-     * @return {@code true} if the cell was shot, {@code false} if the cell was already shot or marked with water and thus couldn't be shot.
+     * @return {@code true} if a ship was hit, {@code false} if the cell didn't contain a ship or was already shot or marked with water and thus couldn't be shot.
      */
     public boolean shoot(int x, int y){
         if(!canBeShot(x, y))
