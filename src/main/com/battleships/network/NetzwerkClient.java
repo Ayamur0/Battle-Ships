@@ -6,11 +6,14 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 
-public class NetzwerkClient {
+public class NetzwerkClient extends Network{
     private static final int PORT = 50000;
 
     private BufferedReader getInputFromHost;
     private BufferedReader sendToHost;
+
+
+
 
     private PrintWriter out;
 
@@ -22,8 +25,8 @@ public class NetzwerkClient {
 
 
     /**
-    *Der Client soll aufgerufen werden mit einer IP Adresse (in Form eines Strings)
-    */
+     *Der Client soll aufgerufen werden mit einer IP Adresse (in Form eines Strings)
+     */
     public NetzwerkClient(String adress) throws IOException {
         startClient(adress);
         waitingForInput();
@@ -31,7 +34,9 @@ public class NetzwerkClient {
 
     private void waitingForInput() throws  IOException{
         while(online) {
-            getData(getInputFromHost.readLine());
+            String s = getInputFromHost.readLine();
+            whatKindOfStringIsThis(1,s);
+            getData(s);
             out.println(sendToHost.readLine());
         }
     }
@@ -42,10 +47,10 @@ public class NetzwerkClient {
 
 
     /**
-    * startet Client
-    */
+     * startet Client
+     */
     private void startClient(String adress) throws IOException {
-       //System.out.println("Starting Client...");
+        //System.out.println("Starting Client...");
         clientSocket = new Socket(adress, PORT);
         online = true;
 
