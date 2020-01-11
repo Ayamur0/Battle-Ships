@@ -183,6 +183,11 @@ public class GameManager {
     private static boolean cannonballDone;
 
     /**
+     * {@code true} if the last cannonball has hit a ship.
+     */
+    private static boolean cannonballHit;
+
+    /**
      * Initialize the GameManager and all needed components.
      * Needs to be called when the game is started.
      */
@@ -395,7 +400,10 @@ public class GameManager {
         AudioMaster.setListenerData(camera.getPosition().x, camera.getPosition().y, camera.getPosition().z, camera.getPitch(), camera.getYaw());
         if(cannonballDone) {
             cannonballDone = false;
-            logic.advanceTurn();
+            if(cannonballHit)
+                logic.repeatTurn();
+            else
+                logic.advanceTurn();
         }
         renderEntities();
         prepareWater();
@@ -451,9 +459,11 @@ public class GameManager {
      * Function to tell GameManager that cannonball has reached it's destination.
      * Needed to exit the second thread in which the cannonball was moved, so OpenGL function can be used.
      * Only used if animations are enabled.
+     * @param shipHit {@code true} if the cannonball has hit a ship, {@code false} else.
      */
-    public static void cannonballHit(){
+    public static void cannonballHit(boolean shipHit){
         cannonballDone = true;
+        cannonballHit = shipHit;
     }
 
     /**

@@ -252,6 +252,13 @@ public class LogicManager {
     }
 
     /**
+     * Same player is allowed to shoot again, call if player hit a ship.
+     */
+    public void repeatTurn(){
+        turnHandler.makeAiTurns();
+    }
+
+    /**
      * @return Current state of the game (one of constants in {@link GameManager}).
      */
     public int getGameState() {

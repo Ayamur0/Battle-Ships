@@ -45,7 +45,7 @@ public abstract class AI {
     /**
      * AI makes their next turn.
      */
-    abstract void makeTurn();
+    public abstract void makeTurn();
 
     /**
      * This AI places it's ships.
