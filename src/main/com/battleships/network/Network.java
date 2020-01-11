@@ -16,6 +16,8 @@ public abstract class Network {
     private static GameManager gameManager;
     private static GridManager gridManager;
 
+
+
     private static Settings settings;
 
     /**

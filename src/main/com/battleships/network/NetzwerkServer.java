@@ -20,6 +20,8 @@ public class NetzwerkServer extends Network {
     private BufferedReader sendClient;
     private BufferedReader fromClient;
 
+
+
     private ServerSocket serverSocket;
     private Socket clientSocket;
 

@@ -12,6 +12,8 @@ public class NetzwerkClient extends Network{
     private BufferedReader getInputFromHost;
     private BufferedReader sendToHost;
 
+
+
     private PrintWriter out;
 
     private Socket clientSocket;
