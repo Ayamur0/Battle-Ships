@@ -13,6 +13,7 @@ public class AIHard extends AIMedium {
     protected void updatePattern() {
         if(!(pattern instanceof PatternChess))
             pattern = new PatternChess(gridSize);
-        pattern = new PatternRandom(gridSize, team);
+        else
+            pattern = new PatternRandom(gridSize, team);
     }
 }
