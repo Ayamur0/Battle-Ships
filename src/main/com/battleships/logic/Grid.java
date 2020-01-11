@@ -1,5 +1,6 @@
-package com.battleships.gui.gameAssets.testLogic;
+package com.battleships.logic;
 
+import com.battleships.gui.entities.Entity;
 import com.battleships.gui.gameAssets.GameManager;
 import com.battleships.gui.gameAssets.grids.ShipManager;
 import org.joml.Vector2i;
@@ -16,6 +17,7 @@ public class Grid {
 
     private Cell[][] grid;
     private int owner;
+    private int[] shipsAlive;
 
     public Grid (int size, int owner){
         this.owner = owner;
@@ -25,23 +27,22 @@ public class Grid {
                 grid[i][j] = new Cell(i,j);
             }
         }
+        shipsAlive = ShipAmountLoader.getShipAmounts(size);
     }
 
     public boolean canShipBePlaced(int x, int y, int size, int direction){
-        x -= 1;
-        y -= 1;
         int directionFactor = getDirectionFactor(direction);
         try {
             if (direction == ShipManager.NORTH || direction == ShipManager.SOUTH) {
                 for (int i = 0; i < size; i++) {
-                    if (grid[y + directionFactor * i][x].state != WATER) {
+                    if (getCell(x, y + directionFactor * i).state != WATER) {
                         return false;
                     }
                 }
             }
             if (direction == ShipManager.WEST || direction == ShipManager.EAST) {
                 for (int i = 0; i < size; i++) {
-                    if (grid[y][x + directionFactor * i].state != WATER) {
+                    if (getCell(x + directionFactor * i, y).state != WATER) {
                         return false;
                     }
                 }
@@ -53,67 +54,76 @@ public class Grid {
         return true;
     }
 
-    public void placeShip(int x, int y, int size, int direction){
+    public boolean placeShip(int x, int y, int size, int direction, Entity entity){
         if(!canShipBePlaced(x, y, size, direction))
-            return;
-        x -= 1;
-        y -= 1;
+            return false;
         List<Cell> shipParts = new ArrayList<>();
         int directionFactor = getDirectionFactor(direction);
         if (direction == ShipManager.NORTH || direction == ShipManager.SOUTH) {
             for (int i = 0; i < size; i++) {
-                shipParts.add(grid[y + directionFactor * i][x]);
-                grid[y + directionFactor * i][x].state = SHIP;
-                grid[y + directionFactor * i][x].lifes = size;
-                blockFieldsAroundIndex(x + 1, y + 1 + directionFactor * i, BLOCKED);
+                shipParts.add(getCell(x, y + directionFactor * i));
+                getCell(x, y + directionFactor * i).state = SHIP;
+                blockFieldsAroundIndex(x, y + directionFactor * i, BLOCKED, false);
             }
         }
         if (direction == ShipManager.WEST || direction == ShipManager.EAST) {
             for (int i = 0; i < size; i++) {
-                shipParts.add(grid[y][x + directionFactor * i]);
-                grid[y][x + directionFactor * i].state = SHIP;
-                grid[y][x + directionFactor * i].lifes = size;
-                blockFieldsAroundIndex(x + 1 + directionFactor * i, y + 1, BLOCKED);
+                shipParts.add(getCell(x + directionFactor * i, y));
+                getCell(x + directionFactor * i, y).state = SHIP;
+                blockFieldsAroundIndex(x + directionFactor * i, y, BLOCKED, false);
             }
         }
+        Ship ship = new Ship(size, direction, shipParts, entity);
         for(Cell c : shipParts){
-            c.ShipParts = shipParts;
+            c.ship = ship;
+        }
+        return true;
+    }
+
+    public void removeShip(Ship ship){
+        for(Cell c : ship.getOccupiedCells()){
+            c.state = WATER;
+            blockFieldsAroundIndex(c.y +1, c.x+1, WATER, false);
         }
     }
 
     public boolean canBeShot(int x, int y){
-        return grid[x-1][y-1].state != SHOT;
+        return getCell(x,y).state != SHOT;
     }
 
     public boolean shoot(int x, int y){
         if(!canBeShot(x, y))
             return false;
         boolean shipHit = shipHit(x, y);
-        grid[x-1][y-1].state = SHOT;
-        for(Cell c : grid[x-1][y-1].ShipParts)
-            c.lifes -= 1;
-        if(isShipSunk(x, y))
+        getCell(x,y).state = SHOT;
+        if(shipHit)
+            getCell(x,y).ship.damage();
+        if(shipHit && isShipSunk(x, y))
             sinkShip(x, y);
         return shipHit;
     }
 
     public boolean shipHit(int x, int y){
-        return grid[x-1][y-1].state == SHIP;
+        return getCell(x,y).state == SHIP;
     }
 
-    private void blockFieldsAroundIndex(int x, int y, int blockType){
+    private void blockFieldsAroundIndex(int x, int y, int blockType, boolean visible){
         x-=1;
         y-=1;
         int[] toBlock = {x-1, y-1, x, y-1, x+1, y-1, x-1, y, x+1, y, x-1, y+1, x, y+1, x+1, y+1};
         for(int i = 0; i < toBlock.length; i += 2){
-            if(toBlock[i] >= 0 && toBlock[i] < grid.length && toBlock[i+1] >= 0 && toBlock[i+1] < grid.length && grid[toBlock[i+1]][toBlock[i]].state != SHIP)
-                grid[toBlock[i+1]][toBlock[i]].state = blockType;
+            if(toBlock[i] >= 0 && toBlock[i] < grid.length && toBlock[i+1] >= 0 && toBlock[i+1] < grid.length && grid[toBlock[i+1]][toBlock[i]].state != SHIP) {
+                grid[toBlock[i + 1]][toBlock[i]].state = blockType;
+                if(visible && grid[toBlock[i+1]][toBlock[i]].state != SHOT)
+                    GameManager.placeMarker(false, new Vector2i(toBlock[i]+1, toBlock[i+1]+1), GameManager.getLogic().getGridID(this));
+            }
         }
     }
 
     private void sinkShip(int x, int y){
-        for(Cell c : grid[x-1][y-1].ShipParts){
-            blockFieldsAroundIndex(c.x+1, c.y+1, WATER);
+        shipsAlive[getCell(x,y).ship.getSize() - 2]--;
+        for(Cell c : getCell(x,y).ship.getOccupiedCells()){
+            blockFieldsAroundIndex(c.y+1, c.x+1, WATER, true);
             GameManager.placeMarker(false, new Vector2i(x,y), owner);
         }
     }
@@ -129,9 +139,7 @@ public class Grid {
     }
 
     private boolean isShipSunk(int x, int y){
-        if(grid[x-1][y-1].lifes == 0)
-            return true;
-        return false;
+        return getCell(x,y).ship.isSunk();
     }
 
     @Override
@@ -153,5 +161,17 @@ public class Grid {
         }
         builder.append("\n\n\n");
         return builder.toString();
+    }
+
+    public Cell getCell(int x, int y){
+        return grid[y-1][x-1];
+    }
+
+    public int[] getShipsAlive() {
+        return shipsAlive;
+    }
+
+    public int getSize(){
+        return grid.length;
     }
 }

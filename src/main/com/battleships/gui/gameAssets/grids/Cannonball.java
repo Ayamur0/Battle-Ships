@@ -1,6 +1,7 @@
 package com.battleships.gui.gameAssets.grids;
 
 import com.battleships.gui.entities.Entity;
+import com.battleships.gui.gameAssets.GameManager;
 import com.battleships.gui.renderingEngine.Loader;
 import com.battleships.gui.window.WindowManager;
 import org.apache.commons.math3.linear.*;
@@ -228,19 +229,20 @@ public class Cannonball extends Entity implements Runnable {
      * Plays sound depending on what has been hit and places a correct marker.
      */
     private void cannonballHit(){
-        boolean shipHit = true; //TODO get from logic
+        boolean shipHit = GameManager.getLogic().shoot(destinationCell.x, destinationCell.y, destinationGrid);
         if(shipHit && destinationGrid == GridManager.OWNFIELD) {
-            gridManager.playFireEffect(destination);
+            gridManager.playFireEffect(destination, destinationCell);
         }
         else {
             gridManager.placeMarker(shipHit, destinationCell, destinationGrid);
-            if (shipHit)
-                gridManager.playSound(new Vector3f(destination.x, GridManager.getGRIDHEIGHT(), destination.y), CannonSounds.HITSOUND);
-            else
-                gridManager.playSound(new Vector3f(destination.x, GridManager.getGRIDHEIGHT(), destination.y), CannonSounds.WATERSPLASH);
         }
+        if (shipHit)
+            gridManager.playSound(new Vector3f(destination.x, GridManager.getGRIDHEIGHT(), destination.y), CannonSounds.HITSOUND);
+        else
+            gridManager.playSound(new Vector3f(destination.x, GridManager.getGRIDHEIGHT(), destination.y), CannonSounds.WATERSPLASH);
         flying = false;
         remove();
+        GameManager.cannonballHit();
     }
 
     /**

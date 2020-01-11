@@ -28,7 +28,7 @@ public class ParticleRenderer {
     /**
      * Max number of particles that can be on the screen at once.
      */
-    private static final int MAX_INSTANCES = 11000;
+    private static final int MAX_INSTANCES = 50000;
     /**
      * length of data for each particle
      * first 16 floats for viewMatrix

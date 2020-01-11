@@ -3,8 +3,10 @@ package com.battleships.gui.gameAssets.ingameGui;
 import com.battleships.gui.fontMeshCreator.GUIText;
 import com.battleships.gui.fontRendering.TextMaster;
 import com.battleships.gui.gameAssets.GameManager;
+import com.battleships.gui.gameAssets.grids.GridManager;
 import com.battleships.gui.gameAssets.grids.ShipManager;
-import com.battleships.gui.gameAssets.testLogic.TestLogic;
+import com.battleships.gui.window.WindowManager;
+import com.battleships.logic.ShipAmountLoader;
 import com.battleships.gui.guis.GuiClickCallback;
 import com.battleships.gui.guis.GuiManager;
 import com.battleships.gui.guis.GuiTexture;
@@ -23,6 +25,11 @@ import java.util.List;
 public class ShipSelector extends GuiClickCallback {
 
     /**
+     * ID's for the clickable buttons, besides the ship buttons.
+     */
+    private static final int DELETE = 6, RANDOM = 7, CONFIRM = 8;
+
+    /**
      * Color of all {@link GUIText}s on this UI.
      */
     private static final Vector3f BLACK = new Vector3f();
@@ -34,7 +41,7 @@ public class ShipSelector extends GuiClickCallback {
     /**
      * Array containing the GuiTextures for all clickable elements of this UI.
      */
-    private GuiTexture[] buttons = new GuiTexture[4];
+    private GuiTexture[] buttons = new GuiTexture[7];
     /**
      * Gui of the background behind the clickable buttons.
      */
@@ -68,6 +75,11 @@ public class ShipSelector extends GuiClickCallback {
     private List<GuiTexture> guis;
 
     /**
+     * Ship counts for the current grid size, so counts that show ships left to place can be reset to values of beginning.
+     */
+    private int[] standardShipCounts;
+
+    /**
      * Create the gui used for ship selecting.
      * @param loader Loader needed to load textures.
      * @param guiManager GuiManager needed to link click functions to the gui elements.
@@ -91,25 +103,30 @@ public class ShipSelector extends GuiClickCallback {
         ship3.getPositions().x = background.getPositions().x + 0.5f * space + 0.5f * ship3.getScale().x;
         GuiTexture ship4 = new GuiTexture(loader.loadTexture("IngameGuiShipSelectShip4.png"), new Vector2f(0,background.getPositions().y - 0.0204f));
         ship4.getPositions().x = background.getPositions().x + 1.5f * space + 1.5f * ship4.getScale().x;
+        GuiTexture delete = new GuiTexture(loader.loadTexture("deleteIcon.png"), new Vector2f(0.08f,0.9f), new Vector2f(0.05f, 0.09f));
+        GuiTexture random = new GuiTexture(loader.loadTexture("randomizeIcon.png"), new Vector2f(0.08f,0.78f), new Vector2f(0.05f,0.09f));
+        GuiTexture confirm = new GuiTexture(loader.loadTexture("confirmIcon.png"), new Vector2f(0.08f,0.66f), new Vector2f(0.05f,0.09f));
         guis.add(background);
-        guis.add(ship1);
-        guis.add(ship2);
-        guis.add(ship3);
-        guis.add(ship4);
         buttons[0] = ship1;
         buttons[1] = ship2;
         buttons[2] = ship3;
         buttons[3] = ship4;
-        guiManager.createClickableGui(ship1, () -> this);
-        guiManager.createClickableGui(ship2, () -> this);
-        guiManager.createClickableGui(ship3, () -> this);
-        guiManager.createClickableGui(ship4, () -> this);
+        buttons[4] = delete;
+        buttons[5] = random;
+        buttons[6] = confirm;
+        for(GuiTexture g : buttons){
+            guis.add(g);
+            guiManager.createClickableGui(g, () -> this);
+        }
 
-        shipCounts = TestLogic.getShipAmounts(shipManager.getGridSize());
-        if(shipCounts == null){
+        standardShipCounts = ShipAmountLoader.getShipAmounts(shipManager.getGridSize());
+        if(standardShipCounts == null){
             System.err.println("Something went wrong calculating the ship amounts!");
             return;
         }
+        shipCounts = new int[standardShipCounts.length];
+        System.arraycopy(standardShipCounts, 0, shipCounts, 0, standardShipCounts.length);
+
         for(int i = 0; i < 4; i++)
             shipCountTexts.add(new GUIText(shipCounts[i] + " Left", 2, GameManager.getPirateFont(), new Vector2f(buttons[i].getPositions().x, buttons[i].getPositions().y + buttons[i].getScale().y / 2 + 0.05f), buttons[i].getScale().x, true, BLACK, 0, 0.1f,BLACK, OUTLINEOFFSET));
 }
@@ -126,9 +143,10 @@ public class ShipSelector extends GuiClickCallback {
     @Override
     protected boolean isClickOnGui(GuiTexture gui, double x, double y){
         for(int i = 0; i < buttons.length; i++) {
-            if (buttons[i].getPositions().x - 0.5f * buttons[i].getScale().x <= x && buttons[i].getPositions().x + 0.5f *
-                    buttons[i].getScale().x >= x && buttons[i].getPositions().y - 0.5f * buttons[i].getScale().y <= y &&
-                    buttons[i].getPositions().y + 0.5f * buttons[i].getScale().y >= y) {
+//            if (buttons[i].getPositions().x - 0.5f * buttons[i].getScale().x <= x && buttons[i].getPositions().x + 0.5f *
+//                    buttons[i].getScale().x >= x && buttons[i].getPositions().y - 0.5f * buttons[i].getScale().y <= y &&
+//                    buttons[i].getPositions().y + 0.5f * buttons[i].getScale().y >= y) {
+            if(super.isClickOnGui(buttons[i],x,y)){
                 this.buttonNumber = i + 2;
                 return true;
             }
@@ -143,23 +161,49 @@ public class ShipSelector extends GuiClickCallback {
      */
     @Override
     protected void clickAction(){
-        if(shipCounts[buttonNumber - 2] > 0) {
+        if(buttonNumber < 6 && shipCounts[buttonNumber - 2] > 0) {
             shipManager.stickShipToCursor(buttonNumber);
+            return;
+        }
+        switch (buttonNumber){
+            case DELETE: GameManager.removeAllShips(); return;
+            case RANDOM: GameManager.removeAllShips(); GameManager.getLogic().placeRandomShips(GridManager.OWNFIELD); return;
+            case CONFIRM: GameManager.getLogic().advanceGamePhase();
+            //TODO only confirm if all ships placed
         }
     }
 
     /**
      * Change the text under the button for that ship size, so it shows that you can place one
-     * ship less of that size than before.
-     * @param shipSize Size of the ship for that the count should get decremented.
+     * ship less or one more of that size than before.
+     * @param increment {@code true} if the count should be incremented, {@code false} if it should be decremented
      */
-    public void decrementCount(int shipSize){
+    public void changeCount(int shipSize, boolean increment){
         GUIText dummy = shipCountTexts.get(shipSize - 2);
         dummy.remove();
-        shipCounts[shipSize - 2]--;
+        if(increment)
+            shipCounts[shipSize - 2]++;
+        else
+            shipCounts[shipSize - 2]--;
         dummy.setTextString(shipCounts[shipSize - 2] + " Left");
         //TextMaster.loadText(new GUIText(shipCounts[0] + " Left", 2, dummy.getFont(), dummy.getPosition(), dummy.getLineMaxSize(), true, 0, 0.1f,BLACK, OUTLINEOFFSET));
         TextMaster.loadText(dummy);
+    }
+
+    /**
+     * Decrements the amount remaining of the ships with the given size.
+     * @param shipSize Size of ships the count should be decremented for.
+     */
+    public void decrementCount(int shipSize){
+        changeCount(shipSize, false);
+    }
+
+    /**
+     * Increments the amount remaining of the ships with the given size.
+     * @param shipSize Size of ships the count should be incremented for.
+     */
+    public void incrementCount(int shipSize){
+        changeCount(shipSize, true);
     }
 
     /**
@@ -173,5 +217,17 @@ public class ShipSelector extends GuiClickCallback {
         }
         for(GUIText t : shipCountTexts)
             t.remove();
+    }
+
+    /**
+     * Resets counts for ships left to full values (values from the beginning before any ship was placed).
+     */
+    public void resetCount(){
+        for(int i = 0; i < 4; i++){
+            shipCountTexts.get(i).remove();
+            System.arraycopy(standardShipCounts, 0, shipCounts, 0, standardShipCounts.length);
+            shipCountTexts.get(i).setTextString(shipCounts[i] + " Left");
+            TextMaster.loadText(shipCountTexts.get(i));
+        }
     }
 }

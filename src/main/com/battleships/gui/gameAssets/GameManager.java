@@ -31,6 +31,8 @@ import com.battleships.gui.water.WaterRenderer;
 import com.battleships.gui.water.WaterShader;
 import com.battleships.gui.water.WaterTile;
 import com.battleships.gui.window.WindowManager;
+import com.battleships.logic.LogicManager;
+import com.battleships.logic.Settings;
 import org.joml.*;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.GLFW;
@@ -165,6 +167,22 @@ public class GameManager {
     private static Fbo blur;
 
     /**
+     * LogicManager that handles all logic functions.
+     */
+    private static LogicManager logic;
+
+    /**
+     * Contains all settings currently set for the game.
+     */
+    private static Settings settings;
+
+    /**
+     * {@code true} if the cannonball has reached it's destination.
+     * Gets read in the next frame and is then reset after executing functions needed after the cannonball has hit.
+     */
+    private static boolean cannonballDone;
+
+    /**
      * Initialize the GameManager and all needed components.
      * Needs to be called when the game is started.
      */
@@ -185,6 +203,8 @@ public class GameManager {
         blur = new Fbo(WindowManager.getWidth(), WindowManager.getHeight(), Fbo.DEPTH_RENDER_BUFFER);
         PostProcessing.init(loader);
         mainMenuManager = new MainMenuManager(guiManager,loader,waterFbos);
+        settings = new Settings();
+        logic = new LogicManager();
     }
 
     /**
@@ -195,13 +215,19 @@ public class GameManager {
      * @param field ID of the grid the ship is placed on.
      */
     public static void placeShip(Vector2i index, int size, int direction, int field){
-        if(field == GridManager.OPPONENTFIELD) {
-            //TestLogic.opponent.placeShip(index.x, index.y, size, direction);
+        if(logic.canShipBePlaced(index.x,index.y,size,direction,field)) {
+            shipSelector.decrementCount(size);
+            logic.placeShip(index.x, index.y, size, direction, gridManager.placeShip(index, size, direction, field), field);
         }
-        if(field == GridManager.OWNFIELD){
-            gridManager.placeShip(index, size, direction);
-            //TestLogic.own.placeShip(index.x, index.y, size, direction);
-        }
+    }
+
+    /**
+     * Removes all ships on the players grid.
+     */
+    public static void removeAllShips(){
+        shipSelector.resetCount();
+        gridManager.removeAllShips();
+        logic.removeAllShips();
     }
 
     /**
@@ -211,7 +237,6 @@ public class GameManager {
     public static void startShipPlacementPhase(){
         if(shipCounter != null)
             shipCounter.remove();
-        gridManager.setShipPlacingPhase(true);
         shipSelector = new ShipSelector(loader, guiManager, shipManager, guis);
     }
 
@@ -220,7 +245,6 @@ public class GameManager {
      * Creates gui needed for that phase and destroys unneeded guis.
      */
     public static void startPlayPhase(){
-        gridManager.setShipPlacingPhase(false);
         if(shipSelector != null)
             shipSelector.remove();
         shipCounter = new ShipCounter(loader, guiManager, guis);
@@ -350,9 +374,15 @@ public class GameManager {
      * Updates everything in the scene and then renders everything.
      */
     public static void updateScene(){
+        if(GLFW.glfwGetKey(WindowManager.getWindow(), GLFW.GLFW_KEY_L) == GLFW.GLFW_PRESS)
+            logic.advanceTurn();
         camera.move(terrain);
         mousePicker.update();
         AudioMaster.setListenerData(camera.getPosition().x, camera.getPosition().y, camera.getPosition().z, camera.getPitch(), camera.getYaw());
+        if(cannonballDone) {
+            cannonballDone = false;
+            logic.advanceTurn();
+        }
         renderEntities();
         prepareWater();
         waterRenderer.render(waterTiles, camera, light);
@@ -386,9 +416,22 @@ public class GameManager {
      * Shoot method, that passes the shoot command to the {@link GridManager}.
      * @param originField ID of the grid the shot originates from.
      * @param destinationIndex Index of the cell that should get shot.
+     *
+     * @return true if the shot can be made (no ball is currently flying and cell hasn't already been shot), false else.
      */
-    public static void shoot(int originField, Vector2i destinationIndex){
-        gridManager.shoot(originField, destinationIndex);
+    public static boolean shoot(int originField, Vector2i destinationIndex){
+        if(originField == GridManager.OWNFIELD && !logic.isPlayerTurn() || originField == GridManager.OPPONENTFIELD && logic.isPlayerTurn())
+            return false;
+        return gridManager.shoot(originField, destinationIndex);
+    }
+
+    /**
+     * Function to tell GameManager that cannonball has reached it's destination.
+     * Needed to exit the second thread in which the cannonball was moved, so OpenGL function can be used.
+     * Only used if animations are enabled.
+     */
+    public static void cannonballHit(){
+        cannonballDone = true;
     }
 
     /**
@@ -413,11 +456,10 @@ public class GameManager {
     }
 
     /**
-     * Decrement the count, that keeps track of how many enemy ships of each size are alive.
-     * @param size Size of ship the count should be decremented for.
+     * Updates the counts, that keep track of how many enemy ships of each size are alive.
      */
-    public static void decrementAliveShip(int size){
-        shipCounter.decrementCount(size);
+    public static void updateAliveShip(){
+        shipCounter.updateCount();
     }
 
     /**
@@ -466,7 +508,7 @@ public class GameManager {
             if(key == GLFW.GLFW_KEY_F11 && action == GLFW.GLFW_PRESS)
                 WindowManager.setFullScreen(!WindowManager.isFullscreen());
             if(key == GLFW.GLFW_KEY_F && action == GLFW.GLFW_PRESS)
-                startShipPlacementPhase();
+                logic.advanceGamePhase();
             if(key == GLFW.GLFW_KEY_G && action == GLFW.GLFW_PRESS)
                 startPlayPhase();
             if(key == GLFW.GLFW_KEY_R && action == GLFW.GLFW_PRESS){
@@ -482,6 +524,12 @@ public class GameManager {
             if(key == GLFW.GLFW_KEY_K && action == GLFW.GLFW_PRESS) {
                 FinishGame f = new FinishGame();
                 f.finishGame(loader, guiManager, false);
+            }
+            if(key == GLFW.GLFW_KEY_L && action == GLFW.GLFW_PRESS) {
+                logic.advanceTurn();
+            }
+            if(key == GLFW.GLFW_KEY_O&& action == GLFW.GLFW_PRESS) {
+                logic.placeRandomShips(0);
             }
         }
     };
@@ -537,4 +585,17 @@ public class GameManager {
         return loading;
     }
 
+    /**
+     * @return LogicManager this game uses.
+     */
+    public static LogicManager getLogic() {
+        return logic;
+    }
+
+    /**
+     * @return Class containing all settings with their current values.
+     */
+    public static Settings getSettings() {
+        return settings;
+    }
 }

@@ -3,7 +3,7 @@ package com.battleships.gui.gameAssets.ingameGui;
 import com.battleships.gui.fontMeshCreator.GUIText;
 import com.battleships.gui.fontRendering.TextMaster;
 import com.battleships.gui.gameAssets.GameManager;
-import com.battleships.gui.gameAssets.testLogic.TestLogic;
+import com.battleships.logic.ShipAmountLoader;
 import com.battleships.gui.guis.GuiClickCallback;
 import com.battleships.gui.guis.GuiManager;
 import com.battleships.gui.guis.GuiTexture;
@@ -89,19 +89,19 @@ public class ShipCounter extends GuiClickCallback implements Runnable{
         guis.add(hideButton);
         texts.add(new GUIText("Enemy Ships Left", 3, GameManager.getPirateFont(), new Vector2f(0.5f,0.05f), 0.2f, true, GREY, 0, 0.1f, GREY, OUTLINEOFFSET));
         for(int i = 0; i < 4; i++)
-            texts.add(new GUIText("" + TestLogic.getEnemyShipsLeft(i + 2), 3, GameManager.getPirateFont(), new Vector2f(0.315f + i * 0.122f ,0.265f), 0.2f, true, GREY, 0, 0.1f, GREY, OUTLINEOFFSET));
+            texts.add(new GUIText("" + GameManager.getLogic().getEnemyShipsLeft()[i], 3, GameManager.getPirateFont(), new Vector2f(0.315f + i * 0.122f ,0.265f), 0.2f, true, GREY, 0, 0.1f, GREY, OUTLINEOFFSET));
         guiManager.createClickableGui(hideButton, () -> this);
     }
 
     /**
-     * Decrement the count of alive ships, for a specific size.
-     * @param shipSize shipSize for which the count of the ships left should be decremented.
+     * Update the count of alive ships.
      */
-    public void decrementCount(int shipSize){
-        GUIText toChange = counts[shipSize - 2];
-        toChange.remove();
-        toChange.setTextString(""+TestLogic.getEnemyShipsLeft(shipSize));
-        TextMaster.loadText(toChange);
+    public void updateCount(){
+        for(int i = 1; i < texts.size(); i++) {
+            texts.get(i).remove();
+            texts.get(i).setTextString(""+ GameManager.getLogic().getEnemyShipsLeft()[i-1]);
+            TextMaster.loadText(texts.get(i));
+        }
     }
 
     /**

@@ -82,16 +82,16 @@ public class ShipManager {
     }
 
     /**
-     * Create a entity from the corresponding model to place a ship. Gets added to a list (intended to be the ships list from
-     * the PlayingField).
-     * @param entities - List to add this new ship entity to.
-     * @param size - Size of the ship that should be placed.
-     * @param position - Position (world coordinates) at which the ship should be placed.
+     * Create a entity from the corresponding model to place a ship.
+     * @param size - Size of the ship that should be created.
+     * @param position - Position (world coordinates) at which the ship should be created.
      * @param rotation - Rotation of the ship (as rotation around x,y and z axis in the world).
      * @param scale - Scale of the ship (should for normal grids always be 1).
+     *
+     * @return Entity for a new ship with the specified size, position, rotation and scale.
      */
-    public void placeShip(List<Entity> entities, int size, Vector3f position, Vector3f rotation, float scale){
-        entities.add(new Entity(ships[size - 2], position, rotation, scale));
+    public Entity placeShip(int size, Vector3f position, Vector3f rotation, float scale){
+        return new Entity(ships[size - 2], position, rotation, scale);
     }
 
     /**
@@ -107,10 +107,22 @@ public class ShipManager {
 
     /**
      * Stick a already existing ship to the cursor (to edit already placed ships).
-     * @param ship
+     * If no ship is at the given index or if there is already a ship stuck to the cursor, this method will do nothing.
+     * @param index Index of the cell at which the ship that should be stuck to the cursor is located.
      */
-    public void stickShipToCursor(Ship ship){
-        //TODO get shipsize, entity and direction from logic
+    public void stickShipToCursor(Vector2i index){
+        if(cursorShipAttached)
+            return;
+        Ship ship = GameManager.getLogic().getPlayerShipAtIndex(index.x, index.y);
+        if(ship == null)
+            return;
+        GameManager.getLogic().removeShip(ship);
+        cursorShipSize = ship.getSize();
+        cursorShipDirection = ship.getDirection();
+        cursorShip = ship.getGuiShip();
+        cursorShipAttached = true;
+        shipSelector.incrementCount(cursorShipSize);
+        gridManager.getShips().remove(cursorShip);
     }
 
     /**
@@ -129,8 +141,9 @@ public class ShipManager {
     public void placeCursorShip(){
         if(!cursorShipAttached)
             return;
+        if(!GameManager.getLogic().canShipBePlaced(gridManager.getCurrentPointedCell().x, gridManager.getCurrentPointedCell().y, cursorShipSize, cursorShipDirection, GridManager.OWNFIELD))
+            return;
         cursorShip.setAdditionalColorPercentage(0);
-        shipSelector.decrementCount(cursorShipSize);
         GameManager.placeShip(new Vector2i(gridManager.getCurrentPointedCell().x, gridManager.getCurrentPointedCell().y), cursorShipSize, cursorShipDirection, GridManager.OWNFIELD);
         //ownPlayingField.placeShip(new Vector2i(ownPlayingField.getCurrentPointedCell().x, ownPlayingField.getCurrentPointedCell().y), cursorShipSize, cursorShipDirection);
         removeCursorShip();
@@ -156,8 +169,7 @@ public class ShipManager {
             cursorShipOnGrid = false;
             return;
         }
-        //if(TestLogic.own.canShipBePlaced(currentCell.x, currentCell.y, cursorShipSize, cursorShipDirection)) { //TODO get if ship is allowed to be placed at currentCell)
-        if(true){
+        if(GameManager.getLogic().canShipBePlaced(currentCell.x, currentCell.y, cursorShipSize, cursorShipDirection, GridManager.OWNFIELD)){
             cursorShip.setAdditionalColor(GREEN);
             cursorShip.setAdditionalColorPercentage(MIXPERCENTAGE);
         }

@@ -3,7 +3,7 @@
 //import com.battleships.gui.audio.AudioMaster;
 //import com.battleships.gui.audio.Source;
 //import com.battleships.gui.entities.Entity;
-//import com.battleships.gui.gameAssets.testLogic.TestLogic;
+//import com.battleships.logic.ShipAmountLoader;
 //import com.battleships.gui.models.ModelTexture;
 //import com.battleships.gui.models.TexturedModel;
 //import com.battleships.gui.particles.ParticleSystemComplex;

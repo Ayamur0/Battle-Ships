@@ -87,10 +87,6 @@ public class GridManager {
      * {@code true} if the animation of the cannonball is shown.
      */
     private boolean animation = true;
-    /**
-     * {@code true} if ships are currently being placed.
-     */
-    private boolean shipPlacingPhase;
 
     /**
      * ShipManager that handles placing ships on the grids.
@@ -157,12 +153,15 @@ public class GridManager {
      * @param field Field the cell that was clicked is on.
      */
     public void cellClicked(Vector2i index, int field){
-        //TODO move to logic
-        if(shipPlacingPhase){
-            shipManager.placeCursorShip();
+        //TODO disable during end screen
+        if(GameManager.getLogic().getGameState() == GameManager.SHIPLACING && field == OWNFIELD){
+            if(GameManager.getLogic().getPlayerShipAtIndex(index.x, index.y) == null)
+                shipManager.placeCursorShip();
+            else
+                shipManager.stickShipToCursor(index);
         }
-        else
-            shoot(field == OWNFIELD ? OPPONENTFIELD : OWNFIELD, index);
+        else if(GameManager.getLogic().getGameState() == GameManager.SHOOTING && field == OPPONENTFIELD && GameManager.getLogic().isPlayerTurn())
+            GameManager.shoot(OWNFIELD, index);
     }
 
     /**
@@ -170,22 +169,35 @@ public class GridManager {
      * @param index The index of the cell the back part of the ship should be placed on.
      * @param shipSize Size of the ship (between 2 and 5).
      * @param rotation Direction the ship should be facing (one of the constant values in {@link ShipManager} for the directions)
+     * @param grid The grid the ship should be placed on.
+     * @return The Entity of the placed Ship.
      */
-    public void placeShip(Vector2i index, int shipSize, int rotation) {
-        Vector3f position = GridMaths.calculateShipPosition(ownGrid, index, shipSize, rotation);
+    public Entity placeShip(Vector2i index, int shipSize, int rotation, int grid) {
+        Vector3f position;
+        if(grid == OWNFIELD)
+            position = GridMaths.calculateShipPosition(ownGrid, index, shipSize, rotation);
+        else
+            position = GridMaths.calculateShipPosition(opponentGrid, index, shipSize, rotation);
+
         Vector3f degrees = new Vector3f(0, GridMaths.calculateShipRotation(rotation), 0);
 
-        shipManager.placeShip(ships, shipSize, position, degrees, 1f);
+        Entity ship = shipManager.placeShip(shipSize, position, degrees, 1f);
+        ships.add(ship);
+        return ship;
     }
 
     /**
      * Create a flying cannonball that shoots the specified cell.
      * @param origin the playing field from which the cannonball originates
      * @param destinationCell the destination cell on the other field
+     * @return true if the shot can be made (no ball is currently flying), false else.
      */
-    public void shoot(int origin, Vector2i destinationCell) {
+    public boolean shoot(int origin, Vector2i destinationCell) {
         if(cannonball.isFlying())
-            return;
+            return false;
+
+        if (GameManager.getLogic().hasBeenShot(destinationCell.x, destinationCell.y, origin == OWNFIELD ? OPPONENTFIELD : OWNFIELD))
+            return false;
 
         //TODO remove sound if no animation?
         if(origin == OWNFIELD)
@@ -194,11 +206,6 @@ public class GridManager {
             cannonSound.playSound(opponentGrid.getPosition(), CannonSounds.CANNONSOUND);
 
         //calculate index relative to center of field
-        //TODO test for turn
-
-        if (/*call logic to test whether field has been shot already or not
-            better: only call this function from logic if shooting is allowed*/false)
-            return;
 
         Vector2f originIndex = origin == OWNFIELD ? new Vector2f(ownGrid.getPosition().x, ownGrid.getPosition().z) : new Vector2f(opponentGrid.getPosition().x, opponentGrid.getPosition().z);
 
@@ -207,16 +214,18 @@ public class GridManager {
 
         //create cannonball flying from origin to destination
         cannonball.start(destinationCoords, originIndex, destinationCell, origin == OWNFIELD ? OPPONENTFIELD : OWNFIELD);
+        return true;
     }
 
     /**
      * Places a fire at the location.
      * @param location Location at which the fire should be placed (world coordinates x,z)
+     * @param locationIndex Index of the cell at which the fire should be placed
      */
-    protected void playFireEffect(Vector2f location){
-        Entity ship = ownGrid; //TODO get ship from logic
+    protected void playFireEffect(Vector2f location, Vector2i locationIndex){
+        Entity ship = GameManager.getLogic().getPlayerShipAtIndex(locationIndex.x, locationIndex.y).getGuiShip();
         Source sound = fire.createFireSound(location);
-        if (burningFires.containsKey(ship)) { //TODO test if ship has been destroyed (size of Vector List == size of ship) Logic?
+        if (burningFires.containsKey(ship)) {
             burningFires.get(ship).add(new Vector3f(location.x, 0, location.y));
             burningFireSounds.get(ship).add(sound);
         } else {
@@ -286,6 +295,13 @@ public class GridManager {
     }
 
     /**
+     * Removes all ships on the players grid.
+     */
+    public void removeAllShips(){
+        ships.clear();
+    }
+
+    /**
      * @return GuiGrid of the player.
      */
     public GuiGrid getOwnGrid() {
@@ -330,14 +346,6 @@ public class GridManager {
     }
 
     /**
-     * Set the current game phase.
-     * @param shipPlacingPhase {@code true} if the current game phase should be set to place ships, {@code false} if game phase should be set to shooting.
-     */
-    public void setShipPlacingPhase(boolean shipPlacingPhase) {
-        this.shipPlacingPhase = shipPlacingPhase;
-    }
-
-    /**
      * @return The ShipManager that handles placing ships.
      */
     public ShipManager getShipManager() {
@@ -364,5 +372,12 @@ public class GridManager {
      */
     public static void setIsBackground(boolean isBackground) {
         GridManager.isBackground = isBackground;
+    }
+
+    /**
+     * @return A List containing the entities for all ships on the grid of the player.
+     */
+    public List<Entity> getShips() {
+        return ships;
     }
 }
