@@ -80,4 +80,6 @@ public class AIMedium extends AI{
         return false;
     }
 
+
+
 }

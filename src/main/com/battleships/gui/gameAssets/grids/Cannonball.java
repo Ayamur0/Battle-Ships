@@ -252,7 +252,7 @@ public class Cannonball extends Entity implements Runnable {
             gridManager.playSound(new Vector3f(destination.x, GridManager.getGRIDHEIGHT(), destination.y), CannonSounds.WATERSPLASH);
         flying = false;
         remove();
-        GameManager.cannonballHit();
+        GameManager.cannonballHit(shipHit);
     }
 
     /**

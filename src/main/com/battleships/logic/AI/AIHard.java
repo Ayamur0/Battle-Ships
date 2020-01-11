@@ -8,7 +8,7 @@ public class AIHard extends AI {
     }
 
     @Override
-    void makeTurn() {
+    public void makeTurn() {
 
     }
 
