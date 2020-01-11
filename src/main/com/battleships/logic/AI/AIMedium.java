@@ -15,6 +15,7 @@ public class AIMedium extends AI{
     private Pattern pattern;
     private boolean lastHit;
     private Vector2i lastShot;
+    private Vector2i firstShipHit;
     private int foundShipDir;
     private boolean leftEnd, downEnd, upEnd, rightEnd;
     private Grid opponentGrid;
@@ -38,6 +39,19 @@ public class AIMedium extends AI{
     public void makeTurn() {
         if(lastHit && foundShipDir == UNKNOWN){
             findFoundShipDir();
+            return;
+        }
+
+    }
+
+    private void shootFoundShip(){
+        if(foundShipDir == HORIZONTAL){
+            if(!leftEnd){
+                lastShot.x -= 1;
+                switch (shootCell(lastShot)){
+
+                }
+            }
         }
     }
 
@@ -51,30 +65,30 @@ public class AIMedium extends AI{
 
     @SuppressWarnings("Duplicates")
     private boolean findFoundShipDir(){
-        Vector2i toShoot = new Vector2i(lastShot);
+        Vector2i toShoot = new Vector2i(firstShipHit);
         toShoot.x -= 1;
         switch (shootCell(toShoot)){
             case SHIP: foundShipDir = HORIZONTAL; return true;
-            case WATER: return false;
+            case WATER: leftEnd = true; return false;
             case NA: leftEnd = true; break;
         }
         toShoot.x += 2;
         switch (shootCell(toShoot)){
             case SHIP: foundShipDir = HORIZONTAL; return true;
-            case WATER: return false;
+            case WATER: rightEnd = true; return false;
             case NA: rightEnd = true; break;
         }
         toShoot.x -= 1;
         toShoot.y += 1;
         switch (shootCell(toShoot)){
             case SHIP: foundShipDir = VERTICAL; return true;
-            case WATER: return false;
+            case WATER: upEnd = true; return false;
             case NA: upEnd = true; break;
         }
         toShoot.y -= 2;
         switch (shootCell(toShoot)){
             case SHIP: foundShipDir = VERTICAL; return true;
-            case WATER: return false;
+            case WATER: downEnd = true; return false;
             case NA: downEnd = true; break;
         }
         return false;
