@@ -1,28 +1,48 @@
 package com.battleships.gui.gameAssets.MainMenuGui;
 
 import com.battleships.gui.fontMeshCreator.GUIText;
-import com.battleships.gui.fontRendering.TextMaster;
 import com.battleships.gui.guis.GuiManager;
 import com.battleships.gui.guis.GuiTexture;
-import com.battleships.gui.main.Inits;
 import com.battleships.gui.renderingEngine.Loader;
 import org.joml.Vector2f;
 import org.lwjgl.util.tinyfd.TinyFileDialogs;
+import sun.applet.Main;
 
+/**
+ * Menu to choose if you host a game or connect to a game
+ *
+ * @author Sascha Mößle
+ */
 public class MultiplayerMenu extends Menu {
-        private static final int HOST = 0;
-        private static final int CLIENT = 1;
-        private static final int BACK = 2;
+    /**
+     * Constant value for host button
+     */
+    private static final int HOST = 0;
+    /**
+     * Constant value for client button
+     */
+    private static final int CLIENT = 1;
+    /**
+     * Constant value for back button
+     */
+    private static final int BACK = 2;
 
-        public MultiplayerMenu(GuiManager guiManager, Loader loader){
+    /**
+     * Creates the Multiplayer menu, sets the color of the {@link GUIText} and creates the {@link GUIText} on the Buttons.
+     * @param guiManager GuiManager that should handle the click function of these guis.
+     * @param loader Loader needed to load textures
+     */
+    public MultiplayerMenu(GuiManager guiManager, Loader loader){
         super(guiManager, loader);
 
         this.createMenu();
 
-        SetTextColor();
-
         CreateTextLabels();
     }
+
+    /**
+     * Creates {@link GUIText}as labels and adds the {@link GuiTexture} for the buttons.
+     */
     private void createMenu() {
         super.CreateButtonTextures(3);
 
@@ -32,6 +52,14 @@ public class MultiplayerMenu extends Menu {
 
         super.createClickable();
     }
+
+    /**
+     * Tests if the click was on one of the {@link GuiTexture} in the menu
+     * @param gui The gui to test for if the click was on it.
+     * @param x xPos of the click (left of screen = 0, right of screen = 1)
+     * @param y yPos of the click (top of screen = 0, bottom of screen = 1)
+     * @return {@code true} if the click was on one of the button textures, {@code false} else.
+     */
     protected boolean isClickOnGui(GuiTexture gui, double x, double y) {
         if(super.isClickOnGui(super.buttons.get(0), x, y)) {
             super.buttonClicked = 0;
@@ -48,6 +76,10 @@ public class MultiplayerMenu extends Menu {
 
         return false;
     }
+
+    /**
+     * Toggles state of clicked button.
+     */
     @Override
     protected void clickAction() {
         if (super.buttonClicked == HOST){
@@ -60,6 +92,8 @@ public class MultiplayerMenu extends Menu {
         if (super.buttonClicked == CLIENT){
             String ip = TinyFileDialogs.tinyfd_inputBox("Connect", "Enter ip Address", "");
             //TODO Adding ip thingi (need logic or network for that
+            super.clearMenu();
+            MainMenuManager.setMenu(new WaitingConnection(guiManager,loader));
         }
         if (super.buttonClicked == BACK) {
             super.clearMenu();

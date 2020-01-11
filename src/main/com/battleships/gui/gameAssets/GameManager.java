@@ -7,6 +7,7 @@ import com.battleships.gui.entities.Light;
 import com.battleships.gui.fontMeshCreator.FontType;
 import com.battleships.gui.fontRendering.TextMaster;
 import com.battleships.gui.gameAssets.MainMenuGui.ESCMenu;
+import com.battleships.gui.gameAssets.MainMenuGui.InGameSettingsMenu;
 import com.battleships.gui.gameAssets.MainMenuGui.MainMenuManager;
 import com.battleships.gui.gameAssets.grids.GridManager;
 import com.battleships.gui.gameAssets.grids.ShipManager;
@@ -16,7 +17,6 @@ import com.battleships.gui.gameAssets.ingameGui.ShipSelector;
 import com.battleships.gui.guis.GuiManager;
 import com.battleships.gui.guis.GuiRenderer;
 import com.battleships.gui.guis.GuiTexture;
-import com.battleships.gui.main.Inits;
 import com.battleships.gui.particles.ParticleMaster;
 import com.battleships.gui.postProcessing.Fbo;
 import com.battleships.gui.postProcessing.PostProcessing;
@@ -360,6 +360,11 @@ public class GameManager {
         renderEntities();
         blur.unbindFrameBuffer();
         prepareWater();
+        if (MainMenuManager.getMenu() instanceof InGameSettingsMenu){
+            if (((InGameSettingsMenu) MainMenuManager.getMenu()).isRunning()){
+                ((InGameSettingsMenu) MainMenuManager.getMenu()).RefreshSliderValue();
+            }
+        }
         blur.bindFrameBuffer();
         waterRenderer.render(waterTiles, camera, light);
         renderParticles();
@@ -520,7 +525,7 @@ public class GameManager {
             if(key == GLFW.GLFW_KEY_T && action == GLFW.GLFW_PRESS)
                 camera.turnCamera();
             if(key == GLFW.GLFW_KEY_ESCAPE && action == GLFW.GLFW_PRESS)
-                Inits.setStartMenu(new ESCMenu(guiManager,Inits.getLoader()));
+                MainMenuManager.setMenu(new ESCMenu(guiManager,loader));
             if(key == GLFW.GLFW_KEY_K && action == GLFW.GLFW_PRESS) {
                 FinishGame f = new FinishGame();
                 f.finishGame(loader, guiManager, false);
