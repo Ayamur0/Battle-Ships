@@ -42,12 +42,12 @@ public class NetworkManager {
         }
     }
 
-    public void sendSave(long ID){
+    public void sendSave(String ID){
         if(player != null)
             player.sendMessage("save " + ID);
     }
 
-    public void sendLoad(long ID){
+    public void sendLoad(String ID){
         if(player != null)
             player.sendMessage("load " + ID);
     }
