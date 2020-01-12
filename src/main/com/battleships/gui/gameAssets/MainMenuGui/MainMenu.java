@@ -39,20 +39,6 @@ public class MainMenu extends Menu {
      * Constant value for exit button
      */
     private static final int EXIT = 3;
-    /**
-     * Name of the file that needs to be loaded.
-     */
-    private String fileName;
-    /**
-     * {@code true} if a file was picked that now needs to be loaded.
-     * {@code false} else and after loading is done.
-     */
-    private boolean filePicked;
-
-    /**
-     * open the file explorer to chose the save file.
-     */
-    private JFileChooser fc;
 
     /**
      * Creates a new {@link JFileChooser}, the main menu, sets the color of the {@link GUIText} and creates the {@link GUIText}as labels on the Buttons.
@@ -113,15 +99,7 @@ public class MainMenu extends Menu {
         return false;
     }
 
-    private class SaveFilePicker implements Runnable{
-        @Override
-        public void run() {
-            fc.showOpenDialog(null);
 
-            fileName = fc.getName(fc.getSelectedFile());
-            filePicked = true;
-        }
-    }
     protected void openLoadGameDialog() {
         try {
             FileNameExtensionFilter xmlfilter = new FileNameExtensionFilter("xml files (*.xml)", "xml");

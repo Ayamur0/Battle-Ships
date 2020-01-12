@@ -31,10 +31,6 @@ public abstract class Network implements NetworkInterface{
     private int lastShotX;
     private int lastShotY;
 
-    private static GameManager gameManager;
-    private static GridManager gridManager;
-
-
     public void execute(){
         switch (action){
             case NONE: break;

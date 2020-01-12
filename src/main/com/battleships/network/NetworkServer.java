@@ -19,21 +19,13 @@ public class NetworkServer extends Network implements Runnable{
     private BufferedReader keyboardInput;
     private BufferedReader fromClient;
 
-
-
-
     private ServerSocket serverSocket;
     private Socket clientSocket;
 
-    private String shot = "shoot ";
-    private String size = "size ";
-    private String confirmed = "confirmed ";
-
-    private static GameManager gameManager;
-    private static GridManager gridManager;
-
     private connect waitingForConnection;
     private boolean connected;
+
+    private Thread connectionSearch;
 
     private static Settings settings;
     //private final Logic logic;
@@ -42,8 +34,8 @@ public class NetworkServer extends Network implements Runnable{
     public NetworkServer(){
         startServer();
         waitingForConnection = new connect(this);
-        Thread t = new Thread(waitingForConnection);
-        t.start();
+        connectionSearch = new Thread(waitingForConnection);
+        connectionSearch.start();
     }
 
     private static class connect implements Runnable{
@@ -66,8 +58,9 @@ public class NetworkServer extends Network implements Runnable{
     }
 
     public void stopConnectionSearch(){
-        waitingForConnection.kill();
-        waitingForConnection = new connect(this);
+//        waitingForConnection.kill();
+//        waitingForConnection = new connect(this);
+        connectionSearch.interrupt();
     }
 
     public void sendMessage(String message){
@@ -122,7 +115,7 @@ public class NetworkServer extends Network implements Runnable{
      */
     private void waitForClient() {
         try {
-            System.out.println("Waitin for Client");
+            System.out.println("Waiting for Client");
             clientSocket = serverSocket.accept();
             toClient = new PrintWriter(clientSocket.getOutputStream(), true);
             fromClient = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));

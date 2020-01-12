@@ -12,6 +12,7 @@ import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.lwjgl.util.tinyfd.TinyFileDialogs;
 
+import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -92,6 +93,21 @@ public abstract class Menu extends GuiClickCallback {
     protected String userInput;
 
     /**
+     * Name of the file that needs to be loaded.
+     */
+    protected String fileName;
+    /**
+     * {@code true} if a file was picked that now needs to be loaded.
+     * {@code false} else and after loading is done.
+     */
+    protected boolean filePicked;
+
+    /**
+     * open the file explorer to chose the save file.
+     */
+    protected JFileChooser fc;
+
+    /**
      * Loads all {@link GuiTexture} needed and the font for the {@link GUIText}
      * @param guiManager GuiManager that should handle the click function of these guis.
      * @param loader Loader needed to load textures
@@ -111,6 +127,19 @@ public abstract class Menu extends GuiClickCallback {
             icon = loader.loadTexture("StartIcon.png");
         if (backgounds.size()==0)
             addBackground();
+    }
+
+    /**
+     * Class for handling file choosing in separate thread.
+     */
+    protected class SaveFilePicker implements Runnable{
+        @Override
+        public void run() {
+            fc.showOpenDialog(null);
+
+            fileName = fc.getName(fc.getSelectedFile());
+            filePicked = true;
+        }
     }
 
     /**
