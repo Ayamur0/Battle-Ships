@@ -23,7 +23,6 @@ public class WaitingConnection extends Menu{
 
     private boolean opponentConnected;
 
-
     public boolean isOpponentConnected() {
         return opponentConnected;
     }
@@ -61,6 +60,7 @@ public class WaitingConnection extends Menu{
         GameManager.getGuis().add(buttons.get(0));
     }
     public void startMultiplayerGame(){
+        opponentConnected=false;
         if (fromFile){
             GameManager.getNetwork().sendLoad(MainMenuManager.getMenu().getFileName());
         }
