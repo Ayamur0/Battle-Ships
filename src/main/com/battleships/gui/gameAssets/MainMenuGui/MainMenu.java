@@ -39,6 +39,15 @@ public class MainMenu extends Menu {
      * Constant value for exit button
      */
     private static final int EXIT = 3;
+    /**
+     * Name of the file that needs to be loaded.
+     */
+    private String fileName;
+    /**
+     * {@code true} if a file was picked that now needs to be loaded.
+     * {@code false} else and after loading is done.
+     */
+    private boolean filePicked;
 
     /**
      * open the file explorer to chose the save file.
@@ -103,23 +112,34 @@ public class MainMenu extends Menu {
         }
         return false;
     }
-    protected boolean LoadGame(){
+
+    private class SaveFilePicker implements Runnable{
+        @Override
+        public void run() {
+            fc.showOpenDialog(null);
+
+            fileName = fc.getName(fc.getSelectedFile());
+            filePicked = true;
+        }
+    }
+    protected void openLoadGameDialog() {
         try {
-            FileNameExtensionFilter xmlfilter = new FileNameExtensionFilter("xml files (*.xml)","xml");
-            File test = new File(SaveFileManager.getJarPath()+"/SaveFiles/");
+            FileNameExtensionFilter xmlfilter = new FileNameExtensionFilter("xml files (*.xml)", "xml");
+            File test = new File(SaveFileManager.getJarPath() + "/SaveFiles/");
             fc.setCurrentDirectory(test);
             fc.setFileFilter(xmlfilter);
 
-        }
-        catch (UnsupportedEncodingException e){
+        } catch (UnsupportedEncodingException e) {
 
         }
         fc.setDialogTitle("Select save file");
-        fc.showOpenDialog(null);
+        new Thread(new SaveFilePicker()).start();
+    }
 
-        String s = fc.getName(fc.getSelectedFile());
-        if (s!=null){
-            String filename = s.replace(".xml","");
+    public boolean processLoadedFile(){
+        filePicked = false;
+        if (fileName!=null){
+            String filename = fileName.replace(".xml","");
             SaveFile saveFile = SaveFileManager.loadFromFile(filename);
             if(saveFile==null){
                 super.guiTexts.add(new GUIText("Error loading file", fontSize, font,new Vector2f(0.5f,0.3f), 0.3f, true,outlineColor, 0.0f, 0.1f,outlineColor, new Vector2f()));
@@ -127,9 +147,11 @@ public class MainMenu extends Menu {
             }
             else{
                 SaveFileManager.loadSaveFile(saveFile);
+                clearMenu();
+                cleaBackgournd();
+                GameManager.prepareGame();
                 return true;
             }
-
         }
         else
             return false;
@@ -140,11 +162,7 @@ public class MainMenu extends Menu {
     @Override
     protected void clickAction() {
         if(buttonClicked == LOAD) {
-            if (LoadGame()) {
-                clearMenu();
-                cleaBackgournd();
-                GameManager.prepareGame();
-            }
+            openLoadGameDialog();
         }
         if(buttonClicked == PLAY){
             super.clearMenu();
@@ -159,4 +177,7 @@ public class MainMenu extends Menu {
         }
     }
 
+    public boolean isFilePicked() {
+        return filePicked;
+    }
 }

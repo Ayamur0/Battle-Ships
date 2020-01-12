@@ -109,12 +109,12 @@ public class SaveFileManager {
         LogicManager logic = GameManager.getLogic();
         GridManager gridManager = GameManager.getGridManager();
 
-        logic.setGameState(saveFile.getGameState());
         logic.setOpponentGrid(saveFile.getOpponentGrid());
         logic.setPlayerGrid(saveFile.getPlayerGrid());
         logic.setStats(saveFile.getStats());
         logic.getStats().restartTime();
         logic.setTurnHandler(saveFile.getTurnHandler());
+        logic.setGameState(saveFile.getGameState());
 
         gridManager.setShips(saveFile.getShips());
         gridManager.setMarkers(saveFile.getMarkers());

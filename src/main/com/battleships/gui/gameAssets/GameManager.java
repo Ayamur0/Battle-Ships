@@ -386,6 +386,8 @@ public class GameManager {
      * This render method blurs the scene, so it can be used as a background image.
      */
     public static void updateSceneBlurred(){
+        if(MainMenuManager.getMenu() instanceof MainMenu && ((MainMenu) MainMenuManager.getMenu()).isFilePicked())
+            ((MainMenu) MainMenuManager.getMenu()).processLoadedFile();
         blur.updateSize();
         camera.move(terrain);
         camera.addYaw(0.1f);
