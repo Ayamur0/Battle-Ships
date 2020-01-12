@@ -30,8 +30,6 @@ public class AiVsAiMenu extends InGameSettingsMenu {
      */
     @Override
     protected void createMenu() {
-        //TODO make menu great again
-
         super.playingFieldSize = new Slider(loader.loadTexture("Slider.png"), loader.loadTexture("WoodenSlider.jpg"), 5, 30,
                 15, super.sliderSize, new Vector2f(super.standardButtonPos.x, super.standardButtonPos.y), guiManager, GameManager.getGuis());
         super.difficulty1 = new Slider(loader.loadTexture("Slider.png"), loader.loadTexture("WoodenSlider.jpg"), EASY, HARD,
