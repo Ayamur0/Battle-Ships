@@ -26,20 +26,47 @@ public class ESCMenu extends Menu {
      */
     private static final int RESUME = 1;
     /**
-     * Constant value for back button
+     * Constant value for Play as AI button
      */
     private static final int PLAYAI = 2;
     /**
      * Constant value for exit button
      */
     private static final int EXIT = 3;
+    /**
+     * Indicates if the {@link ESCMenu} is active or not
+     */
     private static boolean active;
+    /**
+     * Indicates if the player is a AI
+     */
     private static boolean isPlayerAI;
 
+    /**
+     * @return The boolean indicating if the player is a AI
+     */
     public static boolean isIsPlayerAI() {
         return isPlayerAI;
     }
+    /**
+     *
+     * @return The boolean indicating if the {@link ESCMenu} is active
+     */
+    public static boolean isActive() {
+        return active;
+    }
 
+    /**
+     * Sets the variable that indicates if the {@link ESCMenu} is active
+     * @param active indicates if the {@link ESCMenu} is active
+     */
+    public static void setActive(boolean active) {
+        ESCMenu.active = active;
+    }
+    /**
+     * Sets the variable that indicates if the player is a AI
+     * @param isPlayerAI indicates if the player is a AI
+     */
     public static void setIsPlayerAI(boolean isPlayerAI) {
         ESCMenu.isPlayerAI = isPlayerAI;
     }
@@ -113,17 +140,13 @@ public class ESCMenu extends Menu {
         return false;
     }
 
-    public static boolean isActive() {
-        return active;
-    }
+    /**
+     * Clears the {@link GuiTexture} and {@link GUIText} from the {@link ESCMenu}
+     */
     public void ClearESCMenu(){
         active = false;
         clearMenu();
         cleaBackgournd();
-    }
-
-    public static void setActive(boolean active) {
-        ESCMenu.active = active;
     }
 
     /**

@@ -25,12 +25,29 @@ public class InGameSettingsMenu extends Menu {
      * Constant value for back button
      */
     private static final int BACK = 1;
+    /**
+     * Constant value for singleplayer button
+     */
     private static final int SP = 0;
+    /**
+     * Constant value for multiplayer button
+     */
     private static final int MP = 1;
+    /**
+     * Constant value for AivsAi button
+     */
     private static final int AIVSAI = 2;
-
+    /**
+     * Constant value for Easy Ai
+     */
     protected static final int EASY = 0;
+    /**
+     * Constant value for Medium Ai
+     */
     protected static final int MEDIUM = 1;
+    /**
+     * Constant value for Hard Ai
+     */
     protected static final int HARD = 2;
     /**
      * The offset used too set the {@link GUIText} above the {@link Slider}
@@ -121,13 +138,13 @@ public class InGameSettingsMenu extends Menu {
 
         playingFieldSize = new Slider(loader.loadTexture("Brick.jpg"), loader.loadTexture("Brick.jpg"), 5, 30,
                 15, sliderSize, super.standardButtonPos, guiManager, GameManager.getGuis());
-        super.guiTexts.add(new GUIText("Size: "+playingFieldSize.getValueAsInt(),fontSize, font,new Vector2f(playingFieldSize.getPositions().x,playingFieldSize.getPositions().y-0.04f) , 0.12f, true, outlineColor,0.0f, 0.1f,outlineColor, new Vector2f()));
+        super.guiTexts.add(new GUIText("Size: "+playingFieldSize.getValueAsInt(),fontSize, font,new Vector2f(playingFieldSize.getPositions().x,playingFieldSize.getPositions().y-sliderOffset) , 0.12f, true, outlineColor,0.0f, 0.1f,outlineColor, new Vector2f()));
 
 
         if (gameMode == SP) {
             difficulty1 = new Slider(loader.loadTexture("Brick.jpg"), loader.loadTexture("Brick.jpg"), EASY, HARD,
                     MEDIUM, sliderSize, new Vector2f(playingFieldSize.getPositions().x, playingFieldSize.getPositions().y + buttonGap), guiManager, GameManager.getGuis());
-            super.guiTexts.add(new GUIText("Difficulty: Normal",fontSize, font, new Vector2f(difficulty1.getPositions().x, difficulty1.getPositions().y-0.04f), 0.4f, true, outlineColor,0.0f, 0.1f,outlineColor, new Vector2f()));
+            super.guiTexts.add(new GUIText("Difficulty: Normal",fontSize, font, new Vector2f(difficulty1.getPositions().x, difficulty1.getPositions().y-sliderOffset), 0.4f, true, outlineColor,0.0f, 0.1f,outlineColor, new Vector2f()));
         }
 
         buttons.add(new GuiTexture(buttonTexture,new Vector2f(standardButtonPos.x,standardButtonPos.y+2*buttonGap),buttonSize));
