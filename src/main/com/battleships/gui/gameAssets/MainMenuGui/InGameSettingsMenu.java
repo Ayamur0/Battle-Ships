@@ -80,19 +80,21 @@ public class InGameSettingsMenu extends Menu {
 
         super.guiTexts.get(0).remove();
         super.guiTexts.get(0).setTextString("Size: "+playingFieldSize.getValueAsInt());
-
-        switch (difficulty1.getValueAsInt()){
-            case 1: difficultyName = "Easy";
-                break;
-            case 2: difficultyName = "Normal";
-                break;
-            case 3: difficultyName = "Hard";
-                break;
+        if (gameMode == SP || gameMode == AIVSAI){
+            switch (difficulty1.getValueAsInt()){
+                case 1: difficultyName = "Easy";
+                    break;
+                case 2: difficultyName = "Normal";
+                    break;
+                case 3: difficultyName = "Hard";
+                    break;
+            }
+            super.guiTexts.get(1).remove();
+            super.guiTexts.get(1).setTextString("Difficulty: "+difficultyName);
+            TextMaster.loadText(super.guiTexts.get(1));
         }
-        super.guiTexts.get(1).remove();
-        super.guiTexts.get(1).setTextString("Difficulty: "+difficultyName);
         TextMaster.loadText(super.guiTexts.get(0));
-        TextMaster.loadText(super.guiTexts.get(1));
+
     }
 
     /**
@@ -100,10 +102,12 @@ public class InGameSettingsMenu extends Menu {
      * @return {@code true} if one of the sliders is moving {@code false} else
      */
     public boolean isRunning(){
-        if (difficulty2!=null)
-            return (playingFieldSize.isRunning()||difficulty1.isRunning()||difficulty2.isRunning());
-        else
+        if (gameMode == SP)
             return (playingFieldSize.isRunning()||difficulty1.isRunning());
+        else if (gameMode == MP)
+            return (playingFieldSize.isRunning());
+        else
+            return (playingFieldSize.isRunning()||difficulty1.isRunning()||difficulty2.isRunning());
     }
 
     /**
@@ -113,14 +117,16 @@ public class InGameSettingsMenu extends Menu {
 
         playingFieldSize = new Slider(loader.loadTexture("Brick.jpg"), loader.loadTexture("Brick.jpg"), 5, 30,
                 15, sliderSize, super.standardButtonPos, guiManager, GameManager.getGuis());
-
-        difficulty1 = new Slider(loader.loadTexture("Brick.jpg"), loader.loadTexture("Brick.jpg"), 1, 3,
-                2, sliderSize,new Vector2f(playingFieldSize.getPositions().x,playingFieldSize.getPositions().y+buttonGap), guiManager, GameManager.getGuis());
-
         super.guiTexts.add(new GUIText("Size: "+playingFieldSize.getValueAsInt(),fontSize, font,new Vector2f(playingFieldSize.getPositions().x,playingFieldSize.getPositions().y-0.04f) , 0.12f, true, outlineColor,0.0f, 0.1f,outlineColor, new Vector2f()));
-        super.guiTexts.add(new GUIText("Difficulty: Normal",fontSize, font, new Vector2f(difficulty1.getPositions().x, difficulty1.getPositions().y-0.04f), 0.4f, true, outlineColor,0.0f, 0.1f,outlineColor, new Vector2f()));
 
-        buttons.add(new GuiTexture(buttonTexture,new Vector2f(difficulty1.getPositions().x, difficulty1.getPositions().y+buttonGap),buttonSize));
+
+        if (gameMode == SP) {
+            difficulty1 = new Slider(loader.loadTexture("Brick.jpg"), loader.loadTexture("Brick.jpg"), 1, 3,
+                    2, sliderSize, new Vector2f(playingFieldSize.getPositions().x, playingFieldSize.getPositions().y + buttonGap), guiManager, GameManager.getGuis());
+            super.guiTexts.add(new GUIText("Difficulty: Normal",fontSize, font, new Vector2f(difficulty1.getPositions().x, difficulty1.getPositions().y-0.04f), 0.4f, true, outlineColor,0.0f, 0.1f,outlineColor, new Vector2f()));
+        }
+
+        buttons.add(new GuiTexture(buttonTexture,new Vector2f(standardButtonPos.x,standardButtonPos.y+2*buttonGap),buttonSize));
         buttons.add(new GuiTexture(buttonTexture,new Vector2f(buttons.get(0).getPositions().x,buttons.get(0).getPositions().y+buttonGap),buttonSize));
         GameManager.getGuis().addAll(buttons);
 
@@ -159,32 +165,31 @@ public class InGameSettingsMenu extends Menu {
             if (super.buttonClicked == START){
                 super.cleaBackgournd();
                 super.clearMenu();
-                if (gameMode == SP || gameMode == AIVSAI)
-                {
-
-                }
-                if (difficulty2 != null)
-                    GameManager.getSettings().setAiLevelP(difficulty2.getValueAsInt());
-                GameManager.getSettings().setOnline(false);
-                GameManager.getSettings().setAiLevelO(difficulty1.getValueAsInt());
                 GameManager.getSettings().setSize(playingFieldSize.getValueAsInt());
                 GameManager.resizeGrid();
-
                 playingFieldSize.remove();
-                difficulty1.remove();
-                if (difficulty2 != null)
-                    difficulty2.remove();
-                if (gameMode == MP){
+
+                if (gameMode == SP || gameMode == AIVSAI){
+                    GameManager.getSettings().setAiLevelO(difficulty1.getValueAsInt());
+                    difficulty1.remove();
+                    if (gameMode == AIVSAI){
+                        GameManager.getSettings().setAiLevelP(difficulty2.getValueAsInt());
+                        difficulty2.remove();
+                    }
+                    GameManager.getLogic().advanceGamePhase();
+                }
+                else{
+                    GameManager.getSettings().setOnline(true);
+                    GameManager.getNetwork().start(true,null);
                     MainMenuManager.setMenu(new WaitingConnection(guiManager,loader));
                     ((WaitingConnection)MainMenuManager.getMenu()).setServer(true);
-                    GameManager.getSettings().setOnline(true);
-                    GameManager.getNetwork().start(false,null);
                 }
             }
             if (super.buttonClicked == BACK){
                 super.clearMenu();
                 playingFieldSize.remove();
-                difficulty1.remove();
+                if (difficulty1!=null)
+                    difficulty1.remove();
                 if (difficulty2 != null)
                     difficulty2.remove();
                 if (gameMode == SP || gameMode == AIVSAI)

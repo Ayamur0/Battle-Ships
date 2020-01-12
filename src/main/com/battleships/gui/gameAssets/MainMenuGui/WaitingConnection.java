@@ -47,6 +47,7 @@ public class WaitingConnection extends Menu{
     }
 
     private void createMenu() {
+        super.addBackground();
         buttons.add(new GuiTexture(buttonTexture,new Vector2f(0.5f,0.7f),super.buttonSize));
         super.guiTexts.add(new GUIText("Waiting for Connection",fontSize, font, new Vector2f(0.5f,0.5f), 0.5f, true, outlineColor,0.0f, 0.1f,outlineColor, new Vector2f()));
         super.guiTexts.add(new GUIText("Cancel",fontSize, font, new Vector2f(buttons.get(0).getPositions()), 0.12f, true, outlineColor,0.0f, 0.1f,outlineColor, new Vector2f()));
@@ -56,7 +57,9 @@ public class WaitingConnection extends Menu{
         GameManager.getGuis().add(buttons.get(0));
     }
     public void startMultiplayerGame(){
-        //GameManager.getNetwork().sendLoad();
+        if (isServer())
+            //GameManager.getNetwork().sendLoad(MultiplayerMenu.getFilename());
+
         GameManager.getLogic().advanceGamePhase();
 
         //load id senden

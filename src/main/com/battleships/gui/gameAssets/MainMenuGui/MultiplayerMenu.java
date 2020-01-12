@@ -29,7 +29,12 @@ public class MultiplayerMenu extends Menu {
      * Constant value for back button
      */
     private static final int BACK = 3;
-    private String filename;
+
+    public static String getFilename() {
+        return filename;
+    }
+
+    private static String filename;
 
     /**
      * Creates the Multiplayer menu, sets the color of the {@link GUIText} and creates the {@link GUIText} on the Buttons.
@@ -82,7 +87,10 @@ public class MultiplayerMenu extends Menu {
             super.buttonClicked = 2;
             return true;
         }
-
+        if(super.isClickOnGui(super.buttons.get(3), x, y)) {
+            super.buttonClicked = 3;
+            return true;
+        }
         return false;
     }
 
@@ -95,17 +103,17 @@ public class MultiplayerMenu extends Menu {
             JFileChooser fc = new JFileChooser();
             fc.showOpenDialog(null);
             filename = fc.getName(fc.getSelectedFile());
-            filename.replace(".xml","");
-            if(SaveFileManager.loadFromFile(filename) == null) {
-                GameManager.getSettings().setOnline(true);
-                MainMenuManager.setMenu(new WaitingConnection(guiManager, loader));
+            if (filename != null){
+                filename.replace(".xml","");
+                if(SaveFileManager.loadFromFile(filename) == null) {
+                    GameManager.getSettings().setOnline(true);
+                    MainMenuManager.setMenu(new WaitingConnection(guiManager, loader));
+                }
             }
         }
         if (super.buttonClicked == HOST){
             super.clearMenu();
-            //TODO Set mode to multiplayer
             MainMenuManager.setMenu(new InGameSettingsMenu(super.guiManager,super.loader,1));
-            //TODO Adding host game creation
 
         }
         if (super.buttonClicked == CLIENT){

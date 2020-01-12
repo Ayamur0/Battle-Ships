@@ -12,6 +12,7 @@ import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWMouseButtonCallback;
 
+import java.lang.reflect.GenericArrayType;
 import java.nio.DoubleBuffer;
 
 public class MainMenuManager {
@@ -50,6 +51,8 @@ public class MainMenuManager {
 
     public void backToMainMenu(){
         clearAll();
+        GameManager.getSettings().setAiLevelP(-1);
+        GameManager.getSettings().setAiLevelO(-1);
         WindowManager.setMainMenuCallbacks(GameManager.getMainMenuManager(),wFbo);
         GameManager.getLogic().setGameState(GameManager.MENU);
         GridManager.setIsBackground(true);
