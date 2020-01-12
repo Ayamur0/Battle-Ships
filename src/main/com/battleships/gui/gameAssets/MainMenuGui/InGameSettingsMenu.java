@@ -8,6 +8,7 @@ import com.battleships.gui.guis.GuiTexture;
 import com.battleships.gui.guis.Slider;
 import com.battleships.gui.renderingEngine.Loader;
 import com.battleships.logic.LogicManager;
+import com.sun.xml.internal.ws.policy.EffectiveAlternativeSelector;
 import org.joml.Vector2f;
 
 /**
@@ -158,18 +159,26 @@ public class InGameSettingsMenu extends Menu {
             if (super.buttonClicked == START){
                 super.cleaBackgournd();
                 super.clearMenu();
+                if (gameMode == SP || gameMode == AIVSAI)
+                {
+
+                }
                 if (difficulty2 != null)
                     GameManager.getSettings().setAiLevelP(difficulty2.getValueAsInt());
+                GameManager.getSettings().setOnline(false);
                 GameManager.getSettings().setAiLevelO(difficulty1.getValueAsInt());
                 GameManager.getSettings().setSize(playingFieldSize.getValueAsInt());
                 GameManager.resizeGrid();
-                GameManager.getLogic().advanceGamePhase();
+
                 playingFieldSize.remove();
                 difficulty1.remove();
                 if (difficulty2 != null)
                     difficulty2.remove();
                 if (gameMode == MP){
-                    //TODO start multiplayer session
+                    MainMenuManager.setMenu(new WaitingConnection(guiManager,loader));
+                    ((WaitingConnection)MainMenuManager.getMenu()).setServer(true);
+                    GameManager.getSettings().setOnline(true);
+                    GameManager.getNetwork().start(false,null);
                 }
             }
             if (super.buttonClicked == BACK){

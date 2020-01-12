@@ -8,6 +8,7 @@ import com.battleships.gui.fontMeshCreator.FontType;
 import com.battleships.gui.fontRendering.TextMaster;
 import com.battleships.gui.gameAssets.MainMenuGui.ESCMenu;
 import com.battleships.gui.gameAssets.MainMenuGui.InGameSettingsMenu;
+import com.battleships.gui.gameAssets.MainMenuGui.MainMenu;
 import com.battleships.gui.gameAssets.MainMenuGui.MainMenuManager;
 import com.battleships.gui.gameAssets.grids.GridManager;
 import com.battleships.gui.gameAssets.grids.ShipManager;
@@ -571,9 +572,12 @@ public class GameManager {
             }
             if(key == GLFW.GLFW_KEY_T && action == GLFW.GLFW_PRESS)
                 camera.turnCamera();
-            if(key == GLFW.GLFW_KEY_ESCAPE && action == GLFW.GLFW_PRESS)
-                if (GameManager.getLogic().getGameState()!=GameManager.MENU)
+            if(key == GLFW.GLFW_KEY_ESCAPE && action == GLFW.GLFW_PRESS){
+                if (GameManager.getLogic().getGameState()!=GameManager.MENU&&!ESCMenu.isActive())
                     MainMenuManager.setMenu(new ESCMenu(guiManager,loader));
+                if (ESCMenu.isActive())
+                    ((ESCMenu)MainMenuManager.getMenu()).ClearESCMenu();
+                }
             if(key == GLFW.GLFW_KEY_K && action == GLFW.GLFW_PRESS) {
                 FinishGame f = new FinishGame();
                 f.finishGame(loader, guiManager, false);

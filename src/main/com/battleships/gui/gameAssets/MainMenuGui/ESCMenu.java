@@ -5,9 +5,9 @@ import com.battleships.gui.gameAssets.GameManager;
 import com.battleships.gui.guis.GuiManager;
 import com.battleships.gui.guis.GuiTexture;
 import com.battleships.gui.renderingEngine.Loader;
-import com.battleships.gui.window.WindowManager;
+import com.battleships.logic.SaveFileManager;
 import org.joml.Vector2f;
-import org.lwjgl.glfw.GLFW;
+import org.lwjgl.util.tinyfd.TinyFileDialogs;
 
 /**
  * Overlay if ESC was pressed in the game
@@ -31,6 +31,7 @@ public class ESCMenu extends Menu {
      * Constant value for exit button
      */
     private static final int EXIT = 3;
+    private static boolean active;
 
     /**
      * Creates the menu when you press ESC, sets the color of the {@link GUIText} and creates the {@link GUIText} on the Buttons.
@@ -39,6 +40,8 @@ public class ESCMenu extends Menu {
      */
     public ESCMenu(GuiManager guiManager, Loader loader) {
         super(guiManager, loader);
+
+        active = true;
 
         super.addBackground();
 
@@ -55,9 +58,7 @@ public class ESCMenu extends Menu {
 
         super.CreateButtonTextures(4);
 
-        for(int i = 0; i < buttons.size(); i++){
-            GameManager.getGuis().add(buttons.get(i));
-        }
+        GameManager.getGuis().addAll(buttons);
 
 
 
@@ -98,23 +99,57 @@ public class ESCMenu extends Menu {
         return false;
     }
 
+    public static boolean isActive() {
+        return active;
+    }
+    public void ClearESCMenu(){
+        active = false;
+        clearMenu();
+        cleaBackgournd();
+    }
+
+    public static void setActive(boolean active) {
+        ESCMenu.active = active;
+    }
+
     /**
      * Toggles state of clicked button.
      */
     @Override
     protected void clickAction() {
         if(buttonClicked == SAVE) {
-            //TODO adding save thing
+            long time = System.currentTimeMillis();
+            if (!GameManager.getSettings().isOnline()) {
+                String filename = TinyFileDialogs.tinyfd_inputBox("Save", "Enter file name", "");
+                if(SaveFileManager.saveToFile(filename))
+                    GameManager.getMainMenuManager().backToMainMenu();
+                else
+                    super.guiTexts.add(new GUIText("Error saving file", fontSize, font,new Vector2f(), 0.12f, true,outlineColor, 0.0f, 0.1f,outlineColor, new Vector2f()));
+            }
+            else{
+                if (SaveFileManager.saveToFile(String.valueOf(time))){
+                    GameManager.getNetwork().closeConnection();
+                    GameManager.getNetwork().sendSave(time);
+                    GameManager.getMainMenuManager().backToMainMenu();
+                }
+                else
+                    super.guiTexts.add(new GUIText("Error saving file", fontSize, font,new Vector2f(), 0.12f, true,outlineColor, 0.0f, 0.1f,outlineColor, new Vector2f()));
+            }
+
         }
         if(buttonClicked == RESUME){
+            active=false;
             super.clearMenu();
             super.cleaBackgournd();
-            //TODO check with tim
         }
         if (super.buttonClicked == PLAYAI){
             super.clearMenu();
+            new AiPlayerChooserMenu(guiManager,loader);
         }
         if(buttonClicked == EXIT){
+            active=false;
+            super.clearMenu();
+            GameManager.getNetwork().closeConnection();
             GameManager.getMainMenuManager().backToMainMenu();
             GameManager.getLogic().setGameState(GameManager.MENU);
             MainMenuManager.setMenu(new MainMenu(guiManager,loader));

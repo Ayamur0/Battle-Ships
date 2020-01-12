@@ -18,6 +18,16 @@ public class WaitingConnection extends Menu{
      * Constant value for Cancel button
      */
     private static final int CANCEL = 0;
+    private boolean server;
+
+    public boolean isServer() {
+        return server;
+    }
+
+    public void setServer(boolean server) {
+        this.server = server;
+    }
+
     /**
      * Indicates if you are waiting for an connection or not
      */
@@ -45,6 +55,13 @@ public class WaitingConnection extends Menu{
 
         GameManager.getGuis().add(buttons.get(0));
     }
+    public void startMultiplayerGame(){
+        //GameManager.getNetwork().sendLoad();
+        GameManager.getLogic().advanceGamePhase();
+
+        //load id senden
+        //wenn net send size
+    }
 
 
     /**
@@ -69,6 +86,7 @@ public class WaitingConnection extends Menu{
     protected void clickAction() {
         if(buttonClicked == CANCEL) {
             super.clearMenu();
+            GameManager.getNetwork().stopConnectionSearch();
             MainMenuManager.setMenu(new MultiplayerMenu(guiManager,loader));
         }
     }
