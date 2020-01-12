@@ -374,6 +374,7 @@ public class GameManager {
         waterFbos.unbindCurrentFrameBuffer();
         GL11.glDisable(GL30.GL_CLIP_DISTANCE0); //not all drivers support disabling, if it doesn't work set clipPlane when rendering to screen high enough so nothing gets clipped
         waterRenderer.render(waterTiles, camera, light);
+        waterFbos.processIconify();
     }
 
     /**

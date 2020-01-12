@@ -1,6 +1,7 @@
 package com.battleships.gui.water;
 
 import com.battleships.gui.window.WindowManager;
+import org.lwjgl.glfw.GLFWWindowIconifyCallback;
 import org.lwjgl.glfw.GLFWWindowSizeCallback;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL14;
@@ -60,6 +61,12 @@ public class WaterFrameBuffers {
      * ID of the depth buffer of the refraction.
      */
     private int refractionDepthTexture;
+
+    /**
+     * {@code true} if the window was recently maximized (after being put into taskbar).
+     * Gets set back to {@code false} after processed.
+     */
+    private boolean iconify;
 
     /**
      * Initialize water fbos reflection and refraction.
@@ -246,5 +253,34 @@ public class WaterFrameBuffers {
             updateFrameBuffers();
         }
     };
+
+    /**
+     * Needed to resize FrameBuffer after tabbing out or into the game so water gets displayed properly.
+     */
+    public GLFWWindowIconifyCallback iconifyCallback = new GLFWWindowIconifyCallback() {
+        @Override
+        public void invoke(long l, boolean small) {
+            if(small)
+                return;
+            new Thread(() -> {
+                try {
+                    Thread.sleep(10);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                iconify = true;
+            }).start();
+        }
+    };
+
+    /**
+     * Reset waterFrameBuffer sizes after window has been resized through tabbing out.
+     */
+    public void processIconify(){
+        if(iconify) {
+            updateFrameBuffers();
+            iconify = false;
+        }
+    }
 
 }

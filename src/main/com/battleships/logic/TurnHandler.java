@@ -69,6 +69,14 @@ public class TurnHandler {
     }
 
     /**
+     * Set playerTurn, needed if player should act second.
+     * @param playerTurn {@code true} if next turn should be the player, {@code false} else.
+     */
+    public void setPlayerTurn(boolean playerTurn) {
+        this.playerTurn = playerTurn;
+    }
+
+    /**
      * @return {@code true} if it's currently the players turn, {@code false} else.
      */
     public boolean isPlayerTurn() {

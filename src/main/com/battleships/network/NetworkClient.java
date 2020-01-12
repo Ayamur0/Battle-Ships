@@ -13,7 +13,7 @@ public class NetworkClient extends Network implements Runnable{
     private PrintWriter toServer;
     private BufferedReader keyboardInput;
 
-
+    private boolean waitingForMessage;
 
 
     private PrintWriter out;
@@ -34,7 +34,10 @@ public class NetworkClient extends Network implements Runnable{
     }
 
     public void sendMessage(String message){
+        if(waitingForMessage)
+            return;
         toServer.println(message);
+        waitingForMessage = true;
         Thread t = new Thread(this);
         t.start();
     }
@@ -48,6 +51,7 @@ public class NetworkClient extends Network implements Runnable{
             System.err.println("Error receiving message from Server!");
         }
         setStringFunction(1, answer);
+        waitingForMessage = false;
     }
 
     private void pingpong() throws  IOException{

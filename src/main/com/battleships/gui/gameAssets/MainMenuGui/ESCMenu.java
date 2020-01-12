@@ -9,8 +9,6 @@ import com.battleships.logic.SaveFileManager;
 import org.joml.Vector2f;
 import org.lwjgl.util.tinyfd.TinyFileDialogs;
 
-import java.lang.reflect.GenericArrayType;
-
 /**
  * Overlay if ESC was pressed in the game
  *
@@ -26,28 +24,59 @@ public class ESCMenu extends Menu {
      */
     private static final int RESUME = 1;
     /**
-     * Constant value for back button
+     * Constant value for Play as AI button
      */
     private static final int PLAYAI = 2;
     /**
      * Constant value for exit button
      */
     private static final int EXIT = 3;
+    /**
+     * Indicates if the {@link ESCMenu} is active or not
+     */
     private static boolean active;
+    /**
+     * Indicates if the player is a AI
+     */
     private static boolean isPlayerAI;
 
+    /**
+     * @return The boolean indicating if the player is a AI
+     */
     public static boolean isIsPlayerAI() {
         return isPlayerAI;
     }
 
+    /**
+     * @return The boolean indicating if the {@link ESCMenu} is active
+     */
+    public static boolean isActive() {
+        return active;
+    }
+
+    /**
+     * Sets the variable that indicates if the {@link ESCMenu} is active
+     *
+     * @param active indicates if the {@link ESCMenu} is active
+     */
+    public static void setActive(boolean active) {
+        ESCMenu.active = active;
+    }
+
+    /**
+     * Sets the variable that indicates if the player is a AI
+     *
+     * @param isPlayerAI indicates if the player is a AI
+     */
     public static void setIsPlayerAI(boolean isPlayerAI) {
         ESCMenu.isPlayerAI = isPlayerAI;
     }
 
     /**
      * Creates the menu when you press ESC, sets the color of the {@link GUIText} and creates the {@link GUIText} on the Buttons.
+     *
      * @param guiManager GuiManager that should handle the click function of these guis.
-     * @param loader Loader needed to load textures
+     * @param loader     Loader needed to load textures
      */
     public ESCMenu(GuiManager guiManager, Loader loader) {
         super(guiManager, loader);
@@ -65,21 +94,20 @@ public class ESCMenu extends Menu {
     /**
      * Creates {@link GUIText}as labels and adds the {@link GuiTexture} for the buttons.
      */
-    private void createMenu(){
+    private void createMenu() {
 
         super.CreateButtonTextures(4);
 
         GameManager.getGuis().addAll(buttons);
 
 
-
-        super.guiTexts.add(new GUIText("Save", fontSize, font, new Vector2f(buttons.get(0).getPositions().x,buttons.get(0).getPositions().y), 0.12f, true,outlineColor, 0.0f, 0.1f,outlineColor, new Vector2f()));
-        super.guiTexts.add(new GUIText("Resume", fontSize, font,new Vector2f(buttons.get(1).getPositions().x,buttons.get(1).getPositions().y), 0.12f, true,outlineColor, 0.0f, 0.1f,outlineColor, new Vector2f()));
+        super.guiTexts.add(new GUIText("Save", fontSize, font, new Vector2f(buttons.get(0).getPositions().x, buttons.get(0).getPositions().y), 0.12f, true, outlineColor, 0.0f, 0.1f, outlineColor, new Vector2f()));
+        super.guiTexts.add(new GUIText("Resume", fontSize, font, new Vector2f(buttons.get(1).getPositions().x, buttons.get(1).getPositions().y), 0.12f, true, outlineColor, 0.0f, 0.1f, outlineColor, new Vector2f()));
         if (isPlayerAI)
-            super.guiTexts.add(new GUIText("Play yourself", fontSize, font,new Vector2f(buttons.get(2).getPositions().x,buttons.get(2).getPositions().y), 0.2f, true,outlineColor, 0.0f, 0.1f,outlineColor, new Vector2f()));
+            super.guiTexts.add(new GUIText("Play yourself", fontSize, font, new Vector2f(buttons.get(2).getPositions().x, buttons.get(2).getPositions().y), 0.2f, true, outlineColor, 0.0f, 0.1f, outlineColor, new Vector2f()));
         else
-            super.guiTexts.add(new GUIText("Play as AI", fontSize, font,new Vector2f(buttons.get(2).getPositions().x,buttons.get(2).getPositions().y), 0.2f, true,outlineColor, 0.0f, 0.1f,outlineColor, new Vector2f()));
-        super.guiTexts.add(new GUIText("Exit", fontSize, font,new Vector2f(buttons.get(3).getPositions().x,buttons.get(3).getPositions().y), 0.12f, true,outlineColor, 0.0f, 0.1f,outlineColor, new Vector2f()));
+            super.guiTexts.add(new GUIText("Play as AI", fontSize, font, new Vector2f(buttons.get(2).getPositions().x, buttons.get(2).getPositions().y), 0.2f, true, outlineColor, 0.0f, 0.1f, outlineColor, new Vector2f()));
+        super.guiTexts.add(new GUIText("Exit", fontSize, font, new Vector2f(buttons.get(3).getPositions().x, buttons.get(3).getPositions().y), 0.12f, true, outlineColor, 0.0f, 0.1f, outlineColor, new Vector2f()));
 
         super.createClickable();
     }
@@ -87,43 +115,40 @@ public class ESCMenu extends Menu {
 
     /**
      * Tests if the click was on one of the {@link GuiTexture} in the menu
+     *
      * @param gui The gui to test for if the click was on it.
-     * @param x xPos of the click (left of screen = 0, right of screen = 1)
-     * @param y yPos of the click (top of screen = 0, bottom of screen = 1)
+     * @param x   xPos of the click (left of screen = 0, right of screen = 1)
+     * @param y   yPos of the click (top of screen = 0, bottom of screen = 1)
      * @return {@code true} if the click was on one of the button textures, {@code false} else.
      */
     @Override
     protected boolean isClickOnGui(GuiTexture gui, double x, double y) {
-        if(super.isClickOnGui(super.buttons.get(0), x, y)) {
+        if (super.isClickOnGui(super.buttons.get(0), x, y)) {
             super.buttonClicked = 0;
             return true;
         }
-        if(super.isClickOnGui(super.buttons.get(1), x, y)) {
+        if (super.isClickOnGui(super.buttons.get(1), x, y)) {
             super.buttonClicked = 1;
             return true;
         }
-        if(super.isClickOnGui(super.buttons.get(2), x, y)) {
+        if (super.isClickOnGui(super.buttons.get(2), x, y)) {
             super.buttonClicked = 2;
             return true;
         }
-        if(super.isClickOnGui(super.buttons.get(3), x, y)) {
+        if (super.isClickOnGui(super.buttons.get(3), x, y)) {
             super.buttonClicked = 3;
             return true;
         }
         return false;
     }
 
-    public static boolean isActive() {
-        return active;
-    }
-    public void ClearESCMenu(){
+    /**
+     * Clears the {@link GuiTexture} and {@link GUIText} from the {@link ESCMenu}
+     */
+    public void ClearESCMenu() {
         active = false;
         clearMenu();
         cleaBackgournd();
-    }
-
-    public static void setActive(boolean active) {
-        ESCMenu.active = active;
     }
 
     /**
@@ -131,41 +156,38 @@ public class ESCMenu extends Menu {
      */
     @Override
     protected void clickAction() {
-        if(buttonClicked == SAVE) {
+        if (buttonClicked == SAVE) {
             long time = System.currentTimeMillis();
             if (!GameManager.getSettings().isOnline()) {
                 new Thread(new TextInput("Save", "Enter file name")).start();
-                }
-            else{
-                if (SaveFileManager.saveToFile(String.valueOf(time))){
+            } else {
+                if (SaveFileManager.saveToFile(String.valueOf(time))) {
                     GameManager.getNetwork().closeConnection();
                     //GameManager.getNetwork().sendSave(time);
                     GameManager.getMainMenuManager().backToMainMenu();
-                }
-                else
-                    super.guiTexts.add(new GUIText("Error saving file", fontSize, font,new Vector2f(), 0.12f, true,outlineColor, 0.0f, 0.1f,outlineColor, new Vector2f()));
+                } else
+                    super.guiTexts.add(new GUIText("Error saving file", fontSize, font, new Vector2f(), 0.12f, true, outlineColor, 0.0f, 0.1f, outlineColor, new Vector2f()));
             }
 
         }
-        if(buttonClicked == RESUME){
-            active=false;
+        if (buttonClicked == RESUME) {
+            active = false;
             super.clearMenu();
             super.cleaBackgournd();
         }
-        if (super.buttonClicked == PLAYAI){
-            if (isIsPlayerAI()){
+        if (super.buttonClicked == PLAYAI) {
+            if (isIsPlayerAI()) {
                 GameManager.getSettings().setAiLevelP(-1);
-                isPlayerAI=false;
+                isPlayerAI = false;
                 super.clearMenu();
                 super.cleaBackgournd();
-            }
-            else{
+            } else {
                 super.clearMenu();
-                new AiPlayerChooserMenu(guiManager,loader);
+                new AiPlayerChooserMenu(guiManager, loader);
             }
         }
-        if(buttonClicked == EXIT){
-            active=false;
+        if (buttonClicked == EXIT) {
+            active = false;
             super.clearMenu();
             if (GameManager.getSettings().isOnline())
                 GameManager.getNetwork().closeConnection();
@@ -177,11 +199,11 @@ public class ESCMenu extends Menu {
     /**
      * Processes a entered filename by the user by using the last Input made through a {@link TinyFileDialogs}.
      */
-    public void processInput(){
-        if(SaveFileManager.saveToFile(userInput))
+    public void processInput() {
+        if (SaveFileManager.saveToFile(userInput))
             GameManager.getMainMenuManager().backToMainMenu();
         else
-            super.guiTexts.add(new GUIText("Error saving file", fontSize, font,new Vector2f(), 0.12f, true,outlineColor, 0.0f, 0.1f,outlineColor, new Vector2f()));
+            super.guiTexts.add(new GUIText("Error saving file", fontSize, font, new Vector2f(), 0.12f, true, outlineColor, 0.0f, 0.1f, outlineColor, new Vector2f()));
         userInputMade = false;
     }
 }
