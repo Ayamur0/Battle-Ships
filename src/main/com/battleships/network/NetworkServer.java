@@ -144,4 +144,13 @@ public class NetworkServer extends Network implements Runnable{
     public boolean isConnected() {
         return connected;
     }
+
+    public void closeConnection(){
+        try {
+            serverSocket.close();
+            clientSocket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

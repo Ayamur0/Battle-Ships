@@ -86,4 +86,12 @@ public class NetworkClient extends Network implements Runnable{
             e.printStackTrace();
         }
     }
+
+    public void closeConnection(){
+        try {
+            clientSocket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

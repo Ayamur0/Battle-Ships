@@ -24,29 +24,37 @@ public class NetworkManager {
     }
 
     public void sendSize(int size){
-        player.sendMessage("size " + size);
+        if(player != null)
+            player.sendMessage("size " + size);
     }
 
     public void sendShoot(int x, int y){
-        player.sendMessage("shoot " + (y-1) + " " + (x-1));
-        player.setLastShot(x,y);
+        if(player != null){
+            player.sendMessage("shoot " + (y-1) + " " + (x-1));
+            player.setLastShot(x,y);
+        }
     }
 
     public void sendConfirm(){
-        player.sendMessage("confirm");
-        player.setPlayerConfirm();
+        if(player != null) {
+            player.sendMessage("confirm");
+            player.setPlayerConfirm();
+        }
     }
 
     public void sendSave(long ID){
-        player.sendMessage("save " + ID);
+        if(player != null)
+            player.sendMessage("save " + ID);
     }
 
     public void sendLoad(long ID){
-        player.sendMessage("load " + ID);
+        if(player != null)
+            player.sendMessage("load " + ID);
     }
 
     public void sendAnswer(int a){
-        player.sendMessage("answer " + a);
+        if(player != null)
+            player.sendMessage("answer " + a);
     }
 
     public void execute(){
@@ -59,5 +67,15 @@ public class NetworkManager {
             return ((NetworkServer) player).isConnected();
         else
             return false;
+    }
+
+    public void stopConnectionSearch(){
+        if(player instanceof NetworkServer)
+            ((NetworkServer) player).stopConnectionSearch();
+    }
+
+    public void closeConnection(){
+        if(player != null)
+            player.closeConnection();
     }
 }
