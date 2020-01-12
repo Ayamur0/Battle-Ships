@@ -46,7 +46,8 @@ public class MultiplayerMenu extends Menu {
      * Creates {@link GUIText}as labels and adds the {@link GuiTexture} for the buttons.
      */
     private void createMenu() {
-        super.CreateButtonTextures(1);
+        super.buttons.add(new GuiTexture(buttonTexture,standardButtonPos,super.buttonSize));
+
 
         super.guiTexts.add(new GUIText("Host", fontSize, font, new Vector2f(buttons.get(0).getPositions().x, buttons.get(0).getPositions().y), 0.12f, true,outlineColor, 0.0f, 0.1f,outlineColor, new Vector2f()));
 

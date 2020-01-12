@@ -57,9 +57,9 @@ public class MainMenu extends Menu {
      * Creates {@link GUIText}as labels and adds the {@link GuiTexture} for the buttons.
      */
     private void createMenu(){
+        super.addBackground();
 
         super.CreateButtonTextures(4);
-
 
         super.guiTexts.add(new GUIText("Load", fontSize, font, new Vector2f(buttons.get(0).getPositions().x,buttons.get(0).getPositions().y), 0.12f, true,outlineColor, 0.0f, 0.1f,outlineColor, new Vector2f()));
         super.guiTexts.add(new GUIText("Play", fontSize, font,new Vector2f(buttons.get(1).getPositions().x,buttons.get(1).getPositions().y), 0.12f, true,outlineColor, 0.0f, 0.1f,outlineColor, new Vector2f()));
@@ -104,6 +104,7 @@ public class MainMenu extends Menu {
     protected void clickAction() {
         if(buttonClicked == LOAD) {
             fc.showOpenDialog(null);
+            System.out.println(fc.getName(fc.getSelectedFile()));
         }
         if(buttonClicked == PLAY){
             super.clearMenu();

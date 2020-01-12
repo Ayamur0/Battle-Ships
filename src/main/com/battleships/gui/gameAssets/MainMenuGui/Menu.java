@@ -99,6 +99,8 @@ public abstract class Menu extends GuiClickCallback {
             scrollBackground = loader.loadTexture("scroll.png");
         if (icon == 0)
             icon = loader.loadTexture("StartIcon.png");
+        if (backgounds.size()==0)
+            addBackground();
     }
 
     /**
@@ -106,8 +108,6 @@ public abstract class Menu extends GuiClickCallback {
      * @param anzahl how many button textures should be created
      */
     protected void CreateButtonTextures(int anzahl){
-        if (backgounds.size()!=2)
-            addBackground();
         buttons.add(new GuiTexture(buttonTexture, standardButtonPos, buttonSize));
         for (int i = 0;i < anzahl-1; i++){
             buttons.add(new GuiTexture(buttonTexture,new Vector2f(buttons.get(i).getPositions().x,buttons.get(i).getPositions().y+buttonGap),buttonSize));
@@ -125,7 +125,7 @@ public abstract class Menu extends GuiClickCallback {
     }
 
     /**
-     * clears all {@link GuiTexture} that are no buttons at the game beginn
+     * clears all {@link GuiTexture} that are no buttons at the game Begin
      */
     protected void cleaBackgournd(){
         GameManager.getGuis().removeAll(backgounds);
@@ -170,5 +170,6 @@ public abstract class Menu extends GuiClickCallback {
             guiManager.removeClickableGui(gui);
             GameManager.getGuis().remove(gui);
         }
+
     }
 }
