@@ -1,6 +1,7 @@
 package com.battleships.gui.gameAssets.MainMenuGui;
 
 import com.battleships.gui.fontMeshCreator.GUIText;
+import com.battleships.gui.gameAssets.GameManager;
 import com.battleships.gui.guis.GuiManager;
 import com.battleships.gui.guis.GuiTexture;
 import com.battleships.gui.renderingEngine.Loader;
@@ -124,10 +125,13 @@ public class MainMenu extends Menu {
             String s = fc.getName(fc.getSelectedFile());
             if (s!=null){
                 String lol = s.replace(".xml","");
-                System.out.println(lol);
                 if(SaveFileManager.loadFromFile(lol)==null){
                     super.guiTexts.add(new GUIText("Error loading file", fontSize, font,new Vector2f(0.5f,0.3f), 0.3f, true,outlineColor, 0.0f, 0.1f,outlineColor, new Vector2f()));
-
+                }
+                else{
+                    clearMenu();
+                    cleaBackgournd();
+                    GameManager.getLogic().advanceGamePhase();
                 }
             }
         }
