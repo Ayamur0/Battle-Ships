@@ -210,6 +210,7 @@ public class WindowManager {
     public static void setMainMenuCallbacks(MainMenuManager mainMenuManager, WaterFrameBuffers wFbo){
         GLFW.glfwSetMouseButtonCallback(window, mainMenuManager.testClick);
         GLFW.glfwSetWindowSizeCallback(window, wFbo.sizeCallback);
+        GLFW.glfwSetKeyCallback(window,MainMenuManager.keyCallback);
     }
 
     /**

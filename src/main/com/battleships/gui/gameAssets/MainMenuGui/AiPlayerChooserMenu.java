@@ -56,12 +56,14 @@ public class AiPlayerChooserMenu extends Menu {
     @Override
     protected void clickAction() {
         if (buttonClicked == EASY){
+            ESCMenu.setIsPlayerAI(true);
             ESCMenu.setActive(false);
             clearMenu();
             cleaBackgournd();
             GameManager.getSettings().setAiLevelP(EASY);
         }
         if (buttonClicked == MEDIUM){
+            ESCMenu.setIsPlayerAI(true);
             ESCMenu.setActive(false);
 
             clearMenu();
@@ -69,6 +71,7 @@ public class AiPlayerChooserMenu extends Menu {
             GameManager.getSettings().setAiLevelP(MEDIUM);
         }
         if (buttonClicked == HARD){
+            ESCMenu.setIsPlayerAI(true);
             ESCMenu.setActive(false);
             clearMenu();
             cleaBackgournd();
