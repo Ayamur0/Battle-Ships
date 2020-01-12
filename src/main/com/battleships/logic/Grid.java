@@ -136,9 +136,30 @@ public class Grid {
      * @param ship Ship to remove from the grid.
      */
     public void removeShip(Ship ship){
-        for(Cell c : ship.getOccupiedCells()){
+        for(Cell c : ship.getOccupiedCells()) {
             c.state = WATER;
-            blockFieldsAroundIndex(c.y +1, c.x+1, WATER, false);
+            c.ship = null;
+            int[] surrounding = {c.y - 1, c.x - 1, c.y, c.x - 1, c.y + 1, c.x - 1, c.y - 1, c.x, c.y + 1, c.x, c.y - 1, c.x + 1, c.y, c.x + 1, c.y + 1, c.x + 1};
+            boolean shipFound = false;
+            for (int i = 0; i < surrounding.length; i += 2) {
+                System.out.println("Cell: X: " + surrounding[i+1] + " Y: " + surrounding[i]);
+                int[] toTest = {surrounding[i] - 1, surrounding[i+1] - 1, surrounding[i], surrounding[i+1] - 1, surrounding[i] + 1, surrounding[i+1] - 1, surrounding[i] - 1,
+                        surrounding[i+1], surrounding[i] + 1, surrounding[i+1], surrounding[i] - 1, surrounding[i+1] + 1, surrounding[i],
+                        surrounding[i+1] + 1, surrounding[i] + 1, surrounding[i+1] + 1};
+                for (int j = 0; j < toTest.length; j += 2) {
+                    //System.out.println("X: " + toTest[j] + " Y: " + toTest[j+1]);
+                    if (toTest[j] >= 0 && toTest[j] < grid.length && toTest[j + 1] >= 0 && toTest[j + 1] < grid.length && grid[toTest[j + 1]][toTest[j]].state == SHIP) {
+                        if(!ship.getOccupiedCells().contains(getCell(toTest[j]+1,toTest[j+1]+1))) {
+                            Cell test = getCell(toTest[j]+1,toTest[j+1]+1);
+                            shipFound = true;
+                        }
+                    }
+                }
+                System.out.println("Result: " + shipFound);
+                if(!shipFound && surrounding[i] >= 0 && surrounding[i] < grid.length && surrounding[i + 1] >= 0 && surrounding[i + 1] < grid.length)
+                    grid[surrounding[i+1]][surrounding[i]].state = WATER;
+                shipFound = false;
+            }
         }
     }
 
