@@ -247,13 +247,21 @@ public class GameManager {
     }
 
     /**
+     * Prepares stuff that is always needed when a game is started.
+     */
+    public static void prepareGame(){
+        GridManager.setIsBackground(false);
+        WindowManager.setCallbacks(camera, waterFbos);
+        disableSymbols = new DisableSymbols(loader, guiManager, guis);
+        camera.setStandardPos();
+    }
+
+    /**
      * Starts the ship placing phase.
      * Creates gui needed for that phase and destroys unneeded guis.
      */
     public static void startShipPlacementPhase(){
-        GridManager.setIsBackground(false);
-        WindowManager.setCallbacks(camera, waterFbos);
-        disableSymbols = new DisableSymbols(loader, guiManager, guis);
+        prepareGame();
         if(shipCounter != null)
             shipCounter.remove();
         shipSelector = new ShipSelector(loader, guiManager, shipManager, guis);
@@ -663,10 +671,5 @@ public class GameManager {
         return network;
     }
 
-    /**
-     * @return The camera of the current game.
-     */
-    public static Camera getCamera() {
-        return camera;
-    }
+
 }

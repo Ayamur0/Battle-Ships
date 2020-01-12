@@ -5,6 +5,7 @@ import com.battleships.gui.gameAssets.grids.GridManager;
 import com.battleships.logic.OnlineGrid;
 import com.battleships.logic.SaveFileManager;
 import com.battleships.logic.Settings;
+import org.joml.Intersectiond;
 import org.joml.Vector2i;
 
 public abstract class Network implements NetworkInterface{
@@ -75,10 +76,14 @@ public abstract class Network implements NetworkInterface{
                action = CONFIRM;
         }else if(text.contains(answer)){
             text = text.replace(answer, "");
+            if(Integer.parseInt(text) == 0)
+                GameManager.processShootAnswer(false);
              if(Integer.parseInt(text) == 1){
+                 GameManager.processShootAnswer(true);
                  if(GameManager.getLogic().getOpponentGrid() instanceof OnlineGrid)
                     ((OnlineGrid) GameManager.getLogic().getOpponentGrid()).processHit(lastShotX,lastShotY);
             }else if(Integer.parseInt(text) == 2){
+                 GameManager.processShootAnswer(true);
                  if(GameManager.getLogic().getOpponentGrid() instanceof OnlineGrid)
                      ((OnlineGrid) GameManager.getLogic().getOpponentGrid()).processHitSunk(lastShotX,lastShotY);
             }
