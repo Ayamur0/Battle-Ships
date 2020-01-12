@@ -131,6 +131,10 @@ public class AIMedium extends AI{
     protected int shootCell(Vector2i cell){
         if(cell.x < 1 || cell.y < 1 || cell.x > gridSize || cell.y > gridSize) {
             lastShot = pattern.nextIndex();
+            if(lastShot == null){
+                updatePattern();
+                lastShot = pattern.firstIndex();
+            }
             return shootCell(lastShot);
         }
         if(opponentGrid.getCell(cell.x, cell.y).state == Grid.SHIP){

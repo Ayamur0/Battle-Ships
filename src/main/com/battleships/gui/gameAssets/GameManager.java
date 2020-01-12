@@ -292,11 +292,10 @@ public class GameManager {
     }
 
     /**
-     * Changes the size of the grids..
-     * @param size New size on grid should have.
+     * Changes the size of the grids to the size in the settings.
      */
-    public static void resizeGrid(int size){
-        gridManager.resizeGrid(loader,size);
+    public static void resizeGrid(){
+        gridManager.resizeGrid(loader,settings.getSize());
         camera.setStandardPos();
     }
 
