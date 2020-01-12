@@ -1,5 +1,6 @@
 package com.battleships.gui.gameAssets.MainMenuGui;
 
+import com.battleships.gui.fontRendering.TextMaster;
 import com.battleships.gui.gameAssets.GameManager;
 import com.battleships.gui.guis.GuiManager;
 import com.battleships.gui.guis.GuiTexture;
@@ -42,13 +43,15 @@ public class MainMenuManager {
     }
     public static void clearAll(){
         removeAllShips();
+        TextMaster.clear();
         GameManager.getGuis().clear();
     }
 
     public static void backToMainMenu(){
         clearAll();
         WindowManager.setMainMenuCallbacks(GameManager.getMainMenuManager(),wFbo);
-
+        GameManager.getLogic().setGameState(GameManager.MENU);
+        menu = new MainMenu(guiManager,loader);
     }
     public GLFWMouseButtonCallback testClick = new GLFWMouseButtonCallback() {
         @Override

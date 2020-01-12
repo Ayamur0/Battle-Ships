@@ -40,6 +40,7 @@ import org.lwjgl.glfw.GLFWKeyCallback;
 import org.lwjgl.glfw.GLFWMouseButtonCallback;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL30;
+import org.lwjgl.opengl.GLXAMDGPUAssociation;
 
 import java.nio.DoubleBuffer;
 import java.util.ArrayList;
@@ -556,7 +557,8 @@ public class GameManager {
             if(key == GLFW.GLFW_KEY_T && action == GLFW.GLFW_PRESS)
                 camera.turnCamera();
             if(key == GLFW.GLFW_KEY_ESCAPE && action == GLFW.GLFW_PRESS)
-                MainMenuManager.setMenu(new ESCMenu(guiManager,loader));
+                if (GameManager.getLogic().getGameState()!=GameManager.MENU)
+                    MainMenuManager.setMenu(new ESCMenu(guiManager,loader));
             if(key == GLFW.GLFW_KEY_K && action == GLFW.GLFW_PRESS) {
                 FinishGame f = new FinishGame();
                 f.finishGame(loader, guiManager, false);
