@@ -129,8 +129,10 @@ public class AIMedium extends AI{
     }
 
     protected int shootCell(Vector2i cell){
-        if(cell.x < 1 || cell.y < 1 || cell.x > gridSize || cell.y > gridSize)
-            return NA;
+        if(cell.x < 1 || cell.y < 1 || cell.x > gridSize || cell.y > gridSize) {
+            lastShot = pattern.nextIndex();
+            return shootCell(lastShot);
+        }
         if(opponentGrid.getCell(cell.x, cell.y).state == Grid.SHIP){
             return GameManager.shoot(team, cell) ? SHIP : NA;
         }
