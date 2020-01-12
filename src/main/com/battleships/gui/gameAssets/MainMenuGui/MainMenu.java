@@ -129,6 +129,7 @@ public class MainMenu extends Menu {
                 SaveFileManager.loadSaveFile(saveFile);
                 return true;
             }
+
         }
         else
             return false;
