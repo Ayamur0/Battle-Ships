@@ -31,11 +31,11 @@ public class AiVsAiMenu extends InGameSettingsMenu {
     protected void createMenu(){
         //TODO make menu great again
 
-        super.playingFieldSize = new Slider(loader.loadTexture("WoodenSlider.jpg"), loader.loadTexture("WoodenSlider.jpg"), 5, 30,
+        super.playingFieldSize = new Slider(loader.loadTexture("Slider.png"), loader.loadTexture("WoodenSlider.jpg"), 5, 30,
                 15, super.sliderSize, new Vector2f(super.standardButtonPos.x,super.standardButtonPos.y), guiManager, GameManager.getGuis());
-        super.difficulty1 = new Slider(loader.loadTexture("WoodenSlider.jpg"), loader.loadTexture("WoodenSlider.jpg"), EASY, HARD,
+        super.difficulty1 = new Slider(loader.loadTexture("Slider.png"), loader.loadTexture("WoodenSlider.jpg"), EASY, HARD,
                 MEDIUM, super.sliderSize,new Vector2f(playingFieldSize.getPositions().x,playingFieldSize.getPositions().y+buttonGap), guiManager, GameManager.getGuis());
-        super.difficulty2 = new Slider(loader.loadTexture("WoodenSlider.jpg"), loader.loadTexture("WoodenSlider.jpg"), EASY, HARD,
+        super.difficulty2 = new Slider(loader.loadTexture("Slider.png"), loader.loadTexture("WoodenSlider.jpg"), EASY, HARD,
                 MEDIUM, super.sliderSize,new Vector2f(difficulty1.getPositions().x, difficulty1.getPositions().y+buttonGap), guiManager, GameManager.getGuis());
 
         super.guiTexts.add(new GUIText("Size: "+playingFieldSize.getValueAsInt(),fontSize, font,new Vector2f(playingFieldSize.getPositions().x,playingFieldSize.getPositions().y-0.06f) , 0.12f, true, outlineColor,0.0f, 0.1f,outlineColor, new Vector2f()));

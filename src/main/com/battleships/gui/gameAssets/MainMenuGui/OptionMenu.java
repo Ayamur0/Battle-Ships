@@ -69,7 +69,7 @@ public class OptionMenu extends InGameSettingsMenu {
         if (saveVolume == -1){
             saveVolume = 50;
         }
-        volume = new Slider(loader.loadTexture("Brick.jpg"), loader.loadTexture("Brick.jpg"), 0, 100,
+        volume = new Slider(loader.loadTexture("Slider.png"), loader.loadTexture("WoodenSlider.jpg"), 0, 100,
                 saveVolume, new Vector2f(0.2f, 0.01f), super.standardButtonPos, guiManager, GameManager.getGuis());
         super.guiTexts.add(new GUIText("Volume: "+volume.getValueAsInt(),fontSize, font,new Vector2f(volume.getPositions().x,volume.getPositions().y-0.06f) , 0.12f, true, outlineColor,0.0f, 0.1f,outlineColor, new Vector2f()));
 

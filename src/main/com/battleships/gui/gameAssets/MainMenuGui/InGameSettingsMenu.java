@@ -135,14 +135,19 @@ public class InGameSettingsMenu extends Menu {
      * Creates the {@link Slider}, adds {@link GUIText}as labels and adds the {@link GuiTexture} for the buttons.
      */
     protected void createMenu() {
+        if (gameMode == MP)
+            playingFieldSize = new Slider(loader.loadTexture("Slider.png"), loader.loadTexture("WoodenSlider.jpg"), 5, 30,
+                    15, sliderSize, new Vector2f(standardButtonPos.x,standardButtonPos.y+buttonGap/2), guiManager, GameManager.getGuis());
 
-        playingFieldSize = new Slider(loader.loadTexture("WoodenSlider.jpg"), loader.loadTexture("WoodenSlider.jpg"), 5, 30,
-                15, sliderSize, super.standardButtonPos, guiManager, GameManager.getGuis());
+        else
+            playingFieldSize = new Slider(loader.loadTexture("Slider.png"), loader.loadTexture("WoodenSlider.jpg"), 5, 30,
+                    15, sliderSize, super.standardButtonPos, guiManager, GameManager.getGuis());
+
         super.guiTexts.add(new GUIText("Size: "+playingFieldSize.getValueAsInt(),fontSize, font,new Vector2f(playingFieldSize.getPositions().x,playingFieldSize.getPositions().y-sliderOffset) , 0.12f, true, outlineColor,0.0f, 0.1f,outlineColor, new Vector2f()));
 
 
         if (gameMode == SP) {
-            difficulty1 = new Slider(loader.loadTexture("WoodenSlider.jpg"), loader.loadTexture("WoodenSlider.jpg"), EASY, HARD,
+            difficulty1 = new Slider(loader.loadTexture("Slider.png"), loader.loadTexture("WoodenSlider.jpg"), EASY, HARD,
                     MEDIUM, sliderSize, new Vector2f(playingFieldSize.getPositions().x, playingFieldSize.getPositions().y + buttonGap), guiManager, GameManager.getGuis());
             super.guiTexts.add(new GUIText("Difficulty: Normal",fontSize, font, new Vector2f(difficulty1.getPositions().x, difficulty1.getPositions().y-sliderOffset), 0.4f, true, outlineColor,0.0f, 0.1f,outlineColor, new Vector2f()));
         }
