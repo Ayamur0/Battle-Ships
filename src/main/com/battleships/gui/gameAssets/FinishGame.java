@@ -97,5 +97,6 @@ public class FinishGame extends GuiClickCallback {
      */
     @Override
     protected void clickAction() {
+        GameManager.getLogic().advanceGamePhase();
     }
 }

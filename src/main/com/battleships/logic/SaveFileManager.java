@@ -117,6 +117,6 @@ public class SaveFileManager {
         gridManager.setMarkers(saveFile.getMarkers());
         gridManager.setBurningFires(saveFile.getBurningFires());
         gridManager.setBurningFireSounds(saveFile.getBurningFireSounds());
-        GameManager.resizeGrid(saveFile.getPlayerGrid().getSize());
+        GameManager.resizeGrid();
     }
 }
