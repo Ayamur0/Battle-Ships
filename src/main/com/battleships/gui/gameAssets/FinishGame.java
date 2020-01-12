@@ -42,7 +42,6 @@ public class FinishGame extends GuiClickCallback {
      * @param won {@code true} if the player has won.
      */
     public void finishGame(Loader loader, GuiManager guiManager, boolean won){
-        GameManager.getLogic().advanceGamePhase();
         GuiTexture background = new GuiTexture(loader.loadTexture("EndScroll.png"), new Vector2f(0.5f,0.5f), new Vector2f(0.5f,0.8f));
         GameManager.getGuis().add(background);
         if(won) {

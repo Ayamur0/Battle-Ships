@@ -34,7 +34,7 @@ public class AIMedium extends AI{
      */
     public AIMedium(int team, int gridSize, LogicManager manager) {
         super(team, gridSize, manager);
-        pattern = new PatternChess(gridSize);
+        pattern = AI.choosePattern(gridSize);
         opponentGrid = team == GridManager.OWNFIELD ? manager.getOpponentGrid() : manager.getPlayerGrid();
     }
 

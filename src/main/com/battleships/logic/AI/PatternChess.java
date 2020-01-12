@@ -27,7 +27,7 @@ public class PatternChess implements Pattern{
         if(start == DOWNLEFT || start == UPLEFT) {
             lastIndex.x -= 2;
             if (lastIndex.x < 1) {
-                lastIndex.x += size + lastIndex.x == 0 ? -1 : 1;
+                lastIndex.x += (size + (lastIndex.x == 0 ? -1 : 1));
                 lastIndex.y += start == DOWNLEFT ? 1 : -1;
             }
             if (lastIndex.y > size || lastIndex.y < 1)
@@ -36,7 +36,7 @@ public class PatternChess implements Pattern{
         if(start == DOWNRIGHT || start == UPRIGHT) {
             lastIndex.x += 2;
             if (lastIndex.x > size) {
-                lastIndex.x -= size + (lastIndex.x == size + 1 ? 1 : -1);
+                lastIndex.x -= (size + (lastIndex.x == size + 1 ? -1 : 1));
                 lastIndex.y += start == DOWNRIGHT ? 1 : -1;
             }
             if (lastIndex.y > size || lastIndex.y < 1)

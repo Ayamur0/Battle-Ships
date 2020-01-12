@@ -46,7 +46,7 @@ public class LogicManager {
     public void init(Settings settings) {
         playerGrid = new Grid(settings.getSize(), GridManager.OWNFIELD);
         opponentGrid = new Grid(settings.getSize(), GridManager.OPPONENTFIELD);
-        turnHandler.setOpponentAI(new AIMedium(1, settings.getSize(), this));
+        turnHandler.setOpponentAI(new AIHard(1, settings.getSize(), this));
         stats = new Stats();
         stats.init();
     }
