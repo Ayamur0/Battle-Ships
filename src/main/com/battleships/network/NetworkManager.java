@@ -53,4 +53,11 @@ public class NetworkManager {
         if(player != null)
             player.execute();
     }
+
+    public boolean isServerConnected(){
+        if(player instanceof NetworkServer)
+            return ((NetworkServer) player).isConnected();
+        else
+            return false;
+    }
 }
