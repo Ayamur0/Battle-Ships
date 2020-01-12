@@ -33,6 +33,7 @@ public class NetworkServer extends Network implements Runnable{
     private static GridManager gridManager;
 
     private connect waitingForConnection;
+    private boolean connected;
 
     private static Settings settings;
     //private final Logic logic;
@@ -55,6 +56,7 @@ public class NetworkServer extends Network implements Runnable{
 
         public void kill(){
             isRunning = false;
+            server.connected = true;
         }
 
         @Override
@@ -137,5 +139,9 @@ public class NetworkServer extends Network implements Runnable{
     //Main
     public static void main(String[] args) {
         new NetworkServer();
+    }
+
+    public boolean isConnected() {
+        return connected;
     }
 }
