@@ -102,37 +102,45 @@ public class MainMenu extends Menu {
         }
         return false;
     }
+    protected boolean LoadGame(){
+        try {
+            FileNameExtensionFilter xmlfilter = new FileNameExtensionFilter("xml files (*.xml)","xml");
+            File test = new File(SaveFileManager.getJarPath()+"/SaveFiles/");
+            fc.setCurrentDirectory(test);
+            fc.setFileFilter(xmlfilter);
 
+        }
+        catch (UnsupportedEncodingException e){
+
+        }
+        fc.setDialogTitle("Select save file");
+        fc.showOpenDialog(null);
+
+        String s = fc.getName(fc.getSelectedFile());
+        if (s!=null){
+            String filename = s.replace(".xml","");
+            if(SaveFileManager.loadFromFile(filename)==null){
+                super.guiTexts.add(new GUIText("Error loading file", fontSize, font,new Vector2f(0.5f,0.3f), 0.3f, true,outlineColor, 0.0f, 0.1f,outlineColor, new Vector2f()));
+                return false;
+            }
+            else{
+
+            }
+                return true;
+        }
+        else
+            return false;
+    }
     /**
      * Toggles state of clicked button.
      */
     @Override
     protected void clickAction() {
         if(buttonClicked == LOAD) {
-            try {
-                FileNameExtensionFilter xmlfilter = new FileNameExtensionFilter("xml files (*.xml)","xml");
-                File test = new File(SaveFileManager.getJarPath()+"/SaveFiles/");
-                fc.setCurrentDirectory(test);
-                fc.setFileFilter(xmlfilter);
-
-            }
-            catch (UnsupportedEncodingException e){
-
-            }
-            fc.setDialogTitle("Select save file");
-            fc.showOpenDialog(null);
-
-            String s = fc.getName(fc.getSelectedFile());
-            if (s!=null){
-                String lol = s.replace(".xml","");
-                if(SaveFileManager.loadFromFile(lol)==null){
-                    super.guiTexts.add(new GUIText("Error loading file", fontSize, font,new Vector2f(0.5f,0.3f), 0.3f, true,outlineColor, 0.0f, 0.1f,outlineColor, new Vector2f()));
-                }
-                else{
-                    clearMenu();
-                    cleaBackgournd();
-                    GameManager.getLogic().advanceGamePhase();
-                }
+            if (LoadGame()) {
+                clearMenu();
+                cleaBackgournd();
+                GameManager.prepareGame();
             }
         }
         if(buttonClicked == PLAY){

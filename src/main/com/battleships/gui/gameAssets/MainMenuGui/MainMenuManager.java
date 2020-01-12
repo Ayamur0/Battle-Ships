@@ -3,6 +3,7 @@ package com.battleships.gui.gameAssets.MainMenuGui;
 import com.battleships.gui.fontRendering.TextMaster;
 import com.battleships.gui.gameAssets.GameManager;
 import com.battleships.gui.gameAssets.grids.GridManager;
+import com.battleships.gui.guis.GuiClickCallback;
 import com.battleships.gui.guis.GuiManager;
 import com.battleships.gui.guis.GuiTexture;
 import com.battleships.gui.renderingEngine.Loader;
@@ -45,6 +46,7 @@ public class MainMenuManager {
     }
     public void clearAll(){
         removeAllShips();
+        guiManager.clearClickableGuis();
         TextMaster.clear();
         GameManager.getGuis().clear();
     }
