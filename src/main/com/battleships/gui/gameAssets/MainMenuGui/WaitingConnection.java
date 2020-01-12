@@ -84,6 +84,7 @@ public class WaitingConnection extends Menu{
             GameManager.resizeGrid();
             GameManager.getNetwork().sendSize(GameManager.getSettings().getSize());
             GameManager.getLogic().advanceGamePhase();
+            GameManager.getLogic().getTurnHandler().setPlayerTurn(false);
         }
         clearMenu();
         cleaBackgournd();
