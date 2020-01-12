@@ -71,16 +71,14 @@ public class OptionMenu extends InGameSettingsMenu {
         }
         volume = new Slider(loader.loadTexture("Brick.jpg"), loader.loadTexture("Brick.jpg"), 0, 100,
                 saveVolume, new Vector2f(0.2f, 0.01f), super.standardButtonPos, guiManager, GameManager.getGuis());
-        super.guiTexts.add(new GUIText("Volume: "+volume.getValueAsInt(),2.5f, font,new Vector2f(volume.getPositions().x,volume.getPositions().y-0.06f) , 0.12f, true, outlineColor,0.0f, 0.1f,outlineColor, new Vector2f()));
+        super.guiTexts.add(new GUIText("Volume: "+volume.getValueAsInt(),fontSize, font,new Vector2f(volume.getPositions().x,volume.getPositions().y-0.06f) , 0.12f, true, outlineColor,0.0f, 0.1f,outlineColor, new Vector2f()));
 
-        super.buttons.add(new GuiTexture(texture,new Vector2f(volume.getPositions().x+0.06f,volume.getPositions().y+buttonGap),new Vector2f(0.1f,0.1f)));
-        super.guiTexts.add(new GUIText("Potato mode",2.5f, font,new Vector2f(buttons.get(0).getPositions().x-0.14f,buttons.get(0).getPositions().y) , 0.12f, true, outlineColor,0.0f, 0.1f,outlineColor, new Vector2f()));
+        super.buttons.add(new GuiTexture(buttonTexture,new Vector2f(volume.getPositions().x+0.06f,volume.getPositions().y+buttonGap),new Vector2f(0.1f,0.1f)));
+        super.guiTexts.add(new GUIText("Potato mode",fontSize, font,new Vector2f(buttons.get(0).getPositions().x-0.14f,buttons.get(0).getPositions().y) , 0.12f, true, outlineColor,0.0f, 0.1f,outlineColor, new Vector2f()));
 
+        super.buttons.add(new GuiTexture(buttonTexture,new Vector2f(0.5f ,0.83f), super.buttonSize));
 
-
-        super.buttons.add(new GuiTexture(texture,new Vector2f(0.5f ,0.85f), super.buttonSize));
-
-        super.guiTexts.add(new GUIText("Back",2.5f, font, new Vector2f(buttons.get(1).getPositions().x,buttons.get(1).getPositions().y), 0.12f, true, outlineColor,0.0f, 0.1f,outlineColor, new Vector2f()));
+        super.guiTexts.add(new GUIText("Back",fontSize, font, new Vector2f(buttons.get(1).getPositions().x,buttons.get(1).getPositions().y), 0.12f, true, outlineColor,0.0f, 0.1f,outlineColor, new Vector2f()));
 
         marker = new GuiTexture(markTexture,buttons.get(0).getPositions(),buttons.get(0).getScale());
 

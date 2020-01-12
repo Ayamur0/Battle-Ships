@@ -7,6 +7,7 @@ import com.battleships.gui.guis.GuiRenderer;
 import com.battleships.gui.guis.GuiTexture;
 import com.battleships.gui.renderingEngine.Loader;
 import com.battleships.gui.window.WindowManager;
+import com.battleships.logic.LogicManager;
 import org.joml.Vector2f;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL;
@@ -37,8 +38,10 @@ public class MenuTest {
                 WindowManager.destroyLoadingScreen();
                 continue;
             }
-            GameManager.updateSceneBlurred();
-
+            if (GameManager.getLogic().getGameState()==GameManager.MENU)
+                GameManager.updateSceneBlurred();
+            else
+                GameManager.updateScene();
             WindowManager.updateWindow();
 
         }

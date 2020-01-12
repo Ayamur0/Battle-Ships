@@ -27,7 +27,7 @@ public abstract class Menu extends GuiClickCallback {
     /**
      * Standard position to start for all buttons
      */
-    protected Vector2f standardButtonPos = new Vector2f(0.5f, 0.4f);
+    protected Vector2f standardButtonPos = new Vector2f(0.5f, 0.38f);
     /**
      * Standard gap between all buttons
      */
@@ -45,17 +45,29 @@ public abstract class Menu extends GuiClickCallback {
      */
     protected FontType font;
     /**
+     * Main font size for {@link GUIText}
+     */
+    protected float fontSize = 2.5f;
+    /**
      * Main button texture used in all menus
      */
-    protected static int texture;
+    protected static int buttonTexture;
     /**
      * Texture behind the Buttons in the background
      */
     protected static int scrollBackground;
     /**
+     * List containing all {@link GuiTexture}s behind the buttons
+     */
+    protected static List<GuiTexture> backgounds = new ArrayList<>();
+    /**
+     * Texture above all buttons
+     */
+    protected static int icon;
+    /**
      * Main outline color used for the {@link GUIText}
      */
-    protected Vector3f outlineColor = new Vector3f(1.0f, 0.0f, 0.0f);
+    protected Vector3f outlineColor = new Vector3f(0.63f, 0.63f, 0.63f);
     /**
      * List containing all {@link GuiTexture}s on the screen.
      */
@@ -81,10 +93,12 @@ public abstract class Menu extends GuiClickCallback {
             this.font = new FontType(loader.loadFontTexture("font/pirate.png"), "pirate");
         else
             this.font=GameManager.getPirateFont();
-        if (texture == 0)
-            texture = loader.loadTexture("WoodButton.png");
+        if (buttonTexture == 0)
+            buttonTexture = loader.loadTexture("WoodButton.png");
         if (scrollBackground == 0)
             scrollBackground = loader.loadTexture("scroll.png");
+        if (icon == 0)
+            icon = loader.loadTexture("StartIcon.png");
     }
 
     /**
@@ -92,10 +106,11 @@ public abstract class Menu extends GuiClickCallback {
      * @param anzahl how many button textures should be created
      */
     protected void CreateButtonTextures(int anzahl){
-        addBackground();
-        buttons.add(new GuiTexture(texture, standardButtonPos, buttonSize));
+        if (backgounds.size()!=2)
+            addBackground();
+        buttons.add(new GuiTexture(buttonTexture, standardButtonPos, buttonSize));
         for (int i = 0;i < anzahl-1; i++){
-            buttons.add(new GuiTexture(texture,new Vector2f(buttons.get(i).getPositions().x,buttons.get(i).getPositions().y+buttonGap),buttonSize));
+            buttons.add(new GuiTexture(buttonTexture,new Vector2f(buttons.get(i).getPositions().x,buttons.get(i).getPositions().y+buttonGap),buttonSize));
         }
         GameManager.getGuis().addAll(buttons);
     }
@@ -104,9 +119,16 @@ public abstract class Menu extends GuiClickCallback {
      * adds a {@link GuiTexture} behind the buttons as background
      */
     protected void addBackground(){
-        GuiTexture scroll = new GuiTexture(scrollBackground,new Vector2f(0.5f,0.54f),new Vector2f(0.36f,1f));
-        //TODO Change scale and position
-        GameManager.getGuis().add(scroll);
+         backgounds.add(new GuiTexture(scrollBackground, new Vector2f(0.5f, 0.5f), new Vector2f(0.36f, 1f)));
+         backgounds.add(new GuiTexture(icon, new Vector2f(0.5f, 0.175f), new Vector2f(0.3f, 0.3f)));
+         GameManager.getGuis().addAll(backgounds);
+    }
+
+    /**
+     * clears all {@link GuiTexture} that are no buttons at the game beginn
+     */
+    protected void cleaBackgournd(){
+        GameManager.getGuis().removeAll(backgounds);
     }
     /**
      * adds all labels the the {@link TextMaster} to render
@@ -123,7 +145,7 @@ public abstract class Menu extends GuiClickCallback {
      */
     protected void SetTextColor() {
         for (GUIText gui : guiTexts) {
-            gui.setColor(1f, 1f, 1f);
+            gui.setColor(0.25f, 0.25f, 0.25f);
         }
     }
 
@@ -140,9 +162,9 @@ public abstract class Menu extends GuiClickCallback {
      * removes the {@link GuiTexture} and {@link GUIText} from the screen
      */
     protected void clearMenu(){
-        for (GUIText gui : guiTexts){
-            TextMaster.removeText(gui);
-            gui.remove();
+        for (GUIText text : guiTexts){
+            TextMaster.removeText(text);
+            text.remove();
         }
         for (GuiTexture gui : buttons){
             guiManager.removeClickableGui(gui);

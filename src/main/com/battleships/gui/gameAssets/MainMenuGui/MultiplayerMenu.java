@@ -1,9 +1,11 @@
 package com.battleships.gui.gameAssets.MainMenuGui;
 
 import com.battleships.gui.fontMeshCreator.GUIText;
+import com.battleships.gui.gameAssets.GameManager;
 import com.battleships.gui.guis.GuiManager;
 import com.battleships.gui.guis.GuiTexture;
 import com.battleships.gui.renderingEngine.Loader;
+import com.thoughtworks.xstream.mapper.Mapper;
 import org.joml.Vector2f;
 import org.lwjgl.util.tinyfd.TinyFileDialogs;
 import sun.applet.Main;
@@ -44,13 +46,19 @@ public class MultiplayerMenu extends Menu {
      * Creates {@link GUIText}as labels and adds the {@link GuiTexture} for the buttons.
      */
     private void createMenu() {
-        super.CreateButtonTextures(3);
+        super.CreateButtonTextures(1);
 
-        super.guiTexts.add(new GUIText("Host", 3f, font, new Vector2f(buttons.get(0).getPositions().x, buttons.get(0).getPositions().y), 0.12f, true,outlineColor, 0.0f, 0.1f,outlineColor, new Vector2f()));
-        super.guiTexts.add(new GUIText("Client", 3f, font,new Vector2f(buttons.get(1).getPositions().x, buttons.get(1).getPositions().y), 0.12f, true,outlineColor, 0.0f, 0.1f,outlineColor, new Vector2f()));
-        super.guiTexts.add(new GUIText("Back", 3, font,new Vector2f(buttons.get(2).getPositions().x,buttons.get(2).getPositions().y), 0.12f, true, outlineColor,0.0f, 0.1f,outlineColor, new Vector2f()));
+        super.guiTexts.add(new GUIText("Host", fontSize, font, new Vector2f(buttons.get(0).getPositions().x, buttons.get(0).getPositions().y), 0.12f, true,outlineColor, 0.0f, 0.1f,outlineColor, new Vector2f()));
+
+        super.buttons.add(new GuiTexture(buttonTexture,new Vector2f(0.5f,0.605f),super.buttonSize));
+        super.guiTexts.add(new GUIText("Client", fontSize, font,new Vector2f(buttons.get(1).getPositions().x, buttons.get(1).getPositions().y), 0.12f, true,outlineColor, 0.0f, 0.1f,outlineColor, new Vector2f()));
+
+        super.buttons.add(new GuiTexture(buttonTexture,new Vector2f(0.5f ,0.83f), super.buttonSize));
+        super.guiTexts.add(new GUIText("Back", fontSize, font,new Vector2f(buttons.get(2).getPositions().x,buttons.get(2).getPositions().y), 0.12f, true, outlineColor,0.0f, 0.1f,outlineColor, new Vector2f()));
 
         super.createClickable();
+
+        GameManager.getGuis().addAll(buttons);
     }
 
     /**
@@ -91,9 +99,11 @@ public class MultiplayerMenu extends Menu {
         }
         if (super.buttonClicked == CLIENT){
             String ip = TinyFileDialogs.tinyfd_inputBox("Connect", "Enter ip Address", "");
-            //TODO Adding ip thingi (need logic or network for that
-            super.clearMenu();
-            MainMenuManager.setMenu(new WaitingConnection(guiManager,loader));
+            if (ip != null) {
+                //TODO Adding ip thingi (need logic or network for that
+                super.clearMenu();
+                MainMenuManager.setMenu(new WaitingConnection(guiManager, loader));
+            }
         }
         if (super.buttonClicked == BACK) {
             super.clearMenu();

@@ -1,6 +1,7 @@
 package com.battleships.gui.gameAssets.MainMenuGui;
 
 import com.battleships.gui.fontMeshCreator.GUIText;
+import com.battleships.gui.fontRendering.TextMaster;
 import com.battleships.gui.gameAssets.GameManager;
 import com.battleships.gui.guis.GuiManager;
 import com.battleships.gui.guis.GuiTexture;
@@ -30,18 +31,21 @@ public class WaitingConnection extends Menu{
     public WaitingConnection(GuiManager guiManager, Loader loader) {
         super(guiManager, loader);
 
+        this.createMenu();
 
-        buttons.add(new GuiTexture(super.texture,new Vector2f(0.5f,0.7f),super.buttonSize));
+        super.CreateTextLabels();
+    }
 
-        super.guiTexts.add(new GUIText("Waiting for Connection",2.5f, font, new Vector2f(0.5f,0.5f), 0.5f, true, outlineColor,0.0f, 0.1f,outlineColor, new Vector2f()));
-        super.guiTexts.add(new GUIText("Cancel",2.5f, font, new Vector2f(buttons.get(0).getPositions()), 0.12f, true, outlineColor,0.0f, 0.1f,outlineColor, new Vector2f()));
+    private void createMenu() {
+        buttons.add(new GuiTexture(buttonTexture,new Vector2f(0.5f,0.7f),super.buttonSize));
+        super.guiTexts.add(new GUIText("Waiting for Connection",fontSize, font, new Vector2f(0.5f,0.5f), 0.5f, true, outlineColor,0.0f, 0.1f,outlineColor, new Vector2f()));
+        super.guiTexts.add(new GUIText("Cancel",fontSize, font, new Vector2f(buttons.get(0).getPositions()), 0.12f, true, outlineColor,0.0f, 0.1f,outlineColor, new Vector2f()));
+
         super.createClickable();
 
-        GameManager.getGuis().addAll(buttons);
-
-        SetTextColor();
-
+        GameManager.getGuis().add(buttons.get(0));
     }
+
 
     /**
      * Tests if the click was on the cancel button

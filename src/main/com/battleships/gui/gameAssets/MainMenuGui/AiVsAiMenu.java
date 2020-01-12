@@ -38,17 +38,17 @@ public class AiVsAiMenu extends InGameSettingsMenu {
         super.difficulty2 = new Slider(loader.loadTexture("Brick.jpg"), loader.loadTexture("Brick.jpg"), 1, 3,
                 2, super.sliderSize,new Vector2f(difficulty1.getPositions().x, difficulty1.getPositions().y+buttonGap), guiManager, GameManager.getGuis());
 
-        super.guiTexts.add(new GUIText("Size: "+playingFieldSize.getValueAsInt(),2.5f, font,new Vector2f(playingFieldSize.getPositions().x,playingFieldSize.getPositions().y-0.06f) , 0.12f, true, outlineColor,0.0f, 0.1f,outlineColor, new Vector2f()));
+        super.guiTexts.add(new GUIText("Size: "+playingFieldSize.getValueAsInt(),fontSize, font,new Vector2f(playingFieldSize.getPositions().x,playingFieldSize.getPositions().y-0.06f) , 0.12f, true, outlineColor,0.0f, 0.1f,outlineColor, new Vector2f()));
         //super.guiTexts.add(new GUIText(String.format("%d", playingFieldSize.getValueAsInt()),2.5f, font, new Vector2f(playingFieldSize.getPositions().x+0.16f,playingFieldSize.getPositions().y), 0.12f, true, outlineColor,0.0f, 0.1f,outlineColor, new Vector2f()));
-        super.guiTexts.add(new GUIText("Difficulty AI 1: Normal",2.5f, font, new Vector2f(difficulty1.getPositions().x, difficulty1.getPositions().y-0.06f), 0.3f, true, outlineColor,0.0f, 0.1f,outlineColor, new Vector2f()));
+        super.guiTexts.add(new GUIText("Difficulty AI 1: Normal",fontSize, font, new Vector2f(difficulty1.getPositions().x, difficulty1.getPositions().y-0.06f), 0.3f, true, outlineColor,0.0f, 0.1f,outlineColor, new Vector2f()));
         //super.guiTexts.add(new GUIText("Normal",2.5f, font, new Vector2f(difficulty1.getPositions().x+0.16f, difficulty1.getPositions().y), 0.12f, true, outlineColor,0.0f, 0.1f,outlineColor, new Vector2f()));
-        super.guiTexts.add(new GUIText("Difficulty AI 2: Normal",2.5f, font, new Vector2f(difficulty2.getPositions().x,difficulty2.getPositions().y-0.06f), 0.3f, true, outlineColor,0.0f, 0.1f,outlineColor, new Vector2f()));
+        super.guiTexts.add(new GUIText("Difficulty AI 2: Normal",fontSize, font, new Vector2f(difficulty2.getPositions().x,difficulty2.getPositions().y-0.06f), 0.3f, true, outlineColor,0.0f, 0.1f,outlineColor, new Vector2f()));
         //super.guiTexts.add(new GUIText("Normal",2.5f, font, new Vector2f(difficulty2.getPositions().x+0.16f,difficulty2.getPositions().y), 0.12f, true, outlineColor,0.0f, 0.1f,outlineColor, new Vector2f()));
 
-        buttons.add(new GuiTexture(texture,new Vector2f(difficulty2.getPositions().x,difficulty2.getPositions().y+buttonGap),buttonSize));
-        buttons.add(new GuiTexture(texture,new Vector2f(buttons.get(0).getPositions().x,buttons.get(0).getPositions().y+buttonGap),buttonSize));
+        buttons.add(new GuiTexture(buttonTexture,new Vector2f(difficulty2.getPositions().x,difficulty2.getPositions().y+buttonGap),buttonSize));
+        buttons.add(new GuiTexture(buttonTexture,new Vector2f(buttons.get(0).getPositions().x,buttons.get(0).getPositions().y+buttonGap),buttonSize));
 
-        super.guiTexts.add(new GUIText("Fight",2.5f, font, new Vector2f(buttons.get(0).getPositions().x,buttons.get(0).getPositions().y), 0.12f, true, outlineColor,0.0f, 0.1f,outlineColor, new Vector2f()));
+        super.guiTexts.add(new GUIText("Beginn",2.5f, font, new Vector2f(buttons.get(0).getPositions().x,buttons.get(0).getPositions().y), 0.12f, true, outlineColor,0.0f, 0.1f,outlineColor, new Vector2f()));
         super.guiTexts.add(new GUIText("Back",2.5f, font, new Vector2f(buttons.get(1).getPositions().x,buttons.get(1).getPositions().y), 0.12f, true, outlineColor,0.0f, 0.1f,outlineColor, new Vector2f()));
 
         GameManager.getGuis().addAll(buttons);

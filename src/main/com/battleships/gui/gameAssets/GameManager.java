@@ -295,7 +295,7 @@ public class GameManager {
      * Changes the size of the grids to the size in the settings.
      */
     public static void resizeGrid(){
-        gridManager.resizeGrid(loader,settings.getSize());
+        gridManager = new GridManager(loader, settings.getSize());
         camera.setStandardPos();
     }
 

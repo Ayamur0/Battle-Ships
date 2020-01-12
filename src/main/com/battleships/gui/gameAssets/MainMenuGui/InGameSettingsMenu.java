@@ -7,9 +7,8 @@ import com.battleships.gui.guis.GuiManager;
 import com.battleships.gui.guis.GuiTexture;
 import com.battleships.gui.guis.Slider;
 import com.battleships.gui.renderingEngine.Loader;
+import com.battleships.logic.LogicManager;
 import org.joml.Vector2f;
-
-import javax.xml.soap.Text;
 
 /**
  * Contains all functions needed for an settings menu
@@ -67,7 +66,6 @@ public class InGameSettingsMenu extends Menu {
 
         CreateTextLabels();
 
-        super.guiTexts.get(0).setColor(0f,0f,0f);
     }
 
     /**
@@ -76,8 +74,6 @@ public class InGameSettingsMenu extends Menu {
     public void RefreshSliderValue(){
         String difficultyName = "";
 
-        //super.guiTexts.get(1).remove();
-        //super.guiTexts.get(1).setTextString(String.format("%d", playingFieldSize.getValueAsInt()));
         super.guiTexts.get(0).remove();
         super.guiTexts.get(0).setTextString("Size: "+playingFieldSize.getValueAsInt());
 
@@ -93,10 +89,6 @@ public class InGameSettingsMenu extends Menu {
         super.guiTexts.get(1).setTextString("Difficulty: "+difficultyName);
         TextMaster.loadText(super.guiTexts.get(0));
         TextMaster.loadText(super.guiTexts.get(1));
-        //super.guiTexts.get(3).remove();
-        //super.guiTexts.get(3).setTextString(difficultyName);
-        //TextMaster.loadText(super.guiTexts.get(1));
-        //TextMaster.loadText(super.guiTexts.get(3));
     }
 
     /**
@@ -121,15 +113,15 @@ public class InGameSettingsMenu extends Menu {
         difficulty1 = new Slider(loader.loadTexture("Brick.jpg"), loader.loadTexture("Brick.jpg"), 1, 3,
                 2, sliderSize,new Vector2f(playingFieldSize.getPositions().x,playingFieldSize.getPositions().y+buttonGap), guiManager, GameManager.getGuis());
 
-        super.guiTexts.add(new GUIText("Size: "+playingFieldSize.getValueAsInt(),2.5f, font,new Vector2f(playingFieldSize.getPositions().x,playingFieldSize.getPositions().y-0.04f) , 0.12f, true, outlineColor,0.0f, 0.1f,outlineColor, new Vector2f()));
-        super.guiTexts.add(new GUIText("Difficulty: Normal",2.5f, font, new Vector2f(difficulty1.getPositions().x, difficulty1.getPositions().y-0.04f), 0.4f, true, outlineColor,0.0f, 0.1f,outlineColor, new Vector2f()));
+        super.guiTexts.add(new GUIText("Size: "+playingFieldSize.getValueAsInt(),fontSize, font,new Vector2f(playingFieldSize.getPositions().x,playingFieldSize.getPositions().y-0.04f) , 0.12f, true, outlineColor,0.0f, 0.1f,outlineColor, new Vector2f()));
+        super.guiTexts.add(new GUIText("Difficulty: Normal",fontSize, font, new Vector2f(difficulty1.getPositions().x, difficulty1.getPositions().y-0.04f), 0.4f, true, outlineColor,0.0f, 0.1f,outlineColor, new Vector2f()));
 
-        buttons.add(new GuiTexture(texture,new Vector2f(difficulty1.getPositions().x, difficulty1.getPositions().y+buttonGap),buttonSize));
-        buttons.add(new GuiTexture(texture,new Vector2f(buttons.get(0).getPositions().x,buttons.get(0).getPositions().y+buttonGap),buttonSize));
+        buttons.add(new GuiTexture(buttonTexture,new Vector2f(difficulty1.getPositions().x, difficulty1.getPositions().y+buttonGap),buttonSize));
+        buttons.add(new GuiTexture(buttonTexture,new Vector2f(buttons.get(0).getPositions().x,buttons.get(0).getPositions().y+buttonGap),buttonSize));
         GameManager.getGuis().addAll(buttons);
 
-        super.guiTexts.add(new GUIText("Start",2.5f, font, new Vector2f(buttons.get(0).getPositions().x,buttons.get(0).getPositions().y), 0.12f, true, outlineColor,0.0f, 0.1f,outlineColor, new Vector2f()));
-        super.guiTexts.add(new GUIText("Back",2.5f, font, new Vector2f(buttons.get(1).getPositions().x,buttons.get(1).getPositions().y), 0.12f, true, outlineColor,0.0f, 0.1f,outlineColor, new Vector2f()));
+        super.guiTexts.add(new GUIText("Beginn",fontSize, font, new Vector2f(buttons.get(0).getPositions().x,buttons.get(0).getPositions().y), 0.12f, true, outlineColor,0.0f, 0.1f,outlineColor, new Vector2f()));
+        super.guiTexts.add(new GUIText("Back",fontSize, font, new Vector2f(buttons.get(1).getPositions().x,buttons.get(1).getPositions().y), 0.12f, true, outlineColor,0.0f, 0.1f,outlineColor, new Vector2f()));
 
         super.createClickable();
 
@@ -162,6 +154,11 @@ public class InGameSettingsMenu extends Menu {
     protected void clickAction() {
         if(gameMode == 0){
             if (super.buttonClicked == START){
+                GameManager.getSettings().setAiLevelO(difficulty1.getValueAsInt());
+                GameManager.getSettings().setSize(playingFieldSize.getValueAsInt());
+                GameManager.resizeGrid();
+                GameManager.getLogic().advanceGamePhase();
+                super.cleaBackgournd();
                 super.clearMenu();
                 playingFieldSize.remove();
                 difficulty1.remove();
@@ -177,6 +174,11 @@ public class InGameSettingsMenu extends Menu {
         }
         else if(gameMode == 1){
             if (super.buttonClicked == START){
+                GameManager.getSettings().setAiLevelO(difficulty1.getValueAsInt());
+                GameManager.getSettings().setSize(playingFieldSize.getValueAsInt());
+                GameManager.resizeGrid();
+                GameManager.getLogic().advanceGamePhase();
+                super.cleaBackgournd();
                 super.clearMenu();
                 playingFieldSize.remove();
                 difficulty1.remove();
@@ -194,6 +196,12 @@ public class InGameSettingsMenu extends Menu {
         }
         else if(gameMode == 2){
             if (super.buttonClicked == START){
+                GameManager.getSettings().setAiLevelO(difficulty1.getValueAsInt());
+                GameManager.getSettings().setAiLevelP(difficulty2.getValueAsInt());
+                GameManager.getSettings().setSize(playingFieldSize.getValueAsInt());
+                GameManager.resizeGrid();
+                GameManager.getLogic().advanceGamePhase();
+                super.cleaBackgournd();
                 super.clearMenu();
                 playingFieldSize.remove();
                 difficulty1.remove();

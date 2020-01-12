@@ -26,7 +26,7 @@ public class ESCMenu extends Menu {
     /**
      * Constant value for back button
      */
-    private static final int BACK = 2;
+    private static final int PLAYAI = 2;
     /**
      * Constant value for exit button
      */
@@ -59,10 +59,10 @@ public class ESCMenu extends Menu {
 
 
 
-        super.guiTexts.add(new GUIText("Save", 3, font, new Vector2f(buttons.get(0).getPositions().x,buttons.get(0).getPositions().y), 0.12f, true,outlineColor, 0.0f, 0.1f,outlineColor, new Vector2f()));
-        super.guiTexts.add(new GUIText("Resume", 3, font,new Vector2f(buttons.get(1).getPositions().x,buttons.get(1).getPositions().y), 0.12f, true,outlineColor, 0.0f, 0.1f,outlineColor, new Vector2f()));
-        super.guiTexts.add(new GUIText("Back", 3, font,new Vector2f(buttons.get(2).getPositions().x,buttons.get(2).getPositions().y), 0.12f, true,outlineColor, 0.0f, 0.1f,outlineColor, new Vector2f()));
-        super.guiTexts.add(new GUIText("Exit", 3, font,new Vector2f(buttons.get(3).getPositions().x,buttons.get(3).getPositions().y), 0.12f, true,outlineColor, 0.0f, 0.1f,outlineColor, new Vector2f()));
+        super.guiTexts.add(new GUIText("Save", fontSize, font, new Vector2f(buttons.get(0).getPositions().x,buttons.get(0).getPositions().y), 0.12f, true,outlineColor, 0.0f, 0.1f,outlineColor, new Vector2f()));
+        super.guiTexts.add(new GUIText("Resume", fontSize, font,new Vector2f(buttons.get(1).getPositions().x,buttons.get(1).getPositions().y), 0.12f, true,outlineColor, 0.0f, 0.1f,outlineColor, new Vector2f()));
+        super.guiTexts.add(new GUIText("Play as AI", fontSize, font,new Vector2f(buttons.get(2).getPositions().x,buttons.get(2).getPositions().y), 0.12f, true,outlineColor, 0.0f, 0.1f,outlineColor, new Vector2f()));
+        super.guiTexts.add(new GUIText("Back", fontSize, font,new Vector2f(buttons.get(3).getPositions().x,buttons.get(3).getPositions().y), 0.12f, true,outlineColor, 0.0f, 0.1f,outlineColor, new Vector2f()));
 
         super.createClickable();
     }
@@ -108,12 +108,12 @@ public class ESCMenu extends Menu {
             super.clearMenu();
             //TODO check with tim
         }
-        if (super.buttonClicked == BACK){
+        if (super.buttonClicked == PLAYAI){
             super.clearMenu();
-            MainMenuManager.setMenu(new MainMenu(guiManager,loader));
         }
         if(buttonClicked == EXIT){
-            GLFW.glfwSetWindowShouldClose(WindowManager.getWindow(),true);
+            super.clearMenu();
+            MainMenuManager.setMenu(new MainMenu(guiManager,loader));
         }
     }
 
