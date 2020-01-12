@@ -206,4 +206,12 @@ public class ShipManager {
     public int getGridSize() {
         return gridSize;
     }
+
+    /**
+     * Set new gridSize.
+     * @param gridSize New size of the grid this shipManager places its ships on.
+     */
+    public void setGridSize(int gridSize) {
+        this.gridSize = gridSize;
+    }
 }

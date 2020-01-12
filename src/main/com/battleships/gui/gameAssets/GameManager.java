@@ -240,6 +240,9 @@ public class GameManager {
      * Creates gui needed for that phase and destroys unneeded guis.
      */
     public static void startShipPlacementPhase(){
+        GridManager.setIsBackground(false);
+        WindowManager.setCallbacks(camera, waterFbos);
+        disableSymbols = new DisableSymbols(loader, guiManager, guis);
         if(shipCounter != null)
             shipCounter.remove();
         shipSelector = new ShipSelector(loader, guiManager, shipManager, guis);
@@ -295,7 +298,7 @@ public class GameManager {
      * Changes the size of the grids to the size in the settings.
      */
     public static void resizeGrid(){
-        gridManager = new GridManager(loader, settings.getSize());
+        gridManager.resizeGrid(loader,settings.getSize());
         camera.setStandardPos();
     }
 

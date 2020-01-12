@@ -5,6 +5,7 @@ import com.battleships.gui.entities.Entity;
 import com.battleships.gui.gameAssets.GameManager;
 import com.battleships.gui.renderingEngine.Loader;
 import com.battleships.gui.renderingEngine.MasterRenderer;
+import com.battleships.gui.window.WindowManager;
 import org.joml.Vector2f;
 import org.joml.Vector2i;
 import org.joml.Vector3f;
@@ -130,6 +131,7 @@ public class GridManager {
      */
     public void resizeGrid(Loader loader, int size){
         initializeGrids(loader, size);
+        shipManager.setGridSize(size);
         highlighter = new Highlighter(loader, scale / (size + 1), this);
     }
 
@@ -268,6 +270,7 @@ public class GridManager {
      */
     private void initializeGrids(Loader loader, int size) {
         this.size = size;
+        scale = 300;
         scale *= (size + 1) / (float)MAXSIZE;
         opponentPosition.x = 350 + scale + 5;
         this.ownGrid = new GuiGrid(loader, ownPosition, new Vector3f(-90,0,0), scale, (float)MAXSIZE / (size + 1));

@@ -154,14 +154,14 @@ public class InGameSettingsMenu extends Menu {
     protected void clickAction() {
         if(gameMode == 0){
             if (super.buttonClicked == START){
-                GameManager.getSettings().setAiLevelO(difficulty1.getValueAsInt());
-                GameManager.getSettings().setSize(playingFieldSize.getValueAsInt());
-                GameManager.resizeGrid();
-                GameManager.getLogic().advanceGamePhase();
                 super.cleaBackgournd();
                 super.clearMenu();
                 playingFieldSize.remove();
                 difficulty1.remove();
+                GameManager.getSettings().setAiLevelO(difficulty1.getValueAsInt());
+                GameManager.getSettings().setSize(playingFieldSize.getValueAsInt());
+                GameManager.resizeGrid();
+                GameManager.getLogic().advanceGamePhase();
                 //Inits.setGlobalGameState(1);
                 //TODO set difficulty and size for offline game(need logic for that)
             }

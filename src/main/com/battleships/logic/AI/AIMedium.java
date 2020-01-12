@@ -34,7 +34,7 @@ public class AIMedium extends AI{
      */
     public AIMedium(int team, int gridSize, LogicManager manager) {
         super(team, gridSize, manager);
-        pattern = AI.choosePattern(gridSize);
+        pattern = new PatternChess(gridSize);
         opponentGrid = team == GridManager.OWNFIELD ? manager.getOpponentGrid() : manager.getPlayerGrid();
     }
 
@@ -103,7 +103,7 @@ public class AIMedium extends AI{
 
         if(foundShipDir == VERTICAL){
             if(!downEnd){
-                lastShot.y -= 1;
+                lastShot.y += 1;
                 switch (shootCell(lastShot)){
                     case SHIP: return true;
                     case WATER: lastShot = firstShipHit; downEnd = true; return true;
@@ -111,7 +111,7 @@ public class AIMedium extends AI{
                 }
             }
             if(!upEnd){
-                lastShot.x += 1;
+                lastShot.y -= 1;
                 switch (shootCell(lastShot)){
                     case SHIP: return true;
                     case WATER: lastShot = firstShipHit; upEnd = true; return true;
@@ -163,14 +163,14 @@ public class AIMedium extends AI{
         toShoot.y += 1;
         switch (shootCell(toShoot)){
             case SHIP: foundShipDir = VERTICAL; lastShot = toShoot; return true;
-            case WATER: upEnd = true; return false;
-            case NA: upEnd = true; break;
+            case WATER: downEnd = true; return false;
+            case NA: downEnd = true; break;
         }
         toShoot.y -= 2;
         switch (shootCell(toShoot)){
             case SHIP: foundShipDir = VERTICAL; lastShot = toShoot; return true;
-            case WATER: downEnd = true; return false;
-            case NA: downEnd = true; break;
+            case WATER: upEnd = true; return false;
+            case NA: upEnd = true; break;
         }
         return false;
     }

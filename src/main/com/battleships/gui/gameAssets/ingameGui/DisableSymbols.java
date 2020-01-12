@@ -104,7 +104,6 @@ public class DisableSymbols extends GuiClickCallback {
     protected void clickAction() {
         if(buttonClicked == ANIMATION) {
             GameManager.toggleAnimations();
-            toggleSymbol(ANIMATION);
         }
         if(buttonClicked == SOUND) {
             if(currentSymbols.get(SOUND).getOffsetX() == 0)
