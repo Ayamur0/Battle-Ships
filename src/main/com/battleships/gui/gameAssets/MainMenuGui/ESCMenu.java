@@ -149,10 +149,10 @@ public class ESCMenu extends Menu {
         if(buttonClicked == EXIT){
             active=false;
             super.clearMenu();
-            GameManager.getNetwork().closeConnection();
-            GameManager.getMainMenuManager().backToMainMenu();
+            if (GameManager.getSettings().isOnline())
+                GameManager.getNetwork().closeConnection();
             GameManager.getLogic().setGameState(GameManager.MENU);
-            MainMenuManager.setMenu(new MainMenu(guiManager,loader));
+            GameManager.getMainMenuManager().backToMainMenu();
         }
     }
 
