@@ -8,11 +8,15 @@ import com.battleships.gui.guis.GuiClickCallback;
 import com.battleships.gui.guis.GuiManager;
 import com.battleships.gui.guis.GuiTexture;
 import com.battleships.gui.renderingEngine.Loader;
+import com.battleships.logic.SaveFileManager;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.lwjgl.util.tinyfd.TinyFileDialogs;
 
 import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import java.io.File;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -239,6 +243,19 @@ public abstract class Menu extends GuiClickCallback {
         }
         GameManager.getGuis().removeAll(buttons);
 
+    }
+    protected void openLoadGameDialog() {
+        try {
+            FileNameExtensionFilter xmlfilter = new FileNameExtensionFilter("xml files (*.xml)", "xml");
+            File test = new File(SaveFileManager.getJarPath() + "/SaveFiles/");
+            fc.setCurrentDirectory(test);
+            fc.setFileFilter(xmlfilter);
+
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        fc.setDialogTitle("Select save file");
+        new Thread(new SaveFilePicker()).start();
     }
 
     /**

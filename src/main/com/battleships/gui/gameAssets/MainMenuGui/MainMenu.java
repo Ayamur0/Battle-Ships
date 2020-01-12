@@ -98,22 +98,6 @@ public class MainMenu extends Menu {
         }
         return false;
     }
-
-
-    protected void openLoadGameDialog() {
-        try {
-            FileNameExtensionFilter xmlfilter = new FileNameExtensionFilter("xml files (*.xml)", "xml");
-            File test = new File(SaveFileManager.getJarPath() + "/SaveFiles/");
-            fc.setCurrentDirectory(test);
-            fc.setFileFilter(xmlfilter);
-
-        } catch (UnsupportedEncodingException e) {
-
-        }
-        fc.setDialogTitle("Select save file");
-        new Thread(new SaveFilePicker()).start();
-    }
-
     public boolean processLoadedFile(){
         filePicked = false;
         if (fileName!=null){

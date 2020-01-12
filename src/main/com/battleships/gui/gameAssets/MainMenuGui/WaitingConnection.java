@@ -20,18 +20,11 @@ public class WaitingConnection extends Menu{
      * Constant value for Cancel button
      */
     private static final int CANCEL = 0;
-    private boolean server;
 
     /**
      * Indicates if the game is loaded from a file
      */
-    private boolean formFile;
-    public boolean isServer() {
-        return server;
-    }
-    public void setServer(boolean server) {
-        this.server = server;
-    }
+    private boolean fromFile;
     /**
      * Creates the Multiplayer menu, sets the color of the {@link GUIText} and creates the {@link GUIText} on the Buttons.
      * @param guiManager GuiManager that should handle the click function of these guis.
@@ -39,7 +32,7 @@ public class WaitingConnection extends Menu{
      */
     public WaitingConnection(GuiManager guiManager, Loader loader,boolean fromFile) {
         super(guiManager, loader);
-        this.formFile = fromFile;
+        this.fromFile = fromFile;
 
         this.createMenu();
 
@@ -57,13 +50,19 @@ public class WaitingConnection extends Menu{
         GameManager.getGuis().add(buttons.get(0));
     }
     public void startMultiplayerGame(){
-        if (formFile&&isServer())
+        if (fromFile){
             GameManager.getNetwork().sendLoad(MultiplayerMenu.getFilename());
-        else
+
+        }
+        else{
+            GameManager.resizeGrid();
             GameManager.getNetwork().sendSize(GameManager.getSettings().getSize());
+            GameManager.getLogic().advanceGamePhase();
+        }
+
         clearMenu();
         cleaBackgournd();
-        GameManager.getLogic().advanceGamePhase();
+
     }
 
 

@@ -101,16 +101,7 @@ public class MultiplayerMenu extends Menu {
     @Override
     protected void clickAction() {
         if (super.buttonClicked == LOADONLINEGAME) {
-            JFileChooser fc = new JFileChooser();
-            fc.showOpenDialog(null);
-            filename = fc.getName(fc.getSelectedFile());
-            if (filename != null){
-                filename.replace(".xml","");
-                if(SaveFileManager.loadFromFile(filename) == null) {
-                    GameManager.getSettings().setOnline(true);
-                    MainMenuManager.setMenu(new WaitingConnection(guiManager, loader,true));
-                }
-            }
+            openLoadGameDialog();
         }
         if (super.buttonClicked == HOST){
             super.clearMenu();
@@ -119,6 +110,9 @@ public class MultiplayerMenu extends Menu {
         }
         if (super.buttonClicked == CLIENT){
             new Thread(new TextInput("Connect", "Enter ip Address")).start();
+            if (!GameManager.getNetwork().start(false,userInput)){
+                //TODO Error msg
+            }
         }
         if (super.buttonClicked == BACK) {
             super.clearMenu();

@@ -182,7 +182,6 @@ public class InGameSettingsMenu extends Menu {
                     GameManager.getSettings().setOnline(true);
                     GameManager.getNetwork().start(true,null);
                     MainMenuManager.setMenu(new WaitingConnection(guiManager,loader,false));
-                    ((WaitingConnection)MainMenuManager.getMenu()).setServer(true);
                 }
             }
             if (super.buttonClicked == BACK){

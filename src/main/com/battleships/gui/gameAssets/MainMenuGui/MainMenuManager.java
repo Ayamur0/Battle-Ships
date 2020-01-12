@@ -46,6 +46,7 @@ public class MainMenuManager {
     }
     public void clearAll(){
         removeAllShips();
+        GameManager.removeIngameModelsFromScene();
         guiManager.clearClickableGuis();
         TextMaster.clear();
         GameManager.getGuis().clear();
