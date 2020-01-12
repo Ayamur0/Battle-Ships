@@ -88,7 +88,6 @@ public class WaitingConnection extends Menu{
         }
         clearMenu();
         cleaBackgournd();
-
     }
 
 
