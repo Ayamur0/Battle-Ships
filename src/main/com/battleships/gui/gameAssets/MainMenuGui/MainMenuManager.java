@@ -1,6 +1,7 @@
 package com.battleships.gui.gameAssets.MainMenuGui;
 
 import com.battleships.gui.fontRendering.TextMaster;
+import com.battleships.gui.gameAssets.FinishGame;
 import com.battleships.gui.gameAssets.GameManager;
 import com.battleships.gui.gameAssets.grids.GridManager;
 import com.battleships.gui.guis.GuiClickCallback;
@@ -11,6 +12,7 @@ import com.battleships.gui.water.WaterFrameBuffers;
 import com.battleships.gui.window.WindowManager;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.GLFW;
+import org.lwjgl.glfw.GLFWKeyCallback;
 import org.lwjgl.glfw.GLFWMouseButtonCallback;
 
 import java.lang.reflect.GenericArrayType;
@@ -78,6 +80,19 @@ public class MainMenuManager {
             y = BufferUtils.createDoubleBuffer(1);
 
             guiManager.testGuiClick(xpos, ypos);
+        }
+    };
+    public static GLFWKeyCallback keyCallback = new GLFWKeyCallback() {
+        @Override
+        public void invoke(long window, int key, int scanCode, int action, int mods) {
+            if (key == GLFW.GLFW_KEY_F11 && action == GLFW.GLFW_PRESS)
+                WindowManager.setFullScreen(!WindowManager.isFullscreen());
+            if (key == GLFW.GLFW_KEY_ESCAPE && action == GLFW.GLFW_PRESS) {
+                if (GameManager.getLogic().getGameState() != GameManager.MENU && !ESCMenu.isActive())
+                    MainMenuManager.setMenu(new ESCMenu(guiManager, loader));
+                else if (ESCMenu.isActive())
+                    ((ESCMenu) MainMenuManager.getMenu()).ClearESCMenu();
+            }
         }
     };
 }
