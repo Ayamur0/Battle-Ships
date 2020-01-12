@@ -23,6 +23,7 @@ public class WaitingConnection extends Menu{
 
     private boolean opponentConnected;
 
+
     public boolean isOpponentConnected() {
         return opponentConnected;
     }
