@@ -30,8 +30,7 @@ public class NetworkServer extends Network implements Runnable{
 
     private Thread connectionSearch;
 
-    private static Settings settings;
-    //private final Logic logic;
+    private boolean waitingForMessage;
 
     //Konstruktor für den Server
     public NetworkServer(){
@@ -67,7 +66,10 @@ public class NetworkServer extends Network implements Runnable{
     }
 
     public void sendMessage(String message){
+        if(waitingForMessage)
+            return;
         toClient.println(message);
+        waitingForMessage = true;
         Thread t = new Thread(this);
         t.start();
     }
@@ -81,6 +83,7 @@ public class NetworkServer extends Network implements Runnable{
             System.err.println("Error receiving message from Client!");
         }
         setStringFunction(1, answer);
+        waitingForMessage = false;
     }
 
     /**

@@ -12,7 +12,7 @@ public abstract class Network implements NetworkInterface{
 
     private static final int NONE = -1, SHOOT = 0, CONFIRM = 1, SAVE = 2, LOAD = 3, SIZE = 4;
 
-    private String shoot = "shoot ";
+    private String shoot = "shot ";
     private String size = "size ";
     private String confirmed = "confirmed";
     private String answer = "answer ";
@@ -37,8 +37,17 @@ public abstract class Network implements NetworkInterface{
             case SHOOT: GameManager.shoot(GridManager.OPPONENTFIELD, new Vector2i(row+1, col+1)); break;
             case CONFIRM: setOpponentConfirm(); break;
             case SAVE: SaveFileManager.saveToFile(ID); break;
-            case LOAD: SaveFileManager.loadFromFile(ID); GameManager.getMainMenuManager().clearAll(); GameManager.resizeGrid(); GameManager.getLogic().advanceGamePhase(); break;
-            case SIZE: GameManager.getMainMenuManager().clearAll(); GameManager.resizeGrid(); GameManager.getLogic().advanceGamePhase(); break;
+            case LOAD: SaveFileManager.loadFromFile(ID);
+                GameManager.getMainMenuManager().clearAll();
+                GameManager.resizeGrid();
+                GameManager.getLogic().advanceGamePhase();
+                GameManager.getLogic().getTurnHandler().setPlayerTurn(false);
+                break;
+            case SIZE: GameManager.getMainMenuManager().clearAll();
+                GameManager.resizeGrid();
+                GameManager.getLogic().advanceGamePhase();
+                GameManager.getLogic().getTurnHandler().setPlayerTurn(false);
+                break;
         }
         action = NONE;
     }

@@ -167,6 +167,7 @@ public class WindowManager {
         width = widthBuffer.get(0);
         height = heightBuffer.get(0);
 
+        //TODO lock 4k
         GL11.glViewport(0, 0, width, height);
 
         double currentFrame = GLFW.glfwGetTime();
@@ -199,6 +200,7 @@ public class WindowManager {
         GLFW.glfwSetScrollCallback(window, camera.scrollCallback);
         GLFW.glfwSetKeyCallback(window, GameManager.keyCallback);
         GLFW.glfwSetWindowSizeCallback(window, wFbo.sizeCallback);
+        GLFW.glfwSetWindowIconifyCallback(window, wFbo.iconifyCallback);
     }
 
     /**
