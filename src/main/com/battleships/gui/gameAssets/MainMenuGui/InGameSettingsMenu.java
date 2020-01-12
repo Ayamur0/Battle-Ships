@@ -130,7 +130,6 @@ public class InGameSettingsMenu extends Menu {
         else
             return (playingFieldSize.isRunning()||difficulty1.isRunning()||difficulty2.isRunning());
     }
-
     /**
      * Creates the {@link Slider}, adds {@link GUIText}as labels and adds the {@link GuiTexture} for the buttons.
      */
