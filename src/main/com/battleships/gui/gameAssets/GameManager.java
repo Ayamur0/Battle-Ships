@@ -323,6 +323,21 @@ public class GameManager {
     }
 
     /**
+     * Remove all models that were created during game.
+     * Call when exiting to main menu.
+     */
+    public static void removeIngameModelsFromScene(){
+        entities.clear();
+        guis.clear();
+        guiManager.clearClickableGuis();
+        gridManager.getBurningFires().clear();
+        gridManager.getBurningFireSounds().clear();
+        gridManager.getCannonball().remove();
+        gridManager.getMarkers().clear();
+        gridManager.getShips().clear();
+    }
+
+    /**
      * Removes everything from the scene.
      */
     public static void clearScene(){
