@@ -1,5 +1,6 @@
 package com.battleships.logic;
 
+import com.battleships.gui.gameAssets.GameManager;
 import com.battleships.logic.AI.AI;
 
 /**
@@ -50,6 +51,10 @@ public class TurnHandler {
             opponentAI.placeShips();
         if(playerAIUsed)
             playerAI.placeShips();
+        if(opponentAIUsed && playerAIUsed){
+            GameManager.getLogic().advanceGamePhase();
+            makeAiTurns();
+        }
     }
 
     /**
