@@ -37,7 +37,7 @@ public class NetworkManager {
 
     public void sendConfirm(){
         if(player != null) {
-            player.sendMessage("confirm");
+            player.sendMessage("confirmed");
             player.setPlayerConfirm();
         }
     }
