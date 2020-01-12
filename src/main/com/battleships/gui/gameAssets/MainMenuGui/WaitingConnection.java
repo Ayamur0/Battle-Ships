@@ -21,6 +21,16 @@ public class WaitingConnection extends Menu{
      */
     private static final int CANCEL = 0;
 
+    private boolean opponentConnected;
+
+    public boolean isOpponentConnected() {
+        return opponentConnected;
+    }
+
+    public void setOpponentConnected(boolean opponentConnected) {
+        this.opponentConnected = opponentConnected;
+    }
+
     /**
      * Indicates if the game is loaded from a file
      */
