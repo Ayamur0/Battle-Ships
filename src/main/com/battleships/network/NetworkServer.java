@@ -32,18 +32,40 @@ public class NetworkServer extends Network implements Runnable{
     private static GameManager gameManager;
     private static GridManager gridManager;
 
+    private connect waitingForConnection;
+
     private static Settings settings;
     //private final Logic logic;
 
     //Konstruktor für den Server
     public NetworkServer(){
         startServer();
-        waitForClient();
-        try {
-            pingong();
-        } catch (IOException e) {
-            e.printStackTrace();
+        waitingForConnection = new connect(this);
+        Thread t = new Thread(waitingForConnection);
+        t.start();
+    }
+
+    private static class connect implements Runnable{
+        private NetworkServer server;
+        private volatile boolean isRunning = true;
+
+        public connect(NetworkServer server) {
+            this.server = server;
         }
+
+        public void kill(){
+            isRunning = false;
+        }
+
+        @Override
+        public void run() {
+            server.waitForClient();
+        }
+    }
+
+    public void stopConnectionSearch(){
+        waitingForConnection.kill();
+        waitingForConnection = new connect(this);
     }
 
     public void sendMessage(String message){
@@ -59,7 +81,7 @@ public class NetworkServer extends Network implements Runnable{
         } catch (IOException e) {
             System.err.println("Error receiving message from Client!");
         }
-        executeStringFunction(1, answer);
+        setStringFunction(1, answer);
     }
 
     /**
@@ -71,7 +93,7 @@ public class NetworkServer extends Network implements Runnable{
             toClient.println(keyboardInput.readLine());
             String answer = fromClient.readLine();
             System.out.println(answer);
-            executeStringFunction(0, answer);
+            setStringFunction(0, answer);
             //System.out.println(fromClient.readLine());
         }
     }

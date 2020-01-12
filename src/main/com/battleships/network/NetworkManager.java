@@ -1,5 +1,7 @@
 package com.battleships.network;
 
+import java.io.IOException;
+
 public class NetworkManager {
 
     private Network player;
@@ -7,12 +9,18 @@ public class NetworkManager {
     public NetworkManager() {
     }
 
-    public void start(boolean server) {
-        if(server)
+    public boolean start(boolean server, String IP) {
+        if(server) {
             player = new NetworkServer();
-        else
-            player = new NetworkClient("Localhost");
-
+        }
+        else {
+            try {
+                player = new NetworkClient(IP);
+            } catch (IOException e) {
+                return false;
+            }
+        }
+        return true;
     }
 
     public void sendSize(int size){
@@ -35,5 +43,14 @@ public class NetworkManager {
 
     public void sendLoad(long ID){
         player.sendMessage("load " + ID);
+    }
+
+    public void sendAnswer(int a){
+        player.sendMessage("answer " + a);
+    }
+
+    public void execute(){
+        if(player != null)
+            player.execute();
     }
 }

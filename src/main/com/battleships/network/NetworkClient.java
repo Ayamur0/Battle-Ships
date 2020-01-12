@@ -28,12 +28,9 @@ public class NetworkClient extends Network implements Runnable{
     /**
      *Der Client soll aufgerufen werden mit einer IP Adresse (in Form eines Strings)
      */
-    public NetworkClient(String adress){
-        try {
-            startClient(adress);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public NetworkClient(String adress) throws IOException {
+        startClient(adress);
+
     }
 
     public void sendMessage(String message){
@@ -49,13 +46,13 @@ public class NetworkClient extends Network implements Runnable{
         } catch (IOException e) {
             System.err.println("Error receiving message from Server!");
         }
-        executeStringFunction(1, answer);
+        setStringFunction(1, answer);
     }
 
     private void pingpong() throws  IOException{
         while(online) {
             String answer = fromServer.readLine();
-            executeStringFunction(1,answer);
+            setStringFunction(1,answer);
             printReceivedMessage(answer);
             String send = keyboardInput.readLine();
             toServer.println(send);

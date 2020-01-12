@@ -8,6 +8,9 @@ import com.battleships.logic.Settings;
 import org.joml.Vector2i;
 
 public abstract class Network implements NetworkInterface{
+
+    private static final int NONE = -1, SHOOT = 0, CONFIRM = 1, SAVE = 2, LOAD = 3;
+
     private String shoot = "shoot ";
     private String size = "size ";
     private String confirmed = "confirmed ";
@@ -18,6 +21,12 @@ public abstract class Network implements NetworkInterface{
     private boolean playerConfirm;
     private boolean opponentConfirm;
 
+    private int row;
+    private int col;
+    private String ID;
+
+    private int action;
+
     private int lastShotX;
     private int lastShotY;
 
@@ -25,7 +34,16 @@ public abstract class Network implements NetworkInterface{
     private static GridManager gridManager;
 
 
-
+    public void execute(){
+        switch (action){
+            case NONE: break;
+            case SHOOT: GameManager.shoot(GridManager.OPPONENTFIELD, new Vector2i(row+1, col+1)); break;
+            case CONFIRM: setOpponentConfirm(); break;
+            case SAVE: SaveFileManager.saveToFile(ID); break;
+            case LOAD: SaveFileManager.loadFromFile(ID); break;
+        }
+        action = NONE;
+    }
 
 
     /**
@@ -34,15 +52,15 @@ public abstract class Network implements NetworkInterface{
      * @param i Wenn i == 0 dann ist es der Server für i == 1 ist der Client gedacht.
      * @param text Der Input von Client oder User
      */
-    public void executeStringFunction(int i, String text){
+    public void setStringFunction(int i, String text){
         if(text.contains(shoot)){
             text = text.replace(shoot, "");
             String[] temp = text.split(" ");
 
-            int row= Integer.parseInt(temp[0]);
-            int col = Integer.parseInt(temp[1]);
+            row= Integer.parseInt(temp[0]);
+            col = Integer.parseInt(temp[1]);
 
-            GameManager.shoot(GridManager.OPPONENTFIELD, new Vector2i(row+1, col+1));
+            action = SHOOT;
         }else if(text.contains(size)){
             text = text.replace(size, "");
             GameManager.getLogic().onlineMode(true);
@@ -52,8 +70,7 @@ public abstract class Network implements NetworkInterface{
         }else if(text.contains(confirmed)){
             text = text.replace(confirmed, "");
             if(text.equals(""))
-               setOpponentConfirm();
-            //Ruft Methode in Logic auf
+               action = CONFIRM;
         }else if(text.contains(answer)){
             text = text.replace(answer, "");
              if(Integer.parseInt(text) == 1){
@@ -66,11 +83,11 @@ public abstract class Network implements NetworkInterface{
 
         }else if(text.contains(save)){
             text = text.replace(save, "");
-            SaveFileManager.saveToFile(""+text);
+            ID = text;
 
         }else if(text.contains(load)){
             text = text.replace(load, "");
-            SaveFileManager.loadFromFile(text);
+            ID = text;
         }else{
             System.err.println("Received faulty message from Network!");
         }

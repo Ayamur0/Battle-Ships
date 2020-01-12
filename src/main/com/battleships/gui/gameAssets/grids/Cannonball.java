@@ -4,6 +4,7 @@ import com.battleships.gui.entities.Entity;
 import com.battleships.gui.gameAssets.GameManager;
 import com.battleships.gui.renderingEngine.Loader;
 import com.battleships.gui.window.WindowManager;
+import com.battleships.logic.Cell;
 import org.apache.commons.math3.linear.*;
 import org.joml.Vector2f;
 import org.joml.Vector2i;
@@ -236,8 +237,15 @@ public class Cannonball extends Entity implements Runnable {
      */
     private void cannonballHit(){
         boolean shipHit = GameManager.getLogic().shoot(destinationCell.x, destinationCell.y, destinationGrid);
-        if(GameManager.getSettings().isOnline())
-            return;
+        if(GameManager.getSettings().isOnline() && !GameManager.getLogic().getTurnHandler().isPlayerTurn()) {
+            Cell c = GameManager.getLogic().getPlayerGrid().getCell(destinationCell.x, destinationCell.y);
+            if(c.ship == null)
+                GameManager.getNetwork().sendAnswer(0);
+            else if(!c.ship.isSunk())
+                GameManager.getNetwork().sendAnswer(1);
+            else if(c.ship.isSunk())
+                GameManager.getNetwork().sendAnswer(2);
+        }
         cannonballHit2(shipHit);
     }
 

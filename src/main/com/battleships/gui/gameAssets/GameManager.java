@@ -399,6 +399,8 @@ public class GameManager {
         PostProcessing.doPostProcessing(blur.getColorTexture());
         guiRenderer.render(guis);
         TextMaster.render();
+        if(settings.isOnline())
+            network.execute();
     }
 
     /**
@@ -424,6 +426,8 @@ public class GameManager {
         guiRenderer.render(guis);
         TextMaster.render();
         renderer.updateProjectionMatrix();
+        if(settings.isOnline())
+            network.execute();
     }
 
     /**
