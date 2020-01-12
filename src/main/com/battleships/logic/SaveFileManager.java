@@ -105,6 +105,7 @@ public class SaveFileManager {
      * @param saveFile SaveFile the data should be loaded from.
      */
     public static void loadSaveFile(SaveFile saveFile){
+        GameManager.setSettings(saveFile.getSettings());
         LogicManager logic = GameManager.getLogic();
         GridManager gridManager = GameManager.getGridManager();
 

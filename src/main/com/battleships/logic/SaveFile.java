@@ -52,11 +52,16 @@ public class SaveFile {
     /**
      * List containing all positions for fire effects on the players grid grouped by the ships on which the fires are burning.
      */
-    private Map<Entity, List<Vector3f>> burningFires = new HashMap<>();
+    private Map<Entity, List<Vector3f>> burningFires;
     /**
      * List containing all sources for fire sounds on the players grid grouped by the ships on which the fires are burning.
      */
-    private Map<Entity, List<Source>> burningFireSounds = new HashMap<>();
+    private Map<Entity, List<Source>> burningFireSounds;
+
+    /**
+     * Settings of the saved game.
+     */
+    private Settings settings;
 
     /**
      * Create a new SaveFile and save information about current game into it.
@@ -74,6 +79,7 @@ public class SaveFile {
         markers = gridManager.getMarkers();
         burningFires = gridManager.getBurningFires();
         burningFireSounds = gridManager.getBurningFireSounds();
+        settings = GameManager.getSettings();
     }
 
     /**
@@ -137,5 +143,12 @@ public class SaveFile {
      */
     public Map<Entity, List<Source>> getBurningFireSounds() {
         return burningFireSounds;
+    }
+
+    /**
+     * @return Settings of this game.
+     */
+    public Settings getSettings() {
+        return settings;
     }
 }

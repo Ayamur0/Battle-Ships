@@ -672,5 +672,10 @@ public class GameManager {
         return network;
     }
 
-
+    /**
+     * @param settings new settings (when loading a game)
+     */
+    public static void setSettings(Settings settings) {
+        GameManager.settings = settings;
+    }
 }
