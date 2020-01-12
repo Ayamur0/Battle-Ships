@@ -230,7 +230,8 @@ public class GameManager {
      * Removes all ships on the players grid.
      */
     public static void removeAllShips(){
-        shipSelector.resetCount();
+        if(shipSelector != null)
+            shipSelector.resetCount();
         gridManager.removeAllShips();
         logic.removeAllShips();
     }

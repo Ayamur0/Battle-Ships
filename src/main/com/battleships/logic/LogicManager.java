@@ -6,6 +6,7 @@ import com.battleships.gui.gameAssets.grids.GridManager;
 import com.battleships.gui.gameAssets.grids.ShipManager;
 import com.battleships.logic.AI.AIEasy;
 import com.battleships.logic.AI.AIHard;
+import com.battleships.logic.AI.AIMedium;
 import org.joml.Vector2i;
 
 import java.util.Random;
@@ -45,7 +46,7 @@ public class LogicManager {
     public void init(Settings settings) {
         playerGrid = new Grid(settings.getSize(), GridManager.OWNFIELD);
         opponentGrid = new Grid(settings.getSize(), GridManager.OPPONENTFIELD);
-        turnHandler.setOpponentAI(new AIHard(1, settings.getSize(), this));
+        turnHandler.setOpponentAI(new AIMedium(1, settings.getSize(), this));
         stats = new Stats();
         stats.init();
     }
