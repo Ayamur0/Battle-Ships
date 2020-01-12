@@ -121,30 +121,31 @@ public abstract class Menu extends GuiClickCallback {
 
     /**
      * Loads all {@link GuiTexture} needed and the font for the {@link GUIText}
+     *
      * @param guiManager GuiManager that should handle the click function of these guis.
-     * @param loader Loader needed to load textures
+     * @param loader     Loader needed to load textures
      */
     public Menu(GuiManager guiManager, Loader loader) {
         this.guiManager = guiManager;
         this.loader = loader;
-        if (GameManager.getPirateFont()==null)
+        if (GameManager.getPirateFont() == null)
             this.font = new FontType(loader.loadFontTexture("font/pirate.png"), "pirate");
         else
-            this.font=GameManager.getPirateFont();
+            this.font = GameManager.getPirateFont();
         if (buttonTexture == 0)
             buttonTexture = loader.loadTexture("WoodButton.png");
         if (scrollBackground == 0)
             scrollBackground = loader.loadTexture("scroll.png");
         if (icon == 0)
             icon = loader.loadTexture("StartIcon.png");
-        if (backgounds.size()==0)
+        if (backgounds.size() == 0)
             addBackground();
     }
 
     /**
      * Class for handling file choosing in separate thread.
      */
-    protected class SaveFilePicker implements Runnable{
+    protected class SaveFilePicker implements Runnable {
         @Override
         public void run() {
             fc.showOpenDialog(null);
@@ -157,7 +158,7 @@ public abstract class Menu extends GuiClickCallback {
     /**
      * Class for handling text input window in separate thread.
      */
-    protected class TextInput implements Runnable{
+    protected class TextInput implements Runnable {
         /**
          * Title and message of the text inout dialog.
          */
@@ -165,7 +166,8 @@ public abstract class Menu extends GuiClickCallback {
 
         /**
          * Create a new input window
-         * @param title Title of the window
+         *
+         * @param title   Title of the window
          * @param message Message of the window
          */
         public TextInput(String title, String message) {
@@ -185,12 +187,13 @@ public abstract class Menu extends GuiClickCallback {
 
     /**
      * creates the amount of {@link GuiTexture} needed.
+     *
      * @param anzahl how many button textures should be created
      */
-    protected void CreateButtonTextures(int anzahl){
+    protected void CreateButtonTextures(int anzahl) {
         buttons.add(new GuiTexture(buttonTexture, standardButtonPos, buttonSize));
-        for (int i = 0;i < anzahl-1; i++){
-            buttons.add(new GuiTexture(buttonTexture,new Vector2f(buttons.get(i).getPositions().x,buttons.get(i).getPositions().y+buttonGap),buttonSize));
+        for (int i = 0; i < anzahl - 1; i++) {
+            buttons.add(new GuiTexture(buttonTexture, new Vector2f(buttons.get(i).getPositions().x, buttons.get(i).getPositions().y + buttonGap), buttonSize));
         }
         GameManager.getGuis().addAll(buttons);
     }
@@ -198,18 +201,19 @@ public abstract class Menu extends GuiClickCallback {
     /**
      * adds a {@link GuiTexture} behind the buttons as background
      */
-    protected void addBackground(){
-         backgounds.add(new GuiTexture(scrollBackground, new Vector2f(0.5f, 0.5f), new Vector2f(0.375f, 1f)));
-         backgounds.add(new GuiTexture(icon, new Vector2f(0.5f, 0.175f), new Vector2f(0.3f, 0.3f)));
-         GameManager.getGuis().addAll(backgounds);
+    protected void addBackground() {
+        backgounds.add(new GuiTexture(scrollBackground, new Vector2f(0.5f, 0.5f), new Vector2f(0.375f, 1f)));
+        backgounds.add(new GuiTexture(icon, new Vector2f(0.5f, 0.175f), new Vector2f(0.3f, 0.3f)));
+        GameManager.getGuis().addAll(backgounds);
     }
 
     /**
      * clears all {@link GuiTexture} that are no buttons at the game Begin
      */
-    protected void cleaBackgournd(){
+    protected void cleaBackgournd() {
         GameManager.getGuis().removeAll(backgounds);
     }
+
     /**
      * adds all labels the the {@link TextMaster} to render
      */
@@ -241,12 +245,12 @@ public abstract class Menu extends GuiClickCallback {
     /**
      * removes the {@link GuiTexture} and {@link GUIText} from the screen
      */
-    protected void clearMenu(){
-        for (GUIText text : guiTexts){
+    protected void clearMenu() {
+        for (GUIText text : guiTexts) {
             TextMaster.removeText(text);
             text.remove();
         }
-        for (GuiTexture gui : buttons){
+        for (GuiTexture gui : buttons) {
             guiManager.removeClickableGui(gui);
         }
         GameManager.getGuis().removeAll(buttons);
@@ -272,26 +276,25 @@ public abstract class Menu extends GuiClickCallback {
 
     /**
      * Loads the selected file into the game
+     *
      * @return {@code true} when the file could be loaded {@code false} when the file could not be loaded
      */
-    public boolean processLoadedFile(){
+    public boolean processLoadedFile() {
         filePicked = false;
-        if (fileName!=null){
-            String filename = fileName.replace(".xml","");
+        if (fileName != null) {
+            String filename = fileName.replace(".xml", "");
             SaveFile saveFile = SaveFileManager.loadFromFile(filename);
-            if(saveFile==null){
-                guiTexts.add(new GUIText("Error loading file", fontSize, font,new Vector2f(0.5f,0.3f), 0.3f, true,outlineColor, 0.0f, 0.1f,outlineColor, new Vector2f()));
+            if (saveFile == null) {
+                guiTexts.add(new GUIText("Error loading file", fontSize, font, new Vector2f(0.5f, 0.3f), 0.3f, true, outlineColor, 0.0f, 0.1f, outlineColor, new Vector2f()));
                 return false;
-            }
-            else{
+            } else {
                 SaveFileManager.loadSaveFile(saveFile);
                 clearMenu();
                 cleaBackgournd();
                 GameManager.prepareGame();
                 return true;
             }
-        }
-        else
+        } else
             return false;
     }
 

@@ -51,42 +51,43 @@ public class OptionMenu extends InGameSettingsMenu {
 
     /**
      * Creates the option menu
+     *
      * @param guiManager GuiManager that should handle the click function of these guis.
-     * @param loader Loader needed to load textures
+     * @param loader     Loader needed to load textures
      */
     public OptionMenu(GuiManager guiManager, Loader loader) {
-        super(guiManager, loader,4);
+        super(guiManager, loader, 4);
     }
 
     /**
      * Creates {@link GUIText}as labels and adds the {@link GuiTexture} for the buttons.
      */
     @Override
-    protected void createMenu(){
-        if (markTexture==0){
+    protected void createMenu() {
+        if (markTexture == 0) {
             markTexture = loader.loadTexture("buttonMark.png");
         }
-        if (saveVolume == -1){
+        if (saveVolume == -1) {
             saveVolume = 50;
         }
         volume = new Slider(loader.loadTexture("Slider.png"), loader.loadTexture("WoodenSlider.jpg"), 0, 100,
                 saveVolume, new Vector2f(0.2f, 0.01f), super.standardButtonPos, guiManager, GameManager.getGuis());
-        super.guiTexts.add(new GUIText("Volume: "+volume.getValueAsInt(),fontSize, font,new Vector2f(volume.getPositions().x,volume.getPositions().y-0.06f) , 0.12f, true, outlineColor,0.0f, 0.1f,outlineColor, new Vector2f()));
+        super.guiTexts.add(new GUIText("Volume: " + volume.getValueAsInt(), fontSize, font, new Vector2f(volume.getPositions().x, volume.getPositions().y - 0.06f), 0.12f, true, outlineColor, 0.0f, 0.1f, outlineColor, new Vector2f()));
 
-        super.buttons.add(new GuiTexture(buttonTexture,new Vector2f(volume.getPositions().x+0.06f,volume.getPositions().y+buttonGap),new Vector2f(0.1f,0.1f)));
-        super.guiTexts.add(new GUIText("Potato mode",fontSize, font,new Vector2f(buttons.get(0).getPositions().x-0.14f,buttons.get(0).getPositions().y) , 0.12f, true, outlineColor,0.0f, 0.1f,outlineColor, new Vector2f()));
+        super.buttons.add(new GuiTexture(buttonTexture, new Vector2f(volume.getPositions().x + 0.06f, volume.getPositions().y + buttonGap), new Vector2f(0.1f, 0.1f)));
+        super.guiTexts.add(new GUIText("Potato mode", fontSize, font, new Vector2f(buttons.get(0).getPositions().x - 0.14f, buttons.get(0).getPositions().y), 0.12f, true, outlineColor, 0.0f, 0.1f, outlineColor, new Vector2f()));
 
-        super.buttons.add(new GuiTexture(buttonTexture,new Vector2f(0.5f ,0.83f), super.buttonSize));
+        super.buttons.add(new GuiTexture(buttonTexture, new Vector2f(0.5f, 0.83f), super.buttonSize));
 
-        super.guiTexts.add(new GUIText("Back",fontSize, font, new Vector2f(buttons.get(1).getPositions().x,buttons.get(1).getPositions().y), 0.12f, true, outlineColor,0.0f, 0.1f,outlineColor, new Vector2f()));
+        super.guiTexts.add(new GUIText("Back", fontSize, font, new Vector2f(buttons.get(1).getPositions().x, buttons.get(1).getPositions().y), 0.12f, true, outlineColor, 0.0f, 0.1f, outlineColor, new Vector2f()));
 
-        marker = new GuiTexture(markTexture,buttons.get(0).getPositions(),buttons.get(0).getScale());
+        marker = new GuiTexture(markTexture, buttons.get(0).getPositions(), buttons.get(0).getScale());
 
         super.createClickable();
 
         GameManager.getGuis().addAll(buttons);
 
-        if (potato){
+        if (potato) {
             GameManager.getGuis().add(marker);
         }
 
@@ -96,21 +97,23 @@ public class OptionMenu extends InGameSettingsMenu {
      * Refreshes the {@link GUIText} that show the Value of the {@link Slider} in the current Menu
      */
     @Override
-    public void RefreshSliderValue(){
+    public void RefreshSliderValue() {
 
         super.guiTexts.get(0).remove();
-        super.guiTexts.get(0).setTextString("Volume: "+volume.getValueAsInt());
+        super.guiTexts.get(0).setTextString("Volume: " + volume.getValueAsInt());
 
         saveVolume = volume.getValueAsInt();
 
         TextMaster.loadText(super.guiTexts.get(0));
     }
+
     /**
      * Indicates if the {@link Slider} is moving
+     *
      * @return {@code true} if the sliders is moving {@code false} else
      */
     @Override
-    public boolean isRunning(){
+    public boolean isRunning() {
         return (volume.isRunning());
     }
 
@@ -119,7 +122,7 @@ public class OptionMenu extends InGameSettingsMenu {
      */
     @Override
     protected void clickAction() {
-        if (super.buttonClicked == POTATOMODE){
+        if (super.buttonClicked == POTATOMODE) {
             potato = !potato;
             if (potato)
                 GameManager.getGuis().add(marker);
@@ -127,9 +130,9 @@ public class OptionMenu extends InGameSettingsMenu {
                 GameManager.getGuis().remove(marker);
             //TODO activate potato mode or deactivate potato mode
         }
-        if (super.buttonClicked == BACK){
+        if (super.buttonClicked == BACK) {
             super.clearMenu();
-            MainMenuManager.setMenu(new MainMenu(guiManager,loader));
+            MainMenuManager.setMenu(new MainMenu(guiManager, loader));
         }
     }
 }

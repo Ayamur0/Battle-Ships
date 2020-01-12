@@ -5,10 +5,8 @@ import com.battleships.gui.gameAssets.GameManager;
 import com.battleships.gui.guis.GuiManager;
 import com.battleships.gui.guis.GuiTexture;
 import com.battleships.gui.renderingEngine.Loader;
-import com.battleships.logic.SaveFileManager;
 import org.joml.Vector2f;
 import org.lwjgl.util.tinyfd.TinyFileDialogs;
-import javax.swing.*;
 
 /**
  * Menu to choose if you host a game or connect to a game
@@ -32,12 +30,14 @@ public class MultiplayerMenu extends Menu {
      * Constant value for back button
      */
     private static final int BACK = 3;
+
     /**
      * Creates the Multiplayer menu, sets the color of the {@link GUIText} and creates the {@link GUIText} on the Buttons.
+     *
      * @param guiManager GuiManager that should handle the click function of these guis.
-     * @param loader Loader needed to load textures
+     * @param loader     Loader needed to load textures
      */
-    public MultiplayerMenu(GuiManager guiManager, Loader loader){
+    public MultiplayerMenu(GuiManager guiManager, Loader loader) {
         super(guiManager, loader);
 
         this.createMenu();
@@ -51,12 +51,12 @@ public class MultiplayerMenu extends Menu {
     private void createMenu() {
         CreateButtonTextures(4);
 
-        super.guiTexts.add(new GUIText("Load online", fontSize, font, new Vector2f(buttons.get(0).getPositions().x, buttons.get(0).getPositions().y-0.01f), 0.12f, true,outlineColor, 0.0f, 0.1f,outlineColor, new Vector2f()));
-        super.guiTexts.add(new GUIText("Game", fontSize, font, new Vector2f(buttons.get(0).getPositions().x, buttons.get(0).getPositions().y+0.03f), 0.12f, true,outlineColor, 0.0f, 0.1f,outlineColor, new Vector2f()));
+        super.guiTexts.add(new GUIText("Load online", fontSize, font, new Vector2f(buttons.get(0).getPositions().x, buttons.get(0).getPositions().y - 0.01f), 0.12f, true, outlineColor, 0.0f, 0.1f, outlineColor, new Vector2f()));
+        super.guiTexts.add(new GUIText("Game", fontSize, font, new Vector2f(buttons.get(0).getPositions().x, buttons.get(0).getPositions().y + 0.03f), 0.12f, true, outlineColor, 0.0f, 0.1f, outlineColor, new Vector2f()));
 
-        super.guiTexts.add(new GUIText("Host", fontSize, font, new Vector2f(buttons.get(1).getPositions().x, buttons.get(1).getPositions().y), 0.12f, true,outlineColor, 0.0f, 0.1f,outlineColor, new Vector2f()));
-        super.guiTexts.add(new GUIText("Client", fontSize, font,new Vector2f(buttons.get(2).getPositions().x, buttons.get(2).getPositions().y), 0.12f, true,outlineColor, 0.0f, 0.1f,outlineColor, new Vector2f()));
-        super.guiTexts.add(new GUIText("Back", fontSize, font,new Vector2f(buttons.get(3).getPositions().x,buttons.get(3).getPositions().y), 0.12f, true, outlineColor,0.0f, 0.1f,outlineColor, new Vector2f()));
+        super.guiTexts.add(new GUIText("Host", fontSize, font, new Vector2f(buttons.get(1).getPositions().x, buttons.get(1).getPositions().y), 0.12f, true, outlineColor, 0.0f, 0.1f, outlineColor, new Vector2f()));
+        super.guiTexts.add(new GUIText("Client", fontSize, font, new Vector2f(buttons.get(2).getPositions().x, buttons.get(2).getPositions().y), 0.12f, true, outlineColor, 0.0f, 0.1f, outlineColor, new Vector2f()));
+        super.guiTexts.add(new GUIText("Back", fontSize, font, new Vector2f(buttons.get(3).getPositions().x, buttons.get(3).getPositions().y), 0.12f, true, outlineColor, 0.0f, 0.1f, outlineColor, new Vector2f()));
 
         super.createClickable();
 
@@ -65,25 +65,26 @@ public class MultiplayerMenu extends Menu {
 
     /**
      * Tests if the click was on one of the {@link GuiTexture} in the menu
+     *
      * @param gui The gui to test for if the click was on it.
-     * @param x xPos of the click (left of screen = 0, right of screen = 1)
-     * @param y yPos of the click (top of screen = 0, bottom of screen = 1)
+     * @param x   xPos of the click (left of screen = 0, right of screen = 1)
+     * @param y   yPos of the click (top of screen = 0, bottom of screen = 1)
      * @return {@code true} if the click was on one of the button textures, {@code false} else.
      */
     protected boolean isClickOnGui(GuiTexture gui, double x, double y) {
-        if(super.isClickOnGui(super.buttons.get(0), x, y)) {
+        if (super.isClickOnGui(super.buttons.get(0), x, y)) {
             super.buttonClicked = 0;
             return true;
         }
-        if(super.isClickOnGui(super.buttons.get(1), x, y)) {
+        if (super.isClickOnGui(super.buttons.get(1), x, y)) {
             super.buttonClicked = 1;
             return true;
         }
-        if(super.isClickOnGui(super.buttons.get(2), x, y)) {
+        if (super.isClickOnGui(super.buttons.get(2), x, y)) {
             super.buttonClicked = 2;
             return true;
         }
-        if(super.isClickOnGui(super.buttons.get(3), x, y)) {
+        if (super.isClickOnGui(super.buttons.get(3), x, y)) {
             super.buttonClicked = 3;
 
             return true;
@@ -99,31 +100,31 @@ public class MultiplayerMenu extends Menu {
         if (super.buttonClicked == LOADONLINEGAME) {
             openLoadGameDialog();
         }
-        if (super.buttonClicked == HOST){
+        if (super.buttonClicked == HOST) {
             super.clearMenu();
-            MainMenuManager.setMenu(new InGameSettingsMenu(super.guiManager,super.loader,1));
+            MainMenuManager.setMenu(new InGameSettingsMenu(super.guiManager, super.loader, 1));
 
         }
-        if (super.buttonClicked == CLIENT){
+        if (super.buttonClicked == CLIENT) {
             new Thread(new TextInput("Connect", "Enter ip Address")).start();
-            if (!GameManager.getNetwork().start(false,userInput)){
+            if (!GameManager.getNetwork().start(false, userInput)) {
                 //TODO Error msg
             }
         }
         if (super.buttonClicked == BACK) {
             super.clearMenu();
-            MainMenuManager.setMenu(new PlayMenu(guiManager,loader));
+            MainMenuManager.setMenu(new PlayMenu(guiManager, loader));
         }
     }
 
     /**
      * Processes a entered IP by the user by using the last Input made through a {@link TinyFileDialogs}.
      */
-    public void processInput(){
+    public void processInput() {
         if (userInput != null) {
             GameManager.getNetwork().start(false, userInput);
             super.clearMenu();
-            MainMenuManager.setMenu(new WaitingConnection(guiManager, loader,false));
+            MainMenuManager.setMenu(new WaitingConnection(guiManager, loader, false));
         }
         userInputMade = false;
     }
