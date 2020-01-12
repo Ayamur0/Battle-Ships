@@ -29,13 +29,6 @@ public class MultiplayerMenu extends Menu {
      * Constant value for back button
      */
     private static final int BACK = 3;
-
-    public static String getFilename() {
-        return filename;
-    }
-
-    private static String filename;
-
     /**
      * Creates the Multiplayer menu, sets the color of the {@link GUIText} and creates the {@link GUIText} on the Buttons.
      * @param guiManager GuiManager that should handle the click function of these guis.
