@@ -14,7 +14,7 @@ public abstract class Network implements NetworkInterface{
 
     private String shoot = "shoot ";
     private String size = "size ";
-    private String confirmed = "confirmed ";
+    private String confirmed = "confirmed";
     private String answer = "answer ";
     private String save = "save ";
     private String load = "load ";

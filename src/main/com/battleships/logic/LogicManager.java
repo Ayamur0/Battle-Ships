@@ -202,12 +202,14 @@ public class LogicManager {
      */
     public void advanceGamePhase(){
         switch (gameState){
-            case GameManager.MENU: init(GameManager.getSettings()); GameManager.startShipPlacementPhase(); turnHandler.placeAiShips(); break;
+            case GameManager.MENU: init(GameManager.getSettings()); GameManager.startShipPlacementPhase(); break;
             case GameManager.SHIPLACING: GameManager.startPlayPhase();  break;
             case GameManager.SHOOTING:
         }
         gameState++;
         gameState %= 3;
+        if(gameState == GameManager.SHIPLACING)
+            turnHandler.placeAiShips();
     }
 
     /**
