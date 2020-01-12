@@ -108,7 +108,7 @@ public class MultiplayerMenu extends Menu {
                 filename.replace(".xml","");
                 if(SaveFileManager.loadFromFile(filename) == null) {
                     GameManager.getSettings().setOnline(true);
-                    MainMenuManager.setMenu(new WaitingConnection(guiManager, loader));
+                    MainMenuManager.setMenu(new WaitingConnection(guiManager, loader,true));
                 }
             }
         }
@@ -122,7 +122,7 @@ public class MultiplayerMenu extends Menu {
             if (ip != null) {
                 GameManager.getNetwork().start(false,ip);
                 super.clearMenu();
-                MainMenuManager.setMenu(new WaitingConnection(guiManager, loader));
+                MainMenuManager.setMenu(new WaitingConnection(guiManager, loader,false));
             }
         }
         if (super.buttonClicked == BACK) {

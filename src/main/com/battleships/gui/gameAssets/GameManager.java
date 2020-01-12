@@ -575,7 +575,7 @@ public class GameManager {
             if(key == GLFW.GLFW_KEY_ESCAPE && action == GLFW.GLFW_PRESS){
                 if (GameManager.getLogic().getGameState()!=GameManager.MENU&&!ESCMenu.isActive())
                     MainMenuManager.setMenu(new ESCMenu(guiManager,loader));
-                if (ESCMenu.isActive())
+                else if (ESCMenu.isActive())
                     ((ESCMenu)MainMenuManager.getMenu()).ClearESCMenu();
                 }
             if(key == GLFW.GLFW_KEY_K && action == GLFW.GLFW_PRESS) {

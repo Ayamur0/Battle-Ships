@@ -8,8 +8,12 @@ import com.battleships.gui.window.WindowManager;
 import com.battleships.logic.SaveFileManager;
 import org.joml.Vector2f;
 import org.lwjgl.glfw.GLFW;
+import org.lwjgl.system.CallbackI;
 
 import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import java.io.File;
+import java.io.UnsupportedEncodingException;
 
 /**
  * The main menu for the game
@@ -104,12 +108,27 @@ public class MainMenu extends Menu {
     @Override
     protected void clickAction() {
         if(buttonClicked == LOAD) {
-            fc.showOpenDialog(null);
-            String s = fc.getName(fc.getSelectedFile());
-            s.replace(".xml","");
-            if(SaveFileManager.loadFromFile(s)==null){
-                super.guiTexts.add(new GUIText("Error loading file", fontSize, font,new Vector2f(0.5f,0.1f), 0.12f, true,outlineColor, 0.0f, 0.1f,outlineColor, new Vector2f()));
+            try {
+                FileNameExtensionFilter xmlfilter = new FileNameExtensionFilter("xml files (*.xml)","xml");
+                File test = new File(SaveFileManager.getJarPath()+"/SaveFiles/");
+                fc.setCurrentDirectory(test);
+                fc.setFileFilter(xmlfilter);
 
+            }
+            catch (UnsupportedEncodingException e){
+
+            }
+            fc.setDialogTitle("Select save file");
+            fc.showOpenDialog(null);
+
+            String s = fc.getName(fc.getSelectedFile());
+            if (s!=null){
+                String lol = s.replace(".xml","");
+                System.out.println(lol);
+                if(SaveFileManager.loadFromFile(lol)==null){
+                    super.guiTexts.add(new GUIText("Error loading file", fontSize, font,new Vector2f(0.5f,0.3f), 0.3f, true,outlineColor, 0.0f, 0.1f,outlineColor, new Vector2f()));
+
+                }
             }
         }
         if(buttonClicked == PLAY){

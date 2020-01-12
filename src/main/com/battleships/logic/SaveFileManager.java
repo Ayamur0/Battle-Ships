@@ -33,7 +33,7 @@ public class SaveFileManager {
         xstream.setMode(XStream.XPATH_RELATIVE_REFERENCES);
         xstream.autodetectAnnotations(true);
         try {
-            File saveFolder = new File(getJarPath() + "SaveFiles/");
+            File saveFolder = new File(getJarPath() + "/SaveFiles/");
             if(!saveFolder.isDirectory()) {
                 if(!saveFolder.mkdir()){
                     System.err.println("Error creating save game folder!");
@@ -64,7 +64,7 @@ public class SaveFileManager {
         SaveFile saveFile = null;
         File saveGame;
         try {
-            saveGame = new File(getJarPath() + "SaveFiles/" + fileName + ".xml");
+            saveGame = new File(getJarPath() + "/SaveFiles/" + fileName + ".xml");
         }
         catch (UnsupportedEncodingException e){
             e.printStackTrace();
@@ -93,7 +93,7 @@ public class SaveFileManager {
      * @return The absolute Path the jar is located at.
      * @throws UnsupportedEncodingException If jar Path can't be read.
      */
-    private static String getJarPath() throws UnsupportedEncodingException {
+    public static String getJarPath() throws UnsupportedEncodingException {
         URL url = SaveFileManager.class.getProtectionDomain().getCodeSource().getLocation();
         String jarPath = URLDecoder.decode(url.getFile(), "UTF-8");
         return new File(jarPath).getParentFile().getPath();

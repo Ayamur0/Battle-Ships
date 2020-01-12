@@ -8,6 +8,8 @@ import com.battleships.gui.guis.GuiTexture;
 import com.battleships.gui.renderingEngine.Loader;
 import org.joml.Vector2f;
 
+import java.lang.reflect.GenericArrayType;
+
 /**
  * Overlay if you are waiting for an connection
  *
@@ -20,26 +22,24 @@ public class WaitingConnection extends Menu{
     private static final int CANCEL = 0;
     private boolean server;
 
+    /**
+     * Indicates if the game is loaded from a file
+     */
+    private boolean formFile;
     public boolean isServer() {
         return server;
     }
-
     public void setServer(boolean server) {
         this.server = server;
     }
-
-    /**
-     * Indicates if you are waiting for an connection or not
-     */
-    private boolean waiting;
-
     /**
      * Creates the Multiplayer menu, sets the color of the {@link GUIText} and creates the {@link GUIText} on the Buttons.
      * @param guiManager GuiManager that should handle the click function of these guis.
      * @param loader Loader needed to load textures
      */
-    public WaitingConnection(GuiManager guiManager, Loader loader) {
+    public WaitingConnection(GuiManager guiManager, Loader loader,boolean fromFile) {
         super(guiManager, loader);
+        this.formFile = fromFile;
 
         this.createMenu();
 
@@ -57,13 +57,13 @@ public class WaitingConnection extends Menu{
         GameManager.getGuis().add(buttons.get(0));
     }
     public void startMultiplayerGame(){
-        if (isServer())
-            //GameManager.getNetwork().sendLoad(MultiplayerMenu.getFilename());
-
+        if (formFile&&isServer())
+            GameManager.getNetwork().sendLoad(MultiplayerMenu.getFilename());
+        else
+            GameManager.getNetwork().sendSize(GameManager.getSettings().getSize());
+        clearMenu();
+        cleaBackgournd();
         GameManager.getLogic().advanceGamePhase();
-
-        //load id senden
-        //wenn net send size
     }
 
 

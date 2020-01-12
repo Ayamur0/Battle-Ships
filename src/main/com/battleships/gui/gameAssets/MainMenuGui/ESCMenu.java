@@ -129,7 +129,7 @@ public class ESCMenu extends Menu {
             else{
                 if (SaveFileManager.saveToFile(String.valueOf(time))){
                     GameManager.getNetwork().closeConnection();
-                    GameManager.getNetwork().sendSave(time);
+                    //GameManager.getNetwork().sendSave(time);
                     GameManager.getMainMenuManager().backToMainMenu();
                 }
                 else
