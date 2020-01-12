@@ -177,6 +177,7 @@ public class InGameSettingsMenu extends Menu {
                     GameManager.getSettings().setAiLevelO(difficulty1.getValueAsInt());
                     difficulty1.remove();
                     if (gameMode == AIVSAI){
+                        ESCMenu.setIsPlayerAI(true);
                         GameManager.getSettings().setAiLevelP(difficulty2.getValueAsInt());
                         difficulty2.remove();
                     }
