@@ -30,7 +30,7 @@ public class NetworkManager {
 
     public void sendShoot(int x, int y){
         if(player != null){
-            player.sendMessage("shoot " + (y-1) + " " + (x-1));
+            player.sendMessage("shot " + (y-1) + " " + (x-1));
             player.setLastShot(x,y);
         }
     }
