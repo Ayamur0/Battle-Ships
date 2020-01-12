@@ -9,6 +9,8 @@ import com.battleships.logic.SaveFileManager;
 import org.joml.Vector2f;
 import org.lwjgl.util.tinyfd.TinyFileDialogs;
 
+import java.lang.reflect.GenericArrayType;
+
 /**
  * Overlay if ESC was pressed in the game
  *
@@ -32,6 +34,15 @@ public class ESCMenu extends Menu {
      */
     private static final int EXIT = 3;
     private static boolean active;
+    private static boolean isPlayerAI;
+
+    public static boolean isIsPlayerAI() {
+        return isPlayerAI;
+    }
+
+    public static void setIsPlayerAI(boolean isPlayerAI) {
+        ESCMenu.isPlayerAI = isPlayerAI;
+    }
 
     /**
      * Creates the menu when you press ESC, sets the color of the {@link GUIText} and creates the {@link GUIText} on the Buttons.
@@ -64,7 +75,10 @@ public class ESCMenu extends Menu {
 
         super.guiTexts.add(new GUIText("Save", fontSize, font, new Vector2f(buttons.get(0).getPositions().x,buttons.get(0).getPositions().y), 0.12f, true,outlineColor, 0.0f, 0.1f,outlineColor, new Vector2f()));
         super.guiTexts.add(new GUIText("Resume", fontSize, font,new Vector2f(buttons.get(1).getPositions().x,buttons.get(1).getPositions().y), 0.12f, true,outlineColor, 0.0f, 0.1f,outlineColor, new Vector2f()));
-        super.guiTexts.add(new GUIText("Play as AI", fontSize, font,new Vector2f(buttons.get(2).getPositions().x,buttons.get(2).getPositions().y), 0.12f, true,outlineColor, 0.0f, 0.1f,outlineColor, new Vector2f()));
+        if (isPlayerAI)
+            super.guiTexts.add(new GUIText("Play yourself", fontSize, font,new Vector2f(buttons.get(2).getPositions().x,buttons.get(2).getPositions().y), 0.2f, true,outlineColor, 0.0f, 0.1f,outlineColor, new Vector2f()));
+        else
+            super.guiTexts.add(new GUIText("Play as AI", fontSize, font,new Vector2f(buttons.get(2).getPositions().x,buttons.get(2).getPositions().y), 0.2f, true,outlineColor, 0.0f, 0.1f,outlineColor, new Vector2f()));
         super.guiTexts.add(new GUIText("Exit", fontSize, font,new Vector2f(buttons.get(3).getPositions().x,buttons.get(3).getPositions().y), 0.12f, true,outlineColor, 0.0f, 0.1f,outlineColor, new Vector2f()));
 
         super.createClickable();
@@ -139,8 +153,16 @@ public class ESCMenu extends Menu {
             super.cleaBackgournd();
         }
         if (super.buttonClicked == PLAYAI){
-            super.clearMenu();
-            new AiPlayerChooserMenu(guiManager,loader);
+            if (isIsPlayerAI()){
+                GameManager.getSettings().setAiLevelP(-1);
+                isPlayerAI=false;
+                super.clearMenu();
+                super.cleaBackgournd();
+            }
+            else{
+                super.clearMenu();
+                new AiPlayerChooserMenu(guiManager,loader);
+            }
         }
         if(buttonClicked == EXIT){
             active=false;

@@ -33,10 +33,10 @@ public class AiVsAiMenu extends InGameSettingsMenu {
 
         super.playingFieldSize = new Slider(loader.loadTexture("Brick.jpg"), loader.loadTexture("Brick.jpg"), 5, 30,
                 15, super.sliderSize, new Vector2f(super.standardButtonPos.x,super.standardButtonPos.y), guiManager, GameManager.getGuis());
-        super.difficulty1 = new Slider(loader.loadTexture("Brick.jpg"), loader.loadTexture("Brick.jpg"), 1, 3,
-                2, super.sliderSize,new Vector2f(playingFieldSize.getPositions().x,playingFieldSize.getPositions().y+buttonGap), guiManager, GameManager.getGuis());
-        super.difficulty2 = new Slider(loader.loadTexture("Brick.jpg"), loader.loadTexture("Brick.jpg"), 1, 3,
-                2, super.sliderSize,new Vector2f(difficulty1.getPositions().x, difficulty1.getPositions().y+buttonGap), guiManager, GameManager.getGuis());
+        super.difficulty1 = new Slider(loader.loadTexture("Brick.jpg"), loader.loadTexture("Brick.jpg"), EASY, HARD,
+                MEDIUM, super.sliderSize,new Vector2f(playingFieldSize.getPositions().x,playingFieldSize.getPositions().y+buttonGap), guiManager, GameManager.getGuis());
+        super.difficulty2 = new Slider(loader.loadTexture("Brick.jpg"), loader.loadTexture("Brick.jpg"), EASY, HARD,
+                MEDIUM, super.sliderSize,new Vector2f(difficulty1.getPositions().x, difficulty1.getPositions().y+buttonGap), guiManager, GameManager.getGuis());
 
         super.guiTexts.add(new GUIText("Size: "+playingFieldSize.getValueAsInt(),fontSize, font,new Vector2f(playingFieldSize.getPositions().x,playingFieldSize.getPositions().y-0.06f) , 0.12f, true, outlineColor,0.0f, 0.1f,outlineColor, new Vector2f()));
         super.guiTexts.add(new GUIText("Difficulty AI 1: Normal",fontSize, font, new Vector2f(difficulty1.getPositions().x, difficulty1.getPositions().y-0.06f), 0.3f, true, outlineColor,0.0f, 0.1f,outlineColor, new Vector2f()));
@@ -64,21 +64,21 @@ public class AiVsAiMenu extends InGameSettingsMenu {
 
 
         switch (difficulty1.getValueAsInt()){
-            case 1: difficultyName = "Easy";
+            case EASY: difficultyName = "Easy";
                 break;
-            case 2: difficultyName = "Normal";
+            case MEDIUM: difficultyName = "Normal";
                 break;
-            case 3: difficultyName = "Hard";
+            case HARD: difficultyName = "Hard";
                 break;
         }
         super.guiTexts.get(1).remove();
         super.guiTexts.get(1).setTextString("Difficulty AI 1: "+difficultyName);
         switch (difficulty2.getValueAsInt()){
-            case 1: difficultyName = "Easy";
+            case EASY: difficultyName = "Easy";
                 break;
-            case 2: difficultyName = "Normal";
+            case MEDIUM: difficultyName = "Normal";
                 break;
-            case 3: difficultyName = "Hard";
+            case HARD: difficultyName = "Hard";
                 break;
         }
         super.guiTexts.get(2).remove();

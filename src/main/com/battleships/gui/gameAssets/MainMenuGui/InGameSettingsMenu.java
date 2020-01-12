@@ -28,6 +28,10 @@ public class InGameSettingsMenu extends Menu {
     private static final int SP = 0;
     private static final int MP = 1;
     private static final int AIVSAI = 2;
+
+    protected static final int EASY = 0;
+    protected static final int MEDIUM = 1;
+    protected static final int HARD = 2;
     /**
      * The offset used too set the {@link GUIText} above the {@link Slider}
      */
@@ -82,11 +86,11 @@ public class InGameSettingsMenu extends Menu {
         super.guiTexts.get(0).setTextString("Size: "+playingFieldSize.getValueAsInt());
         if (gameMode == SP || gameMode == AIVSAI){
             switch (difficulty1.getValueAsInt()){
-                case 1: difficultyName = "Easy";
+                case EASY: difficultyName = "Easy";
                     break;
-                case 2: difficultyName = "Normal";
+                case MEDIUM: difficultyName = "Normal";
                     break;
-                case 3: difficultyName = "Hard";
+                case HARD: difficultyName = "Hard";
                     break;
             }
             super.guiTexts.get(1).remove();
@@ -121,8 +125,8 @@ public class InGameSettingsMenu extends Menu {
 
 
         if (gameMode == SP) {
-            difficulty1 = new Slider(loader.loadTexture("Brick.jpg"), loader.loadTexture("Brick.jpg"), 1, 3,
-                    2, sliderSize, new Vector2f(playingFieldSize.getPositions().x, playingFieldSize.getPositions().y + buttonGap), guiManager, GameManager.getGuis());
+            difficulty1 = new Slider(loader.loadTexture("Brick.jpg"), loader.loadTexture("Brick.jpg"), EASY, HARD,
+                    MEDIUM, sliderSize, new Vector2f(playingFieldSize.getPositions().x, playingFieldSize.getPositions().y + buttonGap), guiManager, GameManager.getGuis());
             super.guiTexts.add(new GUIText("Difficulty: Normal",fontSize, font, new Vector2f(difficulty1.getPositions().x, difficulty1.getPositions().y-0.04f), 0.4f, true, outlineColor,0.0f, 0.1f,outlineColor, new Vector2f()));
         }
 
