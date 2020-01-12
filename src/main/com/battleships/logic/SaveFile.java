@@ -64,6 +64,11 @@ public class SaveFile {
     private Settings settings;
 
     /**
+     * Array containing the ships that still need to be placed ordered by size.
+     */
+    private int[] shipsLeftPlacing;
+
+    /**
      * Create a new SaveFile and save information about current game into it.
      */
     public SaveFile() {
@@ -80,6 +85,7 @@ public class SaveFile {
         burningFires = gridManager.getBurningFires();
         burningFireSounds = gridManager.getBurningFireSounds();
         settings = GameManager.getSettings();
+        shipsLeftPlacing = GameManager.getShipSelector().getShipCounts();
     }
 
     /**
@@ -150,5 +156,12 @@ public class SaveFile {
      */
     public Settings getSettings() {
         return settings;
+    }
+
+    /**
+     * @return Array containing the ships that still need to be placed ordered by size.
+     */
+    public int[] getShipsLeftPlacing() {
+        return shipsLeftPlacing;
     }
 }

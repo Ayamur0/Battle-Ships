@@ -116,6 +116,8 @@ public class SaveFileManager {
         logic.setTurnHandler(saveFile.getTurnHandler());
         logic.setGameState(saveFile.getGameState());
 
+        GameManager.getShipSelector().setShipCounts(saveFile.getShipsLeftPlacing());
+        GameManager.getShipSelector().updateCounts();
         gridManager.setShips(saveFile.getShips());
         gridManager.setMarkers(saveFile.getMarkers());
         gridManager.setBurningFires(saveFile.getBurningFires());

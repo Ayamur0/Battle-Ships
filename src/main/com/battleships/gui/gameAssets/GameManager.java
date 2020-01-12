@@ -435,6 +435,8 @@ public class GameManager {
      * Updates everything in the scene and then renders everything.
      */
     public static void updateScene(){
+        if(MainMenuManager.getMenu() instanceof ESCMenu && MainMenuManager.getMenu().isUserInputMade())
+            ((ESCMenu) MainMenuManager.getMenu()).processInput();
         if(GLFW.glfwGetKey(WindowManager.getWindow(), GLFW.GLFW_KEY_L) == GLFW.GLFW_PRESS)
             logic.advanceTurn();
         camera.move(terrain);
@@ -695,5 +697,12 @@ public class GameManager {
      */
     public static void setSettings(Settings settings) {
         GameManager.settings = settings;
+    }
+
+    /**
+     * @return The UI for the shipSelect screen.
+     */
+    public static ShipSelector getShipSelector() {
+        return shipSelector;
     }
 }

@@ -77,6 +77,8 @@ public class TextMaster {
      */
     public static void removeText(GUIText text){
         List<GUIText> textBatch = texts.get(text.getFont());
+        if(textBatch == null)
+            return;
         textBatch.remove(text);
         if(textBatch.isEmpty())
             texts.remove(text.getFont());

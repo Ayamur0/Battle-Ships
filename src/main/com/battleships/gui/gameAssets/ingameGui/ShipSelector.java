@@ -180,6 +180,19 @@ public class ShipSelector extends GuiClickCallback {
     }
 
     /**
+     * Updates the currently displayed counts.
+     */
+    public void updateCounts(){
+        int i = 0;
+        for(GUIText t : shipCountTexts){
+            t.remove();
+            t.setTextString(shipCounts[i] + " Left");
+            TextMaster.loadText(t);
+            i++;
+        }
+    }
+
+    /**
      * Change the text under the button for that ship size, so it shows that you can place one
      * ship less or one more of that size than before.
      * @param increment {@code true} if the count should be incremented, {@code false} if it should be decremented
@@ -235,5 +248,20 @@ public class ShipSelector extends GuiClickCallback {
             shipCountTexts.get(i).setTextString(shipCounts[i] + " Left");
             TextMaster.loadText(shipCountTexts.get(i));
         }
+    }
+
+    /**
+     * @return Array containing ships left for placement ordered by size.
+     */
+    public int[] getShipCounts() {
+        return shipCounts;
+    }
+
+    /**
+     * Set the ships left for placement. Use when loading a game.
+     * @param shipCounts Ships left to place.
+     */
+    public void setShipCounts(int[] shipCounts) {
+        this.shipCounts = shipCounts;
     }
 }
