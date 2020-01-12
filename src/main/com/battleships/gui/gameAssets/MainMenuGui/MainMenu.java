@@ -5,6 +5,7 @@ import com.battleships.gui.guis.GuiManager;
 import com.battleships.gui.guis.GuiTexture;
 import com.battleships.gui.renderingEngine.Loader;
 import com.battleships.gui.window.WindowManager;
+import com.battleships.logic.SaveFileManager;
 import org.joml.Vector2f;
 import org.lwjgl.glfw.GLFW;
 
@@ -104,7 +105,12 @@ public class MainMenu extends Menu {
     protected void clickAction() {
         if(buttonClicked == LOAD) {
             fc.showOpenDialog(null);
-            System.out.println(fc.getName(fc.getSelectedFile()));
+            String s = fc.getName(fc.getSelectedFile());
+            s.replace(".xml","");
+            if(SaveFileManager.loadFromFile(s)==null){
+                super.guiTexts.add(new GUIText("Error loading file", fontSize, font,new Vector2f(0.5f,0.1f), 0.12f, true,outlineColor, 0.0f, 0.1f,outlineColor, new Vector2f()));
+
+            }
         }
         if(buttonClicked == PLAY){
             super.clearMenu();

@@ -119,7 +119,7 @@ public abstract class Menu extends GuiClickCallback {
      * adds a {@link GuiTexture} behind the buttons as background
      */
     protected void addBackground(){
-         backgounds.add(new GuiTexture(scrollBackground, new Vector2f(0.5f, 0.5f), new Vector2f(0.36f, 1f)));
+         backgounds.add(new GuiTexture(scrollBackground, new Vector2f(0.5f, 0.5f), new Vector2f(0.375f, 1f)));
          backgounds.add(new GuiTexture(icon, new Vector2f(0.5f, 0.175f), new Vector2f(0.3f, 0.3f)));
          GameManager.getGuis().addAll(backgounds);
     }
@@ -168,8 +168,8 @@ public abstract class Menu extends GuiClickCallback {
         }
         for (GuiTexture gui : buttons){
             guiManager.removeClickableGui(gui);
-            GameManager.getGuis().remove(gui);
         }
+        GameManager.getGuis().removeAll(buttons);
 
     }
 }
