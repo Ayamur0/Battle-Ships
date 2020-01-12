@@ -252,8 +252,8 @@ public abstract class Menu extends GuiClickCallback {
     protected void openLoadGameDialog() {
         try {
             FileNameExtensionFilter xmlfilter = new FileNameExtensionFilter("xml files (*.xml)", "xml");
-            File test = new File(SaveFileManager.getJarPath() + "/SaveFiles/");
-            fc.setCurrentDirectory(test);
+            File filepath = new File(SaveFileManager.getJarPath() + "/SaveFiles/");
+            fc.setCurrentDirectory(filepath);
             fc.setFileFilter(xmlfilter);
 
         } catch (UnsupportedEncodingException e) {
