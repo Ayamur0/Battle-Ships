@@ -662,4 +662,11 @@ public class GameManager {
     public static NetworkManager getNetwork() {
         return network;
     }
+
+    /**
+     * @return The camera of the current game.
+     */
+    public static Camera getCamera() {
+        return camera;
+    }
 }
