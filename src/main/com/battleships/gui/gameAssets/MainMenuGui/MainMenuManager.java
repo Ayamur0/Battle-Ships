@@ -9,6 +9,7 @@ import com.battleships.gui.guis.GuiManager;
 import com.battleships.gui.guis.GuiTexture;
 import com.battleships.gui.renderingEngine.Loader;
 import com.battleships.gui.water.WaterFrameBuffers;
+import com.battleships.gui.water.WaterTile;
 import com.battleships.gui.window.WindowManager;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.GLFW;
@@ -19,33 +20,75 @@ import java.lang.reflect.GenericArrayType;
 import java.nio.DoubleBuffer;
 
 public class MainMenuManager {
+    /**
+     * Menu that handels all menus and their functions
+     */
     private static Menu menu;
+    /**
+     * GuiManager that handles guis with click functions.
+     */
     private static GuiManager guiManager;
+    /**
+     * Loader for loading models and textures.
+     */
     private static Loader loader;
+    /**
+     * FrameBuffers that create the reflection and refraction texture for the {@link WaterTile}s.
+     */
     private static WaterFrameBuffers wFbo;
-
+    /**
+     * For reading the x Mouse coordinates
+     */
     private DoubleBuffer x = BufferUtils.createDoubleBuffer(1);
+    /**
+     * For reading the y Mouse coordinates
+     */
     private DoubleBuffer y = BufferUtils.createDoubleBuffer(1);
 
+    /**
+     * Sets the current Menu
+     * @param menu the menu that is shown
+     */
     public static void setMenu(Menu menu){
         MainMenuManager.menu = menu;
     }
+
+    /**
+     * @return the current shown Menu from the game
+     */
     public static Menu getMenu(){return MainMenuManager.menu;}
 
+    /**
+     * initializes all attributes for the menu
+     * @param guiManager GuiManager that should handle the click function of these guis.
+     * @param loader Loader needed to load textures
+     * @param wFbo Water Frame Buffers create the reflection and refraction texture for the {@link WaterTile}s
+     */
     public MainMenuManager(GuiManager guiManager, Loader loader, WaterFrameBuffers wFbo) {
         MainMenuManager.guiManager = guiManager;
         MainMenuManager.loader = loader;
         MainMenuManager.wFbo = wFbo;
     }
 
+    /**
+     * Loads the Main menu for the game
+     */
     public static void LoadMainMenu(){
         menu = new MainMenu(guiManager,loader);
 
         WindowManager.setMainMenuCallbacks(GameManager.getMainMenuManager(), wFbo);
     }
+
+    /**
+     * removes all ships
+     */
     public void removeAllShips(){
         GameManager.removeAllShips();
     }
+
+    /**
+     * Clears everything from the ingame scene
+     */
     public void clearAll(){
         removeAllShips();
         GameManager.removeIngameModelsFromScene();
@@ -54,6 +97,9 @@ public class MainMenuManager {
         GameManager.getGuis().clear();
     }
 
+    /**
+     * Clears the ingame textures and sets needed options for the menu
+     */
     public void backToMainMenu(){
         clearAll();
         GameManager.getSettings().setAiLevelP(-1);
@@ -63,6 +109,11 @@ public class MainMenuManager {
         GridManager.setIsBackground(true);
         menu = new MainMenu(guiManager,loader);
     }
+    /**
+     * Function that gets called if the user left clicks anywhere in the game.
+     * Gets the cursor position and tests all guis with a click action if they were
+     * clicked on and if one was clicked executes the click action of that gui.
+     */
     public GLFWMouseButtonCallback testClick = new GLFWMouseButtonCallback() {
         @Override
         public void invoke(long window, int button, int action, int mods) {
@@ -82,6 +133,10 @@ public class MainMenuManager {
             guiManager.testGuiClick(xpos, ypos);
         }
     };
+    /**
+     * Function that gets called if the user presses any key on the keyboard.
+     * Calls the corresponding function if a key that has a function was pressed.
+     */
     public static GLFWKeyCallback keyCallback = new GLFWKeyCallback() {
         @Override
         public void invoke(long window, int key, int scanCode, int action, int mods) {
