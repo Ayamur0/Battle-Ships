@@ -8,6 +8,7 @@ public class PatternChess implements Pattern{
 
     private static final int BLACK = 0, WHITE = 1;
     private static final int DOWNLEFT = 0, UPLEFT = 1, DOWNRIGHT = 2, UPRIGHT = 3;
+    //TODO test upright
 
     private int color;
 

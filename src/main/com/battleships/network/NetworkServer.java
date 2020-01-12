@@ -3,7 +3,6 @@ package com.battleships.network;
 import com.battleships.gui.gameAssets.GameManager;
 import com.battleships.gui.gameAssets.grids.GridManager;
 import com.battleships.logic.Settings;
-import org.joml.Vector2i;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -12,12 +11,12 @@ import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-public class NetzwerkServer extends Network {
+public class NetworkServer extends Network implements Runnable{
     //In der Vorlesung ausgemachter Port den alle verwenden
     public static final int PORT = 50000;
 
     private PrintWriter toClient;
-    private BufferedReader sendClient;
+    private BufferedReader keyboardInput;
     private BufferedReader fromClient;
 
 
@@ -37,24 +36,42 @@ public class NetzwerkServer extends Network {
     //private final Logic logic;
 
     //Konstruktor für den Server
-    public NetzwerkServer(){
+    public NetworkServer(){
         startServer();
         waitForClient();
         try {
-            sendData();
+            pingong();
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void sendMessage(String message){
+        toClient.println(message);
+        Thread t = new Thread(this);
+        t.start();
+    }
+
+    public void run(){
+        String answer = null;
+        try {
+            answer = fromClient.readLine();
+        } catch (IOException e) {
+            System.err.println("Error receiving message from Client!");
+        }
+        executeStringFunction(1, answer);
     }
 
     /**
      * Die while schleife lässt den Server immer etwas schreiben und wartet dann bis der Client etwas bekommt
      * @throws IOException
      */
-    private void sendData() throws IOException{
+    private void pingong() throws IOException{
         while(true) {
-            toClient.println(sendClient.readLine());
-            whatKindOfStringIsThis(0, fromClient.readLine());
+            toClient.println(keyboardInput.readLine());
+            String answer = fromClient.readLine();
+            System.out.println(answer);
+            executeStringFunction(0, answer);
             //System.out.println(fromClient.readLine());
         }
     }
@@ -67,7 +84,7 @@ public class NetzwerkServer extends Network {
             //System.out.println("Startin Server");
             serverSocket = new ServerSocket(PORT);
             //Der BufferedReader wird dafür verwendet den Input von der Logic dem Client zu senden.
-            sendClient = new BufferedReader(new InputStreamReader(System.in));
+            keyboardInput = new BufferedReader(new InputStreamReader(System.in));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -97,6 +114,6 @@ public class NetzwerkServer extends Network {
 
     //Main
     public static void main(String[] args) {
-        new NetzwerkServer();
+        new NetworkServer();
     }
 }

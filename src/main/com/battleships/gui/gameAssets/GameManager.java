@@ -33,6 +33,7 @@ import com.battleships.gui.water.WaterTile;
 import com.battleships.gui.window.WindowManager;
 import com.battleships.logic.LogicManager;
 import com.battleships.logic.Settings;
+import com.battleships.network.NetworkManager;
 import org.joml.*;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.GLFW;
@@ -189,6 +190,11 @@ public class GameManager {
     private static boolean cannonballHit;
 
     /**
+     * Class that handles network related stuff
+     */
+    private static NetworkManager network;
+
+    /**
      * Initialize the GameManager and all needed components.
      * Needs to be called when the game is started.
      */
@@ -211,6 +217,7 @@ public class GameManager {
         mainMenuManager = new MainMenuManager(guiManager,loader,waterFbos);
         settings = new Settings();
         logic = new LogicManager();
+        network = new NetworkManager();
     }
 
     /**
@@ -635,5 +642,12 @@ public class GameManager {
      */
     public static Settings getSettings() {
         return settings;
+    }
+
+    /**
+     * @return The Network manager of this game.
+     */
+    public static NetworkManager getNetwork() {
+        return network;
     }
 }

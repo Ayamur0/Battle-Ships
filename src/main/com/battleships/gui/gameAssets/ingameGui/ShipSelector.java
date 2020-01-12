@@ -16,6 +16,7 @@ import org.joml.Vector3f;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.IntStream;
 
 /**
  * Overlay during the ship placing phase of the game. Contains all {@link GuiTexture}s and their functions needed for this UI.
@@ -168,8 +169,13 @@ public class ShipSelector extends GuiClickCallback {
         switch (buttonNumber){
             case DELETE: shipManager.removeCursorShip(); GameManager.removeAllShips(); return;
             case RANDOM: shipManager.removeCursorShip(); GameManager.removeAllShips(); GameManager.getLogic().placeRandomShips(GridManager.OWNFIELD); return;
-            case CONFIRM: if(!GameManager.getSettings().isOnline())GameManager.getLogic().advanceGamePhase(); else return;//TODO;
-            //TODO only confirm if all ships placed
+            case CONFIRM:
+                if(IntStream.of(shipCounts).sum() > 0)
+                    return;
+                if(!GameManager.getSettings().isOnline())
+                    GameManager.getLogic().advanceGamePhase();
+                else
+                    GameManager.getNetwork().sendConfirm();
         }
     }
 

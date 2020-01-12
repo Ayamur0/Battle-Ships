@@ -1,5 +1,7 @@
 package com.battleships.logic;
 
+import com.battleships.gui.gameAssets.GameManager;
+
 /**
  * Class containing all currently set settings.
  */
@@ -13,12 +15,12 @@ public class Settings {
     /**
      * Level the ai for the player in the current game use.
      */
-    private int aiLevelP;
+    private int aiLevelP = -1;
 
     /**
      * Level the ai for the opponent in the current game use.
      */
-    private int aiLevelO;
+    private int aiLevelO = -1;
     /**
      * Size the grid of the next game should have.
      */
@@ -40,6 +42,7 @@ public class Settings {
      * @param online {@code true} if the game is played online, {@code false} if the game is played offline.
      */
     public void setOnline(boolean online) {
+        GameManager.getLogic().onlineMode(online);
         this.online = online;
     }
 

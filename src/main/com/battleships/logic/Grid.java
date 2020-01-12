@@ -36,7 +36,7 @@ public class Grid {
     /**
      * Array containing all cells on this grid.
      */
-    private Cell[][] grid;
+    protected Cell[][] grid;
     /**
      * ID of the owner of this grid (contsants in {@link com.battleships.gui.gameAssets.grids.GridManager})
      */
@@ -208,7 +208,7 @@ public class Grid {
      * @param x x index of one of the cell the ship is on (1-size)
      * @param y y index of one of the cell the ship is on (1-size)
      */
-    private void sinkShip(int x, int y){
+    protected void sinkShip(int x, int y){
         shipsAlive[getCell(x,y).ship.getSize() - 2]--;
         for(Cell c : getCell(x,y).ship.getOccupiedCells()){
             blockFieldsAroundIndex(c.y+1, c.x+1, SHOT, true);

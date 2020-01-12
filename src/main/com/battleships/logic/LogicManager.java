@@ -357,4 +357,15 @@ public class LogicManager {
     public void setStats(Stats stats) {
         this.stats = stats;
     }
+
+    /**
+     * Changes the opponent field to use the grid implementation for online or offline play.
+     * @param online {@code true} if the opponent grid should use an online grid, {@code false} for an offline grid
+     */
+    public void onlineMode(boolean online){
+        if(online)
+            opponentGrid = new OnlineGrid(GameManager.getSettings().getSize(), GridManager.OPPONENTFIELD);
+        else
+            opponentGrid = new Grid(GameManager.getSettings().getSize(), GridManager.OPPONENTFIELD);
+    }
 }
