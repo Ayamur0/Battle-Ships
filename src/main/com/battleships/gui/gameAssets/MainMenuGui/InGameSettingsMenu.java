@@ -24,6 +24,9 @@ public class InGameSettingsMenu extends Menu {
      * Constant value for back button
      */
     private static final int BACK = 1;
+    private static final int SP = 0;
+    private static final int MP = 1;
+    private static final int AIVSAI = 2;
     /**
      * The offset used too set the {@link GUIText} above the {@link Slider}
      */
@@ -120,7 +123,7 @@ public class InGameSettingsMenu extends Menu {
         buttons.add(new GuiTexture(buttonTexture,new Vector2f(buttons.get(0).getPositions().x,buttons.get(0).getPositions().y+buttonGap),buttonSize));
         GameManager.getGuis().addAll(buttons);
 
-        super.guiTexts.add(new GUIText("Beginn",fontSize, font, new Vector2f(buttons.get(0).getPositions().x,buttons.get(0).getPositions().y), 0.12f, true, outlineColor,0.0f, 0.1f,outlineColor, new Vector2f()));
+        super.guiTexts.add(new GUIText("Begin",fontSize, font, new Vector2f(buttons.get(0).getPositions().x,buttons.get(0).getPositions().y), 0.12f, true, outlineColor,0.0f, 0.1f,outlineColor, new Vector2f()));
         super.guiTexts.add(new GUIText("Back",fontSize, font, new Vector2f(buttons.get(1).getPositions().x,buttons.get(1).getPositions().y), 0.12f, true, outlineColor,0.0f, 0.1f,outlineColor, new Vector2f()));
 
         super.createClickable();
@@ -152,71 +155,33 @@ public class InGameSettingsMenu extends Menu {
      */
     @Override
     protected void clickAction() {
-        if(gameMode == 0){
             if (super.buttonClicked == START){
                 super.cleaBackgournd();
                 super.clearMenu();
-                playingFieldSize.remove();
-                difficulty1.remove();
+                if (difficulty2 != null)
+                    GameManager.getSettings().setAiLevelP(difficulty2.getValueAsInt());
                 GameManager.getSettings().setAiLevelO(difficulty1.getValueAsInt());
                 GameManager.getSettings().setSize(playingFieldSize.getValueAsInt());
                 GameManager.resizeGrid();
                 GameManager.getLogic().advanceGamePhase();
-                //Inits.setGlobalGameState(1);
-                //TODO set difficulty and size for offline game(need logic for that)
+                playingFieldSize.remove();
+                difficulty1.remove();
+                if (difficulty2 != null)
+                    difficulty2.remove();
+                if (gameMode == MP){
+                    //TODO start multiplayer session
+                }
             }
             if (super.buttonClicked == BACK){
                 super.clearMenu();
                 playingFieldSize.remove();
                 difficulty1.remove();
-                MainMenuManager.setMenu(new PlayMenu(super.guiManager,super.loader));
-            }
-        }
-        else if(gameMode == 1){
-            if (super.buttonClicked == START){
-                GameManager.getSettings().setAiLevelO(difficulty1.getValueAsInt());
-                GameManager.getSettings().setSize(playingFieldSize.getValueAsInt());
-                GameManager.resizeGrid();
-                GameManager.getLogic().advanceGamePhase();
-                super.cleaBackgournd();
-                super.clearMenu();
-                playingFieldSize.remove();
-                difficulty1.remove();
-                MainMenuManager.setMenu(new WaitingConnection(super.guiManager,super.loader));
-                //Inits.setGlobalGameState(1);
-                //TODO set difficulty and size for Multiplayer game(need logic for that)
-                //TODO add Connection overlay
-            }
-            if (super.buttonClicked == BACK){
-                super.clearMenu();
-                playingFieldSize.remove();
-                difficulty1.remove();
-                MainMenuManager.setMenu(new MultiplayerMenu(super.guiManager,super.loader));
-            }
-        }
-        else if(gameMode == 2){
-            if (super.buttonClicked == START){
-                GameManager.getSettings().setAiLevelO(difficulty1.getValueAsInt());
-                GameManager.getSettings().setAiLevelP(difficulty2.getValueAsInt());
-                GameManager.getSettings().setSize(playingFieldSize.getValueAsInt());
-                GameManager.resizeGrid();
-                GameManager.getLogic().advanceGamePhase();
-                super.cleaBackgournd();
-                super.clearMenu();
-                playingFieldSize.remove();
-                difficulty1.remove();
-                difficulty2.remove();
-                //Inits.setGlobalGameState(1);
-                //TODO set difficulty and size for offline game(need logic for that)
-                //TODO add Connection overlay
-            }
-            if (super.buttonClicked == BACK){
-                super.clearMenu();
-                playingFieldSize.remove();
-                difficulty1.remove();
-                difficulty2.remove();
-                MainMenuManager.setMenu(new PlayMenu(super.guiManager,super.loader));
+                if (difficulty2 != null)
+                    difficulty2.remove();
+                if (gameMode == SP || gameMode == AIVSAI)
+                    MainMenuManager.setMenu(new PlayMenu(super.guiManager,super.loader));
+                else
+                    MainMenuManager.setMenu(new MultiplayerMenu(super.guiManager,super.loader));
             }
         }
     }
-}

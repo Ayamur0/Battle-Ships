@@ -104,6 +104,7 @@ public class MainMenu extends Menu {
     protected void clickAction() {
         if(buttonClicked == LOAD) {
             fc.showOpenDialog(null);
+            System.out.println(fc.getName(fc.getSelectedFile()));
         }
         if(buttonClicked == PLAY){
             super.clearMenu();

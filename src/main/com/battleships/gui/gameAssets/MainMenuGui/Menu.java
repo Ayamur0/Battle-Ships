@@ -125,7 +125,7 @@ public abstract class Menu extends GuiClickCallback {
     }
 
     /**
-     * clears all {@link GuiTexture} that are no buttons at the game beginn
+     * clears all {@link GuiTexture} that are no buttons at the game Begin
      */
     protected void cleaBackgournd(){
         GameManager.getGuis().removeAll(backgounds);
