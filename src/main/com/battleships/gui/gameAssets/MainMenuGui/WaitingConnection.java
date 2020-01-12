@@ -72,7 +72,6 @@ public class WaitingConnection extends Menu{
 
         GameManager.getGuis().add(buttons.get(0));
     }
-
     /**
      * Setts all needed settings to start a Multiplayer session
      */
