@@ -7,6 +7,7 @@ import com.battleships.logic.SaveFileManager;
 import com.battleships.logic.Settings;
 import org.joml.Intersectiond;
 import org.joml.Vector2i;
+import org.lwjgl.glfw.GLFWWindowIconifyCallback;
 
 public abstract class Network implements NetworkInterface{
 
@@ -41,7 +42,6 @@ public abstract class Network implements NetworkInterface{
                 GameManager.getMainMenuManager().clearAll();
                 GameManager.resizeGrid();
                 GameManager.getLogic().advanceGamePhase();
-                GameManager.getLogic().getTurnHandler().setPlayerTurn(false);
                 break;
             case SIZE: GameManager.getMainMenuManager().clearAll();
                 GameManager.resizeGrid();
@@ -111,6 +111,9 @@ public abstract class Network implements NetworkInterface{
             GameManager.getLogic().advanceGamePhase();
             opponentConfirm = false;
             playerConfirm = false;
+        }
+        if(GameManager.getNetwork().isConfirmCanBeSent()){
+            GameManager.getNetwork().sendConfirm();
         }
     }
 
