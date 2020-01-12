@@ -89,7 +89,6 @@ public class PlayMenu extends Menu {
         if(buttonClicked == AIVSAI) {
             super.clearMenu();
             MainMenuManager.setMenu(new AiVsAiMenu(guiManager,loader));
-            //TODO open ai vs ai Settings
         }
         if(buttonClicked == SINGLEPLAYER){
             super.clearMenu();

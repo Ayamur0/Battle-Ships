@@ -21,12 +21,22 @@ public class WaitingConnection extends Menu{
      */
     private static final int CANCEL = 0;
 
+    /**
+     * {@code true} when the opponent has connected
+     */
     private boolean opponentConnected;
 
+    /**
+     * @return The boolean indicating if the opponent has connected
+     */
     public boolean isOpponentConnected() {
         return opponentConnected;
     }
 
+    /**
+     * setts if the opponent is connect or not
+     * @param opponentConnected indicates if opponent is connected
+     */
     public void setOpponentConnected(boolean opponentConnected) {
         this.opponentConnected = opponentConnected;
     }
@@ -49,6 +59,9 @@ public class WaitingConnection extends Menu{
         super.CreateTextLabels();
     }
 
+    /**
+     * Creates the {@link GUIText} as labels, adds {@link GuiTexture} and makes them clickable
+     */
     private void createMenu() {
         super.addBackground();
         buttons.add(new GuiTexture(buttonTexture,new Vector2f(0.5f,0.7f),super.buttonSize));
@@ -59,6 +72,9 @@ public class WaitingConnection extends Menu{
 
         GameManager.getGuis().add(buttons.get(0));
     }
+    /**
+     * Setts all needed settings to start a Multiplayer session
+     */
     public void startMultiplayerGame(){
         opponentConnected=false;
         if (fromFile){

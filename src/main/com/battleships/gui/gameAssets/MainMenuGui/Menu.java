@@ -88,6 +88,9 @@ public abstract class Menu extends GuiClickCallback {
      */
     protected int buttonClicked;
 
+    /**
+     * @return the file name of from the selected file
+     */
     public String getFileName() {
         return fileName;
     }
@@ -249,6 +252,10 @@ public abstract class Menu extends GuiClickCallback {
         GameManager.getGuis().removeAll(buttons);
 
     }
+
+    /**
+     * Opens the dialog tho select a file
+     */
     protected void openLoadGameDialog() {
         try {
             FileNameExtensionFilter xmlfilter = new FileNameExtensionFilter("xml files (*.xml)", "xml");
@@ -262,6 +269,11 @@ public abstract class Menu extends GuiClickCallback {
         fc.setDialogTitle("Select save file");
         new Thread(new SaveFilePicker()).start();
     }
+
+    /**
+     * Loads the selected file into the game
+     * @return {@code true} when the file could be loaded {@code false} when the file could not be loaded
+     */
     public boolean processLoadedFile(){
         filePicked = false;
         if (fileName!=null){
@@ -290,6 +302,9 @@ public abstract class Menu extends GuiClickCallback {
         return userInputMade;
     }
 
+    /**
+     * @return if a file was picked
+     */
     public boolean isFilePicked() {
         return filePicked;
     }

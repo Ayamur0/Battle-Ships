@@ -16,6 +16,9 @@ import javax.swing.*;
  * @author Sascha Mößle
  */
 public class MultiplayerMenu extends Menu {
+    /**
+     * Constant value for Load online game button
+     */
     private static final int LOADONLINEGAME = 0;
     /**
      * Constant value for host button
