@@ -115,7 +115,7 @@ public class ESCMenu extends Menu {
             super.clearMenu();
         }
         if(buttonClicked == EXIT){
-            MainMenuManager.backToMainMenu();
+            GameManager.getMainMenuManager().backToMainMenu();
             GameManager.getLogic().setGameState(GameManager.MENU);
             MainMenuManager.setMenu(new MainMenu(guiManager,loader));
         }

@@ -42,6 +42,8 @@ public class FinishGame extends GuiClickCallback {
      * @param won {@code true} if the player has won.
      */
     public void finishGame(Loader loader, GuiManager guiManager, boolean won){
+        if(GameManager.getSettings().isOnline())
+            GameManager.getNetwork().closeConnection();
         GuiTexture background = new GuiTexture(loader.loadTexture("EndScroll.png"), new Vector2f(0.5f,0.5f), new Vector2f(0.5f,0.8f));
         GameManager.getGuis().add(background);
         if(won) {
@@ -56,6 +58,7 @@ public class FinishGame extends GuiClickCallback {
         TextMaster.addText(new GUIText("Click to return to the main menu",2, GameManager.getPirateFont(),
                 new Vector2f(0.5f,0.75f), 0.5f, true, WHITE, 0.7f, 0.1f, GREY,new Vector2f()));
         guiManager.createClickableGui(background, () -> this);
+        GameManager.getMainMenuManager().backToMainMenu();
     }
 
     /**
