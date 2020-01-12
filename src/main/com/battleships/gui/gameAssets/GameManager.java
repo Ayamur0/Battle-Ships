@@ -233,7 +233,8 @@ public class GameManager {
         if(shipSelector != null)
             shipSelector.resetCount();
         gridManager.removeAllShips();
-        logic.removeAllShips();
+        if(gridManager.getShips().size() > 0)
+            logic.removeAllShips();
     }
 
     /**
