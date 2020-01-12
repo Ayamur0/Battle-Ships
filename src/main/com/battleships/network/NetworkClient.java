@@ -43,6 +43,7 @@ public class NetworkClient extends Network implements Runnable{
         String answer = null;
         try {
             answer = fromServer.readLine();
+            System.out.println(answer);
         } catch (IOException e) {
             System.err.println("Error receiving message from Server!");
         }

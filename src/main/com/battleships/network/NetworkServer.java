@@ -76,6 +76,7 @@ public class NetworkServer extends Network implements Runnable{
         String answer = null;
         try {
             answer = fromClient.readLine();
+            System.out.println(answer);
         } catch (IOException e) {
             System.err.println("Error receiving message from Client!");
         }
