@@ -10,7 +10,7 @@ public class Settings {
     /**
      * Constants representing ai levels.
      */
-    private static final int EASY = 0, MEDIUM = 1, HARD = 2;
+    public static final int EASY = 0, MEDIUM = 1, HARD = 2;
 
     /**
      * Level the ai for the player in the current game use.

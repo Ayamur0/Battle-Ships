@@ -58,7 +58,6 @@ public class FinishGame extends GuiClickCallback {
         TextMaster.addText(new GUIText("Click to return to the main menu",2, GameManager.getPirateFont(),
                 new Vector2f(0.5f,0.75f), 0.5f, true, WHITE, 0.7f, 0.1f, GREY,new Vector2f()));
         guiManager.createClickableGui(background, () -> this);
-        GameManager.getMainMenuManager().backToMainMenu();
     }
 
     /**
@@ -99,6 +98,6 @@ public class FinishGame extends GuiClickCallback {
      */
     @Override
     protected void clickAction() {
-        GameManager.getLogic().advanceGamePhase();
+        GameManager.getMainMenuManager().backToMainMenu();
     }
 }

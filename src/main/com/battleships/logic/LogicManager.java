@@ -46,7 +46,18 @@ public class LogicManager {
     public void init(Settings settings) {
         playerGrid = new Grid(settings.getSize(), GridManager.OWNFIELD);
         opponentGrid = new Grid(settings.getSize(), GridManager.OPPONENTFIELD);
-        turnHandler.setOpponentAI(new AIHard(1, settings.getSize(), this));
+        switch (settings.getAiLevelO()) {
+            case -1: turnHandler.removeOpponentAI(); break;
+            case Settings.EASY: turnHandler.setOpponentAI(new AIEasy(GridManager.OPPONENTFIELD, settings.getSize(), this));
+            case Settings.MEDIUM: turnHandler.setOpponentAI(new AIMedium(GridManager.OPPONENTFIELD, settings.getSize(), this));
+            case Settings.HARD: turnHandler.setOpponentAI(new AIHard(GridManager.OPPONENTFIELD, settings.getSize(), this));
+        }
+        switch (settings.getAiLevelP()) {
+            case -1: turnHandler.removePlayerAI(); break;
+            case Settings.EASY: turnHandler.setPlayerAI(new AIEasy(GridManager.OWNFIELD, settings.getSize(), this));
+            case Settings.MEDIUM: turnHandler.setPlayerAI(new AIMedium(GridManager.OWNFIELD, settings.getSize(), this));
+            case Settings.HARD: turnHandler.setPlayerAI(new AIHard(GridManager.OWNFIELD, settings.getSize(), this));
+        }
         stats = new Stats();
         stats.init();
     }
