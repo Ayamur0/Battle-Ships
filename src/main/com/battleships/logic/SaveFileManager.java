@@ -25,8 +25,9 @@ public class SaveFileManager {
      * to the saveFiles folder located in the same folder as the jar is.
      * Files are saved as .xml Files.
      * @param name Name of the file the game should be saved in (without suffix).
+     * @return {@code true} if the file was saved, {@code false} if an error occurred.
      */
-    public static void saveToFile(String name){
+    public static boolean saveToFile(String name){
         SaveFile saveFile = new SaveFile();
         XStream xstream = new XStream();
         xstream.setMode(XStream.XPATH_RELATIVE_REFERENCES);
@@ -36,7 +37,7 @@ public class SaveFileManager {
             if(!saveFolder.isDirectory()) {
                 if(!saveFolder.mkdir()){
                     System.err.println("Error creating save game folder!");
-                    System.exit(1);
+                    return false;
                 }
             }
             File saveXML = new File(saveFolder, name+".xml");
@@ -49,8 +50,9 @@ public class SaveFileManager {
         } catch (Exception e) {
             System.err.println("Error while trying to safe game to saveGame.xml!");
             e.printStackTrace(System.err);
+            return false;
         }
-
+        return true;
     }
 
     /**
