@@ -98,26 +98,6 @@ public class MainMenu extends Menu {
         }
         return false;
     }
-    public boolean processLoadedFile(){
-        filePicked = false;
-        if (fileName!=null){
-            String filename = fileName.replace(".xml","");
-            SaveFile saveFile = SaveFileManager.loadFromFile(filename);
-            if(saveFile==null){
-                super.guiTexts.add(new GUIText("Error loading file", fontSize, font,new Vector2f(0.5f,0.3f), 0.3f, true,outlineColor, 0.0f, 0.1f,outlineColor, new Vector2f()));
-                return false;
-            }
-            else{
-                SaveFileManager.loadSaveFile(saveFile);
-                clearMenu();
-                cleaBackgournd();
-                GameManager.prepareGame();
-                return true;
-            }
-        }
-        else
-            return false;
-    }
     /**
      * Toggles state of clicked button.
      */
@@ -137,9 +117,5 @@ public class MainMenu extends Menu {
         if(buttonClicked == EXIT){
             GLFW.glfwSetWindowShouldClose(WindowManager.getWindow(),true);
         }
-    }
-
-    public boolean isFilePicked() {
-        return filePicked;
     }
 }

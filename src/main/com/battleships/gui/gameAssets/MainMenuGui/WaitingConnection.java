@@ -51,15 +51,13 @@ public class WaitingConnection extends Menu{
     }
     public void startMultiplayerGame(){
         if (fromFile){
-            GameManager.getNetwork().sendLoad(MultiplayerMenu.getFilename());
-
+            GameManager.getNetwork().sendLoad(MainMenuManager.getMenu().getFileName());
         }
         else{
             GameManager.resizeGrid();
             GameManager.getNetwork().sendSize(GameManager.getSettings().getSize());
             GameManager.getLogic().advanceGamePhase();
         }
-
         clearMenu();
         cleaBackgournd();
 

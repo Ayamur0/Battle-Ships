@@ -8,6 +8,7 @@ import com.battleships.gui.guis.GuiClickCallback;
 import com.battleships.gui.guis.GuiManager;
 import com.battleships.gui.guis.GuiTexture;
 import com.battleships.gui.renderingEngine.Loader;
+import com.battleships.logic.SaveFile;
 import com.battleships.logic.SaveFileManager;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
@@ -86,6 +87,10 @@ public abstract class Menu extends GuiClickCallback {
      * Used to determine which button was the last one that was clicked.
      */
     protected int buttonClicked;
+
+    public String getFileName() {
+        return fileName;
+    }
 
     /**
      * {@code true} if the user made an input through a {@link TinyFileDialogs} that is not yet processed.
@@ -257,11 +262,35 @@ public abstract class Menu extends GuiClickCallback {
         fc.setDialogTitle("Select save file");
         new Thread(new SaveFilePicker()).start();
     }
+    public boolean processLoadedFile(){
+        filePicked = false;
+        if (fileName!=null){
+            String filename = fileName.replace(".xml","");
+            SaveFile saveFile = SaveFileManager.loadFromFile(filename);
+            if(saveFile==null){
+                guiTexts.add(new GUIText("Error loading file", fontSize, font,new Vector2f(0.5f,0.3f), 0.3f, true,outlineColor, 0.0f, 0.1f,outlineColor, new Vector2f()));
+                return false;
+            }
+            else{
+                SaveFileManager.loadSaveFile(saveFile);
+                clearMenu();
+                cleaBackgournd();
+                GameManager.prepareGame();
+                return true;
+            }
+        }
+        else
+            return false;
+    }
 
     /**
      * @return {@code true} if there is a unprocessed user input that needs to be processed.
      */
     public boolean isUserInputMade() {
         return userInputMade;
+    }
+
+    public boolean isFilePicked() {
+        return filePicked;
     }
 }

@@ -400,6 +400,8 @@ public class GameManager {
     public static void updateSceneBlurred(){
         if(MainMenuManager.getMenu() instanceof MainMenu && ((MainMenu) MainMenuManager.getMenu()).isFilePicked())
             ((MainMenu) MainMenuManager.getMenu()).processLoadedFile();
+        if(MainMenuManager.getMenu() instanceof MultiplayerMenu && ((MultiplayerMenu) MainMenuManager.getMenu()).isFilePicked())
+            ((MultiplayerMenu) MainMenuManager.getMenu()).processLoadedFile();
         if(MainMenuManager.getMenu() instanceof ESCMenu && MainMenuManager.getMenu().isUserInputMade())
             ((ESCMenu) MainMenuManager.getMenu()).processInput();
         if(MainMenuManager.getMenu() instanceof MultiplayerMenu && MainMenuManager.getMenu().isUserInputMade())
