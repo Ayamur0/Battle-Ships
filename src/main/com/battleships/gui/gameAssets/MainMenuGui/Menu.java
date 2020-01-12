@@ -10,6 +10,7 @@ import com.battleships.gui.guis.GuiTexture;
 import com.battleships.gui.renderingEngine.Loader;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
+import org.lwjgl.util.tinyfd.TinyFileDialogs;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -82,6 +83,15 @@ public abstract class Menu extends GuiClickCallback {
     protected int buttonClicked;
 
     /**
+     * {@code true} if the user made an input through a {@link TinyFileDialogs} that is not yet processed.
+     */
+    protected boolean userInputMade;
+    /**
+     * Last inout from the user made  through a {@link TinyFileDialogs}.
+     */
+    protected String userInput;
+
+    /**
      * Loads all {@link GuiTexture} needed and the font for the {@link GUIText}
      * @param guiManager GuiManager that should handle the click function of these guis.
      * @param loader Loader needed to load textures
@@ -101,6 +111,35 @@ public abstract class Menu extends GuiClickCallback {
             icon = loader.loadTexture("StartIcon.png");
         if (backgounds.size()==0)
             addBackground();
+    }
+
+    /**
+     * Class for handling text input window in separate thread.
+     */
+    protected class TextInput implements Runnable{
+        /**
+         * Title and message of the text inout dialog.
+         */
+        private String title, message;
+
+        /**
+         * Create a new input window
+         * @param title Title of the window
+         * @param message Message of the window
+         */
+        public TextInput(String title, String message) {
+            this.title = title;
+            this.message = message;
+        }
+
+        /**
+         * Open the window so user can enter text.
+         */
+        @Override
+        public void run() {
+            userInput = TinyFileDialogs.tinyfd_inputBox(title, message, "");
+            userInputMade = true;
+        }
     }
 
     /**
@@ -171,5 +210,12 @@ public abstract class Menu extends GuiClickCallback {
         }
         GameManager.getGuis().removeAll(buttons);
 
+    }
+
+    /**
+     * @return {@code true} if there is a unprocessed user input that needs to be processed.
+     */
+    public boolean isUserInputMade() {
+        return userInputMade;
     }
 }

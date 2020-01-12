@@ -118,16 +118,23 @@ public class MultiplayerMenu extends Menu {
 
         }
         if (super.buttonClicked == CLIENT){
-            String ip = TinyFileDialogs.tinyfd_inputBox("Connect", "Enter ip Address", "");
-            if (ip != null) {
-                GameManager.getNetwork().start(false,ip);
-                super.clearMenu();
-                MainMenuManager.setMenu(new WaitingConnection(guiManager, loader,false));
-            }
+            new Thread(new TextInput("Connect", "Enter ip Address")).start();
         }
         if (super.buttonClicked == BACK) {
             super.clearMenu();
             MainMenuManager.setMenu(new PlayMenu(guiManager,loader));
         }
+    }
+
+    /**
+     * Processes a entered IP by the user by using the last Input made through a {@link TinyFileDialogs}.
+     */
+    public void processInput(){
+        if (userInput != null) {
+            GameManager.getNetwork().start(false, userInput);
+            super.clearMenu();
+            MainMenuManager.setMenu(new WaitingConnection(guiManager, loader,false));
+        }
+        userInputMade = false;
     }
 }

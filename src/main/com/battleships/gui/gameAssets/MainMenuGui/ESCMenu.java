@@ -120,12 +120,8 @@ public class ESCMenu extends Menu {
         if(buttonClicked == SAVE) {
             long time = System.currentTimeMillis();
             if (!GameManager.getSettings().isOnline()) {
-                String filename = TinyFileDialogs.tinyfd_inputBox("Save", "Enter file name", "");
-                if(SaveFileManager.saveToFile(filename))
-                    GameManager.getMainMenuManager().backToMainMenu();
-                else
-                    super.guiTexts.add(new GUIText("Error saving file", fontSize, font,new Vector2f(), 0.12f, true,outlineColor, 0.0f, 0.1f,outlineColor, new Vector2f()));
-            }
+                new Thread(new TextInput("Save", "Enter file name")).start();
+                }
             else{
                 if (SaveFileManager.saveToFile(String.valueOf(time))){
                     GameManager.getNetwork().closeConnection();
@@ -156,4 +152,14 @@ public class ESCMenu extends Menu {
         }
     }
 
+    /**
+     * Processes a entered filename by the user by using the last Input made through a {@link TinyFileDialogs}.
+     */
+    public void processInput(){
+        if(SaveFileManager.saveToFile(userInput))
+            GameManager.getMainMenuManager().backToMainMenu();
+        else
+            super.guiTexts.add(new GUIText("Error saving file", fontSize, font,new Vector2f(), 0.12f, true,outlineColor, 0.0f, 0.1f,outlineColor, new Vector2f()));
+        userInputMade = false;
+    }
 }

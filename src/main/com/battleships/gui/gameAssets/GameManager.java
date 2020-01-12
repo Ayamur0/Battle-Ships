@@ -6,10 +6,7 @@ import com.battleships.gui.entities.Entity;
 import com.battleships.gui.entities.Light;
 import com.battleships.gui.fontMeshCreator.FontType;
 import com.battleships.gui.fontRendering.TextMaster;
-import com.battleships.gui.gameAssets.MainMenuGui.ESCMenu;
-import com.battleships.gui.gameAssets.MainMenuGui.InGameSettingsMenu;
-import com.battleships.gui.gameAssets.MainMenuGui.MainMenu;
-import com.battleships.gui.gameAssets.MainMenuGui.MainMenuManager;
+import com.battleships.gui.gameAssets.MainMenuGui.*;
 import com.battleships.gui.gameAssets.grids.GridManager;
 import com.battleships.gui.gameAssets.grids.ShipManager;
 import com.battleships.gui.gameAssets.ingameGui.DisableSymbols;
@@ -403,6 +400,10 @@ public class GameManager {
     public static void updateSceneBlurred(){
         if(MainMenuManager.getMenu() instanceof MainMenu && ((MainMenu) MainMenuManager.getMenu()).isFilePicked())
             ((MainMenu) MainMenuManager.getMenu()).processLoadedFile();
+        if(MainMenuManager.getMenu() instanceof ESCMenu && MainMenuManager.getMenu().isUserInputMade())
+            ((ESCMenu) MainMenuManager.getMenu()).processInput();
+        if(MainMenuManager.getMenu() instanceof MultiplayerMenu && MainMenuManager.getMenu().isUserInputMade())
+            ((MultiplayerMenu) MainMenuManager.getMenu()).processInput();
         blur.updateSize();
         camera.move(terrain);
         camera.addYaw(0.1f);
