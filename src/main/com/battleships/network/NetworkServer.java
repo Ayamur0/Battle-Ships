@@ -1,6 +1,9 @@
 package com.battleships.network;
 
 import com.battleships.gui.gameAssets.GameManager;
+import com.battleships.gui.gameAssets.MainMenuGui.MainMenu;
+import com.battleships.gui.gameAssets.MainMenuGui.MainMenuManager;
+import com.battleships.gui.gameAssets.MainMenuGui.WaitingConnection;
 import com.battleships.gui.gameAssets.grids.GridManager;
 import com.battleships.logic.Settings;
 
@@ -120,6 +123,9 @@ public class NetworkServer extends Network implements Runnable{
             toClient = new PrintWriter(clientSocket.getOutputStream(), true);
             fromClient = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
             System.out.println("Connected!");
+            if(MainMenuManager.getMenu() instanceof WaitingConnection){
+                ((WaitingConnection) MainMenuManager.getMenu()).setOpponentConnected(true);
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }

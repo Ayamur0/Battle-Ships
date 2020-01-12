@@ -398,14 +398,16 @@ public class GameManager {
      * This render method blurs the scene, so it can be used as a background image.
      */
     public static void updateSceneBlurred(){
-        if(MainMenuManager.getMenu() instanceof MainMenu && ((MainMenu) MainMenuManager.getMenu()).isFilePicked())
-            ((MainMenu) MainMenuManager.getMenu()).processLoadedFile();
-        if(MainMenuManager.getMenu() instanceof MultiplayerMenu && ((MultiplayerMenu) MainMenuManager.getMenu()).isFilePicked())
-            ((MultiplayerMenu) MainMenuManager.getMenu()).processLoadedFile();
+        if(MainMenuManager.getMenu() instanceof MainMenu && (MainMenuManager.getMenu()).isFilePicked())
+            ( MainMenuManager.getMenu()).processLoadedFile();
+        if(MainMenuManager.getMenu() instanceof MultiplayerMenu && ( MainMenuManager.getMenu()).isFilePicked())
+            ( MainMenuManager.getMenu()).processLoadedFile();
         if(MainMenuManager.getMenu() instanceof ESCMenu && MainMenuManager.getMenu().isUserInputMade())
             ((ESCMenu) MainMenuManager.getMenu()).processInput();
         if(MainMenuManager.getMenu() instanceof MultiplayerMenu && MainMenuManager.getMenu().isUserInputMade())
             ((MultiplayerMenu) MainMenuManager.getMenu()).processInput();
+        if(MainMenuManager.getMenu() instanceof WaitingConnection && ((WaitingConnection) MainMenuManager.getMenu()) .isOpponentConnected())
+            ((WaitingConnection) MainMenuManager.getMenu()).startMultiplayerGame();
         blur.updateSize();
         camera.move(terrain);
         camera.addYaw(0.1f);
