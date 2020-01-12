@@ -456,6 +456,10 @@ public class GameManager {
     public static boolean shoot(int originField, Vector2i destinationIndex){
         if(originField == GridManager.OWNFIELD && !logic.isPlayerTurn() || originField == GridManager.OPPONENTFIELD && logic.isPlayerTurn())
             return false;
+        if(settings.isOnline() && logic.getTurnHandler().isPlayerTurn()){
+            network.sendShoot(destinationIndex.x, destinationIndex.y);
+            return true;
+        }
         return gridManager.shoot(originField, destinationIndex);
     }
 

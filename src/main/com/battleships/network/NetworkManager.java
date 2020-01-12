@@ -29,11 +29,11 @@ public class NetworkManager {
         player.setPlayerConfirm();
     }
 
-    public void sendSave(int ID){
+    public void sendSave(long ID){
         player.sendMessage("save " + ID);
     }
 
-    public void sendLoad(int ID){
+    public void sendLoad(long ID){
         player.sendMessage("load " + ID);
     }
 }
