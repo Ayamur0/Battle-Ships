@@ -5,11 +5,14 @@ import java.io.IOException;
 public class NetworkManager {
 
     private Network player;
+    private boolean server;
+    private boolean confirmCanBeSent;
 
     public NetworkManager() {
     }
 
     public boolean start(boolean server, String IP) {
+        this.server = server;
         if(server) {
             player = new NetworkServer();
         }
@@ -36,6 +39,11 @@ public class NetworkManager {
     }
 
     public void sendConfirm(){
+        if(server && !confirmCanBeSent) {
+            confirmCanBeSent = true;
+            return;
+        }
+        confirmCanBeSent = false;
         if(player != null) {
             player.sendMessage("confirmed");
             player.setPlayerConfirm();
@@ -77,5 +85,9 @@ public class NetworkManager {
     public void closeConnection(){
         if(player != null)
             player.closeConnection();
+    }
+
+    public boolean isConfirmCanBeSent() {
+        return confirmCanBeSent;
     }
 }

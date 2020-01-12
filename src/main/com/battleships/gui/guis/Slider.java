@@ -78,8 +78,8 @@ public class Slider extends GuiClickCallback implements Runnable{
         this.maxPosX = position.x + scale.x / 2;
         this.minPosX = position.x - scale.x / 2;
         setToValue(defaultValue);
-        guis.add(slider);
         guis.add(bar);
+        guis.add(slider);
         this.guis = guis;
         this.guiManager = guiManager;
         guiManager.createClickableGui(slider, () -> this);
