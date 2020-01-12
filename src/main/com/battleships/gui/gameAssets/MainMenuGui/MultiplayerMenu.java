@@ -89,6 +89,7 @@ public class MultiplayerMenu extends Menu {
         }
         if(super.isClickOnGui(super.buttons.get(3), x, y)) {
             super.buttonClicked = 3;
+
             return true;
         }
         return false;
