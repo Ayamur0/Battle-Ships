@@ -169,8 +169,10 @@ public class GridManager {
         if(GameManager.getLogic().getGameState() == GameManager.SHIPLACING && field == OWNFIELD){
             if(GameManager.getLogic().getPlayerShipAtIndex(index.x, index.y) == null)
                 shipManager.placeCursorShip();
-            else
-                shipManager.stickShipToCursor(index);
+            else {
+                if (!GameManager.getNetwork().hasPlayerConfirmed())
+                    shipManager.stickShipToCursor(index);
+            }
         }
         else if(GameManager.getLogic().getGameState() == GameManager.SHOOTING && field == OPPONENTFIELD && GameManager.getLogic().isPlayerTurn())
             GameManager.shoot(OWNFIELD, index);

@@ -137,4 +137,8 @@ public abstract class Network implements NetworkInterface{
         lastShotX = x;
         lastShotY = y;
     }
+
+    public boolean isPlayerConfirm() {
+        return playerConfirm;
+    }
 }

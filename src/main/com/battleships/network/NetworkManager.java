@@ -96,4 +96,10 @@ public class NetworkManager {
     public boolean isConfirmCanBeSent() {
         return confirmCanBeSent;
     }
+
+    public boolean hasPlayerConfirmed(){
+        if(player == null)
+            return false;
+        return player.isPlayerConfirm() || confirmCanBeSent;
+    }
 }

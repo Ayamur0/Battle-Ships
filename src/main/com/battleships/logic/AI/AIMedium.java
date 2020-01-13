@@ -34,7 +34,8 @@ public class AIMedium extends AI{
      */
     public AIMedium(int team, int gridSize, LogicManager manager) {
         super(team, gridSize, manager);
-        pattern = AI.choosePattern(gridSize);
+        //pattern = AI.choosePattern(gridSize);
+        pattern = new PatternChess(gridSize);
         opponentGrid = team == GridManager.OWNFIELD ? manager.getOpponentGrid() : manager.getPlayerGrid();
     }
 
@@ -89,6 +90,7 @@ public class AIMedium extends AI{
                     case SHIP: return true;
                     case WATER: lastShot = firstShipHit; leftEnd = true; return true;
                     case NA:  lastShot = firstShipHit; leftEnd = true; return false;
+                    case ERROR: lastShot = firstShipHit; leftEnd = true; return false;
                 }
             }
             if(!rightEnd){
@@ -97,6 +99,7 @@ public class AIMedium extends AI{
                     case SHIP: return true;
                     case WATER: lastShot = firstShipHit; rightEnd = true; return true;
                     case NA:  lastShot = firstShipHit; rightEnd = true; return false;
+                    case ERROR: lastShot = firstShipHit; rightEnd = true; return false;
                 }
             }
         }
@@ -108,6 +111,7 @@ public class AIMedium extends AI{
                     case SHIP: return true;
                     case WATER: lastShot = firstShipHit; downEnd = true; return true;
                     case NA:  lastShot = firstShipHit; downEnd = true; return false;
+                    case ERROR: lastShot = firstShipHit; downEnd = true; return false;
                 }
             }
             if(!upEnd){
@@ -116,6 +120,7 @@ public class AIMedium extends AI{
                     case SHIP: return true;
                     case WATER: lastShot = firstShipHit; upEnd = true; return true;
                     case NA:  lastShot = firstShipHit; upEnd = true; return false;
+                    case ERROR: lastShot = firstShipHit; upEnd = true; return false;
                 }
             }
         }

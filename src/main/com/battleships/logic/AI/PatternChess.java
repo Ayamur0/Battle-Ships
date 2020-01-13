@@ -19,8 +19,10 @@ public class PatternChess implements Pattern{
     public PatternChess(int size) {
         this.size = size;
         Random r = new Random();
-        start = r.nextInt(4);
-        color = r.nextInt(2);
+        //start = r.nextInt(4);
+        start = 1;
+        //color = r.nextInt(2);
+        color = BLACK;
     }
 
     @Override

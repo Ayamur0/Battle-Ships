@@ -247,7 +247,7 @@ public class Cannonball extends Entity implements Runnable {
                 GameManager.getNetwork().sendAnswer(2);
         }
         if(!GameManager.getSettings().isOnline() || (destinationGrid == GridManager.OWNFIELD && !GameManager.getLogic().isPlayerTurn())) {
-            System.out.println("\u001B[36m" + "Called cannonballHit2! With value " + shipHit);
+            //System.out.println("\u001B[36m" + "Called cannonballHit2! With value " + shipHit);
             cannonballHit2(shipHit);
         }
     }

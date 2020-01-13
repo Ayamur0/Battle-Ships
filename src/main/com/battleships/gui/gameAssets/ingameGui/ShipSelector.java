@@ -167,9 +167,19 @@ public class ShipSelector extends GuiClickCallback {
             return;
         }
         switch (buttonNumber){
-            case DELETE: shipManager.removeCursorShip(); GameManager.removeAllShips(); return;
-            case RANDOM: shipManager.removeCursorShip(); GameManager.removeAllShips(); GameManager.getLogic().placeRandomShips(GridManager.OWNFIELD); return;
+            case DELETE: shipManager.removeCursorShip();
+                if (!GameManager.getNetwork().hasPlayerConfirmed())
+                    GameManager.removeAllShips();
+                return;
+            case RANDOM: shipManager.removeCursorShip();
+                if (!GameManager.getNetwork().hasPlayerConfirmed()) {
+                    GameManager.removeAllShips();
+                    GameManager.getLogic().placeRandomShips(GridManager.OWNFIELD);
+                }
+                return;
             case CONFIRM:
+                if(GameManager.getNetwork().hasPlayerConfirmed())
+                    break;
                 if(IntStream.of(shipCounts).sum() > 0)
                     return;
                 if(!GameManager.getSettings().isOnline())

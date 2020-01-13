@@ -1,6 +1,7 @@
 package com.battleships.gui.gameAssets;
 
 import com.battleships.gui.audio.AudioMaster;
+import com.battleships.gui.audio.Source;
 import com.battleships.gui.entities.Camera;
 import com.battleships.gui.entities.Entity;
 import com.battleships.gui.entities.Light;
@@ -329,6 +330,12 @@ public class GameManager {
         guis.clear();
         guiManager.clearClickableGuis();
         gridManager.getBurningFires().clear();
+        for(Entity e : gridManager.getBurningFireSounds().keySet()){
+            for(Source s : gridManager.getBurningFireSounds().get(e)){
+                s.delete();
+            }
+        }
+        gridManager.getBurningFireSounds().clear();
         gridManager.getBurningFireSounds().clear();
         gridManager.getCannonball().remove();
         gridManager.getMarkers().clear();
@@ -454,7 +461,7 @@ public class GameManager {
                 logic.repeatTurn();
             else
                 logic.advanceTurn();
-            System.out.println("\u001B[35m" + "Shot has hit! " + " Has hit Ship: " + cannonballHit + " Turn: " + logic.isPlayerTurn());
+            //System.out.println("\u001B[35m" + "Shot has hit! " + " Has hit Ship: " + cannonballHit + " Turn: " + logic.isPlayerTurn());
         }
         renderEntities();
         prepareWater();
@@ -496,7 +503,7 @@ public class GameManager {
      */
     public static boolean shoot(int originField, Vector2i destinationIndex){
         if(originField == GridManager.OWNFIELD && !logic.isPlayerTurn() || originField == GridManager.OPPONENTFIELD && logic.isPlayerTurn()) {
-            System.out.println("\u001B[35m" + "Shot not allowed! Field: " + originField + " Turn: " + logic.isPlayerTurn());
+            //System.out.println("\u001B[35m" + "Shot not allowed! Field: " + originField + " Turn: " + logic.isPlayerTurn());
             return false;
         }
         if(settings.isOnline() && logic.getTurnHandler().isPlayerTurn() &&
@@ -504,7 +511,7 @@ public class GameManager {
             network.sendShoot(destinationIndex.x, destinationIndex.y);
             System.out.println("\u001B[35m" + "Shot sent!" + " Turn: " + logic.isPlayerTurn());
         }
-        System.out.println("\u001B[35m" + "Shot made! Field: " + originField + " Turn: " + logic.isPlayerTurn());
+        //System.out.println("\u001B[35m" + "Shot made! Field: " + originField + " Turn: " + logic.isPlayerTurn());
         return gridManager.shoot(originField, destinationIndex);
     }
 
