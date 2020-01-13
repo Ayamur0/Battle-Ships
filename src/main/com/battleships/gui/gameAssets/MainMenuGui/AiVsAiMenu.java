@@ -38,13 +38,13 @@ public class AiVsAiMenu extends InGameSettingsMenu {
                 MEDIUM, super.sliderSize, new Vector2f(difficulty1.getPositions().x, difficulty1.getPositions().y + buttonGap), guiManager, GameManager.getGuis());
 
         super.guiTexts.add(new GUIText("Size: " + playingFieldSize.getValueAsInt(), fontSize, font, new Vector2f(playingFieldSize.getPositions().x, playingFieldSize.getPositions().y - 0.06f), 0.12f, true, outlineColor, 0.0f, 0.1f, outlineColor, new Vector2f()));
-        super.guiTexts.add(new GUIText("Difficulty AI 1: Normal", fontSize, font, new Vector2f(difficulty1.getPositions().x, difficulty1.getPositions().y - 0.06f), 0.3f, true, outlineColor, 0.0f, 0.1f, outlineColor, new Vector2f()));
-        super.guiTexts.add(new GUIText("Difficulty AI 2: Normal", fontSize, font, new Vector2f(difficulty2.getPositions().x, difficulty2.getPositions().y - 0.06f), 0.3f, true, outlineColor, 0.0f, 0.1f, outlineColor, new Vector2f()));
+        super.guiTexts.add(new GUIText("Difficulty AI 1: Medium", fontSize, font, new Vector2f(difficulty1.getPositions().x, difficulty1.getPositions().y - 0.06f), 0.3f, true, outlineColor, 0.0f, 0.1f, outlineColor, new Vector2f()));
+        super.guiTexts.add(new GUIText("Difficulty AI 2: Medium", fontSize, font, new Vector2f(difficulty2.getPositions().x, difficulty2.getPositions().y - 0.06f), 0.3f, true, outlineColor, 0.0f, 0.1f, outlineColor, new Vector2f()));
 
         buttons.add(new GuiTexture(buttonTexture, new Vector2f(0.58f, 0.83f), buttonSize));
         buttons.add(new GuiTexture(buttonTexture, new Vector2f(new Vector2f(0.42f, 0.83f)), buttonSize));
 
-        super.guiTexts.add(new GUIText("Begin", 2.5f, font, new Vector2f(buttons.get(0).getPositions().x, buttons.get(0).getPositions().y), 0.12f, true, outlineColor, 0.0f, 0.1f, outlineColor, new Vector2f()));
+        super.guiTexts.add(new GUIText("Play", 2.5f, font, new Vector2f(buttons.get(0).getPositions().x, buttons.get(0).getPositions().y), 0.12f, true, outlineColor, 0.0f, 0.1f, outlineColor, new Vector2f()));
         super.guiTexts.add(new GUIText("Back", 2.5f, font, new Vector2f(buttons.get(1).getPositions().x, buttons.get(1).getPositions().y), 0.12f, true, outlineColor, 0.0f, 0.1f, outlineColor, new Vector2f()));
 
         GameManager.getGuis().addAll(buttons);
@@ -67,7 +67,7 @@ public class AiVsAiMenu extends InGameSettingsMenu {
                 difficultyName = "Easy";
                 break;
             case MEDIUM:
-                difficultyName = "Normal";
+                difficultyName = "Medium";
                 break;
             case HARD:
                 difficultyName = "Hard";
@@ -80,7 +80,7 @@ public class AiVsAiMenu extends InGameSettingsMenu {
                 difficultyName = "Easy";
                 break;
             case MEDIUM:
-                difficultyName = "Normal";
+                difficultyName = "Medium";
                 break;
             case HARD:
                 difficultyName = "Hard";

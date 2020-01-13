@@ -106,7 +106,7 @@ public class InGameSettingsMenu extends Menu {
                     difficultyName = "Easy";
                     break;
                 case MEDIUM:
-                    difficultyName = "Normal";
+                    difficultyName = "Medium";
                     break;
                 case HARD:
                     difficultyName = "Hard";
@@ -152,14 +152,14 @@ public class InGameSettingsMenu extends Menu {
         if (gameMode == SP) {
             difficulty1 = new Slider(loader.loadTexture("Slider.png"), loader.loadTexture("WoodenSlider.jpg"), EASY, HARD,
                     MEDIUM, sliderSize, new Vector2f(playingFieldSize.getPositions().x, playingFieldSize.getPositions().y + buttonGap), guiManager, GameManager.getGuis());
-            super.guiTexts.add(new GUIText("Difficulty: Normal", fontSize, font, new Vector2f(difficulty1.getPositions().x, difficulty1.getPositions().y - sliderOffset), 0.4f, true, outlineColor, 0.0f, 0.1f, outlineColor, new Vector2f()));
+            super.guiTexts.add(new GUIText("Difficulty: Medium", fontSize, font, new Vector2f(difficulty1.getPositions().x, difficulty1.getPositions().y - sliderOffset), 0.4f, true, outlineColor, 0.0f, 0.1f, outlineColor, new Vector2f()));
         }
 
         buttons.add(new GuiTexture(buttonTexture, new Vector2f(standardButtonPos.x, standardButtonPos.y + 2 * buttonGap), buttonSize));
         buttons.add(new GuiTexture(buttonTexture, new Vector2f(buttons.get(0).getPositions().x, buttons.get(0).getPositions().y + buttonGap), buttonSize));
         GameManager.getGuis().addAll(buttons);
 
-        super.guiTexts.add(new GUIText("Begin", fontSize, font, new Vector2f(buttons.get(0).getPositions().x, buttons.get(0).getPositions().y), 0.12f, true, outlineColor, 0.0f, 0.1f, outlineColor, new Vector2f()));
+        super.guiTexts.add(new GUIText("Play", fontSize, font, new Vector2f(buttons.get(0).getPositions().x, buttons.get(0).getPositions().y), 0.12f, true, outlineColor, 0.0f, 0.1f, outlineColor, new Vector2f()));
         super.guiTexts.add(new GUIText("Back", fontSize, font, new Vector2f(buttons.get(1).getPositions().x, buttons.get(1).getPositions().y), 0.12f, true, outlineColor, 0.0f, 0.1f, outlineColor, new Vector2f()));
 
         super.createClickable();
