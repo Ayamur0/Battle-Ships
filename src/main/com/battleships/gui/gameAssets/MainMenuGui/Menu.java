@@ -128,6 +128,7 @@ public abstract class Menu extends GuiClickCallback {
     public Menu(GuiManager guiManager, Loader loader) {
         this.guiManager = guiManager;
         this.loader = loader;
+        fc = new JFileChooser();
         if (GameManager.getPirateFont() == null)
             this.font = new FontType(loader.loadFontTexture("font/pirate.png"), "pirate");
         else
@@ -285,7 +286,7 @@ public abstract class Menu extends GuiClickCallback {
             String filename = fileName.replace(".xml", "");
             SaveFile saveFile = SaveFileManager.loadFromFile(filename);
             if (saveFile == null) {
-                guiTexts.add(new GUIText("Error loading file", fontSize, font, new Vector2f(0.5f, 0.3f), 0.3f, true, outlineColor, 0.0f, 0.1f, outlineColor, new Vector2f()));
+                JOptionPane.showMessageDialog(null,"Error loading the file","Loading Error",JOptionPane.ERROR_MESSAGE);
                 return false;
             } else {
                 SaveFileManager.loadSaveFile(saveFile);
