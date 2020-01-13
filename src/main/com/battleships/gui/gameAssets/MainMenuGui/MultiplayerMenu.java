@@ -110,10 +110,6 @@ public class MultiplayerMenu extends Menu {
         }
         if (super.buttonClicked == CLIENT) {
             new Thread(new TextInput("Connect", "Enter ip Address")).start();
-            if (!GameManager.getNetwork().start(false, userInput)) {
-                JOptionPane.showMessageDialog(null,"Error connection to opponent","Connection Error",JOptionPane.ERROR_MESSAGE);
-
-            }
         }
         if (super.buttonClicked == BACK) {
             super.clearMenu();
@@ -126,7 +122,8 @@ public class MultiplayerMenu extends Menu {
      */
     public void processInput() {
         if (userInput != null) {
-            GameManager.getNetwork().start(false, userInput);
+            if (!GameManager.getNetwork().start(false, userInput))
+                JOptionPane.showMessageDialog(null,"Error connection to opponent","Connection Error",JOptionPane.ERROR_MESSAGE);
             super.clearMenu();
             MainMenuManager.setMenu(new WaitingConnection(guiManager, loader, false));
         }

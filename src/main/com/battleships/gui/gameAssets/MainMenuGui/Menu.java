@@ -141,6 +141,9 @@ public abstract class Menu extends GuiClickCallback {
             icon = loader.loadTexture("StartIcon.png");
         if (backgounds.size() == 0)
             addBackground();
+        try {
+            UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+        } catch (Exception e) { System.err.println("Error: " + e.getMessage()); }
     }
 
     /**
@@ -149,6 +152,9 @@ public abstract class Menu extends GuiClickCallback {
     protected class SaveFilePicker implements Runnable {
         @Override
         public void run() {
+            try {
+                UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+            } catch (Exception e) { System.err.println("Error: " + e.getMessage()); }
             fc.showOpenDialog(null);
 
             fileName = fc.getName(fc.getSelectedFile());
