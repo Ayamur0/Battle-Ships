@@ -14,6 +14,8 @@ public class PatternChess implements Pattern{
 
     private int start;
     private int size;
+    private int addX1;
+    private int addX2;
     private Vector2i lastIndex;
 
     public PatternChess(int size) {
@@ -23,6 +25,12 @@ public class PatternChess implements Pattern{
         start = 1;
         //color = r.nextInt(2);
         color = BLACK;
+        if(size % 2 == 0){
+            addX1 = -1;
+            addX2 = 1;
+        }
+        else
+            addX1 = addX2 = 0;
     }
 
     @Override
@@ -30,7 +38,7 @@ public class PatternChess implements Pattern{
         if(start == DOWNLEFT || start == UPLEFT) {
             lastIndex.x -= 2;
             if (lastIndex.x < 1) {
-                lastIndex.x += (size + (lastIndex.x == 0 ? -1 : 1));
+                lastIndex.x += (size + (lastIndex.x == 0 ? addX1 : addX2));
                 lastIndex.y += start == DOWNLEFT ? 1 : -1;
             }
             if (lastIndex.y > size || lastIndex.y < 1)
@@ -39,7 +47,7 @@ public class PatternChess implements Pattern{
         if(start == DOWNRIGHT || start == UPRIGHT) {
             lastIndex.x += 2;
             if (lastIndex.x > size) {
-                lastIndex.x -= (size + (lastIndex.x == size + 1 ? -1 : 1));
+                lastIndex.x -= (size + (lastIndex.x == size + 1 ? addX1 : addX2));
                 lastIndex.y += start == DOWNRIGHT ? 1 : -1;
             }
             if (lastIndex.y > size || lastIndex.y < 1)

@@ -25,6 +25,7 @@ public class AIMedium extends AI{
     private int foundShipDir = -1;
     private boolean leftEnd, downEnd, upEnd, rightEnd;
     private Grid opponentGrid;
+    private Ship ship;
 
     /**
      * Creates a new AI with medium difficulty.
@@ -77,6 +78,7 @@ public class AIMedium extends AI{
             }
         }
         if(result == SHIP) {
+            ship = opponentGrid.getCell(lastShot.x, lastShot.y).ship;
             lastHit = true;
             firstShipHit = new Vector2i(lastShot);
         }
@@ -123,6 +125,10 @@ public class AIMedium extends AI{
                     case ERROR: lastShot = firstShipHit; upEnd = true; return false;
                 }
             }
+        }
+        if(!ship.isSunk()){
+            lastShot = firstShipHit;
+            return false;
         }
         foundShipDir = UNKNOWN;
         lastHit = false;
