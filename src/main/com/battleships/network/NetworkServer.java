@@ -69,6 +69,8 @@ public class NetworkServer extends Network implements Runnable{
         if(waitingForMessage)
             return;
         toClient.println(message);
+        System.out.println("\u001B[32m" + "Sent: " + message);
+        System.out.println("\u001B[31m" + "now waiting");
         waitingForMessage = true;
         Thread t = new Thread(this);
         t.start();
@@ -78,12 +80,13 @@ public class NetworkServer extends Network implements Runnable{
         String answer = null;
         try {
             answer = fromClient.readLine();
-            System.out.println(answer);
+            System.out.println("\u001B[0m" + answer);
         } catch (IOException e) {
             System.err.println("Error receiving message from Client!");
         }
-        setStringFunction(1, answer);
         waitingForMessage = false;
+        System.out.println("\u001B[31m" + "stopped waiting");
+        setStringFunction(1, answer);
     }
 
     /**

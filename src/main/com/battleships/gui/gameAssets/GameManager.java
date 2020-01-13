@@ -497,7 +497,6 @@ public class GameManager {
             return false;
         if(settings.isOnline() && logic.getTurnHandler().isPlayerTurn()){
             network.sendShoot(destinationIndex.x, destinationIndex.y);
-            return true;
         }
         return gridManager.shoot(originField, destinationIndex);
     }
