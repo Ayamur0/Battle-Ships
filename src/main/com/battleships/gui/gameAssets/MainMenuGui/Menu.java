@@ -298,7 +298,6 @@ public abstract class Menu extends GuiClickCallback {
         } else
             return false;
     }
-
     /**
      * @return {@code true} if there is a unprocessed user input that needs to be processed.
      */
