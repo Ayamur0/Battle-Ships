@@ -113,6 +113,7 @@ public class MainMenuManager {
         WindowManager.setMainMenuCallbacks(GameManager.getMainMenuManager(), wFbo);
         GameManager.getLogic().setGameState(GameManager.MENU);
         GridManager.setIsBackground(true);
+        GameManager.getLogic().getTurnHandler().setPlayerTurn(true);
         menu = new MainMenu(guiManager, loader);
     }
 

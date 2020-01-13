@@ -8,6 +8,8 @@ import com.battleships.gui.renderingEngine.Loader;
 import org.joml.Vector2f;
 import org.lwjgl.util.tinyfd.TinyFileDialogs;
 
+import javax.swing.*;
+
 /**
  * Menu to choose if you host a game or connect to a game
  *
@@ -98,6 +100,7 @@ public class MultiplayerMenu extends Menu {
     @Override
     protected void clickAction() {
         if (super.buttonClicked == LOADONLINEGAME) {
+            GameManager.getSettings().setOnline(true);
             openLoadGameDialog();
         }
         if (super.buttonClicked == HOST) {
@@ -107,9 +110,6 @@ public class MultiplayerMenu extends Menu {
         }
         if (super.buttonClicked == CLIENT) {
             new Thread(new TextInput("Connect", "Enter ip Address")).start();
-            if (!GameManager.getNetwork().start(false, userInput)) {
-                //TODO Error msg
-            }
         }
         if (super.buttonClicked == BACK) {
             super.clearMenu();
@@ -122,7 +122,8 @@ public class MultiplayerMenu extends Menu {
      */
     public void processInput() {
         if (userInput != null) {
-            GameManager.getNetwork().start(false, userInput);
+            if (!GameManager.getNetwork().start(false, userInput))
+                JOptionPane.showMessageDialog(null,"Error connection to opponent","Connection Error",JOptionPane.ERROR_MESSAGE);
             super.clearMenu();
             MainMenuManager.setMenu(new WaitingConnection(guiManager, loader, false));
         }

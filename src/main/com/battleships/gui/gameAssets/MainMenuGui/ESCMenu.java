@@ -9,6 +9,8 @@ import com.battleships.logic.SaveFileManager;
 import org.joml.Vector2f;
 import org.lwjgl.util.tinyfd.TinyFileDialogs;
 
+import javax.swing.*;
+
 /**
  * Overlay if ESC was pressed in the game
  *
@@ -163,12 +165,12 @@ public class ESCMenu extends Menu {
             } else {
                 if (SaveFileManager.saveToFile(String.valueOf(time))) {
                     GameManager.getNetwork().closeConnection();
-                    //GameManager.getNetwork().sendSave(time);
+                    GameManager.getNetwork().sendSave(String.valueOf(time));
                     GameManager.getMainMenuManager().backToMainMenu();
                 } else
-                    super.guiTexts.add(new GUIText("Error saving file", fontSize, font, new Vector2f(), 0.12f, true, outlineColor, 0.0f, 0.1f, outlineColor, new Vector2f()));
+                    JOptionPane.showMessageDialog(null,"Error saving file","Save Error",JOptionPane.ERROR_MESSAGE);
             }
-
+            GameManager.getSettings().setOnline(false);
         }
         if (buttonClicked == RESUME) {
             active = false;
@@ -193,6 +195,7 @@ public class ESCMenu extends Menu {
                 GameManager.getNetwork().closeConnection();
             GameManager.getLogic().setGameState(GameManager.MENU);
             GameManager.getMainMenuManager().backToMainMenu();
+            GameManager.getSettings().setOnline(false);
         }
     }
 
