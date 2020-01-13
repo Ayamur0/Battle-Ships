@@ -89,7 +89,7 @@ public class AIMedium extends AI{
                 switch (shootCell(lastShot)){
                     case SHIP: return true;
                     case WATER: lastShot = firstShipHit; leftEnd = true; return true;
-                    case NA:  lastShot = firstShipHit; leftEnd = true; return false;
+                    case NA: lastShot.x += 1; leftEnd = true; return false;
                     case ERROR: lastShot = firstShipHit; leftEnd = true; return false;
                 }
             }
@@ -98,7 +98,7 @@ public class AIMedium extends AI{
                 switch (shootCell(lastShot)){
                     case SHIP: return true;
                     case WATER: lastShot = firstShipHit; rightEnd = true; return true;
-                    case NA:  lastShot = firstShipHit; rightEnd = true; return false;
+                    case NA: lastShot.x -= 1; rightEnd = true; return false;
                     case ERROR: lastShot = firstShipHit; rightEnd = true; return false;
                 }
             }
@@ -110,7 +110,7 @@ public class AIMedium extends AI{
                 switch (shootCell(lastShot)){
                     case SHIP: return true;
                     case WATER: lastShot = firstShipHit; downEnd = true; return true;
-                    case NA:  lastShot = firstShipHit; downEnd = true; return false;
+                    case NA:  lastShot.y -= 1; downEnd = true; return false;
                     case ERROR: lastShot = firstShipHit; downEnd = true; return false;
                 }
             }
@@ -119,7 +119,7 @@ public class AIMedium extends AI{
                 switch (shootCell(lastShot)){
                     case SHIP: return true;
                     case WATER: lastShot = firstShipHit; upEnd = true; return true;
-                    case NA:  lastShot = firstShipHit; upEnd = true; return false;
+                    case NA: lastShot.y += 1; upEnd = true; return false;
                     case ERROR: lastShot = firstShipHit; upEnd = true; return false;
                 }
             }
