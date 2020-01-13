@@ -128,6 +128,11 @@ public class AIMedium extends AI{
         }
         if(!ship.isSunk()){
             lastShot = firstShipHit;
+            lastHit = false;
+            leftEnd = false;
+            rightEnd = false;
+            upEnd = false;
+            downEnd = false;
             return false;
         }
         foundShipDir = UNKNOWN;
