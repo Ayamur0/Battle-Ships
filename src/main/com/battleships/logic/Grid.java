@@ -212,7 +212,7 @@ public class Grid {
         int[] toBlock = {x-1, y-1, x, y-1, x+1, y-1, x-1, y, x+1, y, x-1, y+1, x, y+1, x+1, y+1};
         for(int i = 0; i < toBlock.length; i += 2){
             if(toBlock[i] >= 0 && toBlock[i] < grid.length && toBlock[i+1] >= 0 && toBlock[i+1] < grid.length && grid[toBlock[i+1]][toBlock[i]].state != SHIP) {
-                if(visible && grid[toBlock[i+1]][toBlock[i]].state != SHOT)
+                if(visible && grid[toBlock[i+1]][toBlock[i]].state != SHOT && grid[toBlock[i+1]][toBlock[i]].state != OnlineGrid.SHIPPROCESSED)
                     GameManager.placeMarker(false, new Vector2i(toBlock[i]+1, toBlock[i+1]+1), GameManager.getLogic().getGridID(this));
                 grid[toBlock[i + 1]][toBlock[i]].state = blockType;
             }
