@@ -29,6 +29,7 @@ import com.battleships.gui.water.WaterRenderer;
 import com.battleships.gui.water.WaterShader;
 import com.battleships.gui.water.WaterTile;
 import com.battleships.gui.window.WindowManager;
+import com.battleships.logic.Grid;
 import com.battleships.logic.LogicManager;
 import com.battleships.logic.Settings;
 import com.battleships.network.NetworkManager;
@@ -453,6 +454,7 @@ public class GameManager {
                 logic.repeatTurn();
             else
                 logic.advanceTurn();
+            System.out.println("\u001B[35m" + "Shot has hit! " + " Has hit Ship: " + cannonballHit + " Turn: " + logic.isPlayerTurn());
         }
         renderEntities();
         prepareWater();
@@ -493,11 +495,16 @@ public class GameManager {
      * @return true if the shot can be made (no ball is currently flying and cell hasn't already been shot), false else.
      */
     public static boolean shoot(int originField, Vector2i destinationIndex){
-        if(originField == GridManager.OWNFIELD && !logic.isPlayerTurn() || originField == GridManager.OPPONENTFIELD && logic.isPlayerTurn())
+        if(originField == GridManager.OWNFIELD && !logic.isPlayerTurn() || originField == GridManager.OPPONENTFIELD && logic.isPlayerTurn()) {
+            System.out.println("\u001B[35m" + "Shot not allowed! Field: " + originField + " Turn: " + logic.isPlayerTurn());
             return false;
-        if(settings.isOnline() && logic.getTurnHandler().isPlayerTurn()){
-            network.sendShoot(destinationIndex.x, destinationIndex.y);
         }
+        if(settings.isOnline() && logic.getTurnHandler().isPlayerTurn() &&
+                !GameManager.getLogic().hasBeenShot(destinationIndex.x, destinationIndex.y, originField == GridManager.OWNFIELD ? GridManager.OPPONENTFIELD : GridManager.OWNFIELD)){
+            network.sendShoot(destinationIndex.x, destinationIndex.y);
+            System.out.println("\u001B[35m" + "Shot sent!" + " Turn: " + logic.isPlayerTurn());
+        }
+        System.out.println("\u001B[35m" + "Shot made! Field: " + originField + " Turn: " + logic.isPlayerTurn());
         return gridManager.shoot(originField, destinationIndex);
     }
 

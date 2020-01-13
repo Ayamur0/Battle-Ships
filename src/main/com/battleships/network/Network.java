@@ -36,7 +36,8 @@ public abstract class Network implements NetworkInterface{
     public void execute(){
         switch (action){
             case NONE: break;
-            case SHOOT: GameManager.shoot(GridManager.OPPONENTFIELD, new Vector2i(row+1, col+1)); break;
+            case SHOOT:
+                System.out.println("\u001B[34m" + "Processing Shot");GameManager.shoot(GridManager.OPPONENTFIELD, new Vector2i(row+1, col+1)); break;
             case CONFIRM: setOpponentConfirm(); break;
             case SAVE: SaveFileManager.saveToFile(ID); break;
             case LOAD: SaveFileManager.loadFromFile(ID);
@@ -70,7 +71,6 @@ public abstract class Network implements NetworkInterface{
             action = SHOOT;
         }else if(text.contains(size)){
             text = text.replace(size, "");
-            GameManager.getLogic().onlineMode(true);
 
             GameManager.getSettings().setSize(Integer.parseInt(text));
             GameManager.getSettings().setOnline(true);
@@ -83,16 +83,18 @@ public abstract class Network implements NetworkInterface{
             text = text.replace(answer, "");
             if(Integer.parseInt(text) == 0) {
                 GameManager.processShootAnswer(false);
+                if(GameManager.getLogic().getOpponentGrid() instanceof OnlineGrid)
+                    ((OnlineGrid) GameManager.getLogic().getOpponentGrid()).processShot(lastShotX,lastShotY,0);
                 GameManager.getNetwork().sendPass();
             }
              if(Integer.parseInt(text) == 1){
                  GameManager.processShootAnswer(true);
                  if(GameManager.getLogic().getOpponentGrid() instanceof OnlineGrid)
-                    ((OnlineGrid) GameManager.getLogic().getOpponentGrid()).processHit(lastShotX,lastShotY);
+                    ((OnlineGrid) GameManager.getLogic().getOpponentGrid()).processShot(lastShotX,lastShotY,1);
             }else if(Integer.parseInt(text) == 2){
                  GameManager.processShootAnswer(true);
                  if(GameManager.getLogic().getOpponentGrid() instanceof OnlineGrid)
-                     ((OnlineGrid) GameManager.getLogic().getOpponentGrid()).processHitSunk(lastShotX,lastShotY);
+                     ((OnlineGrid) GameManager.getLogic().getOpponentGrid()).processShot(lastShotX,lastShotY, 2);
             }
 
         }else if(text.contains(save)){

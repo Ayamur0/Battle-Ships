@@ -45,7 +45,10 @@ public class LogicManager {
      */
     public void init(Settings settings) {
         playerGrid = new Grid(settings.getSize(), GridManager.OWNFIELD);
-        opponentGrid = new Grid(settings.getSize(), GridManager.OPPONENTFIELD);
+        if(settings.isOnline())
+            opponentGrid = new OnlineGrid(settings.getSize(), GridManager.OPPONENTFIELD);
+        else
+            opponentGrid = new Grid(settings.getSize(), GridManager.OPPONENTFIELD);
         switch (settings.getAiLevelO()) {
             case -1: turnHandler.removeOpponentAI(); break;
             case Settings.EASY: turnHandler.setOpponentAI(new AIEasy(GridManager.OPPONENTFIELD, settings.getSize(), this));
@@ -72,8 +75,6 @@ public class LogicManager {
      */
     public boolean shoot(int x, int y, int grid){
         if(x < 1 || y < 1 || x > playerGrid.getSize() ||y > playerGrid.getSize())
-            return false;
-        if(GameManager.getSettings().isOnline() && grid == GridManager.OWNFIELD)
             return false;
         if(grid == GridManager.OWNFIELD)
             return playerGrid.shoot(x,y);
