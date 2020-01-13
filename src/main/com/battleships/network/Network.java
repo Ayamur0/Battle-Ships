@@ -19,6 +19,7 @@ public abstract class Network implements NetworkInterface{
     private String answer = "answer ";
     private String save = "save ";
     private String load = "load ";
+    private String pass = "pass";
 
     private boolean playerConfirm;
     private boolean opponentConfirm;
@@ -46,7 +47,6 @@ public abstract class Network implements NetworkInterface{
             case SIZE: GameManager.getMainMenuManager().clearAll();
                 GameManager.resizeGrid();
                 GameManager.getLogic().advanceGamePhase();
-                GameManager.getLogic().getTurnHandler().setPlayerTurn(false);
                 break;
         }
         action = NONE;
@@ -64,8 +64,8 @@ public abstract class Network implements NetworkInterface{
             text = text.replace(shoot, "");
             String[] temp = text.split(" ");
 
-            row= Integer.parseInt(temp[0]);
-            col = Integer.parseInt(temp[1]);
+            col = Integer.parseInt(temp[0]);
+            row = Integer.parseInt(temp[1]);
 
             action = SHOOT;
         }else if(text.contains(size)){
@@ -81,8 +81,10 @@ public abstract class Network implements NetworkInterface{
                action = CONFIRM;
         }else if(text.contains(answer)){
             text = text.replace(answer, "");
-            if(Integer.parseInt(text) == 0)
+            if(Integer.parseInt(text) == 0) {
                 GameManager.processShootAnswer(false);
+                GameManager.getNetwork().sendPass();
+            }
              if(Integer.parseInt(text) == 1){
                  GameManager.processShootAnswer(true);
                  if(GameManager.getLogic().getOpponentGrid() instanceof OnlineGrid)
@@ -100,7 +102,10 @@ public abstract class Network implements NetworkInterface{
         }else if(text.contains(load)){
             text = text.replace(load, "");
             ID = text;
-        }else{
+        }else if(text.contains(pass)){
+
+        }
+        else{
             System.err.println("Received faulty message from Network!");
         }
     }

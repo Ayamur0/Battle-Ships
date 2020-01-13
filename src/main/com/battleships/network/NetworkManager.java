@@ -26,6 +26,12 @@ public class NetworkManager {
         return true;
     }
 
+    public void sendPass(){
+        if(player != null){
+            player.sendMessage("pass");
+        }
+    }
+
     public void sendSize(int size){
         if(player != null)
             player.sendMessage("size " + size);
