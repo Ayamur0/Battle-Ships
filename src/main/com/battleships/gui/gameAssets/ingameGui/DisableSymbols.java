@@ -75,6 +75,10 @@ public class DisableSymbols extends GuiClickCallback {
         currentSymbols.add(animation);
         currentSymbols.add(sound);
         guis.addAll(currentSymbols);
+        if(!GameManager.getSettings().isAnimation())
+            toggleSymbol(ANIMATION);
+        if(!GameManager.getSettings().isSound())
+            toggleSymbol(SOUND);
     }
 
     /**
@@ -106,10 +110,14 @@ public class DisableSymbols extends GuiClickCallback {
             GameManager.toggleAnimations();
         }
         if(buttonClicked == SOUND) {
-            if(currentSymbols.get(SOUND).getOffsetX() == 0)
+            if(currentSymbols.get(SOUND).getOffsetX() == 0) {
                 AudioMaster.changeVolume(0);
-            else
+                GameManager.getSettings().setSound(false);
+            }
+            else {
                 AudioMaster.changeVolume(1);
+                GameManager.getSettings().setSound(true);
+            }
             toggleSymbol(SOUND);
         }
     }

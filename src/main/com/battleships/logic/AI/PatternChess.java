@@ -21,10 +21,10 @@ public class PatternChess implements Pattern{
     public PatternChess(int size) {
         this.size = size;
         Random r = new Random();
-        //start = r.nextInt(4);
-        start = 1;
-        //color = r.nextInt(2);
-        color = BLACK;
+        start = r.nextInt(4);
+        //start = 1;
+        color = r.nextInt(2);
+        //color = BLACK;
         if(size % 2 == 0){
             addX1 = -1;
             addX2 = 1;

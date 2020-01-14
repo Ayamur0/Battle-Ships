@@ -371,6 +371,10 @@ public class GridManager {
      * Toggles whether a shooting animation is shown or not.
      */
     public void toggleShootingAnimation(){
+        if(animation)
+            GameManager.getSettings().setAnimation(false);
+        else
+            GameManager.getSettings().setAnimation(true);
         animation = !animation;
     }
 

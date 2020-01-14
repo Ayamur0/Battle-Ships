@@ -195,6 +195,14 @@ public class GameManager {
     private static NetworkManager network;
 
     /**
+     * 0 if no answer from the network is currently waiting to be processed.
+     * If game got an answer from network, while cannonball is not ready to process it yet,
+     * this value will be 1, if the answer was 0 or 2 if the answer was either 1 or 2.
+     * Will be set back to 0 after the answer has benn processed.
+     */
+    private static int pendingAnswer;
+
+    /**
      * Initialize the GameManager and all needed components.
      * Needs to be called when the game is started.
      */
@@ -470,6 +478,13 @@ public class GameManager {
         guiRenderer.render(guis);
         TextMaster.render();
         renderer.updateProjectionMatrix();
+        if(pendingAnswer != 0 && gridManager.getCannonball().isWaiting()) {
+            if(pendingAnswer == 1)
+                gridManager.getCannonball().cannonballHit2(false);
+            else
+                gridManager.getCannonball().cannonballHit2(true);
+            pendingAnswer = 0;
+        }
         if(settings.isOnline())
             network.execute();
     }
@@ -520,7 +535,10 @@ public class GameManager {
      * @param shipHit {@code true} if the shot hit a ship, {@code false} else.
      */
     public static void processShootAnswer(boolean shipHit){
-        gridManager.getCannonball().cannonballHit2(shipHit);
+        if(gridManager.getCannonball().isWaiting())
+            gridManager.getCannonball().cannonballHit2(shipHit);
+        else
+            pendingAnswer = shipHit ? 2 : 1;
     }
 
     /**

@@ -2,6 +2,9 @@ package com.battleships.network;
 
 import com.battleships.gui.gameAssets.GameManager;
 import com.battleships.gui.gameAssets.grids.GridManager;
+import com.battleships.logic.AI.AI;
+import com.battleships.logic.AI.AIHard;
+import com.battleships.logic.AI.AIMedium;
 import com.battleships.logic.OnlineGrid;
 import com.battleships.logic.SaveFileManager;
 import com.battleships.logic.Settings;
@@ -88,10 +91,16 @@ public abstract class Network implements NetworkInterface{
                 GameManager.getNetwork().sendPass();
             }
              if(Integer.parseInt(text) == 1){
+                 AI ai = GameManager.getLogic().getTurnHandler().getOnlineAI();
+                 if(ai instanceof AIMedium)
+                     ((AIMedium) ai).processAnswer(new Vector2i(lastShotX,lastShotY));
                  GameManager.processShootAnswer(true);
                  if(GameManager.getLogic().getOpponentGrid() instanceof OnlineGrid)
                     ((OnlineGrid) GameManager.getLogic().getOpponentGrid()).processShot(lastShotX,lastShotY,1);
             }else if(Integer.parseInt(text) == 2){
+                 AI ai = GameManager.getLogic().getTurnHandler().getOnlineAI();
+                 if(ai instanceof AIMedium)
+                     ((AIMedium) ai).processAnswer(new Vector2i(lastShotX,lastShotY));
                  GameManager.processShootAnswer(true);
                  if(GameManager.getLogic().getOpponentGrid() instanceof OnlineGrid)
                      ((OnlineGrid) GameManager.getLogic().getOpponentGrid()).processShot(lastShotX,lastShotY, 2);

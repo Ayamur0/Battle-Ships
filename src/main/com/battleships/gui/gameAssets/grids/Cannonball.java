@@ -86,6 +86,11 @@ public class Cannonball extends Entity implements Runnable {
      */
     private boolean flying;
 
+    /**
+     * {@code true} while the cannonball is waiting for an answer from the network if the game is played online.
+     */
+    private boolean waiting;
+
 
     /**
      * Creates a new cannonball entity.
@@ -250,6 +255,8 @@ public class Cannonball extends Entity implements Runnable {
             //System.out.println("\u001B[36m" + "Called cannonballHit2! With value " + shipHit);
             cannonballHit2(shipHit);
         }
+        else
+            waiting = true;
     }
 
     /**
@@ -257,6 +264,7 @@ public class Cannonball extends Entity implements Runnable {
      * @param shipHit {@code true} if the cannonball hit a ship, {@code false} else.
      */
     public void cannonballHit2(boolean shipHit){
+        waiting = false;
         if(shipHit && destinationGrid == GridManager.OWNFIELD) {
             gridManager.playFireEffect(destination, destinationCell);
         }
@@ -293,5 +301,12 @@ public class Cannonball extends Entity implements Runnable {
      */
     public boolean isFlying() {
         return flying;
+    }
+
+    /**
+     * @return {@code true} while the cannonball is waiting for an answer from the network if the game is played online.
+     */
+    public boolean isWaiting() {
+        return waiting;
     }
 }

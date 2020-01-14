@@ -7,7 +7,10 @@ import com.battleships.logic.LogicManager;
 import com.battleships.logic.Ship;
 import org.joml.Vector2i;
 
-public class AIMedium extends AI{
+import java.util.ArrayList;
+import java.util.List;
+
+public class AIMedium extends AI {
 
     /**
      * Constants for directions a hit ship can have.
@@ -19,24 +22,22 @@ public class AIMedium extends AI{
     private static final int ERROR = -1, NA = 0, SHIP = 1, WATER = 2;
 
     protected Pattern pattern;
-    private boolean lastHit;
     private Vector2i lastShot;
-    private Vector2i firstShipHit;
     private int foundShipDir = -1;
-    private boolean leftEnd, downEnd, upEnd, rightEnd;
     private Grid opponentGrid;
-    private Ship ship;
+    private List<Vector2i> hitCells = new ArrayList<>();
+    private int lastTried;
 
     /**
      * Creates a new AI with medium difficulty.
-     * @param team Team this ai should play for (0 or 1 as in {@link GridManager})
+     *
+     * @param team     Team this ai should play for (0 or 1 as in {@link GridManager})
      * @param gridSize Size of the grid this ai should play on.
-     * @param manager LogicManager this ai should use to shoot and place ships.
+     * @param manager  LogicManager this ai should use to shoot and place ships.
      */
     public AIMedium(int team, int gridSize, LogicManager manager) {
         super(team, gridSize, manager);
-        //pattern = AI.choosePattern(gridSize);
-        pattern = new PatternChess(gridSize);
+        pattern = AI.choosePattern(gridSize);
         opponentGrid = team == GridManager.OWNFIELD ? manager.getOpponentGrid() : manager.getPlayerGrid();
     }
 
@@ -46,147 +47,181 @@ public class AIMedium extends AI{
     @Override
     public void makeTurn() {
         opponentGrid = team == GridManager.OWNFIELD ? manager.getOpponentGrid() : manager.getPlayerGrid();
-        if(lastHit && foundShipDir == UNKNOWN){
+        if (hitCells.size() != 0 && foundShipDir == UNKNOWN) {
             findFoundShipDir();
             return;
         }
-        if(lastHit && foundShipDir != UNKNOWN){
-            while(!shootFoundShip());
-            if(lastHit)
+        if (hitCells.size() != 0) {
+            if (shootFoundShip(new Vector2i(hitCells.get(0))))
                 return;
+            hitCells.remove(0);
+            makeTurn();
+            return;
         }
-        if(lastShot == null){
+        lastTried = foundShipDir = UNKNOWN;
+        if (lastShot == null) {
             lastShot = pattern.firstIndex();
-            if(shootCell(lastShot) == SHIP) {
-                lastHit = true;
-                firstShipHit = new Vector2i(lastShot);
+            if (shootCell(lastShot) == SHIP) {
+                hitCells.add(lastShot);
             }
             return;
         }
         lastShot = pattern.nextIndex();
-        if(lastShot == null){
+        if (lastShot == null) {
             updatePattern();
             lastShot = pattern.firstIndex();
         }
         int result;
-        while((result = shootCell(lastShot)) == NA) {
-            if(manager.hasBeenShot(lastShot.x, lastShot.y, team == GridManager.OWNFIELD ? GridManager.OPPONENTFIELD : GridManager.OWNFIELD))
+        while ((result = shootCell(lastShot)) == NA || result == ERROR) {
+            if(result == ERROR)
+                continue;
+            if (manager.hasBeenShot(lastShot.x, lastShot.y, team == GridManager.OWNFIELD ? GridManager.OPPONENTFIELD : GridManager.OWNFIELD))
                 lastShot = pattern.nextIndex();
-            if(lastShot == null){
+            if (lastShot == null) {
                 updatePattern();
                 lastShot = pattern.firstIndex();
             }
         }
-        if(result == SHIP) {
-            ship = opponentGrid.getCell(lastShot.x, lastShot.y).ship;
-            lastHit = true;
-            firstShipHit = new Vector2i(lastShot);
+        if (result == SHIP) {
+            hitCells.add(new Vector2i(lastShot));
         }
     }
 
-    protected boolean shootFoundShip(){
-        if(foundShipDir == HORIZONTAL){
-            if(!leftEnd){
-                lastShot.x -= 1;
-                switch (shootCell(lastShot)){
-                    case SHIP: return true;
-                    case WATER: lastShot = firstShipHit; leftEnd = true; return true;
-                    case NA: lastShot.x += 1; leftEnd = true; return false;
-                    case ERROR: lastShot = firstShipHit; leftEnd = true; return false;
-                }
+    protected boolean shootFoundShip(Vector2i lastShot) {
+        if (foundShipDir == HORIZONTAL) {
+
+            lastShot.x -= 1;
+            switch (shootCell(lastShot)) {
+                case SHIP:
+                    hitCells.add(new Vector2i(lastShot));
+                    return true;
+                case WATER:
+                    return true;
             }
-            if(!rightEnd){
-                lastShot.x += 1;
-                switch (shootCell(lastShot)){
-                    case SHIP: return true;
-                    case WATER: lastShot = firstShipHit; rightEnd = true; return true;
-                    case NA: lastShot.x -= 1; rightEnd = true; return false;
-                    case ERROR: lastShot = firstShipHit; rightEnd = true; return false;
-                }
+            lastShot.x += 1;
+
+
+            lastShot.x += 1;
+            switch (shootCell(lastShot)) {
+                case SHIP:
+                    hitCells.add(new Vector2i(lastShot));
+                    return true;
+                case WATER:
+                    return true;
             }
+            lastShot.x -= 1;
+
         }
 
-        if(foundShipDir == VERTICAL){
-            if(!downEnd){
-                lastShot.y += 1;
-                switch (shootCell(lastShot)){
-                    case SHIP: return true;
-                    case WATER: lastShot = firstShipHit; downEnd = true; return true;
-                    case NA:  lastShot.y -= 1; downEnd = true; return false;
-                    case ERROR: lastShot = firstShipHit; downEnd = true; return false;
-                }
+        if (foundShipDir == VERTICAL) {
+            lastShot.y += 1;
+            switch (shootCell(lastShot)) {
+                case SHIP:
+                    hitCells.add(new Vector2i(lastShot));
+                    return true;
+                case WATER:
+                    return true;
             }
-            if(!upEnd){
-                lastShot.y -= 1;
-                switch (shootCell(lastShot)){
-                    case SHIP: return true;
-                    case WATER: lastShot = firstShipHit; upEnd = true; return true;
-                    case NA: lastShot.y += 1; upEnd = true; return false;
-                    case ERROR: lastShot = firstShipHit; upEnd = true; return false;
-                }
+            lastShot.y -= 1;
+            lastShot.y -= 1;
+            switch (shootCell(lastShot)) {
+                case SHIP:
+                    hitCells.add(new Vector2i(lastShot));
+                    return true;
+                case WATER:
+                    return true;
+
             }
+            lastShot.y += 1;
         }
-        if(!ship.isSunk()){
-            lastShot = firstShipHit;
-            lastHit = false;
-            leftEnd = false;
-            rightEnd = false;
-            upEnd = false;
-            downEnd = false;
-            return false;
-        }
-        foundShipDir = UNKNOWN;
-        lastHit = false;
-        leftEnd = false;
-        rightEnd = false;
-        upEnd = false;
-        downEnd = false;
-        return true;
+
+        return false;
     }
 
-    protected int shootCell(Vector2i cell){
-        if(cell.x < 1 || cell.y < 1 || cell.x > gridSize || cell.y > gridSize) {
+    protected int shootCell(Vector2i cell) {
+        if (cell.x < 1 || cell.y < 1 || cell.x > gridSize || cell.y > gridSize) {
             return ERROR;
         }
-        if(opponentGrid.getCell(cell.x, cell.y).state == Grid.SHIP){
-            return GameManager.shoot(team, cell) ? SHIP : NA;
+        if (GameManager.getSettings().isOnline()){
+            return GameManager.shoot(team, cell) ? WATER : NA;
         }
-        else
+        if (opponentGrid.getCell(cell.x, cell.y).state == Grid.SHIP) {
+            return GameManager.shoot(team, cell) ? SHIP : NA;
+        } else
             return GameManager.shoot(team, cell) ? WATER : NA;
     }
 
     @SuppressWarnings("Duplicates")
-    protected boolean findFoundShipDir(){
-        Vector2i toShoot = new Vector2i(firstShipHit);
+    protected boolean findFoundShipDir() {
+        Vector2i toShoot = new Vector2i(hitCells.get(0));
         toShoot.x -= 1;
-        switch (shootCell(toShoot)){
-            case SHIP: foundShipDir = HORIZONTAL; lastShot = toShoot; return true;
-            case WATER: leftEnd = true; return false;
-            case NA: leftEnd = true; break;
+        switch (shootCell(toShoot)) {
+            case SHIP:
+                foundShipDir = HORIZONTAL;
+                hitCells.add(new Vector2i(toShoot));
+                lastShot = toShoot;
+                return true;
+            case WATER:
+                if(GameManager.getSettings().isOnline())
+                    lastTried = HORIZONTAL;
+                return false;
+            case NA:
+                break;
         }
         toShoot.x += 2;
-        switch (shootCell(toShoot)){
-            case SHIP: foundShipDir = HORIZONTAL; lastShot = toShoot; return true;
-            case WATER: rightEnd = true; return false;
-            case NA: rightEnd = true; break;
+        switch (shootCell(toShoot)) {
+            case SHIP:
+                foundShipDir = HORIZONTAL;
+                hitCells.add(new Vector2i(toShoot));
+                lastShot = toShoot;
+                return true;
+            case WATER:
+                if(GameManager.getSettings().isOnline())
+                    lastTried = HORIZONTAL;
+                return false;
+            case NA:
+                break;
         }
         toShoot.x -= 1;
         toShoot.y += 1;
-        switch (shootCell(toShoot)){
-            case SHIP: foundShipDir = VERTICAL; lastShot = toShoot; return true;
-            case WATER: downEnd = true; return false;
-            case NA: downEnd = true; break;
+        switch (shootCell(toShoot)) {
+            case SHIP:
+                foundShipDir = VERTICAL;
+                hitCells.add(new Vector2i(toShoot));
+                lastShot = toShoot;
+                return true;
+            case WATER:
+                if(GameManager.getSettings().isOnline())
+                    lastTried = HORIZONTAL;
+                return false;
+            case NA:
+                break;
         }
         toShoot.y -= 2;
-        switch (shootCell(toShoot)){
-            case SHIP: foundShipDir = VERTICAL; lastShot = toShoot; return true;
-            case WATER: upEnd = true; return false;
-            case NA: upEnd = true; break;
+        switch (shootCell(toShoot)) {
+            case SHIP:
+                foundShipDir = VERTICAL;
+                hitCells.add(new Vector2i(toShoot));
+                lastShot = toShoot;
+                return true;
+            case WATER:
+                if(GameManager.getSettings().isOnline())
+                    lastTried = HORIZONTAL;
+                return false;
+            case NA:
+                break;
         }
         return false;
     }
 
-    protected void updatePattern(){
+    protected void updatePattern() {
         pattern = new PatternRandom(gridSize, team);
+    }
+
+    public void processAnswer(Vector2i shot){
+        hitCells.add(shot);
+        if(lastTried != UNKNOWN)
+            foundShipDir = lastTried;
+        lastShot = shot;
     }
 }
