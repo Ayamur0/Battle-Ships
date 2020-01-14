@@ -31,6 +31,16 @@ public class Settings {
     private boolean online;
 
     /**
+     * {@code true} if sound is enabled, {@code false} else.
+     */
+    private boolean sound;
+
+    /**
+     * {@code true} if animations are enabled, {@code false} else.
+     */
+    private boolean animation;
+
+    /**
      * @return {@code true} if the game is played online, {@code false} if the game is played offline.
      */
     public boolean isOnline() {
@@ -89,5 +99,35 @@ public class Settings {
      */
     public void setSize(int size) {
         this.size = size;
+    }
+
+    /**
+     * @return {@code true} if sound is enabled, {@code false} else.
+     */
+    public boolean isSound() {
+        return sound;
+    }
+
+    /**
+     * This value needs to be set, if sound is being enabled or disabled.
+     * @param sound {@code true} if sound gets enabled, {@code false} if it gets disabled.
+     */
+    public void setSound(boolean sound) {
+        this.sound = sound;
+    }
+
+    /**
+     * @return {@code true} if animations are enabled, {@code false} else.
+     */
+    public boolean isAnimation() {
+        return animation;
+    }
+
+    /**
+     * This value needs to be set, if animations are being enabled or disabled.
+     * @param animation {@code true} if animations get enabled, {@code false} if they get disabled.
+     */
+    public void setAnimation(boolean animation) {
+        this.animation = animation;
     }
 }

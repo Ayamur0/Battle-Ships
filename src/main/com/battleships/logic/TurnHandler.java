@@ -114,4 +114,15 @@ public class TurnHandler {
     public void removeOpponentAI(){
         opponentAIUsed = false;
     }
+
+    /**
+     * @return The AI that plays for the player. Only returns that AI, if the game is currently played online and
+     * the player is played by an AI. Else this method will return null.
+     */
+    public AI getOnlineAI(){
+        if(GameManager.getSettings().isOnline() && playerAIUsed){
+            return this.playerAI;
+        }
+        return null;
+    }
 }
