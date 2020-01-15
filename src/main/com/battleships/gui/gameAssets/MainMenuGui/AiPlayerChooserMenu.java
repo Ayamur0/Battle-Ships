@@ -2,9 +2,13 @@ package com.battleships.gui.gameAssets.MainMenuGui;
 
 import com.battleships.gui.fontMeshCreator.GUIText;
 import com.battleships.gui.gameAssets.GameManager;
+import com.battleships.gui.gameAssets.grids.GridManager;
 import com.battleships.gui.guis.GuiManager;
 import com.battleships.gui.guis.GuiTexture;
 import com.battleships.gui.renderingEngine.Loader;
+import com.battleships.logic.AI.AIEasy;
+import com.battleships.logic.AI.AIHard;
+import com.battleships.logic.AI.AIMedium;
 import org.joml.Vector2f;
 
 /**
@@ -107,6 +111,14 @@ public class AiPlayerChooserMenu extends Menu {
         clearMenu();
         cleaBackgournd();
         GameManager.getSettings().setAiLevelP(buttonClicked);
+        switch (buttonClicked){
+            case EASY: GameManager.getLogic().getTurnHandler().setPlayerAI(
+                    new AIEasy(GridManager.OWNFIELD, GameManager.getLogic().getPlayerGrid().getSize(), GameManager.getLogic()));
+            case MEDIUM: GameManager.getLogic().getTurnHandler().setPlayerAI(
+                    new AIMedium(GridManager.OWNFIELD, GameManager.getLogic().getPlayerGrid().getSize(), GameManager.getLogic()));
+            case HARD: GameManager.getLogic().getTurnHandler().setPlayerAI(
+                    new AIHard(GridManager.OWNFIELD, GameManager.getLogic().getPlayerGrid().getSize(), GameManager.getLogic()));
+        }
         GameManager.getLogic().getTurnHandler().makeAiTurns();
     }
 }
