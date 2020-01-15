@@ -63,39 +63,6 @@ public class AiPlayerChooserMenu extends Menu {
         super.guiTexts.add(new GUIText("Back", 2.5f, font, new Vector2f(buttons.get(3).getPositions().x, buttons.get(3).getPositions().y), 0.12f, true, outlineColor, 0.0f, 0.1f, outlineColor, new Vector2f()));
 
     }
-
-    /**
-     * Tests if the click was on one of the {@link GuiTexture} in the menu
-     *
-     * @param gui The gui to test for if the click was on it.
-     * @param x   xPos of the click (left of screen = 0, right of screen = 1)
-     * @param y   yPos of the click (top of screen = 0, bottom of screen = 1)
-     * @return {@code true} if the click was on one of the button textures, {@code false} else.
-     */
-    /*
-    @Override
-    protected boolean isClickOnGui(GuiTexture gui, double x, double y) {
-        if (super.isClickOnGui(super.buttons.get(0), x, y)) {
-            super.buttonClicked = 0;
-            return true;
-        }
-        if (super.isClickOnGui(super.buttons.get(1), x, y)) {
-            super.buttonClicked = 1;
-            return true;
-        }
-        if (super.isClickOnGui(super.buttons.get(2), x, y)) {
-            super.buttonClicked = 2;
-            return true;
-        }
-        if (super.isClickOnGui(super.buttons.get(3), x, y)) {
-            super.buttonClicked = 3;
-            return true;
-        }
-        return false;
-    }
-
-
-     */
     /**
      * Toggles state of clicked button.
      */

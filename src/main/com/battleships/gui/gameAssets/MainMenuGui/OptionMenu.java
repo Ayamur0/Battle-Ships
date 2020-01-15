@@ -71,7 +71,7 @@ public class OptionMenu extends InGameSettingsMenu {
 
         volume = new Slider(loader.loadTexture("Slider.png"), loader.loadTexture("WoodenSlider.jpg"), 0, 100,
                 (int)GameManager.getSettings().getVolume()*50, new Vector2f(0.2f, 0.01f), super.standardButtonPos, guiManager, GameManager.getGuis());
-        super.guiTexts.add(new GUIText("Volume: " + volume.getValueAsInt()*50, fontSize, font, new Vector2f(volume.getPositions().x, volume.getPositions().y - 0.06f), 0.2f, true, outlineColor, 0.0f, 0.1f, outlineColor, new Vector2f()));
+        super.guiTexts.add(new GUIText("Volume: " + (int)volume.getValueAsFloat(), fontSize, font, new Vector2f(volume.getPositions().x, volume.getPositions().y - 0.06f), 0.2f, true, outlineColor, 0.0f, 0.1f, outlineColor, new Vector2f()));
         textBoxWood = new GuiTexture(woodBox, new Vector2f(standardButtonPos.x,standardButtonPos.y+buttonGap), buttonSize);
         super.guiTexts.add(new GUIText(resolutions.get(resNow), fontSize, font, new Vector2f(textBoxWood.getPositions().x, textBoxWood.getPositions().y), 0.3f, true, outlineColor, 0.0f, 0.1f, outlineColor, new Vector2f()));
 
@@ -98,7 +98,7 @@ public class OptionMenu extends InGameSettingsMenu {
     public void RefreshSliderValue() {
 
         super.guiTexts.get(0).remove();
-        super.guiTexts.get(0).setTextString("Volume: " + (int)volume.getValueAsFloat()*50.0f);
+        super.guiTexts.get(0).setTextString("Volume: " + volume.getValueAsInt());
 
         TextMaster.loadText(super.guiTexts.get(0));
     }
@@ -126,9 +126,9 @@ public class OptionMenu extends InGameSettingsMenu {
         System.out.println(height+"\n"+width);
         if (super.buttonClicked == SAVE){
             GameManager.getSettings().setVolume(volume.getValueAsFloat()/50.0f);
+            GameManager.getSettings().changeResolution(width,height);
             super.clearMenu();
             volume.remove();
-            GameManager.getSettings().changeResolution(width,height);
             MainMenuManager.setMenu(new MainMenu(guiManager, loader));
         }
         if (super.buttonClicked == BACK) {
