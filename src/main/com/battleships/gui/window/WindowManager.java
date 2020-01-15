@@ -194,13 +194,12 @@ public class WindowManager {
         width = widthBuffer.get(0);
         height = heightBuffer.get(0);
 
-        //TODO lock 4k
         GL11.glViewport(0, 0, width, height);
 
         double currentFrame = GLFW.glfwGetTime();
         deltaTime = currentFrame - lastFrame;
         lastFrame = currentFrame;
-        test+=1;
+        test += 1;
         time += deltaTime;
         if(time >= 1){
             System.out.println("FPS: " + test);

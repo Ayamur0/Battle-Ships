@@ -1,10 +1,9 @@
 package com.battleships.gui.postProcessing;
 
+import com.battleships.gui.gameAssets.GameManager;
 import com.battleships.gui.window.WindowManager;
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
-import org.lwjgl.opengl.GL14;
-import org.lwjgl.opengl.GL30;
+import com.battleships.logic.Settings;
+import org.lwjgl.opengl.*;
 
 import java.nio.ByteBuffer;
 
@@ -93,6 +92,16 @@ public class Fbo {
      * Update size of this fbo to match current window size.
      */
     public void updateSize(){
+        Settings settings = GameManager.getSettings();
+        if(settings.getResWidth() != -1 && settings.getResHeight() != -1){
+            if(this.height != settings.getResHeight() || this.width != settings.getResWidth()){
+                cleanUp();
+                this.height = settings.getResHeight();
+                this.width = settings.getResWidth();
+                initializeFrameBuffer(type);
+                return;
+            }
+        }
         if(this.height == WindowManager.getHeight() && this.width == WindowManager.getWidth())
             return;
         cleanUp();
