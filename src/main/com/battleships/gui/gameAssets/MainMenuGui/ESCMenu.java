@@ -147,9 +147,9 @@ public class ESCMenu extends Menu {
         }
         if (super.buttonClicked == PLAYAI) {
             if (GameManager.getLogic().getGameState()==GameManager.SHIPLACING){
-                JOptionPane.showMessageDialog(null,"AI not avaiable in ship placing phase.\nPlease place your ships first","Playing as AI",JOptionPane.PLAIN_MESSAGE);
+                JOptionPane.showMessageDialog(null,"AI not avaiable in ship placing phase.\nPlease place your ships first","Playing as AI",JOptionPane.ERROR_MESSAGE);
             }
-            if (isIsPlayerAI()) {
+            else if (isIsPlayerAI()) {
                 active=false;
                 GameManager.getSettings().setAiLevelP(-1);
                 isPlayerAI = false;
