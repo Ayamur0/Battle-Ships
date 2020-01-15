@@ -66,6 +66,9 @@ public abstract class Network implements NetworkInterface{
     public void setStringFunction(int i, String text){
         if(text == null) {
             closeConnection();
+            GameManager.getLogic().setGameState(GameManager.MENU);
+            GameManager.getMainMenuManager().backToMainMenu();
+            GameManager.getSettings().setOnline(false);
             return;
         }
         if(text.contains(shoot)){
