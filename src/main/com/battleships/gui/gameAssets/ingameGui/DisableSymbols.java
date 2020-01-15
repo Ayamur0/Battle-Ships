@@ -111,11 +111,9 @@ public class DisableSymbols extends GuiClickCallback {
         }
         if(buttonClicked == SOUND) {
             if(currentSymbols.get(SOUND).getOffsetX() == 0) {
-                AudioMaster.changeVolume(0);
                 GameManager.getSettings().setSound(false);
             }
             else {
-                AudioMaster.changeVolume(1);
                 GameManager.getSettings().setSound(true);
             }
             toggleSymbol(SOUND);

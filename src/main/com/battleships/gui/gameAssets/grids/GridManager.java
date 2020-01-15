@@ -277,6 +277,9 @@ public class GridManager {
         opponentPosition.x = 350 + scale + 5;
         this.ownGrid = new GuiGrid(ownPosition, new Vector3f(-90,0,0), scale, (float)MAXSIZE / (size + 1));
         this.opponentGrid = new GuiGrid(opponentPosition, new Vector3f(-90,0,0), scale, (float)MAXSIZE / (size + 1));
+        if(!GameManager.getSettings().isAnimation()){
+            toggleShootingAnimation();
+        }
     }
 
     /**

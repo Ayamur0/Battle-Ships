@@ -1,5 +1,6 @@
 package com.battleships.logic;
 
+import com.battleships.gui.audio.AudioMaster;
 import com.battleships.gui.gameAssets.GameManager;
 import com.battleships.gui.gameAssets.grids.GridManager;
 import com.battleships.gui.postProcessing.PostProcessing;
@@ -45,7 +46,7 @@ public class Settings {
     /**
      * {@code true} if the game is played online, {@code false} if the game is played offline.
      */
-    private boolean online = true;
+    private boolean online;
 
     /**
      * {@code true} if sound is enabled, {@code false} else.
@@ -55,12 +56,18 @@ public class Settings {
     /**
      * {@code true} if animations are enabled, {@code false} else.
      */
-    private boolean animation;
+    private boolean animation = true;
+
+    /**
+     * Current volume of the game.
+     * 0 is no sound and 1 is standard volume.
+     */
+    private int volume = 1;
 
     /**
      * Current resolution of the game.
      */
-    private int resWidth, resHeight;
+    private int resWidth = -1, resHeight = -1;
 
     /**
      * Creates new settings.
@@ -148,6 +155,10 @@ public class Settings {
      */
     public void setSound(boolean sound) {
         this.sound = sound;
+        if(sound)
+            AudioMaster.changeVolume(volume);
+        else
+            AudioMaster.changeVolume(0);
     }
 
     /**
@@ -176,6 +187,22 @@ public class Settings {
             return;
         }
         PostProcessing.changeResolution(width, height);
+    }
+
+    /**
+     * @return Current volume of the game. 0 is no sound and 1 is standard volume.
+     */
+    public int getVolume() {
+        return volume;
+    }
+
+    /**
+     * Set volume of the game.
+     * @param volume New volume. 0 is no sound and 1 is standard volume.
+     */
+    public void setVolume(int volume) {
+        AudioMaster.changeVolume(volume);
+        this.volume = volume;
     }
 
     /**
@@ -209,11 +236,12 @@ public class Settings {
         else
             return false;
         sound = saveFile.isSound();
+        volume = saveFile.getVolume();
+        AudioMaster.changeVolume(saveFile.getVolume());
         animation = saveFile.isAnimation();
-        if(!animation)
-            GameManager.toggleAnimations();
         resWidth = saveFile.getResWidth();
         resHeight = saveFile.getResHeight();
+        changeResolution(resWidth, resHeight);
         return true;
     }
 
@@ -222,7 +250,7 @@ public class Settings {
      * @return {@code true} if the settings were saved, {@code false} if an error occurred during saving.
      */
     public boolean saveSettings(){
-        SettingsSaveFile saveFile = new SettingsSaveFile(sound, animation, resWidth, resHeight);
+        SettingsSaveFile saveFile = new SettingsSaveFile(sound, volume, animation, resWidth, resHeight);
         XStream xstream = new XStream();
         xstream.setMode(XStream.XPATH_RELATIVE_REFERENCES);
         xstream.autodetectAnnotations(true);
@@ -243,4 +271,5 @@ public class Settings {
         }
         return true;
     }
+
 }
