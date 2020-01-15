@@ -1,5 +1,6 @@
 package com.battleships.gui.water;
 
+import com.battleships.gui.gameAssets.GameManager;
 import com.battleships.gui.window.WindowManager;
 import org.lwjgl.glfw.GLFWWindowIconifyCallback;
 import org.lwjgl.glfw.GLFWWindowSizeCallback;
@@ -80,10 +81,18 @@ public class WaterFrameBuffers {
      * Updates the sizes of the frame buffers to match the current window size.
      */
     public void updateFrameBuffers(){
-        REFLECTION_WIDTH = WindowManager.getWidth() / 4;
-        REFLECTION_HEIGHT = WindowManager.getHeight() / 4;
-        REFRACTION_WIDTH = WindowManager.getWidth();
-        REFRACTION_HEIGHT = WindowManager.getHeight();
+        if(GameManager.getSettings().getResHeight() == -1 || GameManager.getSettings().getResWidth() == -1) {
+            REFLECTION_WIDTH = WindowManager.getWidth() / 4;
+            REFLECTION_HEIGHT = WindowManager.getHeight() / 4;
+            REFRACTION_WIDTH = WindowManager.getWidth();
+            REFRACTION_HEIGHT = WindowManager.getHeight();
+        }
+        else {
+            REFLECTION_WIDTH = GameManager.getSettings().getResWidth() / 4;
+            REFLECTION_HEIGHT = GameManager.getSettings().getResHeight() / 4;
+            REFRACTION_WIDTH = GameManager.getSettings().getResWidth();
+            REFRACTION_HEIGHT = GameManager.getSettings().getResHeight();
+        }
         initializeReflectionFrameBuffer();
         initializeRefractionFrameBuffer();
     }
