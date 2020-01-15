@@ -188,6 +188,7 @@ public class Settings {
         }
         resWidth = width;
         resHeight = height;
+        GameManager.getWaterFbos().updateFrameBuffers();
         PostProcessing.changeResolution(width, height);
     }
 

@@ -763,4 +763,11 @@ public class GameManager {
     public static ShipCounter getShipCounter() {
         return shipCounter;
     }
+
+    /**
+     * @return FBO the water is rendered into.
+     */
+    public static WaterFrameBuffers getWaterFbos() {
+        return waterFbos;
+    }
 }
