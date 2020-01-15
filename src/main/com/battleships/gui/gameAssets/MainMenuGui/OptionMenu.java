@@ -7,8 +7,10 @@ import com.battleships.gui.guis.GuiManager;
 import com.battleships.gui.guis.GuiTexture;
 import com.battleships.gui.guis.Slider;
 import com.battleships.gui.renderingEngine.Loader;
+import com.battleships.gui.window.WindowManager;
 import org.joml.Vector2f;
 
+import java.lang.reflect.GenericArrayType;
 import java.net.Inet4Address;
 import java.util.ArrayList;
 
@@ -95,8 +97,26 @@ public class OptionMenu extends InGameSettingsMenu {
         super.createClickable();
 
         GameManager.getGuis().addAll(buttons);
+    }
 
-        //GameManager.getGuis().add(textBoxWood);
+    @Override
+    protected boolean isClickOnGui(GuiTexture gui, double x, double y) {
+        boolean dummy = super.isClickOnGui(gui,x,y);
+        if (buttonClicked==2&&dummy) {
+            float test = buttons.get(2).getScale().x /3.2f;
+            System.out.println("test" + test + "\nx "+ x);
+            if (x<buttons.get(2).getPositions().x-test){
+                buttonClicked=3;
+                return true;
+            }
+            else if (x>buttons.get(2).getPositions().x+test){
+                buttonClicked=2;
+                return true;
+            }
+            else
+                return false;
+        }
+        return dummy;
 
     }
 
