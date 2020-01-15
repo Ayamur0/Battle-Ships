@@ -20,22 +20,19 @@ public class MainMenu extends Menu {
     /**
      * Constant value for load button
      */
-    private static final int LOAD = 1;
-    //private static final int LOAD = 0;
+    private static final int LOAD = 0;
     /**
      * Constant value for play button
      */
-    private static final int PLAY = 0;
-    //private static final int LOAD = 1
+    private static final int PLAY = 1;
     /**
      * Constant value for options button
      */
-    //private static final int OPTIONS = 2; //TODO Remove comments here
+    private static final int OPTIONS = 2;
     /**
      * Constant value for exit button
      */
-    private static final int EXIT = 2;
-    //private static final int EXIT = 3;
+    private static final int EXIT = 3;
 
     /**
      * Creates a new {@link JFileChooser}, the main menu, sets the color of the {@link GUIText} and creates the {@link GUIText}as labels on the Buttons.
@@ -59,24 +56,12 @@ public class MainMenu extends Menu {
     private void createMenu() {
         super.addBackground();
 
-        //super.CreateButtonTextures(3);
+        super.CreateButtonTextures(4);
 
-        super.buttons.add(new GuiTexture(buttonTexture,standardButtonPos,buttonSize));
-        super.buttons.add(new GuiTexture(buttonTexture,new Vector2f(buttons.get(0).getPositions().x,buttons.get(0).getPositions().y+1.5f*buttonGap),buttonSize));
-        super.buttons.add(new GuiTexture(buttonTexture,new Vector2f(standardButtonPos.x,standardButtonPos.y+3*buttonGap),buttonSize));
-
-        GameManager.getGuis().addAll(buttons);
-
-        //super.CreateButtonTextures(4);
-
-        //super.guiTexts.add(new GUIText("Load", fontSize, font, new Vector2f(buttons.get(0).getPositions().x, buttons.get(0).getPositions().y), 0.12f, true, outlineColor, 0.0f, 0.1f, outlineColor, new Vector2f()));
-        //super.guiTexts.add(new GUIText("Play", fontSize, font, new Vector2f(buttons.get(1).getPositions().x, buttons.get(1).getPositions().y), 0.12f, true, outlineColor, 0.0f, 0.1f, outlineColor, new Vector2f()));
-        //super.guiTexts.add(new GUIText("Options", fontSize, font, new Vector2f(buttons.get(2).getPositions().x, buttons.get(2).getPositions().y), 0.12f, true, outlineColor, 0.0f, 0.1f, outlineColor, new Vector2f()));
-        //super.guiTexts.add(new GUIText("Exit", fontSize, font, new Vector2f(buttons.get(3).getPositions().x, buttons.get(3).getPositions().y), 0.12f, true, outlineColor, 0.0f, 0.1f, outlineColor, new Vector2f()));
-
-        super.guiTexts.add(new GUIText("Play", fontSize, font, new Vector2f(buttons.get(0).getPositions().x, buttons.get(0).getPositions().y), 0.12f, true, outlineColor, 0.0f, 0.1f, outlineColor, new Vector2f()));
-        super.guiTexts.add(new GUIText("Load", fontSize, font, new Vector2f(buttons.get(1).getPositions().x, buttons.get(1).getPositions().y), 0.12f, true, outlineColor, 0.0f, 0.1f, outlineColor, new Vector2f()));
-        super.guiTexts.add(new GUIText("Exit", fontSize, font, new Vector2f(buttons.get(2).getPositions().x, buttons.get(2).getPositions().y), 0.12f, true, outlineColor, 0.0f, 0.1f, outlineColor, new Vector2f()));
+        super.guiTexts.add(new GUIText("Load", fontSize, font, new Vector2f(buttons.get(0).getPositions().x, buttons.get(0).getPositions().y), 0.12f, true, outlineColor, 0.0f, 0.1f, outlineColor, new Vector2f()));
+        super.guiTexts.add(new GUIText("Play", fontSize, font, new Vector2f(buttons.get(1).getPositions().x, buttons.get(1).getPositions().y), 0.12f, true, outlineColor, 0.0f, 0.1f, outlineColor, new Vector2f()));
+        super.guiTexts.add(new GUIText("Options", fontSize, font, new Vector2f(buttons.get(2).getPositions().x, buttons.get(2).getPositions().y), 0.12f, true, outlineColor, 0.0f, 0.1f, outlineColor, new Vector2f()));
+        super.guiTexts.add(new GUIText("Exit", fontSize, font, new Vector2f(buttons.get(3).getPositions().x, buttons.get(3).getPositions().y), 0.12f, true, outlineColor, 0.0f, 0.1f, outlineColor, new Vector2f()));
 
         super.createClickable();
     }
@@ -103,11 +88,10 @@ public class MainMenu extends Menu {
             super.buttonClicked = 2;
             return true;
         }
-        /*if (super.isClickOnGui(super.buttons.get(3), x, y)) {
+        if (super.isClickOnGui(super.buttons.get(3), x, y)) {
             super.buttonClicked = 3;
             return true;
         }
-         */
         return false;
     }
 
@@ -124,13 +108,11 @@ public class MainMenu extends Menu {
             super.clearMenu();
             MainMenuManager.setMenu(new PlayMenu(guiManager, loader));
         }
-        /*
         if (super.buttonClicked == OPTIONS) {
 
             super.clearMenu();
             MainMenuManager.setMenu(new OptionMenu(guiManager, loader));
         }
-         */
         if (buttonClicked == EXIT) {
             GLFW.glfwSetWindowShouldClose(WindowManager.getWindow(), true);
         }
