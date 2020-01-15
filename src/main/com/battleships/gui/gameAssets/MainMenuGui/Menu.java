@@ -293,6 +293,7 @@ public abstract class Menu extends GuiClickCallback {
             SaveFile saveFile = SaveFileManager.loadFromFile(filename);
             if (saveFile == null) {
                 JOptionPane.showMessageDialog(null,"Error loading the file","Loading Error",JOptionPane.ERROR_MESSAGE);
+                GameManager.getSettings().setOnline(false);
                 return false;
             } else {
                 SaveFileManager.loadSaveFile(saveFile);
@@ -329,6 +330,8 @@ public abstract class Menu extends GuiClickCallback {
         return false;
     }
     public void clearAllMenuElements(){
+        if (GameManager.getShipSelector() != null)
+            GameManager.getShipSelector().hide();
         cleaBackgournd();
         clearMenu();
     }

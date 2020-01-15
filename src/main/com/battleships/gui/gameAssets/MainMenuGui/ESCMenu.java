@@ -84,6 +84,9 @@ public class ESCMenu extends Menu {
 
         active = true;
 
+        if (GameManager.getShipSelector() != null)
+            GameManager.getShipSelector().hide();
+
         super.addBackground();
 
         this.createMenu();
