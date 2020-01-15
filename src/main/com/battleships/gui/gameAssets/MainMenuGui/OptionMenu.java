@@ -104,7 +104,6 @@ public class OptionMenu extends InGameSettingsMenu {
         boolean dummy = super.isClickOnGui(gui,x,y);
         if (buttonClicked==2&&dummy) {
             float test = buttons.get(2).getScale().x /3.2f;
-            System.out.println("test" + test + "\nx "+ x);
             if (x<buttons.get(2).getPositions().x-test){
                 buttonClicked=3;
                 return true;
@@ -147,11 +146,17 @@ public class OptionMenu extends InGameSettingsMenu {
      */
     @Override
     protected void clickAction() {
-        String dummy = resolutions.get(resNow).replace(" x ","/");
-        String []resSolo = dummy.split("/");
-        int width= Integer.parseInt(resSolo[0]);
-        int height=Integer.parseInt(resSolo[1]);
-
+        int width, height;
+        if (resolutions.get(resNow).equals("Adaptive")){
+            width=-1;
+            height=-1;
+        }
+        else{
+            String dummy = resolutions.get(resNow).replace(" x ","/");
+            String []resSolo = dummy.split("/");
+            width= Integer.parseInt(resSolo[0]);
+            height=Integer.parseInt(resSolo[1]);
+        }
         if (super.buttonClicked == SAVE){
             GameManager.getSettings().setVolume(volume.getValueAsFloat()/50.0f);
             GameManager.getSettings().changeResolution(width,height);
@@ -194,10 +199,11 @@ public class OptionMenu extends InGameSettingsMenu {
     private void initResolutions(){
         resolutions=new ArrayList<>();
         resolutions.add("800 x 600");
-        resolutions.add("1080 x 720");
+        resolutions.add("1280 x 720");
         resolutions.add("1920 x 1080");
         resolutions.add("2560 x 1440");
         resolutions.add("4096 x 2160");
+        resolutions.add("Adaptive");
 
         String dummy = String.format("%d x %d",GameManager.getSettings().getResWidth(),GameManager.getSettings().getResHeight());
 
@@ -207,6 +213,6 @@ public class OptionMenu extends InGameSettingsMenu {
                 return;
             }
         }
-        resNow=2;
+        resNow=5;
     }
 }
