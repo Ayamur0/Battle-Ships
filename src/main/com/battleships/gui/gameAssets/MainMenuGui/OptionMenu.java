@@ -26,7 +26,13 @@ public class OptionMenu extends InGameSettingsMenu {
      * Constant value for host button
      */
     private static final int BACK = 1;
+    /**
+     * Constant value for plus button
+     */
     private static final int PLUS = 2;
+    /**
+     * Constant value for minus button
+     */
     private static final int MINUS = 3;
     /**
      * The texture for check box
@@ -37,9 +43,12 @@ public class OptionMenu extends InGameSettingsMenu {
      * {@link Slider} used to set the volume
      */
     private Slider volume;
+    /**
+     * Used to save the resolution
+     */
     private static int resNow;
     /**
-     * Has all available resolutions for the game
+     * Contains all available resolutions for the game
      */
     private static ArrayList<String> resolutions;
 
@@ -66,20 +75,20 @@ public class OptionMenu extends InGameSettingsMenu {
         initResolutions();
 
         if (woodBox == 0) {
-            woodBox = loader.loadTexture("woodBox.png");
+            woodBox = loader.loadTexture("ResSelector.png");
         }
 
         volume = new Slider(loader.loadTexture("Slider.png"), loader.loadTexture("WoodenSlider.jpg"), 0, 100,
                 (int)GameManager.getSettings().getVolume()*50, new Vector2f(0.2f, 0.01f), super.standardButtonPos, guiManager, GameManager.getGuis());
         super.guiTexts.add(new GUIText("Volume: " + (int)volume.getValueAsFloat(), fontSize, font, new Vector2f(volume.getPositions().x, volume.getPositions().y - 0.06f), 0.2f, true, outlineColor, 0.0f, 0.1f, outlineColor, new Vector2f()));
-        textBoxWood = new GuiTexture(woodBox, new Vector2f(standardButtonPos.x,standardButtonPos.y+buttonGap), buttonSize);
-        super.guiTexts.add(new GUIText(resolutions.get(resNow), fontSize, font, new Vector2f(textBoxWood.getPositions().x, textBoxWood.getPositions().y), 0.3f, true, outlineColor, 0.0f, 0.1f, outlineColor, new Vector2f()));
+
+        super.guiTexts.add(new GUIText(resolutions.get(resNow), fontSize, font, new Vector2f(standardButtonPos.x,standardButtonPos.y+buttonGap), 0.3f, true, outlineColor, 0.0f, 0.1f, outlineColor, new Vector2f()));
 
         super.buttons.add(new GuiTexture(buttonTexture,new Vector2f(standardButtonPos.x, standardButtonPos.y+2*buttonGap),buttonSize));
         super.buttons.add(new GuiTexture(buttonTexture,new Vector2f(standardButtonPos.x, standardButtonPos.y+buttonGap*3),buttonSize));
 
-        super.buttons.add(new GuiTexture(buttonTexture,new Vector2f(textBoxWood.getPositions().x+0.1f,textBoxWood.getPositions().y),buttonSize));
-        super.buttons.add(new GuiTexture(buttonTexture,new Vector2f(textBoxWood.getPositions().x-0.1f,textBoxWood.getPositions().y),buttonSize));
+        super.buttons.add(new GuiTexture(woodBox,new Vector2f(standardButtonPos.x,standardButtonPos.y+buttonGap),new Vector2f(0.21f, 0.12f)));
+
         super.guiTexts.add(new GUIText("Save", fontSize, font,new Vector2f(buttons.get(0).getPositions()) , 0.2f, true, outlineColor, 0.0f, 0.1f, outlineColor, new Vector2f()));
         super.guiTexts.add(new GUIText("Back", fontSize, font, new Vector2f(buttons.get(1).getPositions()), 0.2f, true, outlineColor, 0.0f, 0.1f, outlineColor, new Vector2f()));
 
@@ -87,7 +96,7 @@ public class OptionMenu extends InGameSettingsMenu {
 
         GameManager.getGuis().addAll(buttons);
 
-        GameManager.getGuis().add(textBoxWood);
+        //GameManager.getGuis().add(textBoxWood);
 
     }
 
@@ -123,7 +132,6 @@ public class OptionMenu extends InGameSettingsMenu {
         int width= Integer.parseInt(resSolo[0]);
         int height=Integer.parseInt(resSolo[1]);
 
-        System.out.println(height+"\n"+width);
         if (super.buttonClicked == SAVE){
             GameManager.getSettings().setVolume(volume.getValueAsFloat()/50.0f);
             GameManager.getSettings().changeResolution(width,height);
@@ -146,6 +154,11 @@ public class OptionMenu extends InGameSettingsMenu {
         }
 
     }
+
+    /**
+     *
+     * @param amount
+     */
     private void setResolution(int amount){
         if (resNow+amount<0)
             resNow=resolutions.size()-1;
