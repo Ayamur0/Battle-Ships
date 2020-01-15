@@ -317,4 +317,19 @@ public abstract class Menu extends GuiClickCallback {
     public boolean isFilePicked() {
         return filePicked;
     }
+
+    @Override
+    protected boolean isClickOnGui(GuiTexture gui, double x, double y) {
+        for (int i = 0; i<buttons.size(); i++){
+            if (super.isClickOnGui(buttons.get(i), x, y)) {
+                buttonClicked = i;
+                return true;
+            }
+        }
+        return false;
+    }
+    public void clearAllMenuElements(){
+        cleaBackgournd();
+        clearMenu();
+    }
 }

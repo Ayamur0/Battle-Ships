@@ -73,6 +73,7 @@ public class MultiplayerMenu extends Menu {
      * @param y   yPos of the click (top of screen = 0, bottom of screen = 1)
      * @return {@code true} if the click was on one of the button textures, {@code false} else.
      */
+    /*
     protected boolean isClickOnGui(GuiTexture gui, double x, double y) {
         if (super.isClickOnGui(super.buttons.get(0), x, y)) {
             super.buttonClicked = 0;
@@ -94,6 +95,8 @@ public class MultiplayerMenu extends Menu {
         return false;
     }
 
+
+     */
     /**
      * Toggles state of clicked button.
      */

@@ -68,6 +68,7 @@ public class AiPlayerChooserMenu extends Menu {
      * @param y   yPos of the click (top of screen = 0, bottom of screen = 1)
      * @return {@code true} if the click was on one of the button textures, {@code false} else.
      */
+    /*
     @Override
     protected boolean isClickOnGui(GuiTexture gui, double x, double y) {
         if (super.isClickOnGui(super.buttons.get(0), x, y)) {
@@ -89,6 +90,8 @@ public class AiPlayerChooserMenu extends Menu {
         return false;
     }
 
+
+     */
     /**
      * Toggles state of clicked button.
      */
@@ -96,7 +99,7 @@ public class AiPlayerChooserMenu extends Menu {
     protected void clickAction() {
         if(buttonClicked == BACK){
             clearMenu();
-            new ESCMenu(guiManager, loader);
+            MainMenuManager.setMenu(new ESCMenu(guiManager, loader));
             return;
         }
         ESCMenu.setIsPlayerAI(true);
@@ -105,33 +108,5 @@ public class AiPlayerChooserMenu extends Menu {
         cleaBackgournd();
         GameManager.getSettings().setAiLevelP(buttonClicked);
         GameManager.getLogic().getTurnHandler().makeAiTurns();
-
-//        if (buttonClicked == EASY) {
-//            ESCMenu.setIsPlayerAI(true);
-//            ESCMenu.setActive(false);
-//            clearMenu();
-//            cleaBackgournd();
-//            GameManager.getSettings().setAiLevelP(EASY);
-//        }
-//        if (buttonClicked == MEDIUM) {
-//            ESCMenu.setIsPlayerAI(true);
-//            ESCMenu.setActive(false);
-//
-//            clearMenu();
-//            cleaBackgournd();
-//            GameManager.getSettings().setAiLevelP(MEDIUM);
-//        }
-//        if (buttonClicked == HARD) {
-//            ESCMenu.setIsPlayerAI(true);
-//            ESCMenu.setActive(false);
-//            clearMenu();
-//            cleaBackgournd();
-//            GameManager.getSettings().setAiLevelP(HARD);
-//        }
-//        if (buttonClicked == BACK) {
-//            clearMenu();
-//            new ESCMenu(guiManager, loader);
-//        }
-//
     }
 }

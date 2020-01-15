@@ -150,12 +150,6 @@ public class MainMenuManager {
         public void invoke(long window, int key, int scanCode, int action, int mods) {
             if (key == GLFW.GLFW_KEY_F11 && action == GLFW.GLFW_PRESS)
                 WindowManager.setFullScreen(!WindowManager.isFullscreen());
-            if (key == GLFW.GLFW_KEY_ESCAPE && action == GLFW.GLFW_PRESS) {
-                if (GameManager.getLogic().getGameState() != GameManager.MENU && !ESCMenu.isActive())
-                    MainMenuManager.setMenu(new ESCMenu(guiManager, loader));
-                else if (ESCMenu.isActive())
-                    ((ESCMenu) MainMenuManager.getMenu()).ClearESCMenu();
-            }
         }
     };
 }

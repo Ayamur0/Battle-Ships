@@ -41,7 +41,6 @@ public class ESCMenu extends Menu {
      * Indicates if the player is a AI
      */
     private static boolean isPlayerAI;
-
     /**
      * @return The boolean indicating if the player is a AI
      */
@@ -123,6 +122,7 @@ public class ESCMenu extends Menu {
      * @param y   yPos of the click (top of screen = 0, bottom of screen = 1)
      * @return {@code true} if the click was on one of the button textures, {@code false} else.
      */
+    /*
     @Override
     protected boolean isClickOnGui(GuiTexture gui, double x, double y) {
         if (super.isClickOnGui(super.buttons.get(0), x, y)) {
@@ -143,6 +143,8 @@ public class ESCMenu extends Menu {
         }
         return false;
     }
+
+     */
 
     /**
      * Clears the {@link GuiTexture} and {@link GUIText} from the {@link ESCMenu}
@@ -185,7 +187,8 @@ public class ESCMenu extends Menu {
                 super.cleaBackgournd();
             } else {
                 super.clearMenu();
-                new AiPlayerChooserMenu(guiManager, loader);
+                //new AiPlayerChooserMenu(guiManager,loader);
+                MainMenuManager.setMenu(new AiPlayerChooserMenu(guiManager, loader));
             }
         }
         if (buttonClicked == EXIT) {
