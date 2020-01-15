@@ -129,11 +129,13 @@ public class OptionMenu extends InGameSettingsMenu {
             GameManager.getSettings().changeResolution(width,height);
             super.clearMenu();
             volume.remove();
+            GameManager.getGuis().remove(textBoxWood);
             MainMenuManager.setMenu(new MainMenu(guiManager, loader));
         }
         if (super.buttonClicked == BACK) {
             super.clearMenu();
             volume.remove();
+            GameManager.getGuis().remove(textBoxWood);
             MainMenuManager.setMenu(new MainMenu(guiManager, loader));
         }
         if (super.buttonClicked == PLUS) {
