@@ -109,6 +109,7 @@ public class MainMenu extends Menu {
             MainMenuManager.setMenu(new PlayMenu(guiManager, loader));
         }
         if (super.buttonClicked == OPTIONS) {
+
             super.clearMenu();
             MainMenuManager.setMenu(new OptionMenu(guiManager, loader));
         }
