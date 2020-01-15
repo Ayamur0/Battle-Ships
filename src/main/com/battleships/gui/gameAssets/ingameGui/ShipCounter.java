@@ -111,6 +111,7 @@ public class ShipCounter extends GuiClickCallback implements Runnable{
     public void hide(){
         int v = visible ? 100 : -100;
         gui.getPositions().x += v;
+        hideButton.getPositions().x += v;
         for(GUIText g : texts)
             g.getPosition().x += v;
         visible = !visible;
