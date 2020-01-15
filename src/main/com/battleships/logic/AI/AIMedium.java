@@ -30,11 +30,34 @@ public class AIMedium extends AI {
      */
     private static final int ERROR = -1, NA = 0, SHIP = 1, WATER = 2;
 
+    /**
+     * Pattern in which the AI will shoot.
+     */
     protected Pattern pattern;
+    /**
+     * Index at which the last shot was made.
+     */
     private Vector2i lastShot;
-    private int foundShipDir = -1;
+    /**
+     * Direction of the ship that was found and the AI is now trying to sink.
+     * Is {@value UNKNOWN} while the AI isn't trying to sink a ship or while it hasn't found out
+     * which direction the ship has.
+     */
+    private int foundShipDir = UNKNOWN;
+    /**
+     * Grid of the opponent of this AI.
+     */
     private Grid opponentGrid;
+    /**
+     * List containing all the cells in which a ship part was hit.
+     * Needed to fully sink that ship.
+     * Is empty again after the ship has been sunk.
+     */
     private List<Vector2i> hitCells = new ArrayList<>();
+    /**
+     * Saves the last direction the AI tested for a ship.
+     * Needed if the game is online and the AI doesn't immediately get an answer.
+     */
     private int lastTried;
 
     /**
@@ -102,6 +125,11 @@ public class AIMedium extends AI {
         }
     }
 
+    /**
+     * AI tries to sink a ship. For this method the AI needs to already know the direction of the ship.
+     * @param lastShot Last Shot the AI has made.
+     * @return
+     */
     protected boolean shootFoundShip(Vector2i lastShot) {
         if (foundShipDir == HORIZONTAL) {
 

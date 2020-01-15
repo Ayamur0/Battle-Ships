@@ -206,6 +206,19 @@ public class Settings {
     }
 
     /**
+     * @return Current resolution width in pixels.
+     */
+    public int getResWidth() {
+        return resWidth;
+    }
+    /**
+     * @return Current resolution height in pixels.
+     */
+    public int getResHeight() {
+        return resHeight;
+    }
+
+    /**
      * Loads the settings saved after exiting the game last time.
      * @return {@code true} if settings could be loaded {@code false} else.
      */
