@@ -123,9 +123,9 @@ public class MultiplayerMenu extends Menu {
     public void processInput() {
         if (userInput != null) {
             if (!GameManager.getNetwork().start(false, userInput))
-                JOptionPane.showMessageDialog(null,"Error connection to opponent","Connection Error",JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null,"Error connecting to opponent","Connection Error",JOptionPane.ERROR_MESSAGE);
             super.clearMenu();
-            MainMenuManager.setMenu(new WaitingConnection(guiManager, loader, false));
+            MainMenuManager.setMenu(new MultiplayerMenu(guiManager, loader));
         }
         userInputMade = false;
     }
