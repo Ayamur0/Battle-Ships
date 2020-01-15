@@ -326,6 +326,7 @@ public class GameManager {
         waterTiles.add(new WaterTile(800, 0, -3));
         waterTiles.add(new WaterTile(0, -800, -3));
         waterTiles.add(new WaterTile(800, -800, -3));
+        waterFbos.updateFrameBuffers();
 
         camera.setStandardPos();
         WindowManager.setCallbacks(camera, waterFbos);
