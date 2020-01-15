@@ -73,6 +73,7 @@ public class AiPlayerChooserMenu extends Menu {
             MainMenuManager.setMenu(new ESCMenu(guiManager, loader));
             return;
         }
+        ESCMenu.setActive(false);
         ESCMenu.setIsPlayerAI(true);
         ESCMenu.setActive(false);
         clearMenu();
@@ -87,5 +88,9 @@ public class AiPlayerChooserMenu extends Menu {
                     new AIHard(GridManager.OWNFIELD, GameManager.getLogic().getPlayerGrid().getSize(), GameManager.getLogic()));
         }
         GameManager.getLogic().getTurnHandler().makeAiTurns();
+        if(GameManager.getShipCounter() != null)
+            GameManager.getShipCounter().hide();
+        if (GameManager.getShipSelector() != null)
+            GameManager.getShipSelector().hide();
     }
 }

@@ -84,6 +84,8 @@ public class ESCMenu extends Menu {
 
         active = true;
 
+        if(GameManager.getShipCounter() != null)
+            GameManager.getShipCounter().hide();
         if (GameManager.getShipSelector() != null)
             GameManager.getShipSelector().hide();
 
@@ -115,16 +117,6 @@ public class ESCMenu extends Menu {
 
         super.createClickable();
     }
-
-
-    /**
-     * Tests if the click was on one of the {@link GuiTexture} in the menu
-     *
-     * @param gui The gui to test for if the click was on it.
-     * @param x   xPos of the click (left of screen = 0, right of screen = 1)
-     * @param y   yPos of the click (top of screen = 0, bottom of screen = 1)
-     * @return {@code true} if the click was on one of the button textures, {@code false} else.
-     */
     /**
      * Toggles state of clicked button.
      */
@@ -145,19 +137,30 @@ public class ESCMenu extends Menu {
             GameManager.getSettings().setOnline(false);
         }
         if (buttonClicked == RESUME) {
+            if(GameManager.getShipCounter() != null)
+                GameManager.getShipCounter().hide();
+            if (GameManager.getShipSelector() != null)
+                GameManager.getShipSelector().hide();
             active = false;
             super.clearMenu();
             super.cleaBackgournd();
         }
         if (super.buttonClicked == PLAYAI) {
+            if (GameManager.getLogic().getGameState()==GameManager.SHIPLACING){
+                JOptionPane.showMessageDialog(null,"AI not avaiable in ship placing phase.\nPlease place your ships first","Playing as AI",JOptionPane.PLAIN_MESSAGE);
+            }
             if (isIsPlayerAI()) {
+                active=false;
                 GameManager.getSettings().setAiLevelP(-1);
                 isPlayerAI = false;
+                if(GameManager.getShipCounter() != null)
+                    GameManager.getShipCounter().hide();
+                if (GameManager.getShipSelector() != null)
+                    GameManager.getShipSelector().hide();
                 super.clearMenu();
                 super.cleaBackgournd();
             } else {
                 super.clearMenu();
-                //new AiPlayerChooserMenu(guiManager,loader);
                 MainMenuManager.setMenu(new AiPlayerChooserMenu(guiManager, loader));
             }
         }

@@ -108,6 +108,8 @@ public class MainMenuManager {
      */
     public void backToMainMenu() {
         clearAll();
+        GameManager.getSettings().setVolume(GameManager.getSettings().getVolume());
+        ESCMenu.setIsPlayerAI(false);
         GameManager.getSettings().setAiLevelP(-1);
         GameManager.getSettings().setAiLevelO(-1);
         WindowManager.setMainMenuCallbacks(GameManager.getMainMenuManager(), wFbo);

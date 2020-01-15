@@ -331,6 +331,8 @@ public abstract class Menu extends GuiClickCallback {
     }
     public void clearAllMenuElements(){
         ESCMenu.setActive(false);
+        if(GameManager.getShipCounter() != null)
+            GameManager.getShipCounter().hide();
         if (GameManager.getShipSelector() != null)
             GameManager.getShipSelector().hide();
         cleaBackgournd();
