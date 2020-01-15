@@ -64,6 +64,10 @@ public abstract class Network implements NetworkInterface{
      * @param text Der Input von Client oder User
      */
     public void setStringFunction(int i, String text){
+        if(text == null) {
+            closeConnection();
+            return;
+        }
         if(text.contains(shoot)){
             text = text.replace(shoot, "");
             String[] temp = text.split(" ");

@@ -78,6 +78,8 @@ public class LogicManager {
      * @return {@code true} if a ship was hit, {@code false} if no ship was hit or shot couldn't be made.
      */
     public boolean shoot(int x, int y, int grid){
+        if(isPlayerTurn())
+            stats.addRound();
         if(x < 1 || y < 1 || x > playerGrid.getSize() ||y > playerGrid.getSize())
             return false;
         if(grid == GridManager.OWNFIELD)
@@ -270,8 +272,6 @@ public class LogicManager {
      * If next turn is turn of an AI the turn gets executed.
      */
     public void advanceTurn(){
-        if(!isPlayerTurn())
-            stats.addRound();
         GameManager.updateAliveShip();
         if(testEndOfGame())
             return;

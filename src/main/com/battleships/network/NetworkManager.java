@@ -76,16 +76,10 @@ public class NetworkManager {
             player.execute();
     }
 
-    public boolean isServerConnected(){
-        if(player instanceof NetworkServer)
-            return ((NetworkServer) player).isConnected();
-        else
-            return false;
-    }
-
     public void stopConnectionSearch(){
         if(player instanceof NetworkServer)
             ((NetworkServer) player).stopConnectionSearch();
+        closeConnection();
     }
 
     public void closeConnection(){

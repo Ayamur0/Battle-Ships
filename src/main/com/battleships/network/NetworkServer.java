@@ -13,6 +13,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
 
 public class NetworkServer extends Network implements Runnable{
     //In der Vorlesung ausgemachter Port den alle verwenden
@@ -26,7 +27,6 @@ public class NetworkServer extends Network implements Runnable{
     private Socket clientSocket;
 
     private connect waitingForConnection;
-    private boolean connected;
 
     private Thread connectionSearch;
 
@@ -48,14 +48,13 @@ public class NetworkServer extends Network implements Runnable{
             this.server = server;
         }
 
-        public void kill(){
-            isRunning = false;
-            server.connected = true;
-        }
-
         @Override
         public void run() {
-            server.waitForClient();
+            try {
+                server.waitForClient();
+            } catch (SocketException ignore) {
+                return;
+            }
         }
     }
 
@@ -89,23 +88,6 @@ public class NetworkServer extends Network implements Runnable{
         setStringFunction(1, answer);
     }
 
-    /**
-     * Die while schleife lässt den Server immer etwas schreiben und wartet dann bis der Client etwas bekommt
-     * @throws IOException
-     */
-    private void pingong() throws IOException{
-        while(true) {
-            toClient.println(keyboardInput.readLine());
-            String answer = fromClient.readLine();
-            System.out.println(answer);
-            setStringFunction(0, answer);
-            //System.out.println(fromClient.readLine());
-        }
-    }
-
-    /**
-     * Startet den Server mit dem entsprechenden Port, sowie einen BufferedReader um einen Input zu schicken
-     */
     private void startServer(){
         try {
             //System.out.println("Startin Server");
@@ -117,13 +99,7 @@ public class NetworkServer extends Network implements Runnable{
         }
     }
 
-    //wartet auf den Client bis der sich mit dem Server verbunden hat
-
-    /**
-     * Die Methode wird ausgeführt nachdem der Server gestartet wurde. Sie wartet bis der Client sich verbindet
-     * und erstellt einen Reader und Writer für die Kommunikation zwischen Server und Client.
-     */
-    private void waitForClient() {
+    private void waitForClient() throws SocketException {
         try {
             System.out.println("Waiting for Client");
             clientSocket = serverSocket.accept();
@@ -147,14 +123,13 @@ public class NetworkServer extends Network implements Runnable{
         new NetworkServer();
     }
 
-    public boolean isConnected() {
-        return connected;
-    }
-
     public void closeConnection(){
         try {
-            serverSocket.close();
-            clientSocket.close();
+            if(serverSocket != null)
+                serverSocket.close();
+            if (clientSocket != null) {
+                clientSocket.close();
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }

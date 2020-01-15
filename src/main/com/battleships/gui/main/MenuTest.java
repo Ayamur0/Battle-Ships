@@ -44,5 +44,6 @@ public class MenuTest {
 
         }
         GameManager.cleanUpIngameScene();
+        GameManager.getSettings().saveSettings();
     }
 }

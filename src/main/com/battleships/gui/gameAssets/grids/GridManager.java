@@ -275,8 +275,8 @@ public class GridManager {
         scale = 300;
         scale *= (size + 1) / (float)MAXSIZE;
         opponentPosition.x = 350 + scale + 5;
-        this.ownGrid = new GuiGrid(loader, ownPosition, new Vector3f(-90,0,0), scale, (float)MAXSIZE / (size + 1));
-        this.opponentGrid = new GuiGrid(loader, opponentPosition, new Vector3f(-90,0,0), scale, (float)MAXSIZE / (size + 1));
+        this.ownGrid = new GuiGrid(ownPosition, new Vector3f(-90,0,0), scale, (float)MAXSIZE / (size + 1));
+        this.opponentGrid = new GuiGrid(opponentPosition, new Vector3f(-90,0,0), scale, (float)MAXSIZE / (size + 1));
     }
 
     /**

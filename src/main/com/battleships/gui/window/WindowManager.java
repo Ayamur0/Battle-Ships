@@ -69,6 +69,16 @@ public class WindowManager {
      */
     private static GLFWVidMode vidMode;
 
+    /**
+     * List containing the texture for the loading screen.
+     */
+    private static List<GuiTexture> loadingScreenGui;
+
+    /**
+     * Renderer to render the loading screen.
+     */
+    private static GuiRenderer loadingScreenRenderer;
+
 
     /**
      * Initialize the main window the game is played in.
@@ -118,15 +128,26 @@ public class WindowManager {
         GLFW.glfwMakeContextCurrent(loadingScreen);
         setIcon();
 
-        List<GuiTexture> guis = new ArrayList<>();
+        loadingScreenGui = new ArrayList<>();
         Loader loader = new Loader();
-        GuiRenderer guiRenderer = new GuiRenderer(loader);
-        guis.add(new GuiTexture(loader.loadTexture("StartIcon.png"), new Vector2f(0.5f, 0.5f), new Vector2f(0.5f, 0.5f)));
+        loadingScreenRenderer = new GuiRenderer(loader);
+        loadingScreenGui.add(new GuiTexture(loader.loadTexture("StartIcon.png"), new Vector2f(0.5f, 0.5f), new Vector2f(0.5f, 0.5f)));
 
         GLFW.glfwShowWindow(loadingScreen);
-        guiRenderer.render(guis);
+        loadingScreenRenderer.render(loadingScreenGui);
         GLFW.glfwSwapBuffers(loadingScreen);
 
+        GLFW.glfwMakeContextCurrent(window);
+    }
+
+    /**
+     * Renders the loading screen. Needs to be called to keep
+     * program responsive during loading.
+     */
+    public static void updateLoadingScreen(){
+        GLFW.glfwMakeContextCurrent(loadingScreen);
+        loadingScreenRenderer.render(loadingScreenGui);
+        GLFW.glfwSwapBuffers(window);
         GLFW.glfwMakeContextCurrent(window);
     }
 
@@ -136,6 +157,8 @@ public class WindowManager {
     public static void destroyLoadingScreen(){
         GLFW.glfwDestroyWindow(loadingScreen);
         GLFW.glfwShowWindow(window);
+        loadingScreenGui = null;
+        loadingScreenRenderer = null;
     }
 
     /**

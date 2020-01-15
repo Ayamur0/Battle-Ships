@@ -2,15 +2,15 @@ package com.battleships.gui.postProcessing;
 
 import com.battleships.gui.shaders.ShaderProgram;
 
-public class ContrastShader extends ShaderProgram {
+public class ResolutionShader extends ShaderProgram {
 
-    private static final String VERTEX_FILE = "/com/battleships/gui/postProcessing/contrastVertexShader.glsl";
-    private static final String FRAGMENT_FILE = "/com/battleships/gui/postProcessing/contrastFragmentShader.glsl";
+    private static final String VERTEX_FILE = "/com/battleships/gui/postProcessing/resolutionVertexShader.glsl";
+    private static final String FRAGMENT_FILE = "/com/battleships/gui/postProcessing/resolutionFragmentShader.glsl";
 
     /**
      * Create this shader program with the two shader files
      */
-    public ContrastShader() {
+    public ResolutionShader() {
         super(VERTEX_FILE, FRAGMENT_FILE);
     }
 

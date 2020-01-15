@@ -9,6 +9,7 @@ import com.battleships.gui.fontMeshCreator.FontType;
 import com.battleships.gui.fontRendering.TextMaster;
 import com.battleships.gui.gameAssets.MainMenuGui.*;
 import com.battleships.gui.gameAssets.grids.GridManager;
+import com.battleships.gui.gameAssets.grids.GuiGrid;
 import com.battleships.gui.gameAssets.grids.ShipManager;
 import com.battleships.gui.gameAssets.ingameGui.DisableSymbols;
 import com.battleships.gui.gameAssets.ingameGui.ShipCounter;
@@ -291,18 +292,26 @@ public class GameManager {
      */
     public static void loadIngameScene(){
         clearScene();
+        GuiGrid.loadTexture(loader);
+        WindowManager.updateLoadingScreen();
         disableSymbols = new DisableSymbols(loader, guiManager, guis);
         camera = new Camera();
         mousePicker = new MousePicker(camera, MasterRenderer.getProjectionMatrix(), terrain);
         TerrainTexture texture1 = new TerrainTexture(loader.loadTexture("path.jpg"));
+        WindowManager.updateLoadingScreen();
         TerrainTexture texture2 = new TerrainTexture(loader.loadTexture("Gravel.jpg"));
+        WindowManager.updateLoadingScreen();
         TerrainTexture texture3 = new TerrainTexture(loader.loadTexture("Grass.jpg"));
+        WindowManager.updateLoadingScreen();
         TerrainTexture texture4 = new TerrainTexture(loader.loadTexture("WetSand.jpg"));
+        WindowManager.updateLoadingScreen();
         TerrainTexture texture5 = new TerrainTexture(loader.loadTexture("Sand.jpg"));
+        WindowManager.updateLoadingScreen();
 
         TerrainTexturePack texturePack = new TerrainTexturePack(texture1, texture2, texture3, texture4, texture5);
 
         TerrainTexture blendMap = new TerrainTexture(loader.loadTexture("BlendMapLarge.tga"));
+        WindowManager.updateLoadingScreen();
 
         terrain = new Terrain(-0.25f,-0.75f, loader, texturePack, blendMap, "HeightMapLarge.jpg");
 

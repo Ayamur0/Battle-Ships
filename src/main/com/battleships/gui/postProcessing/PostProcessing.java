@@ -27,9 +27,9 @@ public class PostProcessing {
      */
     private static RawModel quad;
     /**
-     * ContrastChanger to influence contrast of the image.
+     * ResolutionChanger to influence contrast of the image.
      */
-    private static ContrastChanger contrastChanger;
+    private static ResolutionChanger resolutionChanger;
     /**
      * Horizontal blur effect to blur the image horizontally.
      */
@@ -50,6 +50,7 @@ public class PostProcessing {
         //divide width and height to make texture smaller, so it gets scaled when being put on the screen
         //which makes it blurrier while saving performance
         //use two blur stages to decrease flickering after the blur because of the low res texture
+        resolutionChanger = new ResolutionChanger(WindowManager.getWidth(), WindowManager.getHeight());
         hBlur = new HorizontalBlur(WindowManager.getWidth() / 4, WindowManager.getHeight() / 4);
         vBlur = new VerticalBlur(WindowManager.getWidth() / 4, WindowManager.getHeight() / 4);
 //        hBlur2 = new HorizontalBlur(WindowManager.getWidth() / 8, WindowManager.getHeight() / 8);
@@ -65,16 +66,26 @@ public class PostProcessing {
         start();
         hBlur.render(colorTexture);
         vBlur.render(hBlur.getOutputTexture());
+        resolutionChanger.render(vBlur.getOutputTexture());
 //        hBlur2.render(vBlur.getOutputTexture());
 //        vBlur2.render(hBlur2.getOutputTexture());
         end();
     }
 
     /**
+     * Changes the {@link ResolutionChanger} so the texture it renders to has a new resolution.
+     * @param width Width of the new resolution in pixels.
+     * @param height Height of the new resolution in pixels.
+     */
+    public static void changeResolution(int width, int height){
+        resolutionChanger.changeResolution(width, height);
+    }
+
+    /**
      * Cleanup on program exit.
      */
     public static void cleanUp(){
-        contrastChanger.cleanUp();
+        resolutionChanger.cleanUp();
         hBlur.cleanUp();
         vBlur.cleanUp();
 //        hBlur2.cleanUp();
