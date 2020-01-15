@@ -3,6 +3,7 @@ package com.battleships.gui.renderingEngine;
 import com.battleships.gui.entities.Camera;
 import com.battleships.gui.entities.Entity;
 import com.battleships.gui.entities.Light;
+import com.battleships.gui.gameAssets.GameManager;
 import com.battleships.gui.models.TexturedModel;
 import com.battleships.gui.shaders.StaticShader;
 import com.battleships.gui.shaders.TerrainShader;
@@ -221,9 +222,9 @@ public class MasterRenderer {
      * This method needs to be called whenever the size of the window is changed.
      */
     public void updateProjectionMatrix(){
-        if(WindowManager.getWidth() > 1920 || WindowManager.getHeight() > 1080)
-            return;
         projectionMatrix = new Matrix4f();
+        if(GameManager.getSettings() != null && GameManager.getSettings().getResHeight() == -1 && GameManager.getSettings().getResWidth() == -1)
+            projectionMatrix.setPerspective((float)Math.toRadians(FOV), (float) GameManager.getSettings().getResWidth() / GameManager.getSettings().getResHeight(), NEAR_PLANE, FAR_PLANE);
         projectionMatrix.setPerspective((float)Math.toRadians(FOV), (float) WindowManager.getWidth() / WindowManager.getHeight(), NEAR_PLANE, FAR_PLANE);
     }
 
