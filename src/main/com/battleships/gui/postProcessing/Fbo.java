@@ -101,6 +101,7 @@ public class Fbo {
                 initializeFrameBuffer(type);
                 return;
             }
+            return;
         }
         if(this.height == WindowManager.getHeight() && this.width == WindowManager.getWidth())
             return;
