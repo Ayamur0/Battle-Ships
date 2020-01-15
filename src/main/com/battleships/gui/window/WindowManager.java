@@ -79,6 +79,10 @@ public class WindowManager {
      */
     private static GuiRenderer loadingScreenRenderer;
 
+    private static int test;
+
+    private static float time;
+
 
     /**
      * Initialize the main window the game is played in.
@@ -196,6 +200,13 @@ public class WindowManager {
         double currentFrame = GLFW.glfwGetTime();
         deltaTime = currentFrame - lastFrame;
         lastFrame = currentFrame;
+        test+=1;
+        time += deltaTime;
+        if(time >= 1){
+            System.out.println("FPS: " + test);
+            time = 0;
+            test = 0;
+        }
     }
 
     /**
