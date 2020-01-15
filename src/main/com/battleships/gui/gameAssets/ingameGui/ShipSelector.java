@@ -231,8 +231,10 @@ public class ShipSelector extends GuiClickCallback {
     public void hide(){
         int v = hidden ? 100 : -100;
         hidden = !hidden;
-        for(GuiTexture g : guis)
-            g.getPositions().x += v;
+        for (int i = 0; i < buttons.length; i++) {
+            buttons[i].getPositions().x += v;
+        }
+        background.getPositions().x += v;
         for(GUIText g : shipCountTexts)
             g.getPosition().x += v;
     }
