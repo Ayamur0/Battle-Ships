@@ -94,32 +94,44 @@ public class AiPlayerChooserMenu extends Menu {
      */
     @Override
     protected void clickAction() {
-        if (buttonClicked == EASY) {
-            ESCMenu.setIsPlayerAI(true);
-            ESCMenu.setActive(false);
-            clearMenu();
-            cleaBackgournd();
-            GameManager.getSettings().setAiLevelP(EASY);
-        }
-        if (buttonClicked == MEDIUM) {
-            ESCMenu.setIsPlayerAI(true);
-            ESCMenu.setActive(false);
-
-            clearMenu();
-            cleaBackgournd();
-            GameManager.getSettings().setAiLevelP(MEDIUM);
-        }
-        if (buttonClicked == HARD) {
-            ESCMenu.setIsPlayerAI(true);
-            ESCMenu.setActive(false);
-            clearMenu();
-            cleaBackgournd();
-            GameManager.getSettings().setAiLevelP(HARD);
-        }
-        if (buttonClicked == BACK) {
+        if(buttonClicked == BACK){
             clearMenu();
             new ESCMenu(guiManager, loader);
+            return;
         }
+        ESCMenu.setIsPlayerAI(true);
+        ESCMenu.setActive(false);
+        clearMenu();
+        cleaBackgournd();
+        GameManager.getSettings().setAiLevelP(buttonClicked);
+        GameManager.getLogic().getTurnHandler().makeAiTurns();
 
+//        if (buttonClicked == EASY) {
+//            ESCMenu.setIsPlayerAI(true);
+//            ESCMenu.setActive(false);
+//            clearMenu();
+//            cleaBackgournd();
+//            GameManager.getSettings().setAiLevelP(EASY);
+//        }
+//        if (buttonClicked == MEDIUM) {
+//            ESCMenu.setIsPlayerAI(true);
+//            ESCMenu.setActive(false);
+//
+//            clearMenu();
+//            cleaBackgournd();
+//            GameManager.getSettings().setAiLevelP(MEDIUM);
+//        }
+//        if (buttonClicked == HARD) {
+//            ESCMenu.setIsPlayerAI(true);
+//            ESCMenu.setActive(false);
+//            clearMenu();
+//            cleaBackgournd();
+//            GameManager.getSettings().setAiLevelP(HARD);
+//        }
+//        if (buttonClicked == BACK) {
+//            clearMenu();
+//            new ESCMenu(guiManager, loader);
+//        }
+//
     }
 }
