@@ -25,7 +25,7 @@ public class SettingsSaveFile {
     /**
      * Saved volume.
      */
-    private int volume;
+    private float volume;
 
     /**
      * Creates a file that saves the last set settings.
@@ -35,7 +35,7 @@ public class SettingsSaveFile {
      * @param resWidth Resolution width that should be saved.
      * @param resHeight Resolution height that should be saved.
      */
-    public SettingsSaveFile(boolean sound, int volume, boolean animation, int resWidth, int resHeight) {
+    public SettingsSaveFile(boolean sound, float volume, boolean animation, int resWidth, int resHeight) {
         this.sound = sound;
         this.volume = volume;
         this.animation = animation;
@@ -74,7 +74,7 @@ public class SettingsSaveFile {
     /**
      * @return Last saved volume.
      */
-    public int getVolume() {
+    public float getVolume() {
         return volume;
     }
 }

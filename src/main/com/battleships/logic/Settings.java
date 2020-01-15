@@ -62,7 +62,7 @@ public class Settings {
      * Current volume of the game.
      * 0 is no sound and 1 is standard volume.
      */
-    private int volume = 1;
+    private float volume = 1;
 
     /**
      * Current resolution of the game.
@@ -192,7 +192,7 @@ public class Settings {
     /**
      * @return Current volume of the game. 0 is no sound and 1 is standard volume.
      */
-    public int getVolume() {
+    public float getVolume() {
         return volume;
     }
 
@@ -200,7 +200,7 @@ public class Settings {
      * Set volume of the game.
      * @param volume New volume. 0 is no sound and 1 is standard volume.
      */
-    public void setVolume(int volume) {
+    public void setVolume(float volume) {
         AudioMaster.changeVolume(volume);
         this.volume = volume;
     }
