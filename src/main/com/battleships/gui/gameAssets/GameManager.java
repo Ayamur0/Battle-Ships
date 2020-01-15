@@ -754,4 +754,11 @@ public class GameManager {
     public static ShipSelector getShipSelector() {
         return shipSelector;
     }
+
+    /**
+     * @return The UI for the shipCounter.
+     */
+    public static ShipCounter getShipCounter() {
+        return shipCounter;
+    }
 }
