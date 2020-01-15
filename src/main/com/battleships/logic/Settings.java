@@ -184,6 +184,8 @@ public class Settings {
     public void changeResolution(int width, int height){
         if(width == SCREENRESOLUTION || height == SCREENRESOLUTION){
             PostProcessing.changeResolution(WindowManager.getWidth(), WindowManager.getHeight());
+            resWidth = SCREENRESOLUTION;
+            resHeight = SCREENRESOLUTION;
             return;
         }
         resWidth = width;
