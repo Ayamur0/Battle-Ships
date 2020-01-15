@@ -462,4 +462,11 @@ public class GridManager {
     public Cannonball getCannonball() {
         return cannonball;
     }
+
+    /**
+     * Stops all sounds currently played on the grids.
+     */
+    public void stopCannonSounds() {
+        cannonSound.stopSound();
+    }
 }

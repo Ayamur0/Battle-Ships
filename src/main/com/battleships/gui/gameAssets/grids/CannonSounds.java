@@ -59,4 +59,12 @@ public class CannonSounds {
                 break;
         }
     }
+
+    /**
+     * Stops the sounds currently playing.
+     */
+    public void stopSound(){
+        cannon.stop();
+        waterSplash.stop();
+    }
 }
