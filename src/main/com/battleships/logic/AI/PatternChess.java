@@ -4,20 +4,57 @@ import org.joml.Vector2i;
 
 import java.util.Random;
 
+/**
+ * Pattern that shoots in a chess pattern.
+ * Shoots every second cell on the grid, so it can find every ship.
+ *
+ * @author Tim Staudenmaier
+ */
 public class PatternChess implements Pattern{
 
+    /**
+     * Colors on a chess board this pattern always shoots at one of the colors.
+     */
     private static final int BLACK = 0, WHITE = 1;
+    /**
+     * Corners in which this pattern can start.
+     */
     private static final int DOWNLEFT = 0, UPLEFT = 1, DOWNRIGHT = 2, UPRIGHT = 3;
-    //TODO test upright
 
+    /**
+     * Color this pattern is shooting at.
+     */
     private int color;
 
+    /**
+     * Corner in which this pattern started.
+     */
     private int start;
+    /**
+     * Size of the grid this pattern is used on.
+     */
     private int size;
+    /**
+     * Value that needs to be added as offset when the pattern moves into the next row,
+     * so it stays on the same color.
+     * This offset is used if the last cell with this patterns color was on the second outermost column.
+     */
     private int addX1;
+    /**
+     * Value that needs to be added as offset when the pattern moves into the next row,
+     * so it stays on the same color.
+     * This offset is used if the last cell with this patterns color was on the outermost column.
+     */
     private int addX2;
+    /**
+     * Last index this grid returned.
+     */
     private Vector2i lastIndex;
 
+    /**
+     * Creates a new chess pattern.
+     * @param size Size of the grid this pattern is used on.
+     */
     public PatternChess(int size) {
         this.size = size;
         Random r = new Random();
@@ -33,6 +70,9 @@ public class PatternChess implements Pattern{
             addX1 = addX2 = 0;
     }
 
+    /**
+     * @return The next index for this pattern.
+     */
     @Override
     public Vector2i nextIndex() {
         if(start == DOWNLEFT || start == UPLEFT) {
@@ -56,6 +96,9 @@ public class PatternChess implements Pattern{
         return lastIndex;
     }
 
+    /**
+     * @return The first index for this pattern.
+     */
     @Override
     public Vector2i firstIndex() {
         switch (start){

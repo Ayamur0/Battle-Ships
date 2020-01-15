@@ -7,27 +7,64 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
+/**
+ * Pattern that shoots in diagonal lines across the grid.
+ * These lines have a random distance (between 2 and 4) and a random direction (of the 4 possible diagonal directions).
+ *
+ * @author Tim Staudenmaier
+ */
 public class PatternLines implements Pattern{
 
+    /**
+     * Directions in which the lines can go.
+     */
     private static final int DOWNLEFT = 0, DOWNRIGHT = 1;
+    /**
+     * Points on the grid at which the AI can start the first line.
+     */
     private static final int RIGHT = 0, MIDDLERIGHT = 1, MIDDLELEFT = 2, LEFT = 3;
 
+    /**
+     * Distance between two lines in cells.
+     */
     private int distance;
+    /**
+     * Direction each line has.
+     */
     private int direction;
+    /**
+     * Point at which the AI has started.
+     */
     private int startPoint;
+    /**
+     * Cells at which each line has started.
+     */
     private List<Vector2i> lineStarts = new ArrayList<>();
+    /**
+     * Size of the grid this pattern is used on.
+     */
     private int size;
+    /**
+     * Last index this pattern calculated.
+     */
     private Vector2i lastIndex;
 
+    /**
+     * Creates a new Pattern that returns indices forming diagonal lines.
+     * @param size Size of the grid this pattern is used on.
+     */
     public PatternLines(int size) {
         this.size = size;
         Random r = new Random();
-        distance = r.nextInt(3)+3;
+        distance = r.nextInt(3)+2;
         direction = r.nextInt(2);
         startPoint = r.nextInt(4);
         calculateLineStarts();
     }
 
+    /**
+     * Calculates the start cells for all lines.
+     */
     private void calculateLineStarts(){
         List<Vector2i> right = new ArrayList<>();
         List<Vector2i> left = new ArrayList<>();
@@ -75,6 +112,9 @@ public class PatternLines implements Pattern{
         }
     }
 
+    /**
+     * @return The next index for this pattern.
+     */
     @Override
     public Vector2i nextIndex() {
         if(direction == DOWNLEFT) {
@@ -101,7 +141,9 @@ public class PatternLines implements Pattern{
         }
         return lastIndex;
     }
-
+    /**
+     * @return The first index for this pattern.
+     */
     @Override
     public Vector2i firstIndex() {
         lastIndex = lineStarts.get(0);

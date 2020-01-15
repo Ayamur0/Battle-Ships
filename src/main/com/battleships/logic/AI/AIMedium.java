@@ -127,8 +127,9 @@ public class AIMedium extends AI {
 
     /**
      * AI tries to sink a ship. For this method the AI needs to already know the direction of the ship.
+     * To sink a ship the AI tries to shoot the cells around the last shot in the direction the ship lies in.
      * @param lastShot Last Shot the AI has made.
-     * @return
+     * @return {@code true} if the AI has made a shot (regardless if it hit a ship or not), {@code false} if the AI couldn't make a shot for the passed cell.
      */
     protected boolean shootFoundShip(Vector2i lastShot) {
         if (foundShipDir == HORIZONTAL) {
@@ -181,6 +182,12 @@ public class AIMedium extends AI {
         return false;
     }
 
+    /**
+     * Executes shoot command and tells AI if it hit or couldn't make the shot.
+     * @param cell Index of the cell to shoot.
+     * @return {@value ERROR} if the cell is outside of the grid, {@value NA} if the cell was already shot,
+     * {@value WATER} if the cell contained water or {@value SHIP} if the cell contained a ship.
+     */
     protected int shootCell(Vector2i cell) {
         if (cell.x < 1 || cell.y < 1 || cell.x > gridSize || cell.y > gridSize) {
             return ERROR;
@@ -194,7 +201,10 @@ public class AIMedium extends AI {
             return GameManager.shoot(team, cell) ? WATER : NA;
     }
 
-    @SuppressWarnings("Duplicates")
+    /**
+     * AI tries to find out which direction the ship is facing by shooting around the last hit on the ship.
+     * If a direction was found the direction attribute gets set to that direction.
+     */
     protected boolean findFoundShipDir() {
         Vector2i toShoot = new Vector2i(hitCells.get(0));
         toShoot.x -= 1;
@@ -257,10 +267,19 @@ public class AIMedium extends AI {
         return false;
     }
 
+    /**
+     * Updates the pattern this AI uses after the first one is finished.
+     */
     protected void updatePattern() {
         pattern = new PatternRandom(gridSize, team);
     }
 
+    /**
+     * Processes the answer from the network after the AI made a shot.
+     * Only needs to be called for answer = 1 or = 2.
+     * Only used if game is online.
+     * @param shot Index of the shot the answer is for.
+     */
     public void processAnswer(Vector2i shot){
         hitCells.add(shot);
         if(lastTried != UNKNOWN)

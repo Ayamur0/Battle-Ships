@@ -4,20 +4,51 @@ import org.joml.Vector2i;
 
 import java.util.Random;
 
+/**
+ * Pattern that shoots in a X form on the grid.
+ * The X can be started from any point and in any direction.
+ *
+ * @author Tim Staudenmaier
+ */
 public class PatternX implements Pattern {
 
+    /**
+     * Directions the diagonal lines can start in.
+     */
     private static final int DOWNLEFT = 0, UPLEFT = 1, DOWNRIGHT = 2, UPRIGHT = 3;
 
+    /**
+     * X value of the last index.
+     */
     private int lastX;
+    /**
+     * Y value of the last index.
+     */
     private int lastY;
+    /**
+     * Size of the grid this pattern is used on.
+     */
     private int size;
+    /**
+     * Direction in the current diagonal line has.
+     */
     private int direction;
+    /**
+     * Amount of diagonal lines completed (after 2 this pattern stops).
+     */
     private int rowscomplete;
 
+    /**
+     * Creates a new X-Pattern.
+     * @param size Size of the grid this pattern is used on.
+     */
     public PatternX(int size) {
         this.size = size;
     }
 
+    /**
+     * @return The next index for this pattern.
+     */
     @Override
     public Vector2i nextIndex() {
         switch (direction){
@@ -41,6 +72,9 @@ public class PatternX implements Pattern {
         return new Vector2i(lastX, lastY);
     }
 
+    /**
+     * @return A random direction the next diagonal line can start with.
+     */
     private int chooseNextDirection(){
         Random r = new Random();
         int next = r.nextInt(1);
@@ -52,6 +86,9 @@ public class PatternX implements Pattern {
         }
     }
 
+    /**
+     * @return The first index for this pattern.
+     */
     @Override
     public Vector2i firstIndex() {
         Random r = new Random();

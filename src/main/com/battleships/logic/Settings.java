@@ -186,6 +186,8 @@ public class Settings {
             PostProcessing.changeResolution(WindowManager.getWidth(), WindowManager.getHeight());
             return;
         }
+        resWidth = width;
+        resHeight = height;
         PostProcessing.changeResolution(width, height);
     }
 

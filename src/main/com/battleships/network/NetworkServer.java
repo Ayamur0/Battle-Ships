@@ -16,38 +16,71 @@ import java.net.Socket;
 import java.net.SocketException;
 
 public class NetworkServer extends Network implements Runnable{
-    //In der Vorlesung ausgemachter Port den alle verwenden
+    /**
+     * Port this network uses.
+     */
     public static final int PORT = 50000;
 
+    /**
+     * Writer to write messages to client.
+     */
     private PrintWriter toClient;
-    private BufferedReader keyboardInput;
+    /**
+     * Reader to read messages from client.
+     */
     private BufferedReader fromClient;
 
+    /**
+     * Socket of this server.
+     */
     private ServerSocket serverSocket;
+    /**
+     * Socket of the client this server is connected to.
+     */
     private Socket clientSocket;
 
-    private connect waitingForConnection;
-
+    /**
+     * Thread in which the server can search for a connection to a client.
+     */
     private Thread connectionSearch;
 
+    /**
+     * {@code true} while this network is waiting for a message from the client.
+     * {@code false} while this network is able to send a message to the client.
+     */
     private boolean waitingForMessage;
 
-    //Konstruktor für den Server
+    /**
+     * Start a server that searches for a client to connect with.
+     */
     public NetworkServer(){
         startServer();
-        waitingForConnection = new connect(this);
+        connect waitingForConnection = new connect(this);
         connectionSearch = new Thread(waitingForConnection);
         connectionSearch.start();
     }
 
+    /**
+     * Private class to run the connection search in different thread.
+     */
     private static class connect implements Runnable{
+        /**
+         * Network for which this class searches a connection.
+         */
         private NetworkServer server;
-        private volatile boolean isRunning = true;
 
+        /**
+         * Create a new class to search a connection.
+         * @param server Network for which connection is needed.
+         */
         public connect(NetworkServer server) {
             this.server = server;
         }
 
+        /**
+         * Method that searches the connection.
+         * Execute in different Thread.
+         */
         @Override
         public void run() {
             try {
@@ -58,12 +91,17 @@ public class NetworkServer extends Network implements Runnable{
         }
     }
 
+    /**
+     * Stops searching for a connection.
+     */
     public void stopConnectionSearch(){
-//        waitingForConnection.kill();
-//        waitingForConnection = new connect(this);
         connectionSearch.interrupt();
     }
 
+    /**
+     * Sends a message to the client.
+     * @param message Message to send.
+     */
     public void sendMessage(String message){
         if(waitingForMessage)
             return;
@@ -75,6 +113,9 @@ public class NetworkServer extends Network implements Runnable{
         t.start();
     }
 
+    /**
+     * Waits for an answer from the client.
+     */
     public void run(){
         String answer = null;
         try {
@@ -85,15 +126,15 @@ public class NetworkServer extends Network implements Runnable{
         }
         waitingForMessage = false;
         System.out.println("\u001B[31m" + "stopped waiting");
-        setStringFunction(1, answer);
+        setStringFunction(answer);
     }
 
+    /**
+     * Starts the server.
+     */
     private void startServer(){
         try {
-            //System.out.println("Startin Server");
             serverSocket = new ServerSocket(PORT);
-            //Der BufferedReader wird dafür verwendet den Input von der Logic dem Client zu senden.
-            keyboardInput = new BufferedReader(new InputStreamReader(System.in));
         } catch (IOException e) {
             e.printStackTrace();
         }

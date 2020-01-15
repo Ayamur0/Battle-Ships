@@ -6,33 +6,49 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 
+/**
+ * Network implementation for the client side.
+ *
+ * @author Tim Staudenmaier
+ */
 public class NetworkClient extends Network implements Runnable{
+    /**
+     * Port this network uses.
+     */
     private static final int PORT = 50000;
 
+    /**
+     * Reader to read the messages the server sends to this client.
+     */
     private BufferedReader fromServer;
+    /**
+     * Writer to send messages to the server.
+     */
     private PrintWriter toServer;
-    private BufferedReader keyboardInput;
-
-    private boolean waitingForMessage;
-
-
-    private PrintWriter out;
-
-    private Socket clientSocket;
-    // private String clientAdress;
-    // private int clientPort;
-
-    private boolean online = false;
-
 
     /**
-     *Der Client soll aufgerufen werden mit einer IP Adresse (in Form eines Strings)
+     * {@code true} while this network is waiting for a message from the server.
+     * {@code false} while this network is able to send a message to the server.
+     */
+    private boolean waitingForMessage;
+
+    /**
+     * Socket this client uses.
+     */
+    private Socket clientSocket;
+
+    /**
+     * Start a client that tries to connect to the server with the passed IP.
      */
     public NetworkClient(String adress) throws IOException {
         startClient(adress);
 
     }
 
+    /**
+     * Sends a message to the server.
+     * @param message Message to send.
+     */
     public void sendMessage(String message){
         if(waitingForMessage)
             return;
@@ -44,6 +60,9 @@ public class NetworkClient extends Network implements Runnable{
         t.start();
     }
 
+    /**
+     * Waits for an answer from the server.
+     */
     public void run(){
         String answer = null;
         try {
@@ -54,47 +73,24 @@ public class NetworkClient extends Network implements Runnable{
         }
         waitingForMessage = false;
         System.out.println("\u001B[31m" + "stopped waiting");
-        setStringFunction(1, answer);
+        setStringFunction(answer);
     }
-
-    private void pingpong() throws  IOException{
-        while(online) {
-            String answer = fromServer.readLine();
-            setStringFunction(1,answer);
-            printReceivedMessage(answer);
-            String send = keyboardInput.readLine();
-            toServer.println(send);
-        }
-    }
-
-    private void printReceivedMessage(String data){
-        System.out.println(data);
-    }
-
 
     /**
-     * startet Client
+     * Start client and initialize all needed readers.
      */
     private void startClient(String adress) throws IOException {
         //System.out.println("Starting Client...");
         clientSocket = new Socket(adress, PORT);
-        online = true;
         toServer =  new PrintWriter(clientSocket.getOutputStream(), true);
         fromServer = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-        keyboardInput = new BufferedReader(new InputStreamReader(System.in));
-        out = new PrintWriter(clientSocket.getOutputStream(),true);
         Thread t = new Thread(this);
         t.start();
     }
 
-    public static void main(String[] args) {
-        try {
-            new NetworkClient("Localhost");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
+    /**
+     * Close the connection of this client.
+     */
     public void closeConnection(){
         try {
             clientSocket.close();
