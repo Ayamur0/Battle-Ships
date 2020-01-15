@@ -10,6 +10,15 @@ import org.joml.Vector2i;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Implementation of an AI with medium difficulty.
+ * This AI will first choose either a {@link PatternX}, {@link PatternChess} or {@link PatternLines} to shoot.
+ * After that pattern is done it will shoot randomly.
+ *
+ * If it hits a ship it will try to sink that ship before moving on.
+ *
+ * @author Tim Staudenmaier
+ */
 public class AIMedium extends AI {
 
     /**
@@ -73,8 +82,14 @@ public class AIMedium extends AI {
         }
         int result;
         while ((result = shootCell(lastShot)) == NA || result == ERROR) {
-            if(result == ERROR)
+            if(result == ERROR) {
+                lastShot = pattern.nextIndex();
+                if (lastShot == null) {
+                    updatePattern();
+                    lastShot = pattern.firstIndex();
+                }
                 continue;
+            }
             if (manager.hasBeenShot(lastShot.x, lastShot.y, team == GridManager.OWNFIELD ? GridManager.OPPONENTFIELD : GridManager.OWNFIELD))
                 lastShot = pattern.nextIndex();
             if (lastShot == null) {

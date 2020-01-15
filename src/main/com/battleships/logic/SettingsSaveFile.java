@@ -1,5 +1,10 @@
 package com.battleships.logic;
 
+/**
+ * Class that contains all information of the settings that need to be saved when the game is exited.
+ *
+ * @author Tim Staudenmaier
+ */
 public class SettingsSaveFile {
 
     /**

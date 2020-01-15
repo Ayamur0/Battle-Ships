@@ -1,8 +1,12 @@
 package com.battleships.logic;
 
 import com.battleships.gui.gameAssets.GameManager;
+import com.battleships.gui.gameAssets.grids.GridManager;
 import com.battleships.gui.postProcessing.PostProcessing;
 import com.battleships.gui.window.WindowManager;
+import com.battleships.logic.AI.AIEasy;
+import com.battleships.logic.AI.AIHard;
+import com.battleships.logic.AI.AIMedium;
 import com.thoughtworks.xstream.XStream;
 import org.joml.Vector2i;
 
@@ -95,6 +99,16 @@ public class Settings {
      */
     public void setAiLevelP(int aiLevel) {
         this.aiLevelP = aiLevel;
+        switch (aiLevel){
+            case EASY: GameManager.getLogic().getTurnHandler().setPlayerAI(
+                    new AIEasy(GridManager.OWNFIELD, GameManager.getLogic().getPlayerGrid().getSize(), GameManager.getLogic()));
+            case MEDIUM: GameManager.getLogic().getTurnHandler().setPlayerAI(
+                    new AIMedium(GridManager.OWNFIELD, GameManager.getLogic().getPlayerGrid().getSize(), GameManager.getLogic()));
+            case HARD: GameManager.getLogic().getTurnHandler().setPlayerAI(
+                    new AIHard(GridManager.OWNFIELD, GameManager.getLogic().getPlayerGrid().getSize(), GameManager.getLogic()));
+        }
+        if(aiLevel == -1)
+            GameManager.getLogic().getTurnHandler().removePlayerAI();
     }
 
     /**
@@ -110,6 +124,16 @@ public class Settings {
      */
     public void setAiLevelO(int aiLevelO) {
         this.aiLevelO = aiLevelO;
+        switch (aiLevelO){
+            case EASY: GameManager.getLogic().getTurnHandler().setPlayerAI(
+                    new AIEasy(GridManager.OPPONENTFIELD, GameManager.getLogic().getPlayerGrid().getSize(), GameManager.getLogic()));
+            case MEDIUM: GameManager.getLogic().getTurnHandler().setPlayerAI(
+                    new AIMedium(GridManager.OPPONENTFIELD, GameManager.getLogic().getPlayerGrid().getSize(), GameManager.getLogic()));
+            case HARD: GameManager.getLogic().getTurnHandler().setPlayerAI(
+                    new AIHard(GridManager.OPPONENTFIELD, GameManager.getLogic().getPlayerGrid().getSize(), GameManager.getLogic()));
+        }
+        if(aiLevelO == -1)
+            GameManager.getLogic().getTurnHandler().removePlayerAI();
     }
 
     /**

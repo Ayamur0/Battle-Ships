@@ -15,9 +15,12 @@ import java.util.Random;
  */
 public class AIEasy extends AI{
 
-    Pattern pattern;
     /**
-     * Creates a new AI with easy difficulty.
+     * Pattern in which the AI will shoot.
+     */
+    private Pattern pattern;
+    /**
+     * Creates a new AI with easy difficulty using a random pattern.
      * @param team Team this ai should play for (0 or 1 as in {@link GridManager})
      * @param gridSize Size of the grid this ai should play on.
      * @param manager LogicManager this ai should use to shoot and place ships.
