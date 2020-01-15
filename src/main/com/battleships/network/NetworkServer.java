@@ -85,8 +85,11 @@ public class NetworkServer extends Network implements Runnable{
         public void run() {
             try {
                 server.waitForClient();
-            } catch (SocketException ignore) {
+            } catch (SocketException ignore){
                 return;
+            }
+            catch (IOException e) {
+                e.printStackTrace();
             }
         }
     }
@@ -140,30 +143,28 @@ public class NetworkServer extends Network implements Runnable{
         }
     }
 
-    private void waitForClient() throws SocketException {
-        try {
+    /**
+     * Wait for a client to connect to this server. Should be executed in different thread by using {@link connect} class.
+     * @throws IOException If the socket accept gets interrupted (by close connection).
+     */
+    private void waitForClient() throws IOException {
             System.out.println("Waiting for Client");
             clientSocket = serverSocket.accept();
+        try {
             toClient = new PrintWriter(clientSocket.getOutputStream(), true);
             fromClient = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
             System.out.println("Connected!");
             if(MainMenuManager.getMenu() instanceof WaitingConnection){
                 ((WaitingConnection) MainMenuManager.getMenu()).setOpponentConnected(true);
             }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-    public void shoot(int x, int y){
-        String s = "shoot " + x + " " + y;
-        toClient.println(s);
     }
 
-    //Main
-    public static void main(String[] args) {
-        new NetworkServer();
-    }
-
+    /**
+     * Close the connection of this server.
+     */
     public void closeConnection(){
         try {
             if(serverSocket != null)
