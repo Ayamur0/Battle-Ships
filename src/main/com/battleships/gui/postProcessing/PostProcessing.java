@@ -64,9 +64,9 @@ public class PostProcessing {
      */
     public static void doPostProcessing(int colorTexture){
         start();
-        hBlur.render(colorTexture);
+        resolutionChanger.render(colorTexture);
+        hBlur.render(resolutionChanger.getOutputTexture());
         vBlur.render(hBlur.getOutputTexture());
-        resolutionChanger.render(vBlur.getOutputTexture());
 //        hBlur2.render(vBlur.getOutputTexture());
 //        vBlur2.render(hBlur2.getOutputTexture());
         end();

@@ -27,7 +27,7 @@ public class VerticalBlur {
      */
     public VerticalBlur(int targetFboWidth, int targetFboHeight){
         shader = new VerticalBlurShader();
-        renderer = new ImageRenderer(targetFboWidth, targetFboHeight);
+        renderer = new ImageRenderer();
         shader.start();
         shader.loadTargetHeight(targetFboHeight);
         shader.stop();

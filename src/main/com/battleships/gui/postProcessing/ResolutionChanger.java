@@ -6,13 +6,9 @@ import org.lwjgl.opengl.GL13;
 public class ResolutionChanger {
 
     /**
-     * Image renderer that renders the texture to the screen.
-     */
-    private ImageRenderer screenRenderer;
-    /**
      * Image renderer that renders the scene into a fbo with the specified resolution.
      */
-    private ImageRenderer texRenderer;
+    private ImageRenderer renderer;
     /**
      * Shader for creating the texture with changed resolution.
      */
@@ -24,8 +20,7 @@ public class ResolutionChanger {
      * and a {@link ImageRenderer} that renders the changed scene to the screen.
      */
     public ResolutionChanger(int width, int height) {
-        screenRenderer = new ImageRenderer();
-        texRenderer = new ImageRenderer(width, height);
+        renderer = new ImageRenderer(width, height);
         shader = new ResolutionShader();
     }
 
@@ -37,18 +32,22 @@ public class ResolutionChanger {
         shader.start();
         GL13.glActiveTexture(GL13.GL_TEXTURE0);
         GL11.glBindTexture(GL11.GL_TEXTURE_2D, texture);
-        texRenderer.renderQuad();
-        GL11.glBindTexture(GL11.GL_TEXTURE_2D, texRenderer.getOutputTexture());
-        screenRenderer.renderQuad();
+        renderer.renderQuad();
         shader.stop();
+    }
+
+    /**
+     * @return the texture of the current scene after the effect was applied.
+     */
+    public int getOutputTexture(){
+        return renderer.getOutputTexture();
     }
 
     /**
      * CleanUp on program exit.
      */
     public void cleanUp(){
-        texRenderer.cleanUp();
-        screenRenderer.cleanUp();
+        renderer.cleanUp();
         shader.cleanUp();
     }
 
@@ -58,6 +57,6 @@ public class ResolutionChanger {
      * @param height Height of the new resolution in pixels.
      */
     public void changeResolution(int width, int height){
-        texRenderer = new ImageRenderer(width, height);
+        renderer = new ImageRenderer(width, height);
     }
 }
