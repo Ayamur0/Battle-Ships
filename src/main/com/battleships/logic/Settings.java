@@ -250,9 +250,11 @@ public class Settings {
         }
         else
             return false;
-        sound = saveFile.isSound();
         volume = saveFile.getVolume();
         AudioMaster.changeVolume(saveFile.getVolume());
+        sound = saveFile.isSound();
+        if(!sound)
+            AudioMaster.changeVolume(0);
         animation = saveFile.isAnimation();
         resWidth = saveFile.getResWidth();
         resHeight = saveFile.getResHeight();

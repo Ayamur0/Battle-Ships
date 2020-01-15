@@ -259,6 +259,8 @@ public class GameManager {
      * Prepares stuff that is always needed when a game is started.
      */
     public static void prepareGame(){
+        if(!settings.isSound())
+            AudioMaster.changeVolume(0);
         GridManager.setIsBackground(false);
         WindowManager.setCallbacks(camera, waterFbos);
         disableSymbols = new DisableSymbols(loader, guiManager, guis);
