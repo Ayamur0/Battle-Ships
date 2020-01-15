@@ -76,6 +76,11 @@ public class ShipSelector extends GuiClickCallback {
     private List<GuiTexture> guis;
 
     /**
+     * {@code true} if this gui is currently hidden.
+     */
+    private boolean hidden;
+
+    /**
      * Ship counts for the current grid size, so counts that show ships left to place can be reset to values of beginning.
      */
     private int[] standardShipCounts;
@@ -217,6 +222,19 @@ public class ShipSelector extends GuiClickCallback {
         dummy.setTextString(shipCounts[shipSize - 2] + " Left");
         //TextMaster.loadText(new GUIText(shipCounts[0] + " Left", 2, dummy.getFont(), dummy.getPosition(), dummy.getLineMaxSize(), true, 0, 0.1f,BLACK, OUTLINEOFFSET));
         TextMaster.loadText(dummy);
+    }
+
+    /**
+     * Hides this gui if it is currently on screen.
+     * If it is already hidden this displays the gui again.
+     */
+    public void hide(){
+        int v = hidden ? 100 : -100;
+        hidden = !hidden;
+        for(GuiTexture g : guis)
+            g.getPositions().x += v;
+        for(GUIText g : shipCountTexts)
+            g.getPosition().x += v;
     }
 
     /**

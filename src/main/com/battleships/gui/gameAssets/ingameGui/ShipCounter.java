@@ -105,6 +105,19 @@ public class ShipCounter extends GuiClickCallback implements Runnable{
     }
 
     /**
+     * Hides this gui if it is currently on screen.
+     * If it is already hidden this displays the gui again.
+     */
+    public void hide(){
+        int v = visible ? 100 : -100;
+        for(GuiTexture g : guis)
+            g.getPositions().x += v;
+        for(GUIText g : texts)
+            g.getPosition().x += v;
+        visible = !visible;
+    }
+
+    /**
      * Action, that gets called, when the gui (in this case the button to hide this gui) is clicked.
      * This action moves the gui offscreen, or onscreen.
      */
