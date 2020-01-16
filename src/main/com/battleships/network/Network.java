@@ -6,6 +6,7 @@ import com.battleships.logic.AI.AI;
 import com.battleships.logic.AI.AIHard;
 import com.battleships.logic.AI.AIMedium;
 import com.battleships.logic.OnlineGrid;
+import com.battleships.logic.SaveFile;
 import com.battleships.logic.SaveFileManager;
 import com.battleships.logic.Settings;
 import org.joml.Intersectiond;
@@ -99,11 +100,16 @@ public abstract class Network implements NetworkInterface{
             case SHOOT:
                 System.out.println("\u001B[34m" + "Processing Shot");GameManager.shoot(GridManager.OPPONENTFIELD, new Vector2i(row+1, col+1)); break;
             case CONFIRM: setOpponentConfirm(); break;
-            case SAVE: SaveFileManager.saveToFile(ID); break;
-            case LOAD: SaveFileManager.loadFromFile(ID);
-                GameManager.getMainMenuManager().clearAll();
-                GameManager.resizeGrid();
-                GameManager.getLogic().advanceGamePhase();
+            case SAVE: SaveFileManager.saveToFile(ID);
+                        setStringFunction(null);
+                        break;
+            case LOAD: SaveFile file = SaveFileManager.loadFromFile(ID);
+                if(file == null) {
+                    setStringFunction(null);
+                    break;
+                }
+                SaveFileManager.loadSaveFile(file);
+                GameManager.prepareGame();
                 break;
             case SIZE: GameManager.getMainMenuManager().clearAll();
                 GameManager.resizeGrid();
