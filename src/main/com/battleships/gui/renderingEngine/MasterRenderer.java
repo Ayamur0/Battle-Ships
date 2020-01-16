@@ -156,7 +156,8 @@ public class MasterRenderer {
         terrainShader.loadViewMatrix(camera);
         terrainRenderer.render(terrains);
         terrainShader.stop();
-        skyboxRenderer.render(camera);
+        if(!GameManager.getSettings().isLowSpecMode())
+            skyboxRenderer.render(camera);
         //clear stuff that has been rendered or it would be added another time next frame and render on top of each other
         terrains.clear();
         entities.clear();
