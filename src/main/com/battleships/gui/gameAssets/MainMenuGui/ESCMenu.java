@@ -170,7 +170,6 @@ public class ESCMenu extends Menu {
                 GameManager.getNetwork().closeConnection();
             GameManager.getLogic().setGameState(GameManager.MENU);
             GameManager.getMainMenuManager().backToMainMenu();
-            GameManager.getSettings().setOnline(false);
         }
     }
 

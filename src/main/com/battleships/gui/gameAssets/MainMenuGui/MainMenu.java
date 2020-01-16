@@ -71,7 +71,6 @@ public class MainMenu extends Menu {
     @Override
     protected void clickAction() {
         if (buttonClicked == LOAD) {
-            GameManager.getSettings().setOnline(false);
             openLoadGameDialog();
         }
         if (buttonClicked == PLAY) {
