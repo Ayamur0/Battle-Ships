@@ -171,10 +171,11 @@ public abstract class Network implements NetworkInterface{
         }else if(text.contains(save)){
             text = text.replace(save, "");
             ID = text;
-
+            action = SAVE;
         }else if(text.contains(load)){
             text = text.replace(load, "");
             ID = text;
+            action = LOAD;
         }else if(text.contains(pass)){
 
         }
