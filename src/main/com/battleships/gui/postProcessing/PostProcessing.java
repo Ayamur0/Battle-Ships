@@ -57,6 +57,13 @@ public class PostProcessing {
 //        vBlur2 = new VerticalBlur(WindowManager.getWidth() / 8, WindowManager.getHeight() / 8);
     }
 
+    public static void test(int colorTexture){
+        start();
+        resolutionChanger.render(colorTexture);
+        resolutionChanger.renderToScreen(resolutionChanger.getOutputTexture());
+        end();
+    }
+
     /**
      * Do all post processing related things.
      * Render all post processing effects one after another.
