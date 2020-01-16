@@ -72,7 +72,7 @@ public class Settings {
     /**
      * {@code true} if game uses lower graphic to increase performance.
      */
-    private boolean lowSpecMode = true;
+    private boolean lowSpecMode;
 
     /**
      * Creates new settings.
