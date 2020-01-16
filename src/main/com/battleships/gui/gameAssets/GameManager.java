@@ -468,6 +468,7 @@ public class GameManager {
      * Updates everything in the scene and then renders everything.
      */
     public static void updateScene(){
+        blur.updateSize();
         if(MainMenuManager.getMenu() instanceof ESCMenu && MainMenuManager.getMenu().isUserInputMade())
             ((ESCMenu) MainMenuManager.getMenu()).processInput();
         if(GLFW.glfwGetKey(WindowManager.getWindow(), GLFW.GLFW_KEY_L) == GLFW.GLFW_PRESS)
@@ -483,12 +484,17 @@ public class GameManager {
                 logic.advanceTurn();
             //System.out.println("\u001B[35m" + "Shot has hit! " + " Has hit Ship: " + cannonballHit + " Turn: " + logic.isPlayerTurn());
         }
+        blur.bindFrameBuffer();
         renderEntities();
+        blur.unbindFrameBuffer();
         prepareWater();
+        blur.bindFrameBuffer();
         waterRenderer.render(waterTiles, camera, light);
         renderParticles();
         guiRenderer.render(guis);
         TextMaster.render();
+        blur.bindFrameBuffer();
+        PostProcessing.test(blur.getColorTexture());
         renderer.updateProjectionMatrix();
         if(pendingAnswer != 0 && gridManager.getCannonball().isWaiting()) {
             if(pendingAnswer == 1)
