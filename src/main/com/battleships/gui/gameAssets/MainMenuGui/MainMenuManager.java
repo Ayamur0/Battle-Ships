@@ -108,6 +108,7 @@ public class MainMenuManager {
      */
     public void backToMainMenu() {
         clearAll();
+        GameManager.getSettings().setOnline(false);
         GameManager.getGridManager().stopCannonSounds();
         GameManager.getSettings().setVolume(GameManager.getSettings().getVolume());
         ESCMenu.setIsPlayerAI(false);

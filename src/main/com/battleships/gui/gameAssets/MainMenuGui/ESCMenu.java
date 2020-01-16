@@ -134,7 +134,6 @@ public class ESCMenu extends Menu {
                 } else
                     JOptionPane.showMessageDialog(null,"Error saving file","Save Error",JOptionPane.ERROR_MESSAGE);
             }
-            GameManager.getSettings().setOnline(false);
         }
         if (buttonClicked == RESUME) {
             if(GameManager.getShipCounter() != null)
