@@ -79,7 +79,7 @@ public class NetworkManager {
      * Send a confirm message to the opposing network.
      */
     public void sendConfirm(){
-        if(server && !confirmCanBeSent) {
+        if(server && !player.isOpponentConfirm() && !confirmCanBeSent) {
             confirmCanBeSent = true;
             return;
         }

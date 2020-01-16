@@ -202,7 +202,7 @@ public class WindowManager {
         test += 1;
         time += deltaTime;
         if(time >= 1){
-            System.out.println("FPS: " + test);
+            //System.out.println("FPS: " + test);
             time = 0;
             test = 0;
         }

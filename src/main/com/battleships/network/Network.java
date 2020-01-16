@@ -230,4 +230,11 @@ public abstract class Network implements NetworkInterface{
     public boolean isPlayerConfirm() {
         return playerConfirm;
     }
+
+    /**
+     * @return {@code true} if the opponent has already confirmed ship placement.
+     */
+    public boolean isOpponentConfirm() {
+        return opponentConfirm;
+    }
 }
