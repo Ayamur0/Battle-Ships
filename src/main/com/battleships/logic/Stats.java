@@ -76,6 +76,7 @@ public class Stats{
      * Needed if these stats should be saved into a {@link SaveFile}.
      */
     public void saveTime(){
+        endTime = (int) GLFW.glfwGetTime();
         playTime += endTime - startTime;
     }
 
