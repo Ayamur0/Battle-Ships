@@ -57,6 +57,7 @@ public class PostProcessing {
 //        vBlur2 = new VerticalBlur(WindowManager.getWidth() / 8, WindowManager.getHeight() / 8);
     }
 
+
     public static void test(int colorTexture){
         start();
         resolutionChanger.render(colorTexture);
