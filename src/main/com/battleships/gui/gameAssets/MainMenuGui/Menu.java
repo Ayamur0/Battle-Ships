@@ -293,7 +293,6 @@ public abstract class Menu extends GuiClickCallback {
             SaveFile saveFile = SaveFileManager.loadFromFile(filename);
             if (saveFile == null) {
                 JOptionPane.showMessageDialog(null,"Error loading the file","Loading Error",JOptionPane.ERROR_MESSAGE);
-                GameManager.getSettings().setOnline(false);
                 return false;
             } else {
                 SaveFileManager.loadSaveFile(saveFile);
@@ -302,8 +301,11 @@ public abstract class Menu extends GuiClickCallback {
                 GameManager.prepareGame();
                 return true;
             }
-        } else
+        } else{
+            GameManager.getSettings().setOnline(false);
             return false;
+        }
+
     }
     /**
      * @return {@code true} if there is a unprocessed user input that needs to be processed.

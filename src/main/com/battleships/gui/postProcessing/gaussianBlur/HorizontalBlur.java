@@ -34,6 +34,15 @@ public class HorizontalBlur {
     }
 
     /**
+     * Changes the renderer so the texture it renders to has a new resolution.
+     * @param width Width of the new resolution in pixels.
+     * @param height Height of the new resolution in pixels.
+     */
+    public void changeResolution(int width, int height){
+        renderer = new ImageRenderer(width / 4, height / 4);
+    }
+
+    /**
      * Render the horizontal blur.
      * @param texture the texture of the current scene (fbo)
      */

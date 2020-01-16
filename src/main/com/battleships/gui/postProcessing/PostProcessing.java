@@ -77,6 +77,7 @@ public class PostProcessing {
      */
     public static void changeResolution(int width, int height){
         resolutionChanger.changeResolution(width, height);
+        hBlur.changeResolution(width, height);
     }
 
     /**
