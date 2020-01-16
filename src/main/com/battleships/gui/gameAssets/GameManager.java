@@ -468,7 +468,6 @@ public class GameManager {
      * Updates everything in the scene and then renders everything.
      */
     public static void updateScene(){
-        double starttime = GLFW.glfwGetTime() * 1000;
         blur.updateSize();
         if(MainMenuManager.getMenu() instanceof ESCMenu && MainMenuManager.getMenu().isUserInputMade())
             ((ESCMenu) MainMenuManager.getMenu()).processInput();
@@ -476,7 +475,6 @@ public class GameManager {
             logic.advanceTurn();
         camera.move(terrain);
         mousePicker.update();
-        System.out.println("Nach mousepicker " + (GLFW.glfwGetTime() * 1000 - starttime));
         AudioMaster.setListenerData(camera.getPosition().x, camera.getPosition().y, camera.getPosition().z, camera.getPitch(), camera.getYaw());
         if(cannonballDone) {
             cannonballDone = false;
@@ -487,18 +485,13 @@ public class GameManager {
             //System.out.println("\u001B[35m" + "Shot has hit! " + " Has hit Ship: " + cannonballHit + " Turn: " + logic.isPlayerTurn());
         }
         blur.bindFrameBuffer();
-        System.out.println("Vor entities " + (GLFW.glfwGetTime() * 1000 - starttime));
         renderEntities();
-        System.out.println("Nach entities " + (GLFW.glfwGetTime() * 1000 - starttime));
         blur.unbindFrameBuffer();
         prepareWater();
-        System.out.println("Nach water prepare " + (GLFW.glfwGetTime() * 1000 - starttime));
         blur.bindFrameBuffer();
         waterRenderer.render(waterTiles, camera, light);
-        System.out.println("Nach water render " + (GLFW.glfwGetTime() * 1000 - starttime));
         renderParticles();
         guiRenderer.render(guis);
-        System.out.println("Nach guis + particle " + (GLFW.glfwGetTime() * 1000 - starttime));
         TextMaster.render();
         blur.bindFrameBuffer();
         PostProcessing.test(blur.getColorTexture());
@@ -512,7 +505,6 @@ public class GameManager {
         }
         if(settings.isOnline())
             network.execute();
-        System.out.println("Ende " + (GLFW.glfwGetTime() * 1000 - starttime));
     }
 
     /**

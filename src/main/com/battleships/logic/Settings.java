@@ -70,11 +70,6 @@ public class Settings {
     private int resWidth = -1, resHeight = -1;
 
     /**
-     * {@code true} if game uses lower graphic to increase performance.
-     */
-    private boolean lowSpecMode;
-
-    /**
      * Creates new settings.
      * Tries to load existing settings.
      */
@@ -296,19 +291,5 @@ public class Settings {
             return false;
         }
         return true;
-    }
-
-    /**
-     * @return {@code true} if game uses lower graphic to increase performance.
-     */
-    public boolean isLowSpecMode() {
-        return lowSpecMode;
-    }
-
-    /**
-     * @param lowSpecMode {@code true} if game should use lower graphic to increase performance.
-     */
-    public void setLowSpecMode(boolean lowSpecMode) {
-        this.lowSpecMode = lowSpecMode;
     }
 }
