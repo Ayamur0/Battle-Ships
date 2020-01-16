@@ -81,17 +81,20 @@ public class WaterFrameBuffers {
      * Updates the sizes of the frame buffers to match the current window size.
      */
     public void updateFrameBuffers(){
+        boolean lowSpecMode = GameManager.getSettings().isLowSpecMode();
+        int reflectionFactor = lowSpecMode ? 8 : 4;
+        int refractionFactor = lowSpecMode ? 4 : 1;
         if(GameManager.getSettings().getResHeight() == -1 || GameManager.getSettings().getResWidth() == -1) {
-            REFLECTION_WIDTH = WindowManager.getWidth() / 4;
-            REFLECTION_HEIGHT = WindowManager.getHeight() / 4;
-            REFRACTION_WIDTH = WindowManager.getWidth();
-            REFRACTION_HEIGHT = WindowManager.getHeight();
+            REFLECTION_WIDTH = WindowManager.getWidth() / reflectionFactor;
+            REFLECTION_HEIGHT = WindowManager.getHeight() / reflectionFactor;
+            REFRACTION_WIDTH = WindowManager.getWidth() / refractionFactor;
+            REFRACTION_HEIGHT = WindowManager.getHeight() / refractionFactor;
         }
         else {
-            REFLECTION_WIDTH = GameManager.getSettings().getResWidth() / 4;
-            REFLECTION_HEIGHT = GameManager.getSettings().getResHeight() / 4;
-            REFRACTION_WIDTH = GameManager.getSettings().getResWidth();
-            REFRACTION_HEIGHT = GameManager.getSettings().getResHeight();
+            REFLECTION_WIDTH = GameManager.getSettings().getResWidth() / reflectionFactor;
+            REFLECTION_HEIGHT = GameManager.getSettings().getResHeight() / reflectionFactor;
+            REFRACTION_WIDTH = GameManager.getSettings().getResWidth() / refractionFactor;
+            REFRACTION_HEIGHT = GameManager.getSettings().getResHeight() / refractionFactor;
         }
         initializeReflectionFrameBuffer();
         initializeRefractionFrameBuffer();
