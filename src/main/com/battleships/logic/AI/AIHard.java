@@ -24,6 +24,7 @@ public class AIHard extends AIMedium {
         super(team, gridSize, manager);
         int r = random.nextInt(2);
         pattern = r == 1 ? new PatternLines(gridSize) : new PatternX(gridSize);
+        pattern = new PatternX(gridSize);
     }
 
     /**

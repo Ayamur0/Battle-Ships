@@ -24,7 +24,7 @@ public abstract class Network implements NetworkInterface{
     /**
      * Constants for the actions the logic may need to execute.
      */
-    private static final int NONE = -1, SHOOT = 0, CONFIRM = 1, SAVE = 2, LOAD = 3, SIZE = 4;
+    private static final int NONE = -1, SHOOT = 0, CONFIRM = 1, SAVE = 2, LOAD = 3, SIZE = 4, CLOSE = 5;
 
     /**
      * String containing the word the network sends for a shoot command.
@@ -115,6 +115,11 @@ public abstract class Network implements NetworkInterface{
                 GameManager.resizeGrid();
                 GameManager.getLogic().advanceGamePhase();
                 break;
+            case CLOSE:  closeConnection();
+                GameManager.getLogic().setGameState(GameManager.MENU);
+                GameManager.getMainMenuManager().backToMainMenu();
+                GameManager.getSettings().setOnline(false);
+                break;
         }
         action = NONE;
     }
@@ -126,10 +131,7 @@ public abstract class Network implements NetworkInterface{
      */
     public void setStringFunction(String text){
         if(text == null) {
-            closeConnection();
-            GameManager.getLogic().setGameState(GameManager.MENU);
-            GameManager.getMainMenuManager().backToMainMenu();
-            GameManager.getSettings().setOnline(false);
+            action = CLOSE;
             return;
         }
         if(text.contains(shoot)){
