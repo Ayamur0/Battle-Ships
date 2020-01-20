@@ -6,6 +6,7 @@ import com.battleships.logic.AI.AI;
 import com.battleships.logic.AI.AIHard;
 import com.battleships.logic.AI.AIMedium;
 import com.battleships.logic.OnlineGrid;
+import com.battleships.logic.SaveFile;
 import com.battleships.logic.SaveFileManager;
 import com.battleships.logic.Settings;
 import org.joml.Intersectiond;
@@ -23,7 +24,7 @@ public abstract class Network implements NetworkInterface{
     /**
      * Constants for the actions the logic may need to execute.
      */
-    private static final int NONE = -1, SHOOT = 0, CONFIRM = 1, SAVE = 2, LOAD = 3, SIZE = 4;
+    private static final int NONE = -1, SHOOT = 0, CONFIRM = 1, SAVE = 2, LOAD = 3, SIZE = 4, CLOSE = 5;
 
     /**
      * String containing the word the network sends for a shoot command.
@@ -99,15 +100,25 @@ public abstract class Network implements NetworkInterface{
             case SHOOT:
                 System.out.println("\u001B[34m" + "Processing Shot");GameManager.shoot(GridManager.OPPONENTFIELD, new Vector2i(row+1, col+1)); break;
             case CONFIRM: setOpponentConfirm(); break;
-            case SAVE: SaveFileManager.saveToFile(ID); break;
-            case LOAD: SaveFileManager.loadFromFile(ID);
-                GameManager.getMainMenuManager().clearAll();
-                GameManager.resizeGrid();
-                GameManager.getLogic().advanceGamePhase();
+            case SAVE: SaveFileManager.saveToFile(ID);
+                        setStringFunction(null);
+                        break;
+            case LOAD: SaveFile file = SaveFileManager.loadFromFile(ID);
+                if(file == null) {
+                    setStringFunction(null);
+                    break;
+                }
+                SaveFileManager.loadSaveFile(file);
+                GameManager.prepareGame();
                 break;
             case SIZE: GameManager.getMainMenuManager().clearAll();
                 GameManager.resizeGrid();
                 GameManager.getLogic().advanceGamePhase();
+                break;
+            case CLOSE:  closeConnection();
+                GameManager.getLogic().setGameState(GameManager.MENU);
+                GameManager.getMainMenuManager().backToMainMenu();
+                GameManager.getSettings().setOnline(false);
                 break;
         }
         action = NONE;
@@ -120,10 +131,7 @@ public abstract class Network implements NetworkInterface{
      */
     public void setStringFunction(String text){
         if(text == null) {
-            closeConnection();
-            GameManager.getLogic().setGameState(GameManager.MENU);
-            GameManager.getMainMenuManager().backToMainMenu();
-            GameManager.getSettings().setOnline(false);
+            action = CLOSE;
             return;
         }
         if(text.contains(shoot)){
@@ -171,10 +179,11 @@ public abstract class Network implements NetworkInterface{
         }else if(text.contains(save)){
             text = text.replace(save, "");
             ID = text;
-
+            action = SAVE;
         }else if(text.contains(load)){
             text = text.replace(load, "");
             ID = text;
+            action = LOAD;
         }else if(text.contains(pass)){
 
         }

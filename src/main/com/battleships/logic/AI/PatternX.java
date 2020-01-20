@@ -93,6 +93,7 @@ public class PatternX implements Pattern {
     public Vector2i firstIndex() {
         Random r = new Random();
         lastX = r.nextInt(4);
+        lastX = 1;
         switch (lastX){
             case 0: lastX = 1; lastY = 1; direction = DOWNRIGHT; return new Vector2i(lastX,lastY);
             case 1: lastX = size; lastY = 1; direction = DOWNLEFT; return new Vector2i(lastX, lastY);
