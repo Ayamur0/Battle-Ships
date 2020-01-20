@@ -294,15 +294,19 @@ public abstract class Menu extends GuiClickCallback {
             if (saveFile == null) {
                 JOptionPane.showMessageDialog(null,"Error loading the file","Loading Error",JOptionPane.ERROR_MESSAGE);
                 return false;
-            } else {
+            }
+            else {
                 SaveFileManager.loadSaveFile(saveFile);
                 clearMenu();
                 cleaBackgournd();
-                GameManager.prepareGame();
+                if (GameManager.getSettings().isOnline())
+                    MainMenuManager.setMenu(new WaitingConnection(guiManager,loader,true));
+                else
+                    GameManager.prepareGame();
                 return true;
             }
-        } else{
-            GameManager.getSettings().setOnline(false);
+        }
+        else{
             return false;
         }
 
