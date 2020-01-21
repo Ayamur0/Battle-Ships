@@ -66,7 +66,7 @@ public abstract class Menu extends GuiClickCallback {
     /**
      * List containing all {@link GuiTexture}s behind the buttons
      */
-    protected static List<GuiTexture> backgounds = new ArrayList<>();
+    protected static List<GuiTexture> backgrounds = new ArrayList<>();
     /**
      * Texture above all buttons
      */
@@ -139,7 +139,7 @@ public abstract class Menu extends GuiClickCallback {
             scrollBackground = loader.loadTexture("scroll.png");
         if (icon == 0)
             icon = loader.loadTexture("StartIcon.png");
-        if (backgounds.size() == 0)
+        if (backgrounds.size() == 0)
             addBackground();
         try {
             UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
@@ -209,16 +209,16 @@ public abstract class Menu extends GuiClickCallback {
      * adds a {@link GuiTexture} behind the buttons as background
      */
     protected void addBackground() {
-        backgounds.add(new GuiTexture(scrollBackground, new Vector2f(0.5f, 0.5f), new Vector2f(0.375f, 1f)));
-        backgounds.add(new GuiTexture(icon, new Vector2f(0.5f, 0.175f), new Vector2f(0.3f, 0.3f)));
-        GameManager.getGuis().addAll(backgounds);
+        backgrounds.add(new GuiTexture(scrollBackground, new Vector2f(0.5f, 0.5f), new Vector2f(0.375f, 1f)));
+        backgrounds.add(new GuiTexture(icon, new Vector2f(0.5f, 0.175f), new Vector2f(0.3f, 0.3f)));
+        GameManager.getGuis().addAll(backgrounds);
     }
 
     /**
      * clears all {@link GuiTexture} that are no buttons at the game Begin
      */
     protected void cleaBackgournd() {
-        GameManager.getGuis().removeAll(backgounds);
+        GameManager.getGuis().removeAll(backgrounds);
     }
 
     /**
@@ -265,7 +265,7 @@ public abstract class Menu extends GuiClickCallback {
     }
 
     /**
-     * Opens the dialog tho select a file
+     * Opens the dialog to select a file
      */
     protected void openLoadGameDialog() {
         try {
@@ -325,6 +325,13 @@ public abstract class Menu extends GuiClickCallback {
         return filePicked;
     }
 
+    /**
+     * Tests if the click was on either of the {@link GuiTexture}.
+     * @param gui The gui to test for if the click was on it.
+     * @param x xPos of the click (left of screen = 0, right of screen = 1)
+     * @param y yPos of the click (top of screen = 0, bottom of screen = 1)
+     * @return {@code true} if the click was on either of the{@link GuiTexture}, {@code false} else.
+     */
     @Override
     protected boolean isClickOnGui(GuiTexture gui, double x, double y) {
         for (int i = 0; i<buttons.size(); i++){
@@ -335,6 +342,10 @@ public abstract class Menu extends GuiClickCallback {
         }
         return false;
     }
+
+    /**
+     * Clears all {@link GuiTexture}, {@link GUIText} from the rendered scene and resets the settings for the game
+     */
     public void clearAllMenuElements(){
         ESCMenu.setActive(false);
         if(GameManager.getShipCounter() != null)

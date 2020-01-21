@@ -50,27 +50,27 @@ public class InGameSettingsMenu extends Menu {
     /**
      * The offset used too set the {@link GUIText} above the {@link Slider}
      */
-    private float sliderOffset = 0.04f;
+    private final static float sliderOffset = 0.04f;
     /**
      * Indicates if the settings are for Singleplayer, Multiplayer or Ai VS Ai
      */
     protected int gameMode; //0 Singleplayer, 1 Multiplayer, 2 Ai VS Ai;
 
     /**
-     * Slider for the playing field size
+     * {@link Slider} for the playing field size
      */
     protected Slider playingFieldSize;
     /**
-     * Slider for the ai difficulty
+     * {@link Slider} for the ai difficulty
      */
     protected Slider difficulty1;
     /**
-     * Slider for the second ai difficulty only needed if game mode Ai VS Ai is chosen
+     * {@link Slider} for the second ai difficulty only needed if game mode Ai VS Ai is chosen
      */
     protected Slider difficulty2; //needed for Ai VS Ai to remove the slider afterwords
 
     /**
-     * Size for the Sliders
+     * Size for the {@link Slider}
      */
     protected Vector2f sliderSize = new Vector2f(0.2f, 0.01f);
 
