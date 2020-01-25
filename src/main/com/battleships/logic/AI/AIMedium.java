@@ -245,7 +245,7 @@ public class AIMedium extends AI {
                 return true;
             case WATER:
                 if(GameManager.getSettings().isOnline())
-                    lastTried = HORIZONTAL;
+                    lastTried = VERTICAL;
                 return false;
             case NA:
                 break;
@@ -259,7 +259,7 @@ public class AIMedium extends AI {
                 return true;
             case WATER:
                 if(GameManager.getSettings().isOnline())
-                    lastTried = HORIZONTAL;
+                    lastTried = VERTICAL;
                 return false;
             case NA:
                 break;
@@ -281,9 +281,12 @@ public class AIMedium extends AI {
      * @param shot Index of the shot the answer is for.
      */
     public void processAnswer(Vector2i shot){
+        System.out.println("Added by AI");
         hitCells.add(shot);
-        if(lastTried != UNKNOWN)
+        if(lastTried != UNKNOWN) {
             foundShipDir = lastTried;
+            System.out.println("AI found ship dir " + foundShipDir + " Hit cells " + hitCells.size());
+        }
         lastShot = shot;
     }
 }

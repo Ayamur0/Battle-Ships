@@ -496,15 +496,17 @@ public class GameManager {
         blur.bindFrameBuffer();
         PostProcessing.test(blur.getColorTexture());
         renderer.updateProjectionMatrix();
-        if(pendingAnswer != 0 && gridManager.getCannonball().isWaiting()) {
-            if(pendingAnswer == 1)
-                gridManager.getCannonball().cannonballHit2(false);
-            else
-                gridManager.getCannonball().cannonballHit2(true);
-            pendingAnswer = 0;
-        }
         if(settings.isOnline())
             network.execute();
+        if(pendingAnswer != 0 && gridManager.getCannonball().isWaiting()) {
+            if(pendingAnswer == 1) {
+                gridManager.getCannonball().cannonballHit2(false);
+            }
+            else {
+                gridManager.getCannonball().cannonballHit2(true);
+            }
+            pendingAnswer = 0;
+        }
     }
 
     /**

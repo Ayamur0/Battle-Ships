@@ -19,7 +19,7 @@ import org.lwjgl.glfw.GLFWWindowIconifyCallback;
  *
  * @Tim Staudenmaier
  */
-public abstract class Network implements NetworkInterface{
+public abstract class Network implements NetworkInterface {
 
     /**
      * Constants for the actions the logic may need to execute.
@@ -80,7 +80,7 @@ public abstract class Network implements NetworkInterface{
     /**
      * Action the network needs to process. (One of the constants)
      */
-    private int action;
+    private int action = -1;
 
     /**
      * X index of the last shot this network sent to the opponent.
@@ -94,28 +94,39 @@ public abstract class Network implements NetworkInterface{
     /**
      * Execute the last action this network received from the opponent.
      */
-    public void execute(){
-        switch (action){
-            case NONE: break;
+    public void execute() {
+        switch (action) {
+            case NONE:
+                break;
             case SHOOT:
-                System.out.println("\u001B[34m" + "Processing Shot");GameManager.shoot(GridManager.OPPONENTFIELD, new Vector2i(row+1, col+1)); break;
-            case CONFIRM: setOpponentConfirm(); break;
-            case SAVE: SaveFileManager.saveToFile(ID);
-                        setStringFunction(null);
-                        break;
-            case LOAD: SaveFile file = SaveFileManager.loadFromFile(ID);
-                if(file == null) {
+                System.out.println("\u001B[34m" + "Processing Shot " + GameManager.getGridManager().getCannonball().isFlying());
+                if(GameManager.getGridManager().getCannonball().isFlying())
+                    return;
+                GameManager.shoot(GridManager.OPPONENTFIELD, new Vector2i(row + 1, col + 1));
+                break;
+            case CONFIRM:
+                setOpponentConfirm();
+                break;
+            case SAVE:
+                SaveFileManager.saveToFile(ID);
+                setStringFunction(null);
+                break;
+            case LOAD:
+                SaveFile file = SaveFileManager.loadFromFile(ID);
+                if (file == null) {
                     setStringFunction(null);
                     break;
                 }
                 SaveFileManager.loadSaveFile(file);
                 GameManager.prepareGame();
                 break;
-            case SIZE: GameManager.getMainMenuManager().clearAll();
+            case SIZE:
+                GameManager.getMainMenuManager().clearAll();
                 GameManager.resizeGrid();
                 GameManager.getLogic().advanceGamePhase();
                 break;
-            case CLOSE:  closeConnection();
+            case CLOSE:
+                closeConnection();
                 GameManager.getLogic().setGameState(GameManager.MENU);
                 GameManager.getMainMenuManager().backToMainMenu();
                 GameManager.getSettings().setOnline(false);
@@ -129,12 +140,12 @@ public abstract class Network implements NetworkInterface{
      * Reads a string the network has gotten from the opponent.
      * Sets the action depending on what this game needs to do, to execute the received command.
      */
-    public void setStringFunction(String text){
-        if(text == null) {
+    public void setStringFunction(String text) {
+        if (text == null) {
             action = CLOSE;
             return;
         }
-        if(text.contains(shoot)){
+        if (text.contains(shoot)) {
             text = text.replace(shoot, "");
             String[] temp = text.split(" ");
 
@@ -142,52 +153,51 @@ public abstract class Network implements NetworkInterface{
             row = Integer.parseInt(temp[1]);
 
             action = SHOOT;
-        }else if(text.contains(size)){
+        } else if (text.contains(size)) {
             text = text.replace(size, "");
 
             GameManager.getSettings().setSize(Integer.parseInt(text));
             GameManager.getSettings().setOnline(true);
             action = SIZE;
-        }else if(text.contains(confirmed)){
+        } else if (text.contains(confirmed)) {
             text = text.replace(confirmed, "");
-            if(text.equals(""))
-               action = CONFIRM;
-        }else if(text.contains(answer)){
+            if (text.equals(""))
+                action = CONFIRM;
+        } else if (text.contains(answer)) {
             text = text.replace(answer, "");
-            if(Integer.parseInt(text) == 0) {
+            if (Integer.parseInt(text) == 0) {
                 GameManager.processShootAnswer(false);
-                if(GameManager.getLogic().getOpponentGrid() instanceof OnlineGrid)
-                    ((OnlineGrid) GameManager.getLogic().getOpponentGrid()).processShot(lastShotX,lastShotY,0);
+                if (GameManager.getLogic().getOpponentGrid() instanceof OnlineGrid)
+                    ((OnlineGrid) GameManager.getLogic().getOpponentGrid()).processShot(lastShotX, lastShotY, 0);
                 GameManager.getNetwork().sendPass();
             }
-             if(Integer.parseInt(text) == 1){
-                 AI ai = GameManager.getLogic().getTurnHandler().getOnlineAI();
-                 if(ai instanceof AIMedium)
-                     ((AIMedium) ai).processAnswer(new Vector2i(lastShotX,lastShotY));
-                 GameManager.processShootAnswer(true);
-                 if(GameManager.getLogic().getOpponentGrid() instanceof OnlineGrid)
-                    ((OnlineGrid) GameManager.getLogic().getOpponentGrid()).processShot(lastShotX,lastShotY,1);
-            }else if(Integer.parseInt(text) == 2){
-                 AI ai = GameManager.getLogic().getTurnHandler().getOnlineAI();
-                 if(ai instanceof AIMedium)
-                     ((AIMedium) ai).processAnswer(new Vector2i(lastShotX,lastShotY));
-                 GameManager.processShootAnswer(true);
-                 if(GameManager.getLogic().getOpponentGrid() instanceof OnlineGrid)
-                     ((OnlineGrid) GameManager.getLogic().getOpponentGrid()).processShot(lastShotX,lastShotY, 2);
+            if (Integer.parseInt(text) == 1) {
+                AI ai = GameManager.getLogic().getTurnHandler().getOnlineAI();
+                if (ai instanceof AIMedium)
+                    ((AIMedium) ai).processAnswer(new Vector2i(lastShotX, lastShotY));
+                GameManager.processShootAnswer(true);
+                if (GameManager.getLogic().getOpponentGrid() instanceof OnlineGrid)
+                    ((OnlineGrid) GameManager.getLogic().getOpponentGrid()).processShot(lastShotX, lastShotY, 1);
+            } else if (Integer.parseInt(text) == 2) {
+                AI ai = GameManager.getLogic().getTurnHandler().getOnlineAI();
+                if (ai instanceof AIMedium)
+                    ((AIMedium) ai).processAnswer(new Vector2i(lastShotX, lastShotY));
+                GameManager.processShootAnswer(true);
+                if (GameManager.getLogic().getOpponentGrid() instanceof OnlineGrid)
+                    ((OnlineGrid) GameManager.getLogic().getOpponentGrid()).processShot(lastShotX, lastShotY, 2);
             }
 
-        }else if(text.contains(save)){
+        } else if (text.contains(save)) {
             text = text.replace(save, "");
             ID = text;
             action = SAVE;
-        }else if(text.contains(load)){
+        } else if (text.contains(load)) {
             text = text.replace(load, "");
             ID = text;
             action = LOAD;
-        }else if(text.contains(pass)){
+        } else if (text.contains(pass)) {
 
-        }
-        else{
+        } else {
             System.err.println("Received faulty message from Network!");
         }
     }
@@ -198,14 +208,14 @@ public abstract class Network implements NetworkInterface{
      * If the player has confirmed but the confirm message was sent because network was waiting form enemy confirm,
      * the confirm message gets sent.
      */
-    public void setOpponentConfirm(){
+    public void setOpponentConfirm() {
         opponentConfirm = true;
-        if(playerConfirm){
+        if (playerConfirm) {
             GameManager.getLogic().advanceGamePhase();
             opponentConfirm = false;
             playerConfirm = false;
         }
-        if(GameManager.getNetwork().isConfirmCanBeSent()){
+        if (GameManager.getNetwork().isConfirmCanBeSent()) {
             GameManager.getNetwork().sendConfirm();
         }
     }
@@ -214,9 +224,9 @@ public abstract class Network implements NetworkInterface{
      * Sets the value to true that indicates whether the player has confirmed the ship placement.
      * If both players have confirmed this processes the confirms and starts the shooting phase.
      */
-    public void setPlayerConfirm(){
+    public void setPlayerConfirm() {
         playerConfirm = true;
-        if(opponentConfirm){
+        if (opponentConfirm) {
             GameManager.getLogic().advanceGamePhase();
             opponentConfirm = false;
             playerConfirm = false;
@@ -225,10 +235,11 @@ public abstract class Network implements NetworkInterface{
 
     /**
      * Sets the index of the last shot that this network has made.
+     *
      * @param x X index of the last shot sent.
      * @param y Y index of the last shot sent.
      */
-    public void setLastShot(int x, int y){
+    public void setLastShot(int x, int y) {
         lastShotX = x;
         lastShotY = y;
     }

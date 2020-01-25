@@ -106,7 +106,6 @@ public class SaveFileManager {
      */
     public static void loadSaveFile(SaveFile saveFile){
         GameManager.setSettings(saveFile.getSettings());
-        GameManager.getSettings().setOnline(false);
         LogicManager logic = GameManager.getLogic();
         GridManager gridManager = GameManager.getGridManager();
 

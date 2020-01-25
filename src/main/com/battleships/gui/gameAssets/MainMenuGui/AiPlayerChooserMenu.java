@@ -82,10 +82,13 @@ public class AiPlayerChooserMenu extends Menu {
         switch (buttonClicked){
             case EASY: GameManager.getLogic().getTurnHandler().setPlayerAI(
                     new AIEasy(GridManager.OWNFIELD, GameManager.getLogic().getPlayerGrid().getSize(), GameManager.getLogic()));
+            break;
             case MEDIUM: GameManager.getLogic().getTurnHandler().setPlayerAI(
                     new AIMedium(GridManager.OWNFIELD, GameManager.getLogic().getPlayerGrid().getSize(), GameManager.getLogic()));
+            break;
             case HARD: GameManager.getLogic().getTurnHandler().setPlayerAI(
                     new AIHard(GridManager.OWNFIELD, GameManager.getLogic().getPlayerGrid().getSize(), GameManager.getLogic()));
+            break;
         }
         GameManager.getLogic().getTurnHandler().makeAiTurns();
         if(GameManager.getShipCounter() != null)
