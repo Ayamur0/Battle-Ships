@@ -75,8 +75,7 @@ public class TextureLoader {
         int height = 0;
         ByteBuffer buffer = null;
         try {
-            URL resource = TextureLoader.class.getResource(fileName);
-            FileInputStream in = new FileInputStream(new File(resource.toURI()));
+            InputStream in = TextureLoader.class.getResourceAsStream(fileName);
             PNGDecoder decoder = new PNGDecoder(in);
             width = decoder.getWidth();
             height = decoder.getHeight();
