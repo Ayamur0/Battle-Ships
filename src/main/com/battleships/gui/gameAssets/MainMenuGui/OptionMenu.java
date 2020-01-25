@@ -7,11 +7,7 @@ import com.battleships.gui.guis.GuiManager;
 import com.battleships.gui.guis.GuiTexture;
 import com.battleships.gui.guis.Slider;
 import com.battleships.gui.renderingEngine.Loader;
-import com.battleships.gui.window.WindowManager;
 import org.joml.Vector2f;
-
-import java.lang.reflect.GenericArrayType;
-import java.net.Inet4Address;
 import java.util.ArrayList;
 
 /**
@@ -25,7 +21,7 @@ public class OptionMenu extends InGameSettingsMenu {
      */
     private static final int SAVE = 0;
     /**
-     * Constant value for host button
+     * Constant value for back button
      */
     private static final int BACK = 1;
     /**
@@ -37,7 +33,7 @@ public class OptionMenu extends InGameSettingsMenu {
      */
     private static final int MINUS = 3;
     /**
-     * The texture for check box
+     * The texture used for the {@link GuiTexture} resolution settings button
      */
     private static int woodBox;
 
@@ -55,7 +51,7 @@ public class OptionMenu extends InGameSettingsMenu {
     private static ArrayList<String> resolutions;
 
     /**
-     * {@link GuiTexture} for the check box
+     * {@link GuiTexture} for the resolution settings button
      */
     GuiTexture textBoxWood;
 
@@ -81,7 +77,7 @@ public class OptionMenu extends InGameSettingsMenu {
         }
 
         volume = new Slider(loader.loadTexture("Slider.png"), loader.loadTexture("WoodenSlider.jpg"), 0, 100,
-                (int)GameManager.getSettings().getVolume()*50, new Vector2f(0.2f, 0.01f), super.standardButtonPos, guiManager, GameManager.getGuis());
+                (int)(GameManager.getSettings().getVolume()*50), new Vector2f(0.2f, 0.01f), super.standardButtonPos, guiManager, GameManager.getGuis());
         super.guiTexts.add(new GUIText("Volume: " + (int)volume.getValueAsFloat(), fontSize, font, new Vector2f(volume.getPositions().x, volume.getPositions().y - 0.06f), 0.2f, true, outlineColor, 0.0f, 0.1f, outlineColor, new Vector2f()));
 
         super.guiTexts.add(new GUIText(resolutions.get(resNow), fontSize, font, new Vector2f(standardButtonPos.x,standardButtonPos.y+buttonGap), 0.3f, true, outlineColor, 0.0f, 0.1f, outlineColor, new Vector2f()));
@@ -99,6 +95,14 @@ public class OptionMenu extends InGameSettingsMenu {
         GameManager.getGuis().addAll(buttons);
     }
 
+    /**
+     * Tests if the click was on either of the {@link GuiTexture}.
+     * To test if the click was on the left or right side on the {@link GuiTexture} woodBox to set the resolution
+     * @param gui The gui to test for if the click was on it.
+     * @param x xPos of the click (left of screen = 0, right of screen = 1)
+     * @param y yPos of the click (top of screen = 0, bottom of screen = 1)
+     * @return {@code true} if the click was on either of the{@link GuiTexture}, {@code false} else.
+     */
     @Override
     protected boolean isClickOnGui(GuiTexture gui, double x, double y) {
         boolean dummy = super.isClickOnGui(gui,x,y);
@@ -181,8 +185,8 @@ public class OptionMenu extends InGameSettingsMenu {
     }
 
     /**
-     *
-     * @param amount
+     * Sets the Resolution for the game and updates the {@link GUIText}
+     * @param amount how many steps to go in the {@link ArrayList} for the resolution
      */
     private void setResolution(int amount){
         if (resNow+amount<0)
@@ -196,6 +200,10 @@ public class OptionMenu extends InGameSettingsMenu {
 
         TextMaster.loadText(super.guiTexts.get(1));
     }
+
+    /**
+     * Initializes the {@link ArrayList} for the resolutions in the {@link GUIText}
+     */
     private void initResolutions(){
         resolutions=new ArrayList<>();
         resolutions.add("800 x 600");

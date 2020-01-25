@@ -74,7 +74,7 @@ public class WaitingConnection extends Menu {
     }
 
     /**
-     * Setts all needed settings to start a Multiplayer session
+     * Setts all settings needed to start a Multiplayer session
      */
     public void startMultiplayerGame() {
         opponentConnected = false;

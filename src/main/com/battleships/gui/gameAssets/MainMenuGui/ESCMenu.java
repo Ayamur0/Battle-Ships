@@ -180,7 +180,7 @@ public class ESCMenu extends Menu {
         if (SaveFileManager.saveToFile(userInput))
             GameManager.getMainMenuManager().backToMainMenu();
         else
-            super.guiTexts.add(new GUIText("Error saving file", fontSize, font, new Vector2f(), 0.12f, true, outlineColor, 0.0f, 0.1f, outlineColor, new Vector2f()));
+            JOptionPane.showMessageDialog(null,"Error saving file","Save Error",JOptionPane.ERROR_MESSAGE);
         userInputMade = false;
     }
 }
