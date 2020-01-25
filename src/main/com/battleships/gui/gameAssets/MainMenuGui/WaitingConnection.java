@@ -5,6 +5,8 @@ import com.battleships.gui.gameAssets.GameManager;
 import com.battleships.gui.guis.GuiManager;
 import com.battleships.gui.guis.GuiTexture;
 import com.battleships.gui.renderingEngine.Loader;
+import com.battleships.logic.SaveFile;
+import com.battleships.logic.SaveFileManager;
 import org.joml.Vector2f;
 
 /**
@@ -23,9 +25,9 @@ public class WaitingConnection extends Menu {
      */
     private boolean opponentConnected;
     /**
-     * Indicates if the game is loaded from a file
+     * stores the save File if the multiplayer game is from a save File
      */
-    private boolean fromFile;
+    private SaveFile saveFile;
 
     /**
      * Creates the Multiplayer menu, sets the color of the {@link GUIText} and creates the {@link GUIText} on the Buttons.
@@ -33,9 +35,9 @@ public class WaitingConnection extends Menu {
      * @param guiManager GuiManager that should handle the click function of these guis.
      * @param loader     Loader needed to load textures
      */
-    public WaitingConnection(GuiManager guiManager, Loader loader, boolean fromFile) {
+    public WaitingConnection(GuiManager guiManager, Loader loader, SaveFile saveFile) {
         super(guiManager, loader);
-        this.fromFile = fromFile;
+        this.saveFile = saveFile;
 
         this.createMenu();
 
@@ -77,8 +79,10 @@ public class WaitingConnection extends Menu {
      */
     public void startMultiplayerGame() {
         opponentConnected = false;
-        if (fromFile) {
+        if (saveFile != null) {
+            GameManager.prepareGame();
             GameManager.getNetwork().sendLoad(MainMenuManager.getMenu().getFileName());
+            SaveFileManager.loadSaveFile(saveFile);
         } else {
             GameManager.resizeGrid();
             GameManager.getNetwork().sendSize(GameManager.getSettings().getSize());
@@ -96,6 +100,7 @@ public class WaitingConnection extends Menu {
     protected void clickAction() {
         if (buttonClicked == CANCEL) {
             super.clearMenu();
+            GameManager.getSettings().setOnline(false);
             GameManager.getNetwork().stopConnectionSearch();
             MainMenuManager.setMenu(new MultiplayerMenu(guiManager, loader));
         }
