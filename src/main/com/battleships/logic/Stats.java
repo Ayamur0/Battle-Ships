@@ -10,7 +10,7 @@ import java.util.stream.IntStream;
  *
  * @author Tim Staudenmaier
  */
-public class Stats{
+public class Stats {
 
     /**
      * Tiem played in seconds
@@ -54,11 +54,11 @@ public class Stats{
     /**
      * Initialize the stats with values of the beginning of the game.
      */
-    public void init(){
-        startTime = (int)GLFW.glfwGetTime();
+    public void init() {
+        startTime = (int) GLFW.glfwGetTime();
         rounds = 0;
         maxShipsSum = IntStream.of(GameManager.getLogic().getEnemyShipsLeft()).sum();
-        System.arraycopy(GameManager.getLogic().getEnemyShipsLeft(),0,maxShips,0,4);
+        System.arraycopy(GameManager.getLogic().getEnemyShipsLeft(), 0, maxShips, 0, 4);
         shipsAlive = maxShipsSum;
         shipsDestroyed = 0;
         accuracy = 1;
@@ -67,15 +67,15 @@ public class Stats{
     /**
      * Restart the timer if these stats have been loaded from a {@link SaveFile}.
      */
-    public void restartTime(){
-        startTime = (int)GLFW.glfwGetTime();
+    public void restartTime() {
+        startTime = (int) GLFW.glfwGetTime();
     }
 
     /**
      * Saves the current played time.
      * Needed if these stats should be saved into a {@link SaveFile}.
      */
-    public void saveTime(){
+    public void saveTime() {
         endTime = (int) GLFW.glfwGetTime();
         playTime += endTime - startTime;
     }
@@ -84,13 +84,13 @@ public class Stats{
      * Updates the stats to match current game state.
      */
     public void updateStats() {
-        endTime = (int)GLFW.glfwGetTime();
+        endTime = (int) GLFW.glfwGetTime();
         playTime += endTime - startTime;
         shipsAlive = IntStream.of(GameManager.getLogic().getPlayerShipsLeft()).sum();
         shipsDestroyed = maxShipsSum - IntStream.of(GameManager.getLogic().getEnemyShipsLeft()).sum();
-        int shipsHit  = 0;
+        int shipsHit = 0;
         int[] enemyShips = GameManager.getLogic().getEnemyShipsLeft();
-        for (int i = 0; i < enemyShips.length; i++){
+        for (int i = 0; i < enemyShips.length; i++) {
             shipsHit += (maxShips[i] - enemyShips[i]) * (i + 2);
         }
         accuracy = (float) shipsHit / rounds;
@@ -99,7 +99,7 @@ public class Stats{
     /**
      * Increments the round counter.
      */
-    public void addRound(){
+    public void addRound() {
         rounds++;
     }
 

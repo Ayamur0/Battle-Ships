@@ -30,9 +30,10 @@ public class ResolutionChanger {
 
     /**
      * Render into a fbo.
+     *
      * @param texture - the fbo as texture to be rendered to the screen
      */
-    public void render(int texture){
+    public void render(int texture) {
         shader.start();
         GL13.glActiveTexture(GL13.GL_TEXTURE0);
         GL11.glBindTexture(GL11.GL_TEXTURE_2D, texture);
@@ -42,9 +43,10 @@ public class ResolutionChanger {
 
     /**
      * Render the fbo to the screen.
+     *
      * @param texture - the fbo as texture to be rendered to the screen
      */
-    public void renderToScreen(int texture){
+    public void renderToScreen(int texture) {
         shader.start();
         GL13.glActiveTexture(GL13.GL_TEXTURE0);
         GL11.glBindTexture(GL11.GL_TEXTURE_2D, texture);
@@ -55,24 +57,25 @@ public class ResolutionChanger {
     /**
      * @return the texture of the current scene after the effect was applied.
      */
-    public int getOutputTexture(){
+    public int getOutputTexture() {
         return renderer.getOutputTexture();
     }
 
     /**
      * CleanUp on program exit.
      */
-    public void cleanUp(){
+    public void cleanUp() {
         renderer.cleanUp();
         shader.cleanUp();
     }
 
     /**
      * Changes the renderer so the texture it renders to has a new resolution.
-     * @param width Width of the new resolution in pixels.
+     *
+     * @param width  Width of the new resolution in pixels.
      * @param height Height of the new resolution in pixels.
      */
-    public void changeResolution(int width, int height){
+    public void changeResolution(int width, int height) {
         renderer = new ImageRenderer(width, height);
     }
 }

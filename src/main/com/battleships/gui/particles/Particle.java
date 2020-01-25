@@ -75,13 +75,14 @@ public class Particle {
 
     /**
      * Create a new particle.
-     * @param texture TextureAtlas of this particle.
-     * @param position Position at which this particle should start.
-     * @param velocity Velocity this particle should start with.
+     *
+     * @param texture       TextureAtlas of this particle.
+     * @param position      Position at which this particle should start.
+     * @param velocity      Velocity this particle should start with.
      * @param gravityEffect how much this particle should be influenced by gravity.
-     * @param lifeLength  How long this particle should live in seconds.
-     * @param rotation Rotation of this particle.
-     * @param scale Scale of this particle
+     * @param lifeLength    How long this particle should live in seconds.
+     * @param rotation      Rotation of this particle.
+     * @param scale         Scale of this particle
      */
     public Particle(ParticleTexture texture, Vector3f position, Vector3f velocity, float gravityEffect, float lifeLength, float rotation, float scale) {
         this.texture = texture;
@@ -96,7 +97,6 @@ public class Particle {
     }
 
     /**
-     *
      * @return The distance from this particle to the camera.
      */
     public float getDistance() {
@@ -111,7 +111,6 @@ public class Particle {
     }
 
     /**
-     *
      * @return The textureOffset of the texture that is blended onto the normal texture of this particle (next texture in the textureAtlas).
      */
     public Vector2f getTexOffset2() {
@@ -119,7 +118,6 @@ public class Particle {
     }
 
     /**
-     *
      * @return How much the next texture is blended over the current one.
      */
     public float getBlend() {
@@ -127,7 +125,6 @@ public class Particle {
     }
 
     /**
-     *
      * @return The TextureAtlas of this particle.
      */
     public ParticleTexture getTexture() {
@@ -135,7 +132,6 @@ public class Particle {
     }
 
     /**
-     *
      * @return The current position of this particle.
      */
     public Vector3f getPosition() {
@@ -143,7 +139,6 @@ public class Particle {
     }
 
     /**
-     *
      * @return The current rotation of this particle.
      */
     public float getRotation() {
@@ -151,7 +146,6 @@ public class Particle {
     }
 
     /**
-     *
      * @return The scale of this particle.
      */
     public float getScale() {
@@ -163,10 +157,11 @@ public class Particle {
      * delta time (time elapsed during last frame) and the velocity and gravity values.
      * Also calculate how far away particle is from camera and safe to distance.
      * Save elapsedTime to keep track of how long particle is alive.
+     *
      * @return {@code true} if the particle is still alive in this frame,
-     *           {@code false} if the particle is alive longer than his lifeLength so he needs to be removed
+     * {@code false} if the particle is alive longer than his lifeLength so he needs to be removed
      */
-    protected boolean update(Camera camera){
+    protected boolean update(Camera camera) {
         velocity.y += GRAVITY * gravityEffect * WindowManager.getDeltaTime();
         Vector3f change = new Vector3f(velocity);
         change.mul(WindowManager.getDeltaTime());
@@ -187,7 +182,7 @@ public class Particle {
      * The Blend value is calculated to blend smoothly between one and the next texture.
      * To correctly blend the current and next texture, the texture after the current one in the atlas also needs to be calculated.
      */
-    private void updateTextureCoordInfo(){
+    private void updateTextureCoordInfo() {
         float lifeFactor = elapsedTime / lifeLength;
         int stageCount = texture.getNumberOfRows() * texture.getNumberOfRows();
         float atlasProgression = lifeFactor * stageCount;
@@ -204,13 +199,14 @@ public class Particle {
      * First get number of row and column as integers.
      * Then divide by number of rows so number and row are between 0 and 1,
      * because the textureCoords are all between 0 and 1.
+     *
      * @param offset Vector to save the calculated offset to
-     * @param index index of the current texture in the texture Atlas
+     * @param index  index of the current texture in the texture Atlas
      */
-    private void setTextureOffset(Vector2f offset, int index){
+    private void setTextureOffset(Vector2f offset, int index) {
         int column = index % texture.getNumberOfRows();
         int row = index / texture.getNumberOfRows();
-        offset.x = (float)column / texture.getNumberOfRows();
-        offset.y = (float)row / texture.getNumberOfRows();
+        offset.x = (float) column / texture.getNumberOfRows();
+        offset.y = (float) row / texture.getNumberOfRows();
     }
 }

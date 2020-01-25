@@ -1,7 +1,6 @@
 package com.battleships.gui.toolbox;
 
 import com.battleships.gui.entities.Camera;
-import com.battleships.gui.gameAssets.GameManager;
 import com.battleships.gui.renderingEngine.MasterRenderer;
 import com.battleships.gui.terrains.Terrain;
 import com.battleships.gui.window.WindowManager;
@@ -48,7 +47,8 @@ public class MousePicker {
 
     /**
      * Create a new MousePicker
-     * @param cam Camera viewing the scene.
+     *
+     * @param cam        Camera viewing the scene.
      * @param projection Current projectionMatrix of the window.
      * @param terrain
      */
@@ -65,7 +65,7 @@ public class MousePicker {
 
     /**
      * @return Point at which the ray the mouse creates intersects with the y-level,
-     *  at which the water and grids are located.
+     * at which the water and grids are located.
      */
     public Vector3f getCurrentIntersectionPoint() {
         return currentIntersectionPoint;
@@ -99,6 +99,7 @@ public class MousePicker {
 
     /**
      * Calculates the current ray the mouse is pointing along in the 3D world.
+     *
      * @return
      */
     private Vector3f calculateMouseRay() {
@@ -108,8 +109,8 @@ public class MousePicker {
         x.rewind();
         y.rewind();
 
-        float mouseX = (float)x.get();
-        float mouseY = (float)y.get();
+        float mouseX = (float) x.get();
+        float mouseY = (float) y.get();
 //
         Vector2f normalizedCoords = getNormalizedDeviceCoordinates(mouseX, mouseY);
         Vector4f clipCoords = new Vector4f(normalizedCoords.x, normalizedCoords.y, -1.0f, 1.0f);
@@ -123,6 +124,7 @@ public class MousePicker {
 
     /**
      * Convert coordinates from eyeSpaceCoordinates to worldCoordinates.
+     *
      * @param eyeCoords coordinates in eyeSpace
      * @return Corresponding coordinates in worldCoordinates.
      */
@@ -140,6 +142,7 @@ public class MousePicker {
 
     /**
      * Convert coordinates from clipCoordinates to eyeCoordinates.
+     *
      * @param clipCoords Coordinates as clipCoordinates.
      * @return Corresponding coordinates in eyeCoordinates.
      */
@@ -153,6 +156,7 @@ public class MousePicker {
 
     /**
      * Convert a mouse position to normalizedDeviceCoordinates.
+     *
      * @param mouseX x coordinate of the mouse position.
      * @param mouseY y coordinate of the mouse position.
      * @return The corresponding normalizedDeviceCoordinates.
@@ -163,16 +167,16 @@ public class MousePicker {
         return new Vector2f(x, -y);
     }
 
-    private Vector3f test(Matrix4f proj, Matrix4f view, float x, float y){
+    private Vector3f test(Matrix4f proj, Matrix4f view, float x, float y) {
         Vector3f worldCoords = new Vector3f();
         new Matrix4f(proj).mul(view).translate(-camera.getPosition().x, -camera.getPosition().y, -camera.getPosition().z).unproject(x, y, -1.0f,
-                new int[] { 0, 0, WindowManager.getWidth(), WindowManager.getHeight() }, worldCoords);
+                new int[]{0, 0, WindowManager.getWidth(), WindowManager.getHeight()}, worldCoords);
         return worldCoords;
     }
 
     //**********************************************************
 
-    private Vector3f getXZPlaneIntersectionPoint(Vector3f origin, Vector3f ray, float height){
+    private Vector3f getXZPlaneIntersectionPoint(Vector3f origin, Vector3f ray, float height) {
         float parameter = (float) Intersectiond.intersectRayPlane(origin.x, origin.y, origin.z, ray.x, ray.y, ray.z, 0, height, 0, 0, 1, 0, 0);
         Vector3f result = new Vector3f();
         origin.add(ray.mul(parameter), result);
@@ -209,11 +213,7 @@ public class MousePicker {
     private boolean intersectionInRange(float start, float finish, Vector3f ray) {
         Vector3f startPoint = getPointOnRay(ray, start);
         Vector3f endPoint = getPointOnRay(ray, finish);
-        if (!isUnderGround(startPoint) && isUnderGround(endPoint)) {
-            return true;
-        } else {
-            return false;
-        }
+        return !isUnderGround(startPoint) && isUnderGround(endPoint);
     }
 
     private boolean isUnderGround(Vector3f testPoint) {
@@ -222,11 +222,7 @@ public class MousePicker {
         if (terrain != null) {
             height = terrain.getHeightOfTerrain(testPoint.x, testPoint.z);
         }
-        if (testPoint.y < height) {
-            return true;
-        } else {
-            return false;
-        }
+        return testPoint.y < height;
     }
 
     private Terrain getTerrain(float worldX, float worldZ) {

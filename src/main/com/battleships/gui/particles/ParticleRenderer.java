@@ -69,10 +69,11 @@ public class ParticleRenderer {
      * Load a quad model using VERTICES to render particles on.
      * Create vbo to save all particle instance attributes in
      * Create new shader program and add projection matrix to it.
-     * @param loader Loader to load models
+     *
+     * @param loader           Loader to load models
      * @param projectionMatrix ProjectionMatrix for shader
      */
-    protected ParticleRenderer(Loader loader, Matrix4f projectionMatrix){
+    protected ParticleRenderer(Loader loader, Matrix4f projectionMatrix) {
         this.loader = loader;
         this.vbo = loader.createEmptyVbo(INSTANCE_DATA_LENGTH * MAX_INSTANCES);
         quad = loader.loadToVAO(VERTICES, 2);
@@ -97,13 +98,14 @@ public class ParticleRenderer {
      * together, so texture only needs to be changed once for each particle group, for better performance.
      * Bind texture and store viewMatrix data and texture data in float array for instanced rendering.
      * Then loop through list of particles with that texture and render them using instanced rendering.
+     *
      * @param particles HashMap of textures and their corresponding list of particles to be rendered on screen
-     * @param camera camera that displays particles
+     * @param camera    camera that displays particles
      */
-    protected void render(Map<ParticleTexture, List<Particle>> particles, Camera camera){
+    protected void render(Map<ParticleTexture, List<Particle>> particles, Camera camera) {
         Matrix4f viewMatrix = Maths.createViewMatrix(camera);
         prepare();
-        for(ParticleTexture texture : particles.keySet()) {
+        for (ParticleTexture texture : particles.keySet()) {
             bindTexture(texture);
             List<Particle> particleList = particles.get(texture);
             pointer = 0;
@@ -122,16 +124,17 @@ public class ParticleRenderer {
      * Clean up this renderer.
      * Gets called by ParticleMaster on program exit.
      */
-    protected void cleanUp(){
+    protected void cleanUp() {
         shader.cleanUp();
     }
 
     /**
      * Store texture data for current particle in float array so it can be used to render the particle with instanced rendering
+     *
      * @param particle Particle that should be rendered next.
-     * @param data Data of the particle.
+     * @param data     Data of the particle.
      */
-    private void updateTexCoordInfo(Particle particle, float[] data){
+    private void updateTexCoordInfo(Particle particle, float[] data) {
         data[pointer++] = particle.getTexOffset1().x;
         data[pointer++] = particle.getTexOffset1().y;
         data[pointer++] = particle.getTexOffset2().x;
@@ -141,14 +144,15 @@ public class ParticleRenderer {
 
 
     /**
-     *  Set OpenGL mode to add color of particles if additive is {@code true} in texture or render particles over each other.
-     *  Bind texture to OpenGL and upload numberOfRows of texture (textureAtlas) to the shader.
+     * Set OpenGL mode to add color of particles if additive is {@code true} in texture or render particles over each other.
+     * Bind texture to OpenGL and upload numberOfRows of texture (textureAtlas) to the shader.
+     *
      * @param texture texture to bind to openGL
      */
 
-    private void bindTexture(ParticleTexture texture){
+    private void bindTexture(ParticleTexture texture) {
 
-        if(texture.isAdditive())
+        if (texture.isAdditive())
             GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
         else
             GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
@@ -162,13 +166,14 @@ public class ParticleRenderer {
      * Update viewMatrix for particle that should currently be rendered, to make particle move, scale and rotate.
      * Changes the viewMatrix (rotation part which is top left 3x3) so particle always faces camera.
      * Coverts viewMatrix to float array to make it usable with instanced rendering.
-     * @param position new position of the particle
-     * @param rotation new rotation of the particle (only Z rotation)
-     * @param scale scale of the particle (1 is standard)
+     *
+     * @param position   new position of the particle
+     * @param rotation   new rotation of the particle (only Z rotation)
+     * @param scale      scale of the particle (1 is standard)
      * @param viewMatrix viewMatrix currently used by the camera
-     * @param vboData float array to safe the data to, so it can be used to render particles with instanced rendering.
+     * @param vboData    float array to safe the data to, so it can be used to render particles with instanced rendering.
      */
-    private void updateModelViewMatrix(Vector3f position, float rotation, float scale, Matrix4f viewMatrix, float[] vboData){
+    private void updateModelViewMatrix(Vector3f position, float rotation, float scale, Matrix4f viewMatrix, float[] vboData) {
         Matrix4f modelMatrix = new Matrix4f();
         modelMatrix.translate(position);
         //set the rotation 3x3 part of the model matrix to transpose of view matrix
@@ -181,17 +186,18 @@ public class ParticleRenderer {
         modelMatrix.scale(new Vector3f(scale, scale, scale));
         Matrix4f modelViewMatrix = new Matrix4f();
         viewMatrix.mul(modelMatrix, modelViewMatrix);
-        modelViewMatrix.rotate((float)Math.toRadians(rotation), new Vector3f(0, 0, 1));
+        modelViewMatrix.rotate((float) Math.toRadians(rotation), new Vector3f(0, 0, 1));
         storeMatrixData(modelViewMatrix, vboData);
     }
 
     /**
      * Store all values from a matrix in a float array.
      * Values are ordered by columns, so first 4 values in array are first column from matrix.
-     * @param matrix matrix to convert to float array
+     *
+     * @param matrix  matrix to convert to float array
      * @param vboData float array matrix values should be saved to
      */
-    private void storeMatrixData(Matrix4f matrix, float[] vboData){
+    private void storeMatrixData(Matrix4f matrix, float[] vboData) {
         vboData[pointer++] = matrix.m00();
         vboData[pointer++] = matrix.m01();
         vboData[pointer++] = matrix.m02();
@@ -214,11 +220,11 @@ public class ParticleRenderer {
      * Bind and enable vao of quad and all vbos.
      * Prepare OpenGl for rendering 2D particles.
      */
-    private void prepare(){
+    private void prepare() {
         shader.start();
         shader.loadProjectionMatrix(MasterRenderer.getProjectionMatrix());
         GL30.glBindVertexArray(quad.getVaoID());
-        for(int i = 0; i <= 6; i++)
+        for (int i = 0; i <= 6; i++)
             GL20.glEnableVertexAttribArray(i);
         GL11.glEnable(GL11.GL_BLEND);
         //stop particles from being rendered to depth buffer
@@ -229,10 +235,10 @@ public class ParticleRenderer {
      * Undo all changes made to OpenGL for rendering particles, so normal objects can be rendered again.
      * Disable vao and vbos.
      */
-    private void finishRendering(){
+    private void finishRendering() {
         GL11.glDepthMask(true);
         GL11.glDisable(GL11.GL_BLEND);
-        for(int i = 0; i <= 6; i++)
+        for (int i = 0; i <= 6; i++)
             GL20.glDisableVertexAttribArray(i);
         GL30.glBindVertexArray(0);
         shader.stop();

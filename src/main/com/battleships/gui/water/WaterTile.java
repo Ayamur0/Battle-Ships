@@ -19,15 +19,16 @@ public class WaterTile {
     /**
      * x and z coordinates of the center of this tile.
      */
-    private float x,z;
+    private float x, z;
 
     /**
      * Create a new WaterTile.
+     *
      * @param centerX Center xCoord of the water tile (world coordinates)
      * @param centerZ Center zCoord of the water tile (world coordinates)
-     * @param height Height of the water tile (world coordinates)
+     * @param height  Height of the water tile (world coordinates)
      */
-    public WaterTile(float centerX, float centerZ, float height){
+    public WaterTile(float centerX, float centerZ, float height) {
         this.x = centerX;
         this.z = centerZ;
         this.height = height;

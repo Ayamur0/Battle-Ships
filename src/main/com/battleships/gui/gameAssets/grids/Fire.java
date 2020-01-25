@@ -23,10 +23,11 @@ public class Fire extends ParticleSystemComplex {
 
     /**
      * Create new fire particle system.
+     *
      * @param loader Loader to load texture.
      */
     public Fire(Loader loader) {
-        super(new ParticleTexture(loader.loadTexture("particles/fire.png"), 8, true),20, 3.5f, -0.05f, 2f, 17);
+        super(new ParticleTexture(loader.loadTexture("particles/fire.png"), 8, true), 20, 3.5f, -0.05f, 2f, 17);
         super.setLifeError(0.3f);
         super.setScaleError(0.3f);
         super.setSpeedError(0.15f);
@@ -36,10 +37,11 @@ public class Fire extends ParticleSystemComplex {
 
     /**
      * Create a new source that plays a fire sound.
+     *
      * @param pos Position of the source.
      * @return The created source.
      */
-    public Source createFireSound(Vector2f pos){
+    public Source createFireSound(Vector2f pos) {
         Source sound = new Source(1, 10, 300);
         sound.setPosition(pos.x, 0, pos.y);
         sound.setLooping(true);

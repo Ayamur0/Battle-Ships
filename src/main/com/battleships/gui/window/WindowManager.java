@@ -3,24 +3,22 @@ package com.battleships.gui.window;
 import com.battleships.gui.entities.Camera;
 import com.battleships.gui.gameAssets.GameManager;
 import com.battleships.gui.gameAssets.MainMenuGui.MainMenuManager;
-import com.battleships.gui.guis.GuiClickCallback;
-import com.battleships.gui.guis.GuiManager;
 import com.battleships.gui.guis.GuiRenderer;
 import com.battleships.gui.guis.GuiTexture;
-import com.battleships.gui.main.SchiffeVersenken;
 import com.battleships.gui.models.TextureData;
-import com.battleships.gui.postProcessing.Fbo;
 import com.battleships.gui.renderingEngine.Loader;
-import com.battleships.gui.renderingEngine.MasterRenderer;
 import com.battleships.gui.renderingEngine.TextureLoader;
 import com.battleships.gui.water.WaterFrameBuffers;
 import org.joml.Vector2f;
 import org.lwjgl.BufferUtils;
-import org.lwjgl.glfw.*;
-import org.lwjgl.opengl.*;
-import org.lwjgl.system.windows.User32;
+import org.lwjgl.glfw.GLFW;
+import org.lwjgl.glfw.GLFWErrorCallback;
+import org.lwjgl.glfw.GLFWImage;
+import org.lwjgl.glfw.GLFWVidMode;
+import org.lwjgl.opengl.GL;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL13;
 
-import java.io.InputStream;
 import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +32,10 @@ import java.util.List;
 public class WindowManager {
 
     /**
+     * Standard width and height for this window in pixels.
+     */
+    private static final int StandardWIDTH = 1280, StandardHEIGHT = 720; //To reset Width + Height to standard
+    /**
      * OpenGl ID of this window
      */
     private static long window;
@@ -41,10 +43,6 @@ public class WindowManager {
      * Current Width and Height of this window in pixels.
      */
     private static int width = 1280, height = 720; //get Width + Height from Settings
-    /**
-     * Standard width and height for this window in pixels.
-     */
-    private static final int StandardWIDTH = 1280, StandardHEIGHT = 720; //To reset Width + Height to standard
     /**
      * {@code true} if the window is currently in fullScreen mode.
      */
@@ -88,7 +86,7 @@ public class WindowManager {
      * Initialize the main window the game is played in.
      * Needs to be called at start of the program!
      */
-    public static void initialize(){
+    public static void initialize() {
         //initialize GLFW
         GLFWErrorCallback.createPrint(System.err).set();
         GLFW.glfwInit();
@@ -110,7 +108,7 @@ public class WindowManager {
         //initialize OpenGL
         GL.createCapabilities();
         //set color of empty window to white
-        GL11.glClearColor(0.5f,0.5f,0.5f, 1);
+        GL11.glClearColor(0.5f, 0.5f, 0.5f, 1);
         GLFW.glfwSetInputMode(window, GLFW.GLFW_STICKY_MOUSE_BUTTONS, GLFW.GLFW_TRUE);
         GL13.glEnable(GL13.GL_MULTISAMPLE);
         lastFrame = GLFW.glfwGetTime();
@@ -122,7 +120,7 @@ public class WindowManager {
      * The loading texture is rendered to this window once.
      * Needs to be destroyed after loading is done.
      */
-    public static void createLoadingScreen(){
+    public static void createLoadingScreen() {
         GLFW.glfwWindowHint(GLFW.GLFW_TRANSPARENT_FRAMEBUFFER, GLFW.GLFW_TRUE);
         GLFW.glfwWindowHint(GLFW.GLFW_VISIBLE, GLFW.GLFW_FALSE);
         GLFW.glfwWindowHint(GLFW.GLFW_DECORATED, GLFW.GLFW_FALSE);
@@ -148,7 +146,7 @@ public class WindowManager {
      * Renders the loading screen. Needs to be called to keep
      * program responsive during loading.
      */
-    public static void updateLoadingScreen(){
+    public static void updateLoadingScreen() {
         GLFW.glfwMakeContextCurrent(loadingScreen);
         loadingScreenRenderer.render(loadingScreenGui);
         GLFW.glfwSwapBuffers(window);
@@ -158,7 +156,7 @@ public class WindowManager {
     /**
      * Destroys the loading screen window and shows the game window.
      */
-    public static void destroyLoadingScreen(){
+    public static void destroyLoadingScreen() {
         GLFW.glfwDestroyWindow(loadingScreen);
         GLFW.glfwShowWindow(window);
         loadingScreenGui = null;
@@ -168,7 +166,7 @@ public class WindowManager {
     /**
      * Set the icon of the window.
      */
-    private static void setIcon(){
+    private static void setIcon() {
         TextureData icon = TextureLoader.loadTextureData("/com/battleships/gui/res/textures/Icon2.png");
         GLFWImage image = GLFWImage.malloc();
         GLFWImage.Buffer imagebf = GLFWImage.malloc(1);
@@ -181,7 +179,7 @@ public class WindowManager {
      * Update the window to show the next frame.
      * Needs to be called as last method every frame!
      */
-    public static void updateWindow(){
+    public static void updateWindow() {
         GLFW.glfwSwapBuffers(window);
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
         //allow mouse and keyboard inputs
@@ -201,7 +199,7 @@ public class WindowManager {
         lastFrame = currentFrame;
         test += 1;
         time += deltaTime;
-        if(time >= 1){
+        if (time >= 1) {
             //System.out.println("FPS: " + test);
             time = 0;
             test = 0;
@@ -212,7 +210,7 @@ public class WindowManager {
      * @return Time that has passed since last frame finished rendering in seconds.
      */
     public static float getDeltaTime() {
-        return (float)deltaTime;
+        return (float) deltaTime;
     }
 
     /**
@@ -225,10 +223,11 @@ public class WindowManager {
     /**
      * Sets the Callbacks for user inputs.
      * Sets callbacks for mouse, keyboard and window resizing.
+     *
      * @param camera Camera that views the scene and should be moved by user input.
-     * @param wFbo WaterFBOs that handle the reflection and refraction of water.
+     * @param wFbo   WaterFBOs that handle the reflection and refraction of water.
      */
-    public static void setCallbacks(Camera camera, WaterFrameBuffers wFbo){
+    public static void setCallbacks(Camera camera, WaterFrameBuffers wFbo) {
         GLFW.glfwSetMouseButtonCallback(window, GameManager.testClick);
         GLFW.glfwSetScrollCallback(window, camera.scrollCallback);
         GLFW.glfwSetKeyCallback(window, GameManager.keyCallback);
@@ -238,18 +237,19 @@ public class WindowManager {
 
     /**
      * Sets the Callbacks for user inputs in the MainMenu.
+     *
      * @param mainMenuManager Manager that handles clicks in the main menu.
      */
-    public static void setMainMenuCallbacks(MainMenuManager mainMenuManager, WaterFrameBuffers wFbo){
+    public static void setMainMenuCallbacks(MainMenuManager mainMenuManager, WaterFrameBuffers wFbo) {
         GLFW.glfwSetMouseButtonCallback(window, mainMenuManager.testClick);
         GLFW.glfwSetWindowSizeCallback(window, wFbo.sizeCallback);
-        GLFW.glfwSetKeyCallback(window,MainMenuManager.keyCallback);
+        GLFW.glfwSetKeyCallback(window, MainMenuManager.keyCallback);
     }
 
     /**
      * st
      */
-    public static void clearCallbacks(){
+    public static void clearCallbacks() {
         GLFW.glfwSetMouseButtonCallback(window, null);
         GLFW.glfwSetScrollCallback(window, null);
         GLFW.glfwSetKeyCallback(window, null);
@@ -279,21 +279,22 @@ public class WindowManager {
 
     /**
      * Set the window to be fullscreen or to exit fullscreen.
+     *
      * @param fullS {@code true} if the window should enter fullscreen, {@code false} if the window should exit fullscreen.
      */
-    public static void setFullScreen (boolean fullS) {
-        if(fullS){
+    public static void setFullScreen(boolean fullS) {
+        if (fullS) {
             GLFWVidMode vidMode = GLFW.glfwGetVideoMode(GLFW.glfwGetPrimaryMonitor());
 //            width = vidMode.width();
 //            height = vidMode.height();
             GLFW.glfwSetWindowMonitor(window, GLFW.glfwGetPrimaryMonitor(), 0, 0, vidMode.width(), vidMode.height(), vidMode.refreshRate());
             fullScreen = true;
         }
-        if(!fullS){
+        if (!fullS) {
             GLFWVidMode vidMode = GLFW.glfwGetVideoMode(GLFW.glfwGetPrimaryMonitor());
             width = StandardWIDTH;
             height = StandardHEIGHT;
-            GLFW.glfwSetWindowMonitor(window, 0, vidMode.width() / 2 - width / 2, vidMode.height() / 2 - height / 2,  width, height, vidMode.refreshRate());
+            GLFW.glfwSetWindowMonitor(window, 0, vidMode.width() / 2 - width / 2, vidMode.height() / 2 - height / 2, width, height, vidMode.refreshRate());
             fullScreen = false;
         }
     }

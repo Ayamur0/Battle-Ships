@@ -1,7 +1,6 @@
 package com.battleships.gui.gameAssets.MainMenuGui;
 
 import com.battleships.gui.fontMeshCreator.GUIText;
-import com.battleships.gui.gameAssets.GameManager;
 import com.battleships.gui.guis.GuiManager;
 import com.battleships.gui.guis.GuiTexture;
 import com.battleships.gui.renderingEngine.Loader;
@@ -65,6 +64,7 @@ public class MainMenu extends Menu {
 
         super.createClickable();
     }
+
     /**
      * Toggles state of clicked button.
      */

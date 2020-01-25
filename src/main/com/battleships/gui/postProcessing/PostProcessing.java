@@ -21,7 +21,7 @@ public class PostProcessing {
     /**
      * Positions so the image fully covers the window.
      */
-    private static final float[] POSITIONS = { -1, 1, -1, -1, 1, 1, 1, -1 };
+    private static final float[] POSITIONS = {-1, 1, -1, -1, 1, 1, 1, -1};
     /**
      * Quad the image can get rendered on.
      */
@@ -40,12 +40,14 @@ public class PostProcessing {
     private static VerticalBlur vBlur;
 //    private static HorizontalBlur hBlur2;
 //    private static VerticalBlur vBlur2;
+
     /**
      * Creates a quad that fills the whole screen to render the fbo on.
      * And initializes all post processing effects.
+     *
      * @param loader loader to load vao
      */
-    public static void init(Loader loader){
+    public static void init(Loader loader) {
         quad = loader.loadToVAO(POSITIONS, 2);
         //divide width and height to make texture smaller, so it gets scaled when being put on the screen
         //which makes it blurrier while saving performance
@@ -58,7 +60,7 @@ public class PostProcessing {
     }
 
 
-    public static void test(int colorTexture){
+    public static void test(int colorTexture) {
         start();
         resolutionChanger.render(colorTexture);
         resolutionChanger.renderToScreen(resolutionChanger.getOutputTexture());
@@ -68,9 +70,10 @@ public class PostProcessing {
     /**
      * Do all post processing related things.
      * Render all post processing effects one after another.
+     *
      * @param colorTexture the current scene (fbo) as texture
      */
-    public static void doPostProcessing(int colorTexture){
+    public static void doPostProcessing(int colorTexture) {
         start();
         resolutionChanger.render(colorTexture);
         hBlur.render(resolutionChanger.getOutputTexture());
@@ -80,10 +83,11 @@ public class PostProcessing {
 
     /**
      * Changes the {@link ResolutionChanger} so the texture it renders to has a new resolution.
-     * @param width Width of the new resolution in pixels.
+     *
+     * @param width  Width of the new resolution in pixels.
      * @param height Height of the new resolution in pixels.
      */
-    public static void changeResolution(int width, int height){
+    public static void changeResolution(int width, int height) {
         resolutionChanger.changeResolution(width, height);
         hBlur.changeResolution(width, height);
     }
@@ -91,7 +95,7 @@ public class PostProcessing {
     /**
      * Cleanup on program exit.
      */
-    public static void cleanUp(){
+    public static void cleanUp() {
         resolutionChanger.cleanUp();
         hBlur.cleanUp();
         vBlur.cleanUp();
@@ -104,7 +108,7 @@ public class PostProcessing {
      * Binds the quad and enable its position vbo.
      * Also disable depth test because scene is rendered as one 2D image.
      */
-    private static void start(){
+    private static void start() {
         GL30.glBindVertexArray(quad.getVaoID());
         GL20.glEnableVertexAttribArray(0);
         GL11.glDisable(GL11.GL_DEPTH_TEST);
@@ -113,7 +117,7 @@ public class PostProcessing {
     /**
      * Unbind vao and vbo after rendering and enable depth test.
      */
-    private static void end(){
+    private static void end() {
         GL11.glEnable(GL11.GL_DEPTH_TEST);
         GL20.glDisableVertexAttribArray(0);
         GL30.glBindVertexArray(0);

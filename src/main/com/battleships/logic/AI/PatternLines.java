@@ -13,7 +13,7 @@ import java.util.Random;
  *
  * @author Tim Staudenmaier
  */
-public class PatternLines implements Pattern{
+public class PatternLines implements Pattern {
 
     /**
      * Directions in which the lines can go.
@@ -51,12 +51,13 @@ public class PatternLines implements Pattern{
 
     /**
      * Creates a new Pattern that returns indices forming diagonal lines.
+     *
      * @param size Size of the grid this pattern is used on.
      */
     public PatternLines(int size) {
         this.size = size;
         Random r = new Random();
-        distance = r.nextInt(3)+2;
+        distance = r.nextInt(3) + 2;
         direction = r.nextInt(2);
         startPoint = r.nextInt(4);
         calculateLineStarts();
@@ -65,34 +66,34 @@ public class PatternLines implements Pattern{
     /**
      * Calculates the start cells for all lines.
      */
-    private void calculateLineStarts(){
+    private void calculateLineStarts() {
         List<Vector2i> right = new ArrayList<>();
         List<Vector2i> left = new ArrayList<>();
-        if(direction == DOWNLEFT) {
+        if (direction == DOWNLEFT) {
             int x = size, y = 1;
-            while(y <= size) {
+            while (y <= size) {
                 right.add(new Vector2i(x, y));
                 y += distance + 1;
             }
             y = 1;
-            while(x > 0) {
+            while (x > 0) {
                 left.add(new Vector2i(x, y));
                 x -= distance + 1;
             }
         }
-        if(direction == DOWNRIGHT){
+        if (direction == DOWNRIGHT) {
             int x = 1, y = 1;
-            while(x <= size){
-                right.add(new Vector2i(x,y));
+            while (x <= size) {
+                right.add(new Vector2i(x, y));
                 x += distance + 1;
             }
             x = 1;
-            while (y <= size){
-                left.add(new Vector2i(x,y));
+            while (y <= size) {
+                left.add(new Vector2i(x, y));
                 y += distance + 1;
             }
         }
-        switch (startPoint){
+        switch (startPoint) {
             case RIGHT:
                 Collections.reverse(right);
                 lineStarts.addAll(right);
@@ -117,7 +118,7 @@ public class PatternLines implements Pattern{
      */
     @Override
     public Vector2i nextIndex() {
-        if(direction == DOWNLEFT) {
+        if (direction == DOWNLEFT) {
             lastIndex.x -= 1;
             lastIndex.y += 1;
 
@@ -128,11 +129,11 @@ public class PatternLines implements Pattern{
                 lineStarts.remove(0);
             }
         }
-        if(direction == DOWNRIGHT){
+        if (direction == DOWNRIGHT) {
             lastIndex.x += 1;
             lastIndex.y += 1;
 
-            if(lastIndex.x > size || lastIndex.y > size){
+            if (lastIndex.x > size || lastIndex.y > size) {
                 if (lineStarts.size() == 0)
                     return null;
                 lastIndex = lineStarts.get(0);
@@ -141,6 +142,7 @@ public class PatternLines implements Pattern{
         }
         return lastIndex;
     }
+
     /**
      * @return The first index for this pattern.
      */

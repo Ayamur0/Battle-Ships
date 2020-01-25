@@ -3,7 +3,10 @@ package com.battleships.gui.postProcessing;
 import com.battleships.gui.gameAssets.GameManager;
 import com.battleships.gui.window.WindowManager;
 import com.battleships.logic.Settings;
-import org.lwjgl.opengl.*;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL12;
+import org.lwjgl.opengl.GL14;
+import org.lwjgl.opengl.GL30;
 
 import java.nio.ByteBuffer;
 
@@ -11,7 +14,7 @@ import java.nio.ByteBuffer;
  * FrameBufferObject a scene can be rendered to instead of the screen.
  * Can be used to edit the scene with post processing effects before showing it on the screen.
  * Before using post processing {@link PostProcessing} needs to be initialized!
- * 
+ *
  * @author Tim Staudenmaier
  */
 
@@ -57,14 +60,14 @@ public class Fbo {
     private int colorTexture;
     /**
      * ID of the depth texture of this frame buffer.
-     * Only used with a depthTexture. 
+     * Only used with a depthTexture.
      * If this isn't used the ID is 0.
      */
     private int depthTexture;
 
     /**
      * ID of the depth buffer this frame buffer uses.
-     * Only used with a depthRenderBuffer. 
+     * Only used with a depthRenderBuffer.
      * If this isn't used the ID is 0.
      */
     private int depthBuffer;
@@ -77,8 +80,8 @@ public class Fbo {
      * Creates an FBO of a specified width and height, with the desired type of
      * depth buffer attachment.
      *
-     * @param width the width of the FBO.
-     * @param height the height of the FBO.
+     * @param width           the width of the FBO.
+     * @param height          the height of the FBO.
      * @param depthBufferType an int indicating the type of depth buffer attachment that this FBO should use.
      */
     public Fbo(int width, int height, int depthBufferType) {
@@ -91,10 +94,10 @@ public class Fbo {
     /**
      * Update size of this fbo to match current window size.
      */
-    public void updateSize(){
+    public void updateSize() {
         Settings settings = GameManager.getSettings();
-        if(settings.getResWidth() != -1 && settings.getResHeight() != -1){
-            if(this.height != settings.getResHeight() || this.width != settings.getResWidth()){
+        if (settings.getResWidth() != -1 && settings.getResHeight() != -1) {
+            if (this.height != settings.getResHeight() || this.width != settings.getResWidth()) {
                 cleanUp();
                 this.height = settings.getResHeight();
                 this.width = settings.getResWidth();
@@ -103,7 +106,7 @@ public class Fbo {
             }
             return;
         }
-        if(this.height == WindowManager.getHeight() && this.width == WindowManager.getWidth())
+        if (this.height == WindowManager.getHeight() && this.width == WindowManager.getWidth())
             return;
         cleanUp();
         this.width = WindowManager.getWidth();

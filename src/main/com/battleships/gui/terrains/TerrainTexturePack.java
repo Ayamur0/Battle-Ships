@@ -18,11 +18,12 @@ public class TerrainTexturePack {
     /**
      * Create a new TexturePack from 5 {@link TerrainTexture}.
      * All textures should be tileable.
-     * @param pathTexture Texture for a path
-     * @param gravelTexture Texture for gravel
-     * @param grassTexture Texture for grass
-     * @param wetSandTexture Texture for wet sand 
-     * @param sandTexture Texture for dry sand
+     *
+     * @param pathTexture    Texture for a path
+     * @param gravelTexture  Texture for gravel
+     * @param grassTexture   Texture for grass
+     * @param wetSandTexture Texture for wet sand
+     * @param sandTexture    Texture for dry sand
      */
     public TerrainTexturePack(TerrainTexture pathTexture, TerrainTexture gravelTexture, TerrainTexture grassTexture, TerrainTexture wetSandTexture, TerrainTexture sandTexture) {
         textures.add(pathTexture);

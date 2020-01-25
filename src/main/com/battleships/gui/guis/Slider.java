@@ -14,7 +14,7 @@ import java.util.List;
  *
  * @author Tim Staudenmaier
  */
-public class Slider extends GuiClickCallback implements Runnable{
+public class Slider extends GuiClickCallback implements Runnable {
 
     /**
      * GuiTexture of the slider.
@@ -60,15 +60,16 @@ public class Slider extends GuiClickCallback implements Runnable{
 
     /**
      * Creates a slider gui element, used to enter values that have to be within a specific range.
+     *
      * @param sliderTexture Texture Id for the texture of the slider.
-     * @param barTexture Texture Id for the texture of the bar the slider is moving on.
-     * @param minValue lowest value the slider can have (when slider is completely to the left)
-     * @param maxValue highest value the slider can have (when slider is completely to the right)
-     * @param defaultValue value the slider start at, before it's moved by the user.
-     * @param scale How much space of the screen this slider should occupy (1 is full screen width).
-     * @param position Position of the center of this slider on the screen (Screen coordinates).
-     * @param guiManager GuiManager that should handle the click function of this slider.
-     * @param guis List of guis this slider should be added to. Needs to be passed to a renderer for this slider to show on screen.
+     * @param barTexture    Texture Id for the texture of the bar the slider is moving on.
+     * @param minValue      lowest value the slider can have (when slider is completely to the left)
+     * @param maxValue      highest value the slider can have (when slider is completely to the right)
+     * @param defaultValue  value the slider start at, before it's moved by the user.
+     * @param scale         How much space of the screen this slider should occupy (1 is full screen width).
+     * @param position      Position of the center of this slider on the screen (Screen coordinates).
+     * @param guiManager    GuiManager that should handle the click function of this slider.
+     * @param guis          List of guis this slider should be added to. Needs to be passed to a renderer for this slider to show on screen.
      */
     public Slider(int sliderTexture, int barTexture, int minValue, int maxValue, int defaultValue, Vector2f scale, Vector2f position, GuiManager guiManager, List<GuiTexture> guis) {
         bar = new GuiTexture(barTexture, new Vector2f(position), scale);
@@ -87,9 +88,10 @@ public class Slider extends GuiClickCallback implements Runnable{
 
     /**
      * Tests if the click of the user was either on the slider or the bar.
+     *
      * @param gui GuiElement on which the click should be (in this case the slider)
-     * @param x xPos of the click.
-     * @param y yPos of the click.
+     * @param x   xPos of the click.
+     * @param y   yPos of the click.
      * @return {@code true} if the click was on the slider or bar, {@code false} else.
      */
     @Override
@@ -104,7 +106,7 @@ public class Slider extends GuiClickCallback implements Runnable{
      */
     @Override
     protected void clickAction() {
-        if(running)
+        if (running)
             return;
         Thread t = new Thread(this);
         t.start();
@@ -115,11 +117,11 @@ public class Slider extends GuiClickCallback implements Runnable{
      * Stops moving as soon as the mouse button is released.
      */
     @Override
-    public void run(){
+    public void run() {
         running = true;
         DoubleBuffer x = BufferUtils.createDoubleBuffer(1);
         DoubleBuffer y = BufferUtils.createDoubleBuffer(1);
-        while(GLFW.glfwGetMouseButton(WindowManager.getWindow(), GLFW.GLFW_MOUSE_BUTTON_LEFT) != GLFW.GLFW_RELEASE) {
+        while (GLFW.glfwGetMouseButton(WindowManager.getWindow(), GLFW.GLFW_MOUSE_BUTTON_LEFT) != GLFW.GLFW_RELEASE) {
             GLFW.glfwGetCursorPos(WindowManager.getWindow(), x, y);
             x.rewind();
             y.rewind();
@@ -139,34 +141,32 @@ public class Slider extends GuiClickCallback implements Runnable{
     }
 
     /**
-     *
      * @return Current value of the slider as float value.
      */
-    public float getValueAsFloat(){
+    public float getValueAsFloat() {
         float percentage = (slider.getPositions().x - minPosX) / (maxPosX - minPosX);
         return percentage * (maxValue - minValue) + minValue;
     }
 
     /**
-     *
      * @return Current value of the slider rounded to an int value.
      */
-    public int getValueAsInt(){
+    public int getValueAsInt() {
         float fValue = getValueAsFloat();
         return Math.round(fValue);
     }
 
     /**
      * Sets the slider position to a specific value.
+     *
      * @param value Value the slider should be set to.
      */
-    public void setToValue(float value){
+    public void setToValue(float value) {
         float percentage = (value - minValue) / ((maxValue - minValue));
         slider.getPositions().x = percentage * (maxPosX - minPosX) + minPosX;
     }
 
     /**
-     *
      * @return {@code true} is the slider is currently moving, {@code false} else.
      */
     public boolean isRunning() {
@@ -174,18 +174,16 @@ public class Slider extends GuiClickCallback implements Runnable{
     }
 
     /**
-     *
      * @return Removes the guiTextures of this slider from guis List and removes clickFunction of slider in the guiManager.
      */
-    public boolean remove(){
+    public boolean remove() {
         return guis.remove(bar) && guis.remove(slider) && guiManager.removeClickableGui(slider);
     }
 
     /**
-     *
      * @return Returns screen coordinates of the slider.
      */
-    public Vector2f getPositions(){
+    public Vector2f getPositions() {
         return bar.getPositions();
     }
 }

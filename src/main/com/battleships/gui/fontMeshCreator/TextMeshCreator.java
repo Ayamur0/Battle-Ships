@@ -1,6 +1,5 @@
 package com.battleships.gui.fontMeshCreator;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,6 +35,43 @@ public class TextMeshCreator {
     }
 
     /**
+     * Adds vertices or textureCoords to the corresponding list in the right format:
+     * each quad is made of 2 triangles, for each triangle all 3 corners must be added to the list
+     *
+     * @param coordinates list ti store vertices or textureCoords to
+     * @param x           lower x value of the quad
+     * @param y           lower y value of the quad
+     * @param maxX        higher x value of the quad
+     * @param maxY        higher y value of the quad
+     */
+    private static void addCoordinates(List<Float> coordinates, double x, double y, double maxX, double maxY) {
+        double[] toAdd = {x, y, x, maxY, maxX, maxY, maxX, maxY, maxX, y, x, y};
+        for (double i : toAdd)
+            coordinates.add((float) i);
+    }
+
+    /**
+     * convert a list to a array
+     *
+     * @param listOfFloats list to be converted
+     * @return array containing all values of the list in the same order as they were in the list
+     */
+    private static float[] listToArray(List<Float> listOfFloats) {
+        float[] array = new float[listOfFloats.size()];
+        for (int i = 0; i < array.length; i++) {
+            array[i] = listOfFloats.get(i);
+        }
+        return array;
+    }
+
+    /**
+     * @return the max height of a line in screen coordinates (0.0 1.0)
+     */
+    public static double getLineHeight() {
+        return LINE_HEIGHT;
+    }
+
+    /**
      * Converts the text into {@link Line}, {@link Word} and {@link Character} components.
      * Then creates quads for each character to be rendered on.
      *
@@ -52,7 +88,7 @@ public class TextMeshCreator {
     /**
      * Gets the characters of the text to be displayed from {@link GUIText}
      * converts character array into lines and words
-     * 
+     *
      * @param text the text to create a mesh structure for
      * @return A list of all lines of the text, each line containing the words in a line
      */
@@ -93,11 +129,11 @@ public class TextMeshCreator {
      * If word can be added it's added to the line.
      * If the line would exceed the maxLineLength after the word has been added,
      * a new line is created and the word is added into the new line.
-     * 
-     * @param lines list to save the lines into   
+     *
+     * @param lines       list to save the lines into
      * @param currentLine line that the words are currently written into
      * @param currentWord word that needs to be added to the line
-     * @param text GUIText the word is from (containing font size etc.)
+     * @param text        GUIText the word is from (containing font size etc.)
      */
 
     private void tryToAddWord(List<Line> lines, Line currentLine, Word currentWord, GUIText text) {
@@ -107,16 +143,15 @@ public class TextMeshCreator {
             currentLine = new Line(metaData.getSpaceWidth(), text.getFontSize(), text.getMaxLineSize());
             currentLine.attemptToAddWord(currentWord);
         }
-        
-    }
 
+    }
 
     /**
      * Create quads for each character of the text to be rendered on.
      * Iterates over lines, words in lines and characters in words to create a quad
      * for each character.
      *
-     * @param text text the quads should be created for
+     * @param text  text the quads should be created for
      * @param lines list of lines the text contains
      * @return A {@link TextMeshData} containing two float arrays one with the vertices and one with textureCoords for the quads
      */
@@ -150,11 +185,11 @@ public class TextMeshCreator {
     /**
      * Creates a quad made of 4 vertices the character can be rendered on
      *
-     * @param cursorX current x position of cursor
-     * @param cursorY current y position of cursor
+     * @param cursorX   current x position of cursor
+     * @param cursorY   current y position of cursor
      * @param character character the quad should be made for
-     * @param fontSize size of the font
-     * @param vertices list the vertices should be stored to
+     * @param fontSize  size of the font
+     * @param vertices  list the vertices should be stored to
      */
     private void addVerticesForCharacter(double cursorX, double cursorY, Character character, double fontSize, List<Float> vertices) {
         double x = cursorX + (character.getxOffset() * fontSize);
@@ -166,41 +201,5 @@ public class TextMeshCreator {
         double properMaxX = (2 * maxX) - 1;
         double properMaxY = (-2 * maxY) + 1;
         addCoordinates(vertices, properX, properY, properMaxX, properMaxY);
-    }
-
-    /**
-     * Adds vertices or textureCoords to the corresponding list in the right format:
-     * each quad is made of 2 triangles, for each triangle all 3 corners must be added to the list
-     *
-     * @param coordinates list ti store vertices or textureCoords to
-     * @param x lower x value of the quad
-     * @param y lower y value of the quad
-     * @param maxX higher x value of the quad
-     * @param maxY higher y value of the quad
-     */
-    private static void addCoordinates(List<Float> coordinates, double x, double y, double maxX, double maxY) {
-        double[] toAdd = {x, y, x, maxY, maxX, maxY, maxX, maxY, maxX, y, x, y};
-        for(double i : toAdd)
-            coordinates.add((float)i);
-    }
-
-    /**
-     * convert a list to a array
-     * @param listOfFloats list to be converted
-     * @return array containing all values of the list in the same order as they were in the list
-     */
-    private static float[] listToArray(List<Float> listOfFloats) {
-        float[] array = new float[listOfFloats.size()];
-        for (int i = 0; i < array.length; i++) {
-            array[i] = listOfFloats.get(i);
-        }
-        return array;
-    }
-
-    /**
-     * @return the max height of a line in screen coordinates (0.0 1.0)
-     */
-    public static double getLineHeight() {
-        return LINE_HEIGHT;
     }
 }

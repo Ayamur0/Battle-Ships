@@ -38,6 +38,7 @@ public class ModelTexture {
 
     /**
      * Create a new ModelTexture.
+     *
      * @param textureID Texture ID of the texture this ModelTexture should use.
      */
     public ModelTexture(int textureID) {
@@ -46,7 +47,6 @@ public class ModelTexture {
 
 
     /**
-     *
      * @return Number of rows this textureAtlas has. 1 if it isn't a textureAtlas.
      */
     public float getNumberOfRows() {
@@ -55,6 +55,7 @@ public class ModelTexture {
 
     /**
      * Set the number of rows in this texture.
+     *
      * @param numberOfRows numberOfRows this texture has.
      */
     public void setNumberOfRows(float numberOfRows) {
@@ -62,7 +63,6 @@ public class ModelTexture {
     }
 
     /**
-     *
      * @return {@code true} if this texture uses transparency, {@code false} else.
      */
     public boolean isHasTransparency() {
@@ -71,6 +71,7 @@ public class ModelTexture {
 
     /**
      * Set if this texture uses transparency.
+     *
      * @param hasTransparency {@code true} if this texture should use transparency.
      */
     public void setHasTransparency(boolean hasTransparency) {
@@ -78,7 +79,6 @@ public class ModelTexture {
     }
 
     /**
-     *
      * @return {@code true} if this texture needs to use fake lighting.
      */
     public boolean isUseFakeLighting() {
@@ -87,6 +87,7 @@ public class ModelTexture {
 
     /**
      * Set if this texture needs to use fake lighting.
+     *
      * @param useFakeLighting {@code true} if this texture should use fake lighting.
      */
     public void setUseFakeLighting(boolean useFakeLighting) {
@@ -94,7 +95,6 @@ public class ModelTexture {
     }
 
     /**
-     *
      * @return The ID of the texture.
      */
     public int getID() {
@@ -102,7 +102,6 @@ public class ModelTexture {
     }
 
     /**
-     *
      * @return The value of how much the light, reflected by entities with this texture, spreads.
      */
     public float getShineDamper() {
@@ -111,6 +110,7 @@ public class ModelTexture {
 
     /**
      * Set how much the light, reflected by entities with this texture, should spread.
+     *
      * @param shineDamper How much the light should spread.
      */
     public void setShineDamper(float shineDamper) {
@@ -126,6 +126,7 @@ public class ModelTexture {
 
     /**
      * Set how much light should be reflected by entities with this texture.
+     *
      * @param reflectivity how much light should be reflected.
      */
     public void setReflectivity(float reflectivity) {

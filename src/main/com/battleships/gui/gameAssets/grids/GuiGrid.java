@@ -42,9 +42,10 @@ public class GuiGrid extends Entity {
 
     /**
      * Create a new Grid Entity.
-     * @param position World coordinates of the center of this grid.
-     * @param rotation Rotation of this grid.
-     * @param scale Scale of this grid (300 for grid with size 30)
+     *
+     * @param position      World coordinates of the center of this grid.
+     * @param rotation      Rotation of this grid.
+     * @param scale         Scale of this grid (300 for grid with size 30)
      * @param textureOffset Offset the texture needs depending on size of this grid.
      *                      Needed to map the right part of the texture to the grid.
      */
@@ -53,7 +54,7 @@ public class GuiGrid extends Entity {
         super.getModel().getTexture().setNumberOfRows(textureOffset);
     }
 
-    public static void loadTexture(Loader loader){
+    public static void loadTexture(Loader loader) {
         gridTexModel = new TexturedModel(loader.loadToVAO(VERTICES, TEXTURECOORDS, NORMALS, INDICES), new ModelTexture(loader.loadTexture(playingfieldTexturePath)));
     }
 

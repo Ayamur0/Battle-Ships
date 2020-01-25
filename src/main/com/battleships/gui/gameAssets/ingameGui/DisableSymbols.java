@@ -1,6 +1,5 @@
 package com.battleships.gui.gameAssets.ingameGui;
 
-import com.battleships.gui.audio.AudioMaster;
 import com.battleships.gui.gameAssets.GameManager;
 import com.battleships.gui.guis.GuiClickCallback;
 import com.battleships.gui.guis.GuiManager;
@@ -53,11 +52,12 @@ public class DisableSymbols extends GuiClickCallback {
 
     /**
      * Creates the gui-elements for the symbols that show whether sound or animations are enabled or disabled.
-     * @param loader Loader needed to load textures
+     *
+     * @param loader     Loader needed to load textures
      * @param guiManager GuiManager that should handle the click function of these guis.
-     * @param guis List of guis that these should be added to. This list needs to be rendered so these guis show on screen.
+     * @param guis       List of guis that these should be added to. This list needs to be rendered so these guis show on screen.
      */
-    public DisableSymbols (Loader loader, GuiManager guiManager, List<GuiTexture> guis){
+    public DisableSymbols(Loader loader, GuiManager guiManager, List<GuiTexture> guis) {
         this.guiManager = guiManager;
         this.guis = guis;
         int texture = loader.loadTexture(textureAtlas);
@@ -75,26 +75,27 @@ public class DisableSymbols extends GuiClickCallback {
         currentSymbols.add(animation);
         currentSymbols.add(sound);
         guis.addAll(currentSymbols);
-        if(!GameManager.getSettings().isAnimation())
+        if (!GameManager.getSettings().isAnimation())
             toggleSymbol(ANIMATION);
-        if(!GameManager.getSettings().isSound())
+        if (!GameManager.getSettings().isSound())
             toggleSymbol(SOUND);
     }
 
     /**
      * Tests if the click was on either of the symbols.
+     *
      * @param gui The gui to test for if the click was on it.
-     * @param x xPos of the click (left of screen = 0, right of screen = 1).
-     * @param y yPos of the click (top of screen = 0, bottom of screen = 1).
+     * @param x   xPos of the click (left of screen = 0, right of screen = 1).
+     * @param y   yPos of the click (top of screen = 0, bottom of screen = 1).
      * @return {@code true} if the click was on either symbol, {@code false} else.
      */
     @Override
     protected boolean isClickOnGui(GuiTexture gui, double x, double y) {
-        if(super.isClickOnGui(currentSymbols.get(0), x, y)) {
+        if (super.isClickOnGui(currentSymbols.get(0), x, y)) {
             buttonClicked = 0;
             return true;
         }
-        if(super.isClickOnGui(currentSymbols.get(1), x, y)) {
+        if (super.isClickOnGui(currentSymbols.get(1), x, y)) {
             buttonClicked = 1;
             return true;
         }
@@ -106,14 +107,13 @@ public class DisableSymbols extends GuiClickCallback {
      */
     @Override
     protected void clickAction() {
-        if(buttonClicked == ANIMATION) {
+        if (buttonClicked == ANIMATION) {
             GameManager.toggleAnimations();
         }
-        if(buttonClicked == SOUND) {
-            if(currentSymbols.get(SOUND).getOffsetX() == 0) {
+        if (buttonClicked == SOUND) {
+            if (currentSymbols.get(SOUND).getOffsetX() == 0) {
                 GameManager.getSettings().setSound(false);
-            }
-            else {
+            } else {
                 GameManager.getSettings().setSound(true);
             }
             toggleSymbol(SOUND);
@@ -122,17 +122,18 @@ public class DisableSymbols extends GuiClickCallback {
 
     /**
      * Swaps the texture of a symbol between on and off.
+     *
      * @param symbol number of the symbol that should be toggled.
      */
-    public void toggleSymbol(int symbol){
+    public void toggleSymbol(int symbol) {
         currentSymbols.get(symbol).setOffsetX((currentSymbols.get(symbol).getOffsetX() * currentSymbols.get(symbol).getRows() + 1) % 2);
     }
 
     /**
      * Removes the gui elemnts of the disableSymbols from the screen.
      */
-    public void remove(){
-        for(GuiTexture g : currentSymbols){
+    public void remove() {
+        for (GuiTexture g : currentSymbols) {
             guiManager.removeClickableGui(g);
             guis.remove(g);
         }

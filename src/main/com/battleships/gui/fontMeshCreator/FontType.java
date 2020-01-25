@@ -1,7 +1,5 @@
 package com.battleships.gui.fontMeshCreator;
 
-import java.io.File;
-
 /**
  * Font capable of loading a mesh for a text string of a {@link GUIText}, so it can be rendered to the screen using this font.
  *
@@ -25,8 +23,8 @@ public class FontType {
      * font file.
      *
      * @param textureAtlas the ID of the font atlas texture.
-     * @param fontFile the font file containing information about each character in
-     *            the texture atlas.
+     * @param fontFile     the font file containing information about each character in
+     *                     the texture atlas.
      */
     public FontType(int textureAtlas, String fontFile) {
         this.textureAtlas = textureAtlas;

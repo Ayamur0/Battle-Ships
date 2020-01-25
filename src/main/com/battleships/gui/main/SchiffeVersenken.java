@@ -1,7 +1,6 @@
 package com.battleships.gui.main;
 
 import com.battleships.gui.gameAssets.GameManager;
-import com.battleships.logic.ShipAmountLoader;
 import com.battleships.gui.window.WindowManager;
 import org.joml.Vector3f;
 import org.lwjgl.glfw.GLFW;
@@ -10,7 +9,7 @@ public class SchiffeVersenken {
 
     private static long window;
 
-    public static void main(String[] args){
+    public static void main(String[] args) {
 
         // *******************Main stuff initialization*******************
 
@@ -23,7 +22,6 @@ public class SchiffeVersenken {
 
 
         // *******************Camera initialization*******************
-
 
 
         // *******************Light initialization*******************
@@ -59,12 +57,10 @@ public class SchiffeVersenken {
 
         // *******************Post Processing initialization*******************
 
-       // Fbo fbo = new Fbo(WindowManager.getWidth(), WindowManager.getHeight(), Fbo.DEPTH_RENDER_BUFFER);
-       // PostProcessing.init(loader);
+        // Fbo fbo = new Fbo(WindowManager.getWidth(), WindowManager.getHeight(), Fbo.DEPTH_RENDER_BUFFER);
+        // PostProcessing.init(loader);
 
         // *******************Callbacks initialization*******************
-
-
 
 
         // *******************Audio initialization*******************
@@ -74,7 +70,7 @@ public class SchiffeVersenken {
         // *******************Main Game Loop*******************
         // ****************************************************
 
-        while (!GLFW.glfwWindowShouldClose(WindowManager.getWindow())){
+        while (!GLFW.glfwWindowShouldClose(WindowManager.getWindow())) {
 
 
 //            fbo.unbindFrameBuffer();

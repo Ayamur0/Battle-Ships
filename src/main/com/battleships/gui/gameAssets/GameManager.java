@@ -31,18 +31,19 @@ import com.battleships.gui.water.WaterRenderer;
 import com.battleships.gui.water.WaterShader;
 import com.battleships.gui.water.WaterTile;
 import com.battleships.gui.window.WindowManager;
-import com.battleships.logic.Grid;
 import com.battleships.logic.LogicManager;
 import com.battleships.logic.Settings;
 import com.battleships.network.NetworkManager;
-import org.joml.*;
+import org.joml.Vector2i;
+import org.joml.Vector3f;
+import org.joml.Vector3i;
+import org.joml.Vector4f;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWKeyCallback;
 import org.lwjgl.glfw.GLFWMouseButtonCallback;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL30;
-import org.lwjgl.opengl.GLXAMDGPUAssociation;
 
 import java.nio.DoubleBuffer;
 import java.util.ArrayList;
@@ -51,7 +52,7 @@ import java.util.List;
 /**
  * Main class that controls the game from the gui side.
  * Contains all functions needed by the logic to control the gui for the game.
- * 
+ *
  * @author Tim Staudenmaier
  */
 public class GameManager {
@@ -194,7 +195,82 @@ public class GameManager {
      * Class that handles network related stuff
      */
     private static NetworkManager network;
+    /**
+     * Function that gets called if the user left clicks anywhere in the game.
+     * Gets the cursor position and tests all guis with a click action if they were
+     * clicked on and if one was clicked executes the click action of that gui.
+     */
+    public static GLFWMouseButtonCallback testClick = new GLFWMouseButtonCallback() {
+        @Override
+        public void invoke(long window, int button, int action, int mods) {
 
+            if (action == GLFW.GLFW_PRESS && button == GLFW.GLFW_MOUSE_BUTTON_2) {
+                shipManager.removeCursorShip();
+                return;
+            }
+            if (action == GLFW.GLFW_PRESS && button == GLFW.GLFW_MOUSE_BUTTON_1) {
+
+                GLFW.glfwGetCursorPos(window, x, y);
+                x.rewind();
+                y.rewind();
+
+                float xpos = (float) x.get() / WindowManager.getWidth();
+                float ypos = (float) y.get() / WindowManager.getHeight();
+
+                x.clear();
+                y.clear();
+
+                if (guiManager.testGuiClick(xpos, ypos))
+                    return;
+
+                Vector3i pointedCell = gridManager.getCurrentPointedCell();
+                if (pointedCell != null) {
+                    gridManager.cellClicked(new Vector2i(pointedCell.x, pointedCell.y), pointedCell.z);
+                }
+            }
+        }
+    };
+    /**
+     * Function that gets called if the user presses any key on the keyboard.
+     * Calls the corresponding function if a key that has a function was pressed.
+     */
+    public static GLFWKeyCallback keyCallback = new GLFWKeyCallback() {
+        @Override
+        public void invoke(long window, int key, int scanCode, int action, int mods) {
+            if (key == GLFW.GLFW_KEY_F11 && action == GLFW.GLFW_PRESS)
+                WindowManager.setFullScreen(!WindowManager.isFullscreen());
+            if (key == GLFW.GLFW_KEY_F && action == GLFW.GLFW_PRESS)
+                logic.advanceGamePhase();
+            if (key == GLFW.GLFW_KEY_G && action == GLFW.GLFW_PRESS)
+                startPlayPhase();
+            if (key == GLFW.GLFW_KEY_R && action == GLFW.GLFW_PRESS) {
+                shipManager.rotateShip();
+            }
+            if (key == GLFW.GLFW_KEY_X && action == GLFW.GLFW_PRESS) {
+                toggleAnimations();
+            }
+            if (key == GLFW.GLFW_KEY_T && action == GLFW.GLFW_PRESS)
+                camera.turnCamera();
+            if (key == GLFW.GLFW_KEY_ESCAPE && action == GLFW.GLFW_PRESS) {
+                if (GameManager.getLogic().getGameState() != GameManager.MENU && !ESCMenu.isActive()) {
+                    MainMenuManager.setMenu(new ESCMenu(guiManager, loader));
+                } else if (ESCMenu.isActive()) {
+                    MainMenuManager.getMenu().clearAllMenuElements();
+                    ESCMenu.setActive(false);
+                }
+            }
+            if (key == GLFW.GLFW_KEY_K && action == GLFW.GLFW_PRESS) {
+                FinishGame f = new FinishGame();
+                f.finishGame(loader, guiManager, false);
+            }
+            if (key == GLFW.GLFW_KEY_L && action == GLFW.GLFW_PRESS) {
+                logic.advanceTurn();
+            }
+            if (key == GLFW.GLFW_KEY_O && action == GLFW.GLFW_PRESS) {
+                logic.placeRandomShips(0);
+            }
+        }
+    };
     /**
      * 0 if no answer from the network is currently waiting to be processed.
      * If game got an answer from network, while cannonball is not ready to process it yet,
@@ -223,7 +299,7 @@ public class GameManager {
         loading = true;
         blur = new Fbo(WindowManager.getWidth(), WindowManager.getHeight(), Fbo.DEPTH_RENDER_BUFFER);
         PostProcessing.init(loader);
-        mainMenuManager = new MainMenuManager(guiManager,loader,waterFbos);
+        mainMenuManager = new MainMenuManager(guiManager, loader, waterFbos);
         settings = new Settings();
         logic = new LogicManager();
         network = new NetworkManager();
@@ -231,13 +307,14 @@ public class GameManager {
 
     /**
      * GridManager places a ship.
-     * @param index Index of the cell the stern of the ship is on.
-     * @param size Size of the ship.
+     *
+     * @param index     Index of the cell the stern of the ship is on.
+     * @param size      Size of the ship.
      * @param direction Direction the ship is facing (constants in {@link ShipManager}).
-     * @param field ID of the grid the ship is placed on.
+     * @param field     ID of the grid the ship is placed on.
      */
-    public static void placeShip(Vector2i index, int size, int direction, int field){
-        if(logic.canShipBePlaced(index.x,index.y,size,direction,field)) {
+    public static void placeShip(Vector2i index, int size, int direction, int field) {
+        if (logic.canShipBePlaced(index.x, index.y, size, direction, field)) {
             shipSelector.decrementCount(size);
             logic.placeShip(index.x, index.y, size, direction, gridManager.placeShip(index, size, direction, field), field);
         }
@@ -246,10 +323,10 @@ public class GameManager {
     /**
      * Removes all ships on the players grid.
      */
-    public static void removeAllShips(){
-        if(shipSelector != null)
+    public static void removeAllShips() {
+        if (shipSelector != null)
             shipSelector.resetCount();
-        if(gridManager.getShips().size() > 0) {
+        if (gridManager.getShips().size() > 0) {
             logic.removeAllShips();
         }
         gridManager.removeAllShips();
@@ -258,8 +335,8 @@ public class GameManager {
     /**
      * Prepares stuff that is always needed when a game is started.
      */
-    public static void prepareGame(){
-        if(!settings.isSound())
+    public static void prepareGame() {
+        if (!settings.isSound())
             AudioMaster.changeVolume(0);
         GridManager.setIsBackground(false);
         WindowManager.setCallbacks(camera, waterFbos);
@@ -271,9 +348,9 @@ public class GameManager {
      * Starts the ship placing phase.
      * Creates gui needed for that phase and destroys unneeded guis.
      */
-    public static void startShipPlacementPhase(){
+    public static void startShipPlacementPhase() {
         prepareGame();
-        if(shipCounter != null)
+        if (shipCounter != null)
             shipCounter.remove();
         shipSelector = new ShipSelector(loader, guiManager, shipManager, guis);
     }
@@ -282,8 +359,8 @@ public class GameManager {
      * Starts the shooting phase.
      * Creates gui needed for that phase and destroys unneeded guis.
      */
-    public static void startPlayPhase(){
-        if(shipSelector != null)
+    public static void startPlayPhase() {
+        if (shipSelector != null)
             shipSelector.remove();
         shipCounter = new ShipCounter(loader, guiManager, guis);
     }
@@ -292,7 +369,7 @@ public class GameManager {
      * Loads the main scene the game is played in.
      * This scene mainly consists of a terrain, water, a light and a camera.
      */
-    public static void loadIngameScene(){
+    public static void loadIngameScene() {
         clearScene();
         GuiGrid.loadTexture(loader);
         WindowManager.updateLoadingScreen();
@@ -315,11 +392,11 @@ public class GameManager {
         TerrainTexture blendMap = new TerrainTexture(loader.loadTexture("BlendMapLarge.tga"));
         WindowManager.updateLoadingScreen();
 
-        terrain = new Terrain(-0.25f,-0.75f, loader, texturePack, blendMap, "HeightMapLarge.jpg");
+        terrain = new Terrain(-0.25f, -0.75f, loader, texturePack, blendMap, "HeightMapLarge.jpg");
 
-        light = new Light(new Vector3f(20000,20000,2000), new Vector3f(1,1,1));
+        light = new Light(new Vector3f(20000, 20000, 2000), new Vector3f(1, 1, 1));
 
-        gridManager =  new GridManager(loader, settings.getSize());
+        gridManager = new GridManager(loader, settings.getSize());
         shipManager = gridManager.getShipManager();
 
         waterTiles.add(new WaterTile(0, 0, -3));
@@ -336,8 +413,8 @@ public class GameManager {
     /**
      * Changes the size of the grids to the size in the settings.
      */
-    public static void resizeGrid(){
-        gridManager.resizeGrid(loader,settings.getSize());
+    public static void resizeGrid() {
+        gridManager.resizeGrid(loader, settings.getSize());
         camera.setStandardPos();
     }
 
@@ -345,13 +422,13 @@ public class GameManager {
      * Remove all models that were created during game.
      * Call when exiting to main menu.
      */
-    public static void removeIngameModelsFromScene(){
+    public static void removeIngameModelsFromScene() {
         entities.clear();
         guis.clear();
         guiManager.clearClickableGuis();
         gridManager.getBurningFires().clear();
-        for(Entity e : gridManager.getBurningFireSounds().keySet()){
-            for(Source s : gridManager.getBurningFireSounds().get(e)){
+        for (Entity e : gridManager.getBurningFireSounds().keySet()) {
+            for (Source s : gridManager.getBurningFireSounds().get(e)) {
                 s.delete();
             }
         }
@@ -365,7 +442,7 @@ public class GameManager {
     /**
      * Removes everything from the scene.
      */
-    public static void clearScene(){
+    public static void clearScene() {
         guiManager.clearClickableGuis();
         waterTiles.clear();
         entities.clear();
@@ -381,7 +458,7 @@ public class GameManager {
     /**
      * Renders all the {@link WaterTile}s of the scene.
      */
-    public static void prepareWater(){
+    public static void prepareWater() {
         GL11.glEnable(GL30.GL_CLIP_DISTANCE0);
 
         //render reflection texture
@@ -408,7 +485,7 @@ public class GameManager {
     /**
      * Renders all the {@link Entity} of the scene.
      */
-    public static void renderEntities(){
+    public static void renderEntities() {
         gridManager.render(renderer);
         shipManager.moveCursorShip();
         renderer.renderScene(entities, terrain, light, camera, new Vector4f(0, 0, 0, 0));
@@ -417,7 +494,7 @@ public class GameManager {
     /**
      * Renders all the {@link com.battleships.gui.particles.Particle}s of the scene.
      */
-    public static void renderParticles(){
+    public static void renderParticles() {
         ParticleMaster.update(camera);
         ParticleMaster.renderParticles(camera, 1);
     }
@@ -426,29 +503,29 @@ public class GameManager {
      * Updates everything in the scene and then renders everything.
      * This render method blurs the scene, so it can be used as a background image.
      */
-    public static void updateSceneBlurred(){
-        if(MainMenuManager.getMenu() instanceof MainMenu && (MainMenuManager.getMenu()).isFilePicked())
-            ( MainMenuManager.getMenu()).processLoadedFile();
-        if(MainMenuManager.getMenu() instanceof MultiplayerMenu && ( MainMenuManager.getMenu()).isFilePicked())
-            ( MainMenuManager.getMenu()).processLoadedFile();
-        if(MainMenuManager.getMenu() instanceof ESCMenu && MainMenuManager.getMenu().isUserInputMade())
+    public static void updateSceneBlurred() {
+        if (MainMenuManager.getMenu() instanceof MainMenu && (MainMenuManager.getMenu()).isFilePicked())
+            (MainMenuManager.getMenu()).processLoadedFile();
+        if (MainMenuManager.getMenu() instanceof MultiplayerMenu && (MainMenuManager.getMenu()).isFilePicked())
+            (MainMenuManager.getMenu()).processLoadedFile();
+        if (MainMenuManager.getMenu() instanceof ESCMenu && MainMenuManager.getMenu().isUserInputMade())
             ((ESCMenu) MainMenuManager.getMenu()).processInput();
-        if(MainMenuManager.getMenu() instanceof MultiplayerMenu && MainMenuManager.getMenu().isUserInputMade())
+        if (MainMenuManager.getMenu() instanceof MultiplayerMenu && MainMenuManager.getMenu().isUserInputMade())
             ((MultiplayerMenu) MainMenuManager.getMenu()).processInput();
-        if(MainMenuManager.getMenu() instanceof WaitingConnection && ((WaitingConnection) MainMenuManager.getMenu()) .isOpponentConnected())
+        if (MainMenuManager.getMenu() instanceof WaitingConnection && ((WaitingConnection) MainMenuManager.getMenu()).isOpponentConnected())
             ((WaitingConnection) MainMenuManager.getMenu()).startMultiplayerGame();
         blur.updateSize();
         camera.move(terrain);
         camera.addYaw(0.1f);
-        camera.scrollCallback.invoke(0,0,-0.05f);
+        camera.scrollCallback.invoke(0, 0, -0.05f);
         mousePicker.update();
         AudioMaster.setListenerData(camera.getPosition().x, camera.getPosition().y, camera.getPosition().z, camera.getPitch(), camera.getYaw());
         blur.bindFrameBuffer();
         renderEntities();
         blur.unbindFrameBuffer();
         prepareWater();
-        if (MainMenuManager.getMenu() instanceof InGameSettingsMenu){
-            if (((InGameSettingsMenu) MainMenuManager.getMenu()).isRunning()){
+        if (MainMenuManager.getMenu() instanceof InGameSettingsMenu) {
+            if (((InGameSettingsMenu) MainMenuManager.getMenu()).isRunning()) {
                 ((InGameSettingsMenu) MainMenuManager.getMenu()).RefreshSliderValue();
             }
         }
@@ -460,25 +537,25 @@ public class GameManager {
         PostProcessing.doPostProcessing(blur.getColorTexture());
         guiRenderer.render(guis);
         TextMaster.render();
-        if(settings.isOnline())
+        if (settings.isOnline())
             network.execute();
     }
 
     /**
      * Updates everything in the scene and then renders everything.
      */
-    public static void updateScene(){
+    public static void updateScene() {
         blur.updateSize();
-        if(MainMenuManager.getMenu() instanceof ESCMenu && MainMenuManager.getMenu().isUserInputMade())
+        if (MainMenuManager.getMenu() instanceof ESCMenu && MainMenuManager.getMenu().isUserInputMade())
             ((ESCMenu) MainMenuManager.getMenu()).processInput();
-        if(GLFW.glfwGetKey(WindowManager.getWindow(), GLFW.GLFW_KEY_L) == GLFW.GLFW_PRESS)
+        if (GLFW.glfwGetKey(WindowManager.getWindow(), GLFW.GLFW_KEY_L) == GLFW.GLFW_PRESS)
             logic.advanceTurn();
         camera.move(terrain);
         mousePicker.update();
         AudioMaster.setListenerData(camera.getPosition().x, camera.getPosition().y, camera.getPosition().z, camera.getPitch(), camera.getYaw());
-        if(cannonballDone) {
+        if (cannonballDone) {
             cannonballDone = false;
-            if(cannonballHit)
+            if (cannonballHit)
                 logic.repeatTurn();
             else
                 logic.advanceTurn();
@@ -496,13 +573,12 @@ public class GameManager {
         blur.bindFrameBuffer();
         PostProcessing.test(blur.getColorTexture());
         renderer.updateProjectionMatrix();
-        if(settings.isOnline())
+        if (settings.isOnline())
             network.execute();
-        if(pendingAnswer != 0 && gridManager.getCannonball().isWaiting()) {
-            if(pendingAnswer == 1) {
+        if (pendingAnswer != 0 && gridManager.getCannonball().isWaiting()) {
+            if (pendingAnswer == 1) {
                 gridManager.getCannonball().cannonballHit2(false);
-            }
-            else {
+            } else {
                 gridManager.getCannonball().cannonballHit2(true);
             }
             pendingAnswer = 0;
@@ -513,8 +589,8 @@ public class GameManager {
      * Cleans up everything that was used in the ingame scene.
      * Needs to be called when the ingame scene isn't needed anymore.
      */
-    public static void cleanUpIngameScene(){
-        if(shipCounter != null)
+    public static void cleanUpIngameScene() {
+        if (shipCounter != null)
             shipCounter.remove();
         disableSymbols.remove();
         AudioMaster.cleanUp();
@@ -531,18 +607,18 @@ public class GameManager {
 
     /**
      * Shoot method, that passes the shoot command to the {@link GridManager}.
-     * @param originField ID of the grid the shot originates from.
-     * @param destinationIndex Index of the cell that should get shot.
      *
+     * @param originField      ID of the grid the shot originates from.
+     * @param destinationIndex Index of the cell that should get shot.
      * @return true if the shot can be made (no ball is currently flying and cell hasn't already been shot), false else.
      */
-    public static boolean shoot(int originField, Vector2i destinationIndex){
-        if(originField == GridManager.OWNFIELD && !logic.isPlayerTurn() || originField == GridManager.OPPONENTFIELD && logic.isPlayerTurn()) {
+    public static boolean shoot(int originField, Vector2i destinationIndex) {
+        if (originField == GridManager.OWNFIELD && !logic.isPlayerTurn() || originField == GridManager.OPPONENTFIELD && logic.isPlayerTurn()) {
             //System.out.println("\u001B[35m" + "Shot not allowed! Field: " + originField + " Turn: " + logic.isPlayerTurn());
             return false;
         }
-        if(settings.isOnline() && logic.getTurnHandler().isPlayerTurn() &&
-                !GameManager.getLogic().hasBeenShot(destinationIndex.x, destinationIndex.y, originField == GridManager.OWNFIELD ? GridManager.OPPONENTFIELD : GridManager.OWNFIELD)){
+        if (settings.isOnline() && logic.getTurnHandler().isPlayerTurn() &&
+                !GameManager.getLogic().hasBeenShot(destinationIndex.x, destinationIndex.y, originField == GridManager.OWNFIELD ? GridManager.OPPONENTFIELD : GridManager.OWNFIELD)) {
             network.sendShoot(destinationIndex.x, destinationIndex.y);
             System.out.println("\u001B[35m" + "Shot sent!" + " Turn: " + logic.isPlayerTurn());
         }
@@ -552,10 +628,11 @@ public class GameManager {
 
     /**
      * Method to process answer of shots made through internet connection.
+     *
      * @param shipHit {@code true} if the shot hit a ship, {@code false} else.
      */
-    public static void processShootAnswer(boolean shipHit){
-        if(gridManager.getCannonball().isWaiting())
+    public static void processShootAnswer(boolean shipHit) {
+        if (gridManager.getCannonball().isWaiting())
             gridManager.getCannonball().cannonballHit2(shipHit);
         else
             pendingAnswer = shipHit ? 2 : 1;
@@ -565,29 +642,32 @@ public class GameManager {
      * Function to tell GameManager that cannonball has reached it's destination.
      * Needed to exit the second thread in which the cannonball was moved, so OpenGL function can be used.
      * Only used if animations are enabled.
+     *
      * @param shipHit {@code true} if the cannonball has hit a ship, {@code false} else.
      */
-    public static void cannonballHit(boolean shipHit){
+    public static void cannonballHit(boolean shipHit) {
         cannonballDone = true;
         cannonballHit = shipHit;
     }
 
     /**
      * Passes the command to place a marker, at the specified index, to the {@link GridManager}.
+     *
      * @param shipHit {@code true} if a ship was hit, so marker should be red. {@code false} if no ship was hit, so marker should be white.
-     * @param index Index where the marker should be placed.
-     * @param field ID of the grid the marker should be placed on.
+     * @param index   Index where the marker should be placed.
+     * @param field   ID of the grid the marker should be placed on.
      */
-    public static void placeMarker(boolean shipHit, Vector2i index, int field){
+    public static void placeMarker(boolean shipHit, Vector2i index, int field) {
         gridManager.placeMarker(shipHit, index, field);
     }
 
     /**
      * Finishes the game and shows endscreen.
+     *
      * @param won {@code true} if the player has won, {@code false} else.
      */
-    public static void finishGame(boolean won){
-        if(shipCounter != null)
+    public static void finishGame(boolean won) {
+        if (shipCounter != null)
             shipCounter.remove();
         FinishGame f = new FinishGame();
         f.finishGame(loader, guiManager, won);
@@ -596,89 +676,9 @@ public class GameManager {
     /**
      * Updates the counts, that keep track of how many enemy ships of each size are alive.
      */
-    public static void updateAliveShip(){
+    public static void updateAliveShip() {
         shipCounter.updateCount();
     }
-
-    /**
-     * Function that gets called if the user left clicks anywhere in the game.
-     * Gets the cursor position and tests all guis with a click action if they were
-     * clicked on and if one was clicked executes the click action of that gui.
-     */
-    public static GLFWMouseButtonCallback testClick = new GLFWMouseButtonCallback() {
-        @Override
-        public void invoke(long window, int button, int action, int mods) {
-
-            if(action == GLFW.GLFW_PRESS && button == GLFW.GLFW_MOUSE_BUTTON_2){
-                shipManager.removeCursorShip();
-                return;
-            }
-            if(action == GLFW.GLFW_PRESS && button == GLFW.GLFW_MOUSE_BUTTON_1) {
-
-                GLFW.glfwGetCursorPos(window, x, y);
-                x.rewind();
-                y.rewind();
-
-                float xpos = (float) x.get() / WindowManager.getWidth();
-                float ypos = (float) y.get() / WindowManager.getHeight();
-
-                x.clear();
-                y.clear();
-
-                if (guiManager.testGuiClick(xpos, ypos))
-                    return;
-
-                Vector3i pointedCell = gridManager.getCurrentPointedCell();
-                if (pointedCell != null) {
-                    gridManager.cellClicked(new Vector2i(pointedCell.x, pointedCell.y), pointedCell.z);
-                }
-            }
-        }
-    };
-
-    /**
-     * Function that gets called if the user presses any key on the keyboard.
-     * Calls the corresponding function if a key that has a function was pressed.
-     */
-    public static GLFWKeyCallback keyCallback = new GLFWKeyCallback() {
-        @Override
-        public void invoke(long window, int key, int scanCode, int action, int mods) {
-            if(key == GLFW.GLFW_KEY_F11 && action == GLFW.GLFW_PRESS)
-                WindowManager.setFullScreen(!WindowManager.isFullscreen());
-            if(key == GLFW.GLFW_KEY_F && action == GLFW.GLFW_PRESS)
-                logic.advanceGamePhase();
-            if(key == GLFW.GLFW_KEY_G && action == GLFW.GLFW_PRESS)
-                startPlayPhase();
-            if(key == GLFW.GLFW_KEY_R && action == GLFW.GLFW_PRESS){
-                shipManager.rotateShip();
-            }
-            if(key == GLFW.GLFW_KEY_X && action == GLFW.GLFW_PRESS){
-                toggleAnimations();
-            }
-            if(key == GLFW.GLFW_KEY_T && action == GLFW.GLFW_PRESS)
-                camera.turnCamera();
-            if (key == GLFW.GLFW_KEY_ESCAPE && action == GLFW.GLFW_PRESS) {
-                if (GameManager.getLogic().getGameState() != GameManager.MENU && !ESCMenu.isActive())
-                {
-                    MainMenuManager.setMenu(new ESCMenu(guiManager, loader));
-                }
-                else if (ESCMenu.isActive()){
-                    MainMenuManager.getMenu().clearAllMenuElements();
-                    ESCMenu.setActive(false);
-                }
-            }
-            if(key == GLFW.GLFW_KEY_K && action == GLFW.GLFW_PRESS) {
-                FinishGame f = new FinishGame();
-                f.finishGame(loader, guiManager, false);
-            }
-            if(key == GLFW.GLFW_KEY_L && action == GLFW.GLFW_PRESS) {
-                logic.advanceTurn();
-            }
-            if(key == GLFW.GLFW_KEY_O&& action == GLFW.GLFW_PRESS) {
-                logic.placeRandomShips(0);
-            }
-        }
-    };
 
     /**
      * Toggle the animations of the game and the symbol indicating
@@ -727,7 +727,7 @@ public class GameManager {
     /**
      * @return The boolean indicating if game is loading
      */
-    public static boolean getLoading(){
+    public static boolean getLoading() {
         return loading;
     }
 
@@ -746,17 +746,17 @@ public class GameManager {
     }
 
     /**
-     * @return The Network manager of this game.
-     */
-    public static NetworkManager getNetwork() {
-        return network;
-    }
-
-    /**
      * @param settings new settings (when loading a game)
      */
     public static void setSettings(Settings settings) {
         GameManager.settings = settings;
+    }
+
+    /**
+     * @return The Network manager of this game.
+     */
+    public static NetworkManager getNetwork() {
+        return network;
     }
 
     /**

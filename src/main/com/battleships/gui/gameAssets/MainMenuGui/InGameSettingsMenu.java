@@ -16,6 +16,18 @@ import org.joml.Vector2f;
  */
 public class InGameSettingsMenu extends Menu {
     /**
+     * Constant value for Easy Ai
+     */
+    protected static final int EASY = 0;
+    /**
+     * Constant value for Medium Ai
+     */
+    protected static final int MEDIUM = 1;
+    /**
+     * Constant value for Hard Ai
+     */
+    protected static final int HARD = 2;
+    /**
      * Constant value for start button
      */
     private static final int START = 0;
@@ -35,18 +47,6 @@ public class InGameSettingsMenu extends Menu {
      * Constant value for AivsAi button
      */
     private static final int AIVSAI = 2;
-    /**
-     * Constant value for Easy Ai
-     */
-    protected static final int EASY = 0;
-    /**
-     * Constant value for Medium Ai
-     */
-    protected static final int MEDIUM = 1;
-    /**
-     * Constant value for Hard Ai
-     */
-    protected static final int HARD = 2;
     /**
      * The offset used too set the {@link GUIText} above the {@link Slider}
      */

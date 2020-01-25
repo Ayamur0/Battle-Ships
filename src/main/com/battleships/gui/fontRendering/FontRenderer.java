@@ -36,12 +36,12 @@ public class FontRenderer {
      *
      * @param texts HashMap containing all fonts and the texts using that font that should be rendered
      */
-    public void render(Map<FontType, List<GUIText>> texts){
+    public void render(Map<FontType, List<GUIText>> texts) {
         prepare();
-        for(FontType font : texts.keySet()){
+        for (FontType font : texts.keySet()) {
             GL13.glActiveTexture(GL13.GL_TEXTURE0);
             GL11.glBindTexture(GL11.GL_TEXTURE_2D, font.getTextureAtlas());
-            for(GUIText text : texts.get(font)){
+            for (GUIText text : texts.get(font)) {
                 renderText(text);
             }
         }
@@ -51,14 +51,14 @@ public class FontRenderer {
     /**
      * clean up the shader on exit of program
      */
-    public void cleanUp(){
+    public void cleanUp() {
         shader.cleanUp();
     }
 
     /**
      * Prepare OpenGl to be able to render text and start shader
      */
-    private void prepare(){
+    private void prepare() {
         GL11.glEnable(GL11.GL_BLEND);
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
         GL11.glDisable(GL11.GL_DEPTH_TEST);
@@ -72,7 +72,7 @@ public class FontRenderer {
      *
      * @param text text to be rendered
      */
-    private void renderText(GUIText text){
+    private void renderText(GUIText text) {
         GL30.glBindVertexArray(text.getMesh());
         GL20.glEnableVertexAttribArray(0);
         GL20.glEnableVertexAttribArray(1);
@@ -91,7 +91,7 @@ public class FontRenderer {
     /**
      * Disable text rendering in OpenGl so standard entities can be rendered again
      */
-    private void endRendering(){
+    private void endRendering() {
         shader.stop();
         GL11.glDisable(GL11.GL_BLEND);
         GL11.glEnable(GL11.GL_DEPTH_TEST);

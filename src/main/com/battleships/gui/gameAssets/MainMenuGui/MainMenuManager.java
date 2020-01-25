@@ -23,6 +23,17 @@ import java.nio.DoubleBuffer;
  */
 public class MainMenuManager {
     /**
+     * Function that gets called if the user presses any key on the keyboard.
+     * Calls the corresponding function if a key that has a function was pressed.
+     */
+    public static GLFWKeyCallback keyCallback = new GLFWKeyCallback() {
+        @Override
+        public void invoke(long window, int key, int scanCode, int action, int mods) {
+            if (key == GLFW.GLFW_KEY_F11 && action == GLFW.GLFW_PRESS)
+                WindowManager.setFullScreen(!WindowManager.isFullscreen());
+        }
+    };
+    /**
      * Menu that handels all menus and their functions
      */
     private static Menu menu;
@@ -46,22 +57,30 @@ public class MainMenuManager {
      * For reading the y Mouse coordinates
      */
     private DoubleBuffer y = BufferUtils.createDoubleBuffer(1);
-
     /**
-     * Sets the current Menu
-     *
-     * @param menu the menu that is shown
+     * Function that gets called if the user left clicks anywhere in the game.
+     * Gets the cursor position and tests all guis with a click action if they were
+     * clicked on and if one was clicked executes the click action of that gui.
      */
-    public static void setMenu(Menu menu) {
-        MainMenuManager.menu = menu;
-    }
+    public GLFWMouseButtonCallback testClick = new GLFWMouseButtonCallback() {
+        @Override
+        public void invoke(long window, int button, int action, int mods) {
 
-    /**
-     * @return the current shown Menu from the game
-     */
-    public static Menu getMenu() {
-        return MainMenuManager.menu;
-    }
+            if (action != GLFW.GLFW_PRESS || button != GLFW.GLFW_MOUSE_BUTTON_1)
+                return;
+            GLFW.glfwGetCursorPos(window, x, y);
+            x.rewind();
+            y.rewind();
+
+            float xpos = (float) x.get() / WindowManager.getWidth();
+            float ypos = (float) y.get() / WindowManager.getHeight();
+
+            x = BufferUtils.createDoubleBuffer(1);
+            y = BufferUtils.createDoubleBuffer(1);
+
+            guiManager.testGuiClick(xpos, ypos);
+        }
+    };
 
     /**
      * initializes all attributes for the menu
@@ -74,6 +93,22 @@ public class MainMenuManager {
         MainMenuManager.guiManager = guiManager;
         MainMenuManager.loader = loader;
         MainMenuManager.wFbo = wFbo;
+    }
+
+    /**
+     * @return the current shown Menu from the game
+     */
+    public static Menu getMenu() {
+        return MainMenuManager.menu;
+    }
+
+    /**
+     * Sets the current Menu
+     *
+     * @param menu the menu that is shown
+     */
+    public static void setMenu(Menu menu) {
+        MainMenuManager.menu = menu;
     }
 
     /**
@@ -120,40 +155,4 @@ public class MainMenuManager {
         GameManager.getLogic().getTurnHandler().setPlayerTurn(true);
         menu = new MainMenu(guiManager, loader);
     }
-
-    /**
-     * Function that gets called if the user left clicks anywhere in the game.
-     * Gets the cursor position and tests all guis with a click action if they were
-     * clicked on and if one was clicked executes the click action of that gui.
-     */
-    public GLFWMouseButtonCallback testClick = new GLFWMouseButtonCallback() {
-        @Override
-        public void invoke(long window, int button, int action, int mods) {
-
-            if (action != GLFW.GLFW_PRESS || button != GLFW.GLFW_MOUSE_BUTTON_1)
-                return;
-            GLFW.glfwGetCursorPos(window, x, y);
-            x.rewind();
-            y.rewind();
-
-            float xpos = (float) x.get() / WindowManager.getWidth();
-            float ypos = (float) y.get() / WindowManager.getHeight();
-
-            x = BufferUtils.createDoubleBuffer(1);
-            y = BufferUtils.createDoubleBuffer(1);
-
-            guiManager.testGuiClick(xpos, ypos);
-        }
-    };
-    /**
-     * Function that gets called if the user presses any key on the keyboard.
-     * Calls the corresponding function if a key that has a function was pressed.
-     */
-    public static GLFWKeyCallback keyCallback = new GLFWKeyCallback() {
-        @Override
-        public void invoke(long window, int key, int scanCode, int action, int mods) {
-            if (key == GLFW.GLFW_KEY_F11 && action == GLFW.GLFW_PRESS)
-                WindowManager.setFullScreen(!WindowManager.isFullscreen());
-        }
-    };
 }

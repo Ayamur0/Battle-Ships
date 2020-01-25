@@ -77,50 +77,56 @@ public class FontShader extends ShaderProgram {
     /**
      * Use int value of the uniform location of the uniform variable color to store a vec3
      * color in that variable so the shader can use it.
+     *
      * @param color color to be uploaded to the shader
      */
-    protected void loadColor(Vector3f color){
+    protected void loadColor(Vector3f color) {
         super.loadVector(location_color, color);
     }
 
     /**
      * Upload translation(position) 2d vector to the shader code
+     *
      * @param translation translation to be uploaded to the shader
      */
-    protected void loadTranslation(Vector2f translation){
+    protected void loadTranslation(Vector2f translation) {
         super.load2DVector(location_translation, translation);
     }
 
     /**
      * Upload width for the outline of the font to the shader code
+     *
      * @param width width of the character outline, 0 for no outline
      */
-    protected void loadBorderWidth(float width){
+    protected void loadBorderWidth(float width) {
         super.loadFloat(location_borderWidth, width);
     }
 
     /**
      * Upload size of the edge of the font outline to the shader code
+     *
      * @param edge size of the smooth transition at the edge of the character outline, to prevent sharp edges
      *             keep at 0.1 when no border is used
      */
-    protected void loadBorderEdge(float edge){
+    protected void loadBorderEdge(float edge) {
         super.loadFloat(location_borderEdge, edge);
     }
 
     /**
      * Upload color of the font outline to the shader code
+     *
      * @param color color of the font outline in r,g,b with values between 0 and 1
      */
-    protected void loadOutlineColor(Vector3f color){
+    protected void loadOutlineColor(Vector3f color) {
         super.loadVector(location_outlineColor, color);
     }
 
     /**
      * Load offset of character in textureAtlas to shader.
+     *
      * @param offset Offset of current character in textureAtlas.
      */
-    protected void loadOffset(Vector2f offset){
+    protected void loadOffset(Vector2f offset) {
         super.load2DVector(location_offset, offset);
     }
 

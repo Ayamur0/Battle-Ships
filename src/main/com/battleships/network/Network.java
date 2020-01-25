@@ -3,15 +3,11 @@ package com.battleships.network;
 import com.battleships.gui.gameAssets.GameManager;
 import com.battleships.gui.gameAssets.grids.GridManager;
 import com.battleships.logic.AI.AI;
-import com.battleships.logic.AI.AIHard;
 import com.battleships.logic.AI.AIMedium;
 import com.battleships.logic.OnlineGrid;
 import com.battleships.logic.SaveFile;
 import com.battleships.logic.SaveFileManager;
-import com.battleships.logic.Settings;
-import org.joml.Intersectiond;
 import org.joml.Vector2i;
-import org.lwjgl.glfw.GLFWWindowIconifyCallback;
 
 /**
  * This class can handle the Strings the network receives from the opponent.
@@ -100,7 +96,7 @@ public abstract class Network implements NetworkInterface {
                 break;
             case SHOOT:
                 System.out.println("\u001B[34m" + "Processing Shot " + GameManager.getGridManager().getCannonball().isFlying());
-                if(GameManager.getGridManager().getCannonball().isFlying())
+                if (GameManager.getGridManager().getCannonball().isFlying())
                     return;
                 GameManager.shoot(GridManager.OPPONENTFIELD, new Vector2i(row + 1, col + 1));
                 break;

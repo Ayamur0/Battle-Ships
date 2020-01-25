@@ -5,11 +5,8 @@ import com.battleships.gui.gameAssets.grids.GridManager;
 import com.battleships.gui.terrains.Terrain;
 import com.battleships.gui.window.WindowManager;
 import org.joml.Vector3f;
-import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWScrollCallback;
-
-import java.nio.DoubleBuffer;
 
 /**
  * The scene always gets rendered, as if it was filmed with the camera.
@@ -44,12 +41,21 @@ public class Camera {
      * After the new position has been calculated this value will be set to 0 again.
      */
     private float zoom = 0;
-
-
+    /**
+     * Scroll Callback of GLFW that is needed to get notified when the user scroll.
+     * This callback also tells how far the scroll wheel was scrolled with the yOffset parameter.
+     * The yOffset is negative if the scroll wheel was scrolled downwards, else it's positive.
+     */
+    public GLFWScrollCallback scrollCallback = new GLFWScrollCallback() {
+        @Override
+        public void invoke(long window, double xOffset, double yOffset) {
+            zoom = (float) yOffset;
+        }
+    };
     /**
      * Position of the camera in the world.
      */
-    private Vector3f position = new Vector3f(0,4,0);
+    private Vector3f position = new Vector3f(0, 4, 0);
     /**
      * Pitch, yaw and roll of the camera.
      */
@@ -72,7 +78,6 @@ public class Camera {
      * and time passed.
      */
     private float currentUpwardsSpeed;
-
     /**
      * In this game the camera is fixed on one circle.
      * originX is the x coordinate of the center of this circle.
@@ -87,35 +92,23 @@ public class Camera {
      * Determines the radius of the circle the camera can move on.
      */
     private float radius;
-
     //TODO remove
     private boolean mouseLocked = false;
 
     /**
-     * Scroll Callback of GLFW that is needed to get notified when the user scroll.
-     * This callback also tells how far the scroll wheel was scrolled with the yOffset parameter.
-     * The yOffset is negative if the scroll wheel was scrolled downwards, else it's positive.
-     */
-    public GLFWScrollCallback scrollCallback = new GLFWScrollCallback(){
-        @Override
-        public void invoke(long window, double xOffset, double yOffset) {
-            zoom = (float)yOffset;
-        }
-    };
-
-    /**
      * Move the camera to the new position for the current frame, using all the data needed to calculate that position.
      * (currentSpeed adjusted zoom, new rotation)
+     *
      * @param terrain Terrain the camera is moving on (needed, so camera can't move under terrain).
      */
-        public void move(Terrain terrain){
+    public void move(Terrain terrain) {
         //calculatePitch();
         calculatePosition();
         pitch %= 360;
         yaw %= 360;
 
         //calculate new positions depending on zoom
-        if(position.y - 2* zoom * Math.abs(Math.sin(Math.toRadians(pitch))) > minY && position.y - 2* zoom * Math.abs(Math.sin(Math.toRadians(pitch))) < maxY) {
+        if (position.y - 2 * zoom * Math.abs(Math.sin(Math.toRadians(pitch))) > minY && position.y - 2 * zoom * Math.abs(Math.sin(Math.toRadians(pitch))) < maxY) {
             position.x += (float) (2 * zoom * Math.sin(Math.toRadians(yaw)) * Math.abs(Math.cos(Math.toRadians(pitch))));
             position.z -= (float) (2 * zoom * Math.cos(Math.toRadians(yaw)) * Math.abs(Math.cos(Math.toRadians(pitch))));
             position.y -= 2 * zoom * Math.abs(Math.sin(Math.toRadians(pitch)));
@@ -123,13 +116,13 @@ public class Camera {
 
         zoom = 0;
 
-        position.x = originX + (float)Math.cos(Math.toRadians(yaw + 90))*radius;
-        position.z = originZ + (float)Math.sin(Math.toRadians(yaw + 90))*radius;
+        position.x = originX + (float) Math.cos(Math.toRadians(yaw + 90)) * radius;
+        position.z = originZ + (float) Math.sin(Math.toRadians(yaw + 90)) * radius;
 
 
         //don't allow to get under terrain
         float terrainHeight = terrain.getHeightOfTerrain(position.x, position.z);
-        if(position.y < terrainHeight + 1){
+        if (position.y < terrainHeight + 1) {
             position.y = terrainHeight + 1;
         }
     }
@@ -139,17 +132,17 @@ public class Camera {
      * the user is currently making.
      */
     //set speeds in the directions based in inputs
-    private void calculatePosition(){
-        if(GLFW.glfwGetKey(WindowManager.getWindow(), GLFW.GLFW_KEY_W) == GLFW.GLFW_PRESS){
+    private void calculatePosition() {
+        if (GLFW.glfwGetKey(WindowManager.getWindow(), GLFW.GLFW_KEY_W) == GLFW.GLFW_PRESS) {
             zoom += 0.5f;
         }
-        if(GLFW.glfwGetKey(WindowManager.getWindow(), GLFW.GLFW_KEY_S) == GLFW.GLFW_PRESS) {
+        if (GLFW.glfwGetKey(WindowManager.getWindow(), GLFW.GLFW_KEY_S) == GLFW.GLFW_PRESS) {
             zoom -= 0.5f;
         }
-        if(GLFW.glfwGetKey(WindowManager.getWindow(), GLFW.GLFW_KEY_Q) == GLFW.GLFW_PRESS){
+        if (GLFW.glfwGetKey(WindowManager.getWindow(), GLFW.GLFW_KEY_Q) == GLFW.GLFW_PRESS) {
             yaw -= 0.6f;
         }
-        if(GLFW.glfwGetKey(WindowManager.getWindow(), GLFW.GLFW_KEY_E) == GLFW.GLFW_PRESS){
+        if (GLFW.glfwGetKey(WindowManager.getWindow(), GLFW.GLFW_KEY_E) == GLFW.GLFW_PRESS) {
             yaw += 0.6f;
         }
     }
@@ -202,13 +195,13 @@ public class Camera {
     /**
      * Resets the camera to the standard position where it shows both grids of the players.
      */
-    public void setStandardPos(){
+    public void setStandardPos() {
         GridManager gridManager = GameManager.getGridManager();
         radius = Math.abs(350 * ((float) gridManager.getSize() + 1) / GridManager.getMAXSIZE() * 0.4f);
         originZ = gridManager.getOwnGrid().getPosition().z;
         originX = position.x = (gridManager.getOwnGrid().getPosition().x + gridManager.getOpponentGrid().getPosition().x) / 2f;
-        position.y = 255f * ((float)gridManager.getSize() + 1) / GridManager.getMAXSIZE();
-        position.z = -350 + 0.5f*-350f * (1 - ((float)gridManager.getSize() + 1) / GridManager.getMAXSIZE());
+        position.y = 255f * ((float) gridManager.getSize() + 1) / GridManager.getMAXSIZE();
+        position.z = -350 + 0.5f * -350f * (1 - ((float) gridManager.getSize() + 1) / GridManager.getMAXSIZE());
         pitch = 70;
         yaw = 0;
     }
@@ -217,22 +210,21 @@ public class Camera {
      * Turn the camera to be on the opposite side of the grids if camera was close to standard position.
      * Resets the camera to standard position if it wasn't close to that position.
      */
-    public void turnCamera(){
-            if(350 < yaw || yaw < 10)
-                yaw = 180;
-            else
-                yaw = 0;
+    public void turnCamera() {
+        if (350 < yaw || yaw < 10)
+            yaw = 180;
+        else
+            yaw = 0;
     }
 
     /**
      * Invert the pitch rotation of the camera.
      */
-    public void invertPitch(){
+    public void invertPitch() {
         this.pitch = -pitch;
     }
 
     /**
-     *
      * @return Current position of the camera in world coordinates.
      */
     public Vector3f getPosition() {
@@ -240,7 +232,6 @@ public class Camera {
     }
 
     /**
-     *
      * @return Current pitch of the camera.
      */
     public float getPitch() {
@@ -248,7 +239,6 @@ public class Camera {
     }
 
     /**
-     *
      * @return Current yaw of the camera.
      */
     public float getYaw() {
@@ -257,14 +247,14 @@ public class Camera {
 
     /**
      * Increases the yaw of this camera.
+     *
      * @param degrees By how many degrees the yaw should be increased.
      */
-    public void addYaw(float degrees){
+    public void addYaw(float degrees) {
         yaw += degrees;
     }
 
     /**
-     *
      * @return Current roll of the camera.
      */
     public float getRoll() {

@@ -11,7 +11,7 @@ import java.net.Socket;
  *
  * @author Tim Staudenmaier
  */
-public class NetworkClient extends Network implements Runnable{
+public class NetworkClient extends Network implements Runnable {
     /**
      * Port this network uses.
      */
@@ -47,10 +47,11 @@ public class NetworkClient extends Network implements Runnable{
 
     /**
      * Sends a message to the server.
+     *
      * @param message Message to send.
      */
-    public void sendMessage(String message){
-        if(waitingForMessage)
+    public void sendMessage(String message) {
+        if (waitingForMessage)
             return;
         toServer.println(message);
         System.out.println("\u001B[32m" + "Sent: " + message);
@@ -63,7 +64,7 @@ public class NetworkClient extends Network implements Runnable{
     /**
      * Waits for an answer from the server.
      */
-    public void run(){
+    public void run() {
         String answer = null;
         try {
             answer = fromServer.readLine();
@@ -82,7 +83,7 @@ public class NetworkClient extends Network implements Runnable{
     private void startClient(String adress) throws IOException {
         //System.out.println("Starting Client...");
         clientSocket = new Socket(adress, PORT);
-        toServer =  new PrintWriter(clientSocket.getOutputStream(), true);
+        toServer = new PrintWriter(clientSocket.getOutputStream(), true);
         fromServer = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
         Thread t = new Thread(this);
         t.start();
@@ -91,7 +92,7 @@ public class NetworkClient extends Network implements Runnable{
     /**
      * Close the connection of this client.
      */
-    public void closeConnection(){
+    public void closeConnection() {
         try {
             clientSocket.close();
         } catch (IOException e) {

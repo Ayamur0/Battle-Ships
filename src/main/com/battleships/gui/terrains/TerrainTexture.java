@@ -14,6 +14,7 @@ public class TerrainTexture {
 
     /**
      * Create a new TerrainTexture for a texture ID.
+     *
      * @param textureID Id of the texture this TerrainTexture should use.
      */
     public TerrainTexture(int textureID) {

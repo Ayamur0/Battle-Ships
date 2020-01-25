@@ -41,11 +41,45 @@ public class ESCMenu extends Menu {
      * Indicates if the player is a AI
      */
     private static boolean isPlayerAI;
+
+    /**
+     * Creates the menu when you press ESC, sets the color of the {@link GUIText} and creates the {@link GUIText} on the Buttons.
+     *
+     * @param guiManager GuiManager that should handle the click function of these guis.
+     * @param loader     Loader needed to load textures
+     */
+    public ESCMenu(GuiManager guiManager, Loader loader) {
+        super(guiManager, loader);
+
+        active = true;
+
+        if (GameManager.getShipCounter() != null)
+            GameManager.getShipCounter().hide();
+        if (GameManager.getShipSelector() != null)
+            GameManager.getShipSelector().hide();
+
+        super.addBackground();
+
+        this.createMenu();
+
+        CreateTextLabels();
+
+    }
+
     /**
      * @return The boolean indicating if the player is a AI
      */
     public static boolean isIsPlayerAI() {
         return isPlayerAI;
+    }
+
+    /**
+     * Sets the variable that indicates if the player is a AI
+     *
+     * @param isPlayerAI indicates if the player is a AI
+     */
+    public static void setIsPlayerAI(boolean isPlayerAI) {
+        ESCMenu.isPlayerAI = isPlayerAI;
     }
 
     /**
@@ -62,39 +96,6 @@ public class ESCMenu extends Menu {
      */
     public static void setActive(boolean active) {
         ESCMenu.active = active;
-    }
-
-    /**
-     * Sets the variable that indicates if the player is a AI
-     *
-     * @param isPlayerAI indicates if the player is a AI
-     */
-    public static void setIsPlayerAI(boolean isPlayerAI) {
-        ESCMenu.isPlayerAI = isPlayerAI;
-    }
-
-    /**
-     * Creates the menu when you press ESC, sets the color of the {@link GUIText} and creates the {@link GUIText} on the Buttons.
-     *
-     * @param guiManager GuiManager that should handle the click function of these guis.
-     * @param loader     Loader needed to load textures
-     */
-    public ESCMenu(GuiManager guiManager, Loader loader) {
-        super(guiManager, loader);
-
-        active = true;
-
-        if(GameManager.getShipCounter() != null)
-            GameManager.getShipCounter().hide();
-        if (GameManager.getShipSelector() != null)
-            GameManager.getShipSelector().hide();
-
-        super.addBackground();
-
-        this.createMenu();
-
-        CreateTextLabels();
-
     }
 
     /**
@@ -117,6 +118,7 @@ public class ESCMenu extends Menu {
 
         super.createClickable();
     }
+
     /**
      * Toggles state of clicked button.
      */
@@ -132,11 +134,11 @@ public class ESCMenu extends Menu {
                     GameManager.getNetwork().sendSave(String.valueOf(time));
                     GameManager.getMainMenuManager().backToMainMenu();
                 } else
-                    JOptionPane.showMessageDialog(null,"Error saving file","Save Error",JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "Error saving file", "Save Error", JOptionPane.ERROR_MESSAGE);
             }
         }
         if (buttonClicked == RESUME) {
-            if(GameManager.getShipCounter() != null)
+            if (GameManager.getShipCounter() != null)
                 GameManager.getShipCounter().hide();
             if (GameManager.getShipSelector() != null)
                 GameManager.getShipSelector().hide();
@@ -145,14 +147,13 @@ public class ESCMenu extends Menu {
             super.cleaBackgournd();
         }
         if (super.buttonClicked == PLAYAI) {
-            if (GameManager.getLogic().getGameState()==GameManager.SHIPLACING){
-                JOptionPane.showMessageDialog(null,"AI not avaiable in ship placing phase.\nPlease place your ships first","Playing as AI",JOptionPane.ERROR_MESSAGE);
-            }
-            else if (isIsPlayerAI()) {
-                active=false;
+            if (GameManager.getLogic().getGameState() == GameManager.SHIPLACING) {
+                JOptionPane.showMessageDialog(null, "AI not avaiable in ship placing phase.\nPlease place your ships first", "Playing as AI", JOptionPane.ERROR_MESSAGE);
+            } else if (isIsPlayerAI()) {
+                active = false;
                 GameManager.getSettings().setAiLevelP(-1);
                 isPlayerAI = false;
-                if(GameManager.getShipCounter() != null)
+                if (GameManager.getShipCounter() != null)
                     GameManager.getShipCounter().hide();
                 if (GameManager.getShipSelector() != null)
                     GameManager.getShipSelector().hide();
@@ -180,7 +181,7 @@ public class ESCMenu extends Menu {
         if (SaveFileManager.saveToFile(userInput))
             GameManager.getMainMenuManager().backToMainMenu();
         else
-            JOptionPane.showMessageDialog(null,"Error saving file","Save Error",JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Error saving file", "Save Error", JOptionPane.ERROR_MESSAGE);
         userInputMade = false;
     }
 }

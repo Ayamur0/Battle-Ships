@@ -3,7 +3,6 @@ package com.battleships.gui.gameAssets.ingameGui;
 import com.battleships.gui.fontMeshCreator.GUIText;
 import com.battleships.gui.fontRendering.TextMaster;
 import com.battleships.gui.gameAssets.GameManager;
-import com.battleships.logic.ShipAmountLoader;
 import com.battleships.gui.guis.GuiClickCallback;
 import com.battleships.gui.guis.GuiManager;
 import com.battleships.gui.guis.GuiTexture;
@@ -19,7 +18,7 @@ import java.util.List;
  *
  * @author Tim Staudenmaier
  */
-public class ShipCounter extends GuiClickCallback implements Runnable{
+public class ShipCounter extends GuiClickCallback implements Runnable {
 
     /**
      * Texture of the main UI.
@@ -32,9 +31,9 @@ public class ShipCounter extends GuiClickCallback implements Runnable{
     /**
      * Color of all {@link GUIText}s on this UI.
      */
-    private static final Vector3f GREY = new Vector3f(0.2f,0.2f,0.2f);
+    private static final Vector3f GREY = new Vector3f(0.2f, 0.2f, 0.2f);
     /**
-     *  Color of the outline all {@link GUIText}s have on this UI.
+     * Color of the outline all {@link GUIText}s have on this UI.
      */
     private static final Vector2f OUTLINEOFFSET = new Vector2f();
 
@@ -73,12 +72,13 @@ public class ShipCounter extends GuiClickCallback implements Runnable{
 
     /**
      * Creates the gui, that shows the amount of enemy ships left.
-     * @param loader Loader to load textures.
+     *
+     * @param loader     Loader to load textures.
      * @param guiManager Manager to handle gui's with click action
-     * @param guis List of guis, this one should be added to. This list needs to be
-     *               passed to a renderer, for this gui to show on the screen.
+     * @param guis       List of guis, this one should be added to. This list needs to be
+     *                   passed to a renderer, for this gui to show on the screen.
      */
-    public ShipCounter (Loader loader, GuiManager guiManager, List<GuiTexture> guis){
+    public ShipCounter(Loader loader, GuiManager guiManager, List<GuiTexture> guis) {
         this.guiManager = guiManager;
         this.guis = guis;
         gui = new GuiTexture(loader.loadTexture(texture), new Vector2f(0.5f, 0.15f));
@@ -87,19 +87,19 @@ public class ShipCounter extends GuiClickCallback implements Runnable{
         hideButton.getScale().x /= 2;
         hideButton.getScale().y /= 2;
         guis.add(hideButton);
-        texts.add(new GUIText("Enemy Ships Left", 3, GameManager.getPirateFont(), new Vector2f(0.5f,0.05f), 0.2f, true, GREY, 0, 0.1f, GREY, OUTLINEOFFSET));
-        for(int i = 0; i < 4; i++)
-            texts.add(new GUIText("" + GameManager.getLogic().getEnemyShipsLeft()[i], 3, GameManager.getPirateFont(), new Vector2f(0.315f + i * 0.122f ,0.265f), 0.2f, true, GREY, 0, 0.1f, GREY, OUTLINEOFFSET));
+        texts.add(new GUIText("Enemy Ships Left", 3, GameManager.getPirateFont(), new Vector2f(0.5f, 0.05f), 0.2f, true, GREY, 0, 0.1f, GREY, OUTLINEOFFSET));
+        for (int i = 0; i < 4; i++)
+            texts.add(new GUIText("" + GameManager.getLogic().getEnemyShipsLeft()[i], 3, GameManager.getPirateFont(), new Vector2f(0.315f + i * 0.122f, 0.265f), 0.2f, true, GREY, 0, 0.1f, GREY, OUTLINEOFFSET));
         guiManager.createClickableGui(hideButton, () -> this);
     }
 
     /**
      * Update the count of alive ships.
      */
-    public void updateCount(){
-        for(int i = 1; i < texts.size(); i++) {
+    public void updateCount() {
+        for (int i = 1; i < texts.size(); i++) {
             texts.get(i).remove();
-            texts.get(i).setTextString(""+ GameManager.getLogic().getEnemyShipsLeft()[i-1]);
+            texts.get(i).setTextString("" + GameManager.getLogic().getEnemyShipsLeft()[i - 1]);
             TextMaster.loadText(texts.get(i));
         }
     }
@@ -108,11 +108,11 @@ public class ShipCounter extends GuiClickCallback implements Runnable{
      * Hides this gui if it is currently on screen.
      * If it is already hidden this displays the gui again.
      */
-    public void hide(){
+    public void hide() {
         int v = visible ? 100 : -100;
         gui.getPositions().x += v;
         hideButton.getPositions().x += v;
-        for(GUIText g : texts)
+        for (GUIText g : texts)
             g.getPosition().x += v;
         visible = !visible;
     }
@@ -131,11 +131,11 @@ public class ShipCounter extends GuiClickCallback implements Runnable{
      * Moves the gui to be visible onscreen, if it was offscreen before or moves it offscreen to not be visible, if it was visible before.
      * The movement is executed in a separate thread.
      */
-    public void run(){
-        if(visible) {
-            while (gui.getPositions().y > -0.2f){
+    public void run() {
+        if (visible) {
+            while (gui.getPositions().y > -0.2f) {
                 gui.getPositions().y -= 0.01f;
-                for(GUIText t : texts){
+                for (GUIText t : texts) {
                     t.getPosition().y -= 0.01f;
                 }
                 try {
@@ -145,11 +145,10 @@ public class ShipCounter extends GuiClickCallback implements Runnable{
                 }
             }
             visible = false;
-        }
-        else{
-            while (gui.getPositions().y < 0.15f){
+        } else {
+            while (gui.getPositions().y < 0.15f) {
                 gui.getPositions().y += 0.01f;
-                for(GUIText t : texts){
+                for (GUIText t : texts) {
                     t.getPosition().y += 0.01f;
                 }
                 try {
@@ -165,11 +164,11 @@ public class ShipCounter extends GuiClickCallback implements Runnable{
     /**
      * Removes the shipCounter gui from the screen.
      */
-    public void remove(){
+    public void remove() {
         guiManager.removeClickableGui(gui);
         guis.remove(gui);
         guis.remove(hideButton);
-        for(GUIText t : texts)
+        for (GUIText t : texts)
             t.remove();
     }
 }

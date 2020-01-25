@@ -2,14 +2,9 @@ package com.battleships.logic;
 
 import com.battleships.gui.audio.AudioMaster;
 import com.battleships.gui.gameAssets.GameManager;
-import com.battleships.gui.gameAssets.grids.GridManager;
 import com.battleships.gui.postProcessing.PostProcessing;
 import com.battleships.gui.window.WindowManager;
-import com.battleships.logic.AI.AIEasy;
-import com.battleships.logic.AI.AIHard;
-import com.battleships.logic.AI.AIMedium;
 import com.thoughtworks.xstream.XStream;
-import org.joml.Vector2i;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -86,6 +81,7 @@ public class Settings {
 
     /**
      * Set whether the game is played online or offline.
+     *
      * @param online {@code true} if the game is played online, {@code false} if the game is played offline.
      */
     public void setOnline(boolean online) {
@@ -102,11 +98,12 @@ public class Settings {
 
     /**
      * Sets the level the AI for the player should use during the next game.
+     *
      * @param aiLevel Level the AI for the player in the next game should use.
      */
     public void setAiLevelP(int aiLevel) {
         this.aiLevelP = aiLevel;
-        if(aiLevel == -1)
+        if (aiLevel == -1)
             GameManager.getLogic().getTurnHandler().removePlayerAI();
     }
 
@@ -119,11 +116,12 @@ public class Settings {
 
     /**
      * Sets the level the AI for the opponent should use during the next game.
+     *
      * @param aiLevelO Level the AI for the opponent in the next game should use.
      */
     public void setAiLevelO(int aiLevelO) {
         this.aiLevelO = aiLevelO;
-        if(aiLevelO == -1)
+        if (aiLevelO == -1)
             GameManager.getLogic().getTurnHandler().removePlayerAI();
     }
 
@@ -136,6 +134,7 @@ public class Settings {
 
     /**
      * Set the size for the grids in the next game.
+     *
      * @param size Size the grids should have in the next game.
      */
     public void setSize(int size) {
@@ -151,11 +150,12 @@ public class Settings {
 
     /**
      * This value needs to be set, if sound is being enabled or disabled.
+     *
      * @param sound {@code true} if sound gets enabled, {@code false} if it gets disabled.
      */
     public void setSound(boolean sound) {
         this.sound = sound;
-        if(sound)
+        if (sound)
             AudioMaster.changeVolume(volume);
         else
             AudioMaster.changeVolume(0);
@@ -170,6 +170,7 @@ public class Settings {
 
     /**
      * This value needs to be set, if animations are being enabled or disabled.
+     *
      * @param animation {@code true} if animations get enabled, {@code false} if they get disabled.
      */
     public void setAnimation(boolean animation) {
@@ -178,11 +179,12 @@ public class Settings {
 
     /**
      * Changes the resolution of the game.
-     * @param width Width of the new resolution in pixels or {@value SCREENRESOLUTION} for resolution of screen.
+     *
+     * @param width  Width of the new resolution in pixels or {@value SCREENRESOLUTION} for resolution of screen.
      * @param height Height of the new resolution in pixels or {@value SCREENRESOLUTION} for resolution of screen.
      */
-    public void changeResolution(int width, int height){
-        if(width == SCREENRESOLUTION || height == SCREENRESOLUTION){
+    public void changeResolution(int width, int height) {
+        if (width == SCREENRESOLUTION || height == SCREENRESOLUTION) {
             PostProcessing.changeResolution(WindowManager.getWidth(), WindowManager.getHeight());
             resWidth = SCREENRESOLUTION;
             resHeight = SCREENRESOLUTION;
@@ -190,7 +192,7 @@ public class Settings {
         }
         resWidth = width;
         resHeight = height;
-        if(GameManager.getSettings() != null)
+        if (GameManager.getSettings() != null)
             GameManager.getWaterFbos().updateFrameBuffers();
         PostProcessing.changeResolution(width, height);
     }
@@ -204,6 +206,7 @@ public class Settings {
 
     /**
      * Set volume of the game.
+     *
      * @param volume New volume. 0 is no sound and 1 is standard volume.
      */
     public void setVolume(float volume) {
@@ -217,6 +220,7 @@ public class Settings {
     public int getResWidth() {
         return resWidth;
     }
+
     /**
      * @return Current resolution height in pixels.
      */
@@ -226,15 +230,15 @@ public class Settings {
 
     /**
      * Loads the settings saved after exiting the game last time.
+     *
      * @return {@code true} if settings could be loaded {@code false} else.
      */
-    public boolean loadSettings(){
+    public boolean loadSettings() {
         SettingsSaveFile saveFile = null;
         File settings;
         try {
             settings = new File(SaveFileManager.getJarPath() + "/Settings/settings.xml");
-        }
-        catch (UnsupportedEncodingException e){
+        } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
             System.err.println("Error loading settings File!");
             return false;
@@ -251,13 +255,12 @@ public class Settings {
                 e.printStackTrace(System.err);
                 return false;
             }
-        }
-        else
+        } else
             return false;
         volume = saveFile.getVolume();
         AudioMaster.changeVolume(saveFile.getVolume());
         sound = saveFile.isSound();
-        if(!sound)
+        if (!sound)
             AudioMaster.changeVolume(0);
         animation = saveFile.isAnimation();
         resWidth = saveFile.getResWidth();
@@ -268,17 +271,18 @@ public class Settings {
 
     /**
      * Saves the settings into a file, so they can be loaded when the game is started next time.
+     *
      * @return {@code true} if the settings were saved, {@code false} if an error occurred during saving.
      */
-    public boolean saveSettings(){
+    public boolean saveSettings() {
         SettingsSaveFile saveFile = new SettingsSaveFile(sound, volume, animation, resWidth, resHeight);
         XStream xstream = new XStream();
         xstream.setMode(XStream.XPATH_RELATIVE_REFERENCES);
         xstream.autodetectAnnotations(true);
         try {
             File saveFolder = new File(SaveFileManager.getJarPath() + "/Settings/");
-            if(!saveFolder.isDirectory()) {
-                if(!saveFolder.mkdir()){
+            if (!saveFolder.isDirectory()) {
+                if (!saveFolder.mkdir()) {
                     System.err.println("Error creating settings folder!");
                     return false;
                 }

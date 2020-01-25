@@ -10,7 +10,7 @@ import java.util.Random;
  *
  * @author Tim Staudenmaier
  */
-public class PatternChess implements Pattern{
+public class PatternChess implements Pattern {
 
     /**
      * Colors on a chess board this pattern always shoots at one of the colors.
@@ -53,6 +53,7 @@ public class PatternChess implements Pattern{
 
     /**
      * Creates a new chess pattern.
+     *
      * @param size Size of the grid this pattern is used on.
      */
     public PatternChess(int size) {
@@ -62,11 +63,10 @@ public class PatternChess implements Pattern{
         //start = 1;
         color = r.nextInt(2);
         //color = BLACK;
-        if(size % 2 == 0){
+        if (size % 2 == 0) {
             addX1 = -1;
             addX2 = 1;
-        }
-        else
+        } else
             addX1 = addX2 = 0;
     }
 
@@ -75,7 +75,7 @@ public class PatternChess implements Pattern{
      */
     @Override
     public Vector2i nextIndex() {
-        if(start == DOWNLEFT || start == UPLEFT) {
+        if (start == DOWNLEFT || start == UPLEFT) {
             lastIndex.x -= 2;
             if (lastIndex.x < 1) {
                 lastIndex.x += (size + (lastIndex.x == 0 ? addX1 : addX2));
@@ -84,7 +84,7 @@ public class PatternChess implements Pattern{
             if (lastIndex.y > size || lastIndex.y < 1)
                 return null;
         }
-        if(start == DOWNRIGHT || start == UPRIGHT) {
+        if (start == DOWNRIGHT || start == UPRIGHT) {
             lastIndex.x += 2;
             if (lastIndex.x > size) {
                 lastIndex.x -= (size + (lastIndex.x == size + 1 ? addX1 : addX2));
@@ -101,22 +101,30 @@ public class PatternChess implements Pattern{
      */
     @Override
     public Vector2i firstIndex() {
-        switch (start){
-            case DOWNLEFT: lastIndex = new Vector2i(size,1); break;
-            case DOWNRIGHT: lastIndex = new Vector2i(1,1); break;
-            case UPLEFT: lastIndex = new Vector2i(size,size); break;
-            case UPRIGHT: lastIndex = new Vector2i(1, size); break;
+        switch (start) {
+            case DOWNLEFT:
+                lastIndex = new Vector2i(size, 1);
+                break;
+            case DOWNRIGHT:
+                lastIndex = new Vector2i(1, 1);
+                break;
+            case UPLEFT:
+                lastIndex = new Vector2i(size, size);
+                break;
+            case UPRIGHT:
+                lastIndex = new Vector2i(1, size);
+                break;
         }
-        if((lastIndex.x + lastIndex.y) % 2 != 1 && color == WHITE){
-            if(start == UPRIGHT)
+        if ((lastIndex.x + lastIndex.y) % 2 != 1 && color == WHITE) {
+            if (start == UPRIGHT)
                 lastIndex.x += 1;
-            if(start == DOWNLEFT)
+            if (start == DOWNLEFT)
                 lastIndex.x -= 1;
         }
-        if((lastIndex.x + lastIndex.y) % 2 != 0 && color == BLACK){
-            if(start == DOWNRIGHT)
+        if ((lastIndex.x + lastIndex.y) % 2 != 0 && color == BLACK) {
+            if (start == DOWNRIGHT)
                 lastIndex.x += 1;
-            if(start == UPLEFT)
+            if (start == UPLEFT)
                 lastIndex.x -= 1;
         }
         return lastIndex;

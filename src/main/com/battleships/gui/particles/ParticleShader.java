@@ -2,7 +2,6 @@ package com.battleships.gui.particles;
 
 import com.battleships.gui.shaders.ShaderProgram;
 import org.joml.Matrix4f;
-import org.joml.Vector2f;
 
 /**
  * Shader used by the {@link ParticleRenderer}.
@@ -33,7 +32,7 @@ public class ParticleShader extends ShaderProgram {
      * Initialize the shader for particles.
      * This shader uses the two specified glsl files.
      */
-    public ParticleShader(){
+    public ParticleShader() {
         super(VERTEX_FILE, FRAGMENT_FILE);
     }
 
@@ -67,19 +66,21 @@ public class ParticleShader extends ShaderProgram {
 
     /**
      * Load number of rows to shader.
+     *
      * @param numberOfRows number of rows of the current texture atlas
      */
 
-    protected void loadNumberOfRows(float numberOfRows){
+    protected void loadNumberOfRows(float numberOfRows) {
         super.loadFloat(location_numberOfRows, numberOfRows);
     }
 
     /**
      * Load a matrix as projectionMatrix for the shader.
+     *
      * @param projectionMatrix Matrix to be loaded, is used to convert eye space to viewport space (2D screen)
      */
 
-    protected void loadProjectionMatrix(Matrix4f projectionMatrix){
+    protected void loadProjectionMatrix(Matrix4f projectionMatrix) {
         super.loadMatrix(location_projectionMatrix, projectionMatrix);
     }
 }

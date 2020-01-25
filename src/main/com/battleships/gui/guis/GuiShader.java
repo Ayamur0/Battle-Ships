@@ -43,9 +43,10 @@ public class GuiShader extends ShaderProgram {
 
     /**
      * Load the transformation Matrix of a gui element to the shader, to correctly render it.
+     *
      * @param matrix
      */
-    public void loadTransformation(Matrix4f matrix){
+    public void loadTransformation(Matrix4f matrix) {
         super.loadMatrix(location_transformationMatrix, matrix);
     }
 
@@ -67,18 +68,20 @@ public class GuiShader extends ShaderProgram {
      * Load the numberOfRows of a texture atlas into the uniform variable.
      * Needed so the shader can calculate the part of a texture atlas, it needs to but
      * on the model.
+     *
      * @param numberOfRows Number of rows the used texture atlas contains (1 if it's a normal texture).
      */
-    public void loadNumberOfRows(int numberOfRows){
+    public void loadNumberOfRows(int numberOfRows) {
         super.loadInt(location_numberOfRows, numberOfRows);
     }
 
     /**
      * Load the offset of the texture that should be used in a texture atlas into the uniform variable.
+     *
      * @param x column of the texture that should be used (0 if it's a normal texture).
      * @param y row of the texture (0 if it's a normal texture).
      */
-    public void loadOffset(float x, float y){
+    public void loadOffset(float x, float y) {
         super.load2DVector(location_offset, new Vector2f(x, y));
     }
 

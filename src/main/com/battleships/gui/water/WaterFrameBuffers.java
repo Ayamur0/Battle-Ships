@@ -62,12 +62,39 @@ public class WaterFrameBuffers {
      * ID of the depth buffer of the refraction.
      */
     private int refractionDepthTexture;
-
+    /**
+     * Method that gets called every time the window is resized by the user.
+     * Needed to adjust resolution of frameBuffers corresponding to resolution of the window.
+     */
+    public GLFWWindowSizeCallback sizeCallback = new GLFWWindowSizeCallback() {
+        @Override
+        public void invoke(long window, int width, int height) {
+            updateFrameBuffers();
+        }
+    };
     /**
      * {@code true} if the window was recently maximized (after being put into taskbar).
      * Gets set back to {@code false} after processed.
      */
     private boolean iconify;
+    /**
+     * Needed to resize FrameBuffer after tabbing out or into the game so water gets displayed properly.
+     */
+    public GLFWWindowIconifyCallback iconifyCallback = new GLFWWindowIconifyCallback() {
+        @Override
+        public void invoke(long l, boolean small) {
+            if (small)
+                return;
+            new Thread(() -> {
+                try {
+                    Thread.sleep(10);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                iconify = true;
+            }).start();
+        }
+    };
 
     /**
      * Initialize water fbos reflection and refraction.
@@ -80,14 +107,13 @@ public class WaterFrameBuffers {
     /**
      * Updates the sizes of the frame buffers to match the current window size.
      */
-    public void updateFrameBuffers(){
-        if(GameManager.getSettings().getResHeight() == -1 || GameManager.getSettings().getResWidth() == -1) {
+    public void updateFrameBuffers() {
+        if (GameManager.getSettings().getResHeight() == -1 || GameManager.getSettings().getResWidth() == -1) {
             REFLECTION_WIDTH = WindowManager.getWidth() / 4;
             REFLECTION_HEIGHT = WindowManager.getHeight() / 4;
             REFRACTION_WIDTH = WindowManager.getWidth();
             REFRACTION_HEIGHT = WindowManager.getHeight();
-        }
-        else {
+        } else {
             REFLECTION_WIDTH = GameManager.getSettings().getResWidth() / 4;
             REFLECTION_HEIGHT = GameManager.getSettings().getResHeight() / 4;
             REFRACTION_WIDTH = GameManager.getSettings().getResWidth();
@@ -114,7 +140,7 @@ public class WaterFrameBuffers {
      * rendered after this will be rendered to this FBO, and not to the screen.
      */
     public void bindReflectionFrameBuffer() {//call before rendering to this FBO
-        bindFrameBuffer(reflectionFrameBuffer,REFLECTION_WIDTH,REFLECTION_HEIGHT);
+        bindFrameBuffer(reflectionFrameBuffer, REFLECTION_WIDTH, REFLECTION_HEIGHT);
     }
 
     /**
@@ -122,7 +148,7 @@ public class WaterFrameBuffers {
      * rendered after this will be rendered to this FBO, and not to the screen.
      */
     public void bindRefractionFrameBuffer() {//call before rendering to this FBO
-        bindFrameBuffer(refractionFrameBuffer,REFRACTION_WIDTH,REFRACTION_HEIGHT);
+        bindFrameBuffer(refractionFrameBuffer, REFRACTION_WIDTH, REFRACTION_HEIGHT);
     }
 
     /**
@@ -152,29 +178,29 @@ public class WaterFrameBuffers {
     /**
      * @return Texture of water after refraction depth texture has been applied.
      */
-    public int getRefractionDepthTexture(){//get the resulting depth texture
+    public int getRefractionDepthTexture() {//get the resulting depth texture
         return refractionDepthTexture;
     }
 
     /**
      * Creates the Reflection FBO along with a color buffer texture attachment, and
-     *  a depth buffer attachment.
+     * a depth buffer attachment.
      */
     private void initializeReflectionFrameBuffer() {
         reflectionFrameBuffer = createFrameBuffer();
-        reflectionTexture = createTextureAttachment(REFLECTION_WIDTH,REFLECTION_HEIGHT);
-        reflectionDepthBuffer = createDepthBufferAttachment(REFLECTION_WIDTH,REFLECTION_HEIGHT);
+        reflectionTexture = createTextureAttachment(REFLECTION_WIDTH, REFLECTION_HEIGHT);
+        reflectionDepthBuffer = createDepthBufferAttachment(REFLECTION_WIDTH, REFLECTION_HEIGHT);
         unbindCurrentFrameBuffer();
     }
 
     /**
      * Creates the Refraction FBO along with a color buffer texture attachment, and
-     *  a depth texture attachment.
+     * a depth texture attachment.
      */
     private void initializeRefractionFrameBuffer() {
         refractionFrameBuffer = createFrameBuffer();
-        refractionTexture = createTextureAttachment(REFRACTION_WIDTH,REFRACTION_HEIGHT);
-        refractionDepthTexture = createDepthTextureAttachment(REFRACTION_WIDTH,REFRACTION_HEIGHT);
+        refractionTexture = createTextureAttachment(REFRACTION_WIDTH, REFRACTION_HEIGHT);
+        refractionDepthTexture = createDepthTextureAttachment(REFRACTION_WIDTH, REFRACTION_HEIGHT);
         unbindCurrentFrameBuffer();
     }
 
@@ -182,11 +208,11 @@ public class WaterFrameBuffers {
      * Binds the frame buffer, setting it as the current render target. Anything
      * rendered after this will be rendered to this FBO, and not to the screen.
      *
-     * @param frameBuffer - the frameBuffer to bind.
-     * @param width - width of the frameBuffer.
-     * @param height - height of the frameBuffer.
+     * @param frameBuffer   the frameBuffer to bind.
+     * @param width         width of the frameBuffer.
+     * @param height        height of the frameBuffer.
      */
-    private void bindFrameBuffer(int frameBuffer, int width, int height){
+    private void bindFrameBuffer(int frameBuffer, int width, int height) {
         GL11.glBindTexture(GL11.GL_TEXTURE_2D, 0);//To make sure the texture isn't bound
         GL30.glBindFramebuffer(GL30.GL_FRAMEBUFFER, frameBuffer);
         GL11.glViewport(0, 0, width, height);
@@ -209,10 +235,11 @@ public class WaterFrameBuffers {
     /**
      * Creates a texture and sets it as the color buffer attachment for this
      * FBO.
-     * @param width - width of the texture attachment.
-     * @param height - height of the texture attachment.
+     *
+     * @param width   width of the texture attachment.
+     * @param height  height of the texture attachment.
      */
-    private int createTextureAttachment( int width, int height) {
+    private int createTextureAttachment(int width, int height) {
         int texture = GL11.glGenTextures();
         GL11.glBindTexture(GL11.GL_TEXTURE_2D, texture);
         GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGB, width, height, 0, GL11.GL_RGB, GL11.GL_UNSIGNED_BYTE, (ByteBuffer) null);
@@ -225,10 +252,11 @@ public class WaterFrameBuffers {
     /**
      * Adds a depth buffer to the FBO in the form of a texture, which can later
      * be sampled.
-     * @param width - width of the texture attachment.
-     * @param height - height of the texture attachment.
+     *
+     * @param width   width of the texture attachment.
+     * @param height  height of the texture attachment.
      */
-    private int createDepthTextureAttachment(int width, int height){
+    private int createDepthTextureAttachment(int width, int height) {
         int texture = GL11.glGenTextures();
         GL11.glBindTexture(GL11.GL_TEXTURE_2D, texture);
         GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL14.GL_DEPTH_COMPONENT32, width, height, 0, GL11.GL_DEPTH_COMPONENT, GL11.GL_FLOAT, (ByteBuffer) null);
@@ -241,8 +269,9 @@ public class WaterFrameBuffers {
     /**
      * Adds a depth buffer to the FBO in the form of a render buffer. This can't
      * be used for sampling in the shaders.
-     * @param width - width of the buffer attachment.
-     * @param height - height of the buffer attachment.
+     *
+     * @param width   width of the buffer attachment.
+     * @param height  height of the buffer attachment.
      */
     private int createDepthBufferAttachment(int width, int height) {
         int depthBuffer = GL30.glGenRenderbuffers();
@@ -253,40 +282,10 @@ public class WaterFrameBuffers {
     }
 
     /**
-     * Method that gets called every time the window is resized by the user.
-     * Needed to adjust resolution of frameBuffers corresponding to resolution of the window.
-     */
-    public GLFWWindowSizeCallback sizeCallback = new GLFWWindowSizeCallback() {
-        @Override
-        public void invoke(long window, int width, int height) {
-            updateFrameBuffers();
-        }
-    };
-
-    /**
-     * Needed to resize FrameBuffer after tabbing out or into the game so water gets displayed properly.
-     */
-    public GLFWWindowIconifyCallback iconifyCallback = new GLFWWindowIconifyCallback() {
-        @Override
-        public void invoke(long l, boolean small) {
-            if(small)
-                return;
-            new Thread(() -> {
-                try {
-                    Thread.sleep(10);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                iconify = true;
-            }).start();
-        }
-    };
-
-    /**
      * Reset waterFrameBuffer sizes after window has been resized through tabbing out.
      */
-    public void processIconify(){
-        if(iconify) {
+    public void processIconify() {
+        if (iconify) {
             updateFrameBuffers();
             iconify = false;
         }

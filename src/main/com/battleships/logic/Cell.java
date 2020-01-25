@@ -1,7 +1,5 @@
 package com.battleships.logic;
 
-import java.util.List;
-
 /**
  * One Cell on the Grids.
  * Contains information of what is in that cell.
@@ -13,7 +11,7 @@ public class Cell {
     /**
      * Index of this cell on the grid (0-size)
      */
-    public int x,y;
+    public int x, y;
     /**
      * State of this cell (one of constants on {@link Grid}.
      */
@@ -26,6 +24,7 @@ public class Cell {
 
     /**
      * Create a new cell with an index.
+     *
      * @param x x value of the cell in the grid array.
      * @param y y value of the cell in the grid array.
      */

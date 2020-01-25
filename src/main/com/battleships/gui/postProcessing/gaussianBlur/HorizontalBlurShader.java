@@ -1,11 +1,10 @@
 package com.battleships.gui.postProcessing.gaussianBlur;
 
-import com.battleships.gui.particles.ParticleTexture;
 import com.battleships.gui.shaders.ShaderProgram;
 
 /**
  * Shader for the {@link HorizontalBlur} post processing effect.
- * 
+ *
  * @author Tim Staudenmaier
  */
 public class HorizontalBlurShader extends ShaderProgram {
@@ -33,9 +32,10 @@ public class HorizontalBlurShader extends ShaderProgram {
 
     /**
      * Load the width of the fbo that this effect is used for to the shader.
+     *
      * @param width width of the fbo
      */
-    protected void loadTargetWidth(float width){
+    protected void loadTargetWidth(float width) {
         super.loadFloat(location_targetWidth, width);
     }
 

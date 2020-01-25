@@ -125,10 +125,11 @@ public class WaterShader extends ShaderProgram {
     /**
      * Load distance of near and far plane from camera to shader.
      * Needed to calculate distance from a depth map.
+     *
      * @param nearPlane - distance of near plane from camera
-     * @param farPlane - distance of far plane from camera
+     * @param farPlane  - distance of far plane from camera
      */
-    public void loadPlanes(float nearPlane, float farPlane){
+    public void loadPlanes(float nearPlane, float farPlane) {
         super.loadFloat(location_nearPlane, nearPlane);
         super.loadFloat(location_farPlane, farPlane);
     }
@@ -136,9 +137,10 @@ public class WaterShader extends ShaderProgram {
     /**
      * Load the color and position of the "sun" the light that lights the whole scene
      * to the shader, so the water reflection can use it.
+     *
      * @param sun - the main light of the scene
      */
-    public void loadLight(Light sun){
+    public void loadLight(Light sun) {
         super.loadVector(location_lightColor, sun.getColor());
         super.loadVector(location_lightPosition, sun.getPosition());
     }
@@ -147,9 +149,10 @@ public class WaterShader extends ShaderProgram {
      * Load the moveFactor to the shader.
      * The moveFactor moves the distortion texture around, so it looks like
      * the waves of the water are moving.
+     *
      * @param factor - moveFactor to load
      */
-    public void loadMoveFactor(float factor){
+    public void loadMoveFactor(float factor) {
         super.loadFloat(location_moveFactor, factor);
     }
 
@@ -161,7 +164,7 @@ public class WaterShader extends ShaderProgram {
      * The depthMap that represent how much water is between the camera and the
      * terrain under the water, is in texture unit 4.
      */
-    public void connectTextureUnits(){
+    public void connectTextureUnits() {
         super.loadInt(location_reflectionTexture, 0);
         super.loadInt(location_refractionTexture, 1);
         super.loadInt(location_dudvMap, 2);
@@ -171,6 +174,7 @@ public class WaterShader extends ShaderProgram {
 
     /**
      * Loads the current projection Matrix.
+     *
      * @param projection current projection Matrix, only changes if window is resized.
      */
     public void loadProjectionMatrix(Matrix4f projection) {
@@ -181,9 +185,10 @@ public class WaterShader extends ShaderProgram {
      * Load viewMatrix to shader.
      * Also load camera position to shader, to determine if camera looks at water from above or from the side.
      * If looked at from the side water is more reflective.
+     *
      * @param camera - the current camera that displays the scene
      */
-    public void loadViewMatrix(Camera camera){
+    public void loadViewMatrix(Camera camera) {
         Matrix4f viewMatrix = Maths.createViewMatrix(camera);
         loadMatrix(location_viewMatrix, viewMatrix);
         super.loadVector(location_cameraPosition, camera.getPosition());
@@ -191,9 +196,10 @@ public class WaterShader extends ShaderProgram {
 
     /**
      * Loads the transformation Matrix of the currently rendered WaterTile to the uniform variable.
+     *
      * @param modelMatrix transformation matrix of the waterTile, containing position, rotation and scale.
      */
-    public void loadTransformationMatrix(Matrix4f modelMatrix){
+    public void loadTransformationMatrix(Matrix4f modelMatrix) {
         loadMatrix(location_modelMatrix, modelMatrix);
     }
 }

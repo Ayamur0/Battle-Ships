@@ -1,11 +1,7 @@
 package com.battleships.network;
 
-import com.battleships.gui.gameAssets.GameManager;
-import com.battleships.gui.gameAssets.MainMenuGui.MainMenu;
 import com.battleships.gui.gameAssets.MainMenuGui.MainMenuManager;
 import com.battleships.gui.gameAssets.MainMenuGui.WaitingConnection;
-import com.battleships.gui.gameAssets.grids.GridManager;
-import com.battleships.logic.Settings;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -15,7 +11,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
 
-public class NetworkServer extends Network implements Runnable{
+public class NetworkServer extends Network implements Runnable {
     /**
      * Port this network uses.
      */
@@ -53,7 +49,7 @@ public class NetworkServer extends Network implements Runnable{
     /**
      * Start a server that searches for a client to connect with.
      */
-    public NetworkServer(){
+    public NetworkServer() {
         startServer();
         connect waitingForConnection = new connect(this);
         connectionSearch = new Thread(waitingForConnection);
@@ -61,52 +57,19 @@ public class NetworkServer extends Network implements Runnable{
     }
 
     /**
-     * Private class to run the connection search in different thread.
-     */
-    private static class connect implements Runnable{
-        /**
-         * Network for which this class searches a connection.
-         */
-        private NetworkServer server;
-
-        /**
-         * Create a new class to search a connection.
-         * @param server Network for which connection is needed.
-         */
-        public connect(NetworkServer server) {
-            this.server = server;
-        }
-
-        /**
-         * Method that searches the connection.
-         * Execute in different Thread.
-         */
-        @Override
-        public void run() {
-            try {
-                server.waitForClient();
-            } catch (SocketException ignore){
-                return;
-            }
-            catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    /**
      * Stops searching for a connection.
      */
-    public void stopConnectionSearch(){
+    public void stopConnectionSearch() {
         connectionSearch.interrupt();
     }
 
     /**
      * Sends a message to the client.
+     *
      * @param message Message to send.
      */
-    public void sendMessage(String message){
-        if(waitingForMessage)
+    public void sendMessage(String message) {
+        if (waitingForMessage)
             return;
         toClient.println(message);
         System.out.println("\u001B[32m" + "Sent: " + message);
@@ -119,7 +82,7 @@ public class NetworkServer extends Network implements Runnable{
     /**
      * Waits for an answer from the client.
      */
-    public void run(){
+    public void run() {
         String answer = null;
         try {
             answer = fromClient.readLine();
@@ -135,7 +98,7 @@ public class NetworkServer extends Network implements Runnable{
     /**
      * Starts the server.
      */
-    private void startServer(){
+    private void startServer() {
         try {
             serverSocket = new ServerSocket(PORT);
         } catch (IOException e) {
@@ -145,35 +108,70 @@ public class NetworkServer extends Network implements Runnable{
 
     /**
      * Wait for a client to connect to this server. Should be executed in different thread by using {@link connect} class.
+     *
      * @throws IOException If the socket accept gets interrupted (by close connection).
      */
     private void waitForClient() throws IOException {
-            System.out.println("Waiting for Client");
-            clientSocket = serverSocket.accept();
+        System.out.println("Waiting for Client");
+        clientSocket = serverSocket.accept();
         try {
             toClient = new PrintWriter(clientSocket.getOutputStream(), true);
             fromClient = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
         } catch (IOException e) {
             e.printStackTrace();
         }
-            System.out.println("Connected!");
-            if(MainMenuManager.getMenu() instanceof WaitingConnection){
-                ((WaitingConnection) MainMenuManager.getMenu()).setOpponentConnected(true);
-            }
+        System.out.println("Connected!");
+        if (MainMenuManager.getMenu() instanceof WaitingConnection) {
+            ((WaitingConnection) MainMenuManager.getMenu()).setOpponentConnected(true);
+        }
     }
 
     /**
      * Close the connection of this server.
      */
-    public void closeConnection(){
+    public void closeConnection() {
         try {
-            if(serverSocket != null)
+            if (serverSocket != null)
                 serverSocket.close();
             if (clientSocket != null) {
                 clientSocket.close();
             }
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    /**
+     * Private class to run the connection search in different thread.
+     */
+    private static class connect implements Runnable {
+        /**
+         * Network for which this class searches a connection.
+         */
+        private NetworkServer server;
+
+        /**
+         * Create a new class to search a connection.
+         *
+         * @param server Network for which connection is needed.
+         */
+        public connect(NetworkServer server) {
+            this.server = server;
+        }
+
+        /**
+         * Method that searches the connection.
+         * Execute in different Thread.
+         */
+        @Override
+        public void run() {
+            try {
+                server.waitForClient();
+            } catch (SocketException ignore) {
+                return;
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 }

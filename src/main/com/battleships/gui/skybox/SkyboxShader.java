@@ -1,7 +1,6 @@
 package com.battleships.gui.skybox;
 
 import com.battleships.gui.entities.Camera;
-import com.battleships.gui.guis.GuiTexture;
 import com.battleships.gui.shaders.ShaderProgram;
 import com.battleships.gui.toolbox.Maths;
 import org.joml.Matrix4f;
@@ -41,19 +40,21 @@ public class SkyboxShader extends ShaderProgram {
 
     /**
      * Loads the current projection Matrix.
+     *
      * @param matrix current projection Matrix, only changes if window is resized.
      */
-    public void loadProjectionMatrix(Matrix4f matrix){
+    public void loadProjectionMatrix(Matrix4f matrix) {
         super.loadMatrix(location_projectionMatrix, matrix);
     }
 
     /**
      * Resets the position of the viewMatrix and then loads the edited view matrix into the uniform variable.
      * Position is reset to make skybox move with camera.
+     *
      * @param camera Camera that the scene is viewed through, containing viewMatrix
      *               that manipulates entities, so it looks like the scene is viewed from the camera.
      */
-    public void loadViewMatrix(Camera camera){
+    public void loadViewMatrix(Camera camera) {
         Matrix4f matrix = Maths.createViewMatrix(camera);
         //reset translation of view matrix, so skybox moves with camera
         matrix._m30(0);

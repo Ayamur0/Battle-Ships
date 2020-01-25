@@ -28,6 +28,22 @@ import java.util.List;
  */
 public abstract class Menu extends GuiClickCallback {
     /**
+     * Main button texture used in all menus
+     */
+    protected static int buttonTexture;
+    /**
+     * Texture behind the Buttons in the background
+     */
+    protected static int scrollBackground;
+    /**
+     * List containing all {@link GuiTexture}s behind the buttons
+     */
+    protected static List<GuiTexture> backgrounds = new ArrayList<>();
+    /**
+     * Texture above all buttons
+     */
+    protected static int icon;
+    /**
      * Standard size for all buttons
      */
     protected Vector2f buttonSize = new Vector2f(0.16f, 0.12f);
@@ -56,22 +72,6 @@ public abstract class Menu extends GuiClickCallback {
      */
     protected float fontSize = 2.5f;
     /**
-     * Main button texture used in all menus
-     */
-    protected static int buttonTexture;
-    /**
-     * Texture behind the Buttons in the background
-     */
-    protected static int scrollBackground;
-    /**
-     * List containing all {@link GuiTexture}s behind the buttons
-     */
-    protected static List<GuiTexture> backgrounds = new ArrayList<>();
-    /**
-     * Texture above all buttons
-     */
-    protected static int icon;
-    /**
      * Main outline color used for the {@link GUIText}
      */
     protected Vector3f outlineColor = new Vector3f(0.63f, 0.63f, 0.63f);
@@ -87,14 +87,6 @@ public abstract class Menu extends GuiClickCallback {
      * Used to determine which button was the last one that was clicked.
      */
     protected int buttonClicked;
-
-    /**
-     * @return the file name of from the selected file
-     */
-    public String getFileName() {
-        return fileName;
-    }
-
     /**
      * {@code true} if the user made an input through a {@link TinyFileDialogs} that is not yet processed.
      */
@@ -103,7 +95,6 @@ public abstract class Menu extends GuiClickCallback {
      * Last inout from the user made  through a {@link TinyFileDialogs}.
      */
     protected String userInput;
-
     /**
      * Name of the file that needs to be loaded.
      */
@@ -113,7 +104,6 @@ public abstract class Menu extends GuiClickCallback {
      * {@code false} else and after loading is done.
      */
     protected boolean filePicked;
-
     /**
      * open the file explorer to chose the save file.
      */
@@ -143,53 +133,16 @@ public abstract class Menu extends GuiClickCallback {
             addBackground();
         try {
             UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
-        } catch (Exception e) { System.err.println("Error: " + e.getMessage()); }
-    }
-
-    /**
-     * Class for handling file choosing in separate thread.
-     */
-    protected class SaveFilePicker implements Runnable {
-        @Override
-        public void run() {
-            try {
-                UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
-            } catch (Exception e) { System.err.println("Error: " + e.getMessage()); }
-            fc.showOpenDialog(null);
-
-            fileName = fc.getName(fc.getSelectedFile());
-            filePicked = true;
+        } catch (Exception e) {
+            System.err.println("Error: " + e.getMessage());
         }
     }
 
     /**
-     * Class for handling text input window in separate thread.
+     * @return the file name of from the selected file
      */
-    protected class TextInput implements Runnable {
-        /**
-         * Title and message of the text inout dialog.
-         */
-        private String title, message;
-
-        /**
-         * Create a new input window
-         *
-         * @param title   Title of the window
-         * @param message Message of the window
-         */
-        public TextInput(String title, String message) {
-            this.title = title;
-            this.message = message;
-        }
-
-        /**
-         * Open the window so user can enter text.
-         */
-        @Override
-        public void run() {
-            userInput = TinyFileDialogs.tinyfd_inputBox(title, message, "");
-            userInputMade = true;
-        }
+    public String getFileName() {
+        return fileName;
     }
 
     /**
@@ -292,25 +245,24 @@ public abstract class Menu extends GuiClickCallback {
             String filename = fileName.replace(".xml", "");
             SaveFile saveFile = SaveFileManager.loadFromFile(filename);
             if (saveFile == null) {
-                JOptionPane.showMessageDialog(null,"Error loading the file","Loading Error",JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Error loading the file", "Loading Error", JOptionPane.ERROR_MESSAGE);
                 return false;
-            }
-            else {
+            } else {
                 SaveFileManager.loadSaveFile(saveFile);
                 clearMenu();
                 cleaBackgournd();
                 if (GameManager.getSettings().isOnline())
-                    MainMenuManager.setMenu(new WaitingConnection(guiManager,loader,true));
+                    MainMenuManager.setMenu(new WaitingConnection(guiManager, loader, true));
                 else
                     GameManager.prepareGame();
                 return true;
             }
-        }
-        else{
+        } else {
             return false;
         }
 
     }
+
     /**
      * @return {@code true} if there is a unprocessed user input that needs to be processed.
      */
@@ -327,14 +279,15 @@ public abstract class Menu extends GuiClickCallback {
 
     /**
      * Tests if the click was on either of the {@link GuiTexture}.
+     *
      * @param gui The gui to test for if the click was on it.
-     * @param x xPos of the click (left of screen = 0, right of screen = 1)
-     * @param y yPos of the click (top of screen = 0, bottom of screen = 1)
+     * @param x   xPos of the click (left of screen = 0, right of screen = 1)
+     * @param y   yPos of the click (top of screen = 0, bottom of screen = 1)
      * @return {@code true} if the click was on either of the{@link GuiTexture}, {@code false} else.
      */
     @Override
     protected boolean isClickOnGui(GuiTexture gui, double x, double y) {
-        for (int i = 0; i<buttons.size(); i++){
+        for (int i = 0; i < buttons.size(); i++) {
             if (super.isClickOnGui(buttons.get(i), x, y)) {
                 buttonClicked = i;
                 return true;
@@ -346,13 +299,61 @@ public abstract class Menu extends GuiClickCallback {
     /**
      * Clears all {@link GuiTexture}, {@link GUIText} from the rendered scene and resets the settings for the game
      */
-    public void clearAllMenuElements(){
+    public void clearAllMenuElements() {
         ESCMenu.setActive(false);
-        if(GameManager.getShipCounter() != null)
+        if (GameManager.getShipCounter() != null)
             GameManager.getShipCounter().hide();
         if (GameManager.getShipSelector() != null)
             GameManager.getShipSelector().hide();
         cleaBackgournd();
         clearMenu();
+    }
+
+    /**
+     * Class for handling file choosing in separate thread.
+     */
+    protected class SaveFilePicker implements Runnable {
+        @Override
+        public void run() {
+            try {
+                UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+            } catch (Exception e) {
+                System.err.println("Error: " + e.getMessage());
+            }
+            fc.showOpenDialog(null);
+
+            fileName = fc.getName(fc.getSelectedFile());
+            filePicked = true;
+        }
+    }
+
+    /**
+     * Class for handling text input window in separate thread.
+     */
+    protected class TextInput implements Runnable {
+        /**
+         * Title and message of the text inout dialog.
+         */
+        private String title, message;
+
+        /**
+         * Create a new input window
+         *
+         * @param title   Title of the window
+         * @param message Message of the window
+         */
+        public TextInput(String title, String message) {
+            this.title = title;
+            this.message = message;
+        }
+
+        /**
+         * Open the window so user can enter text.
+         */
+        @Override
+        public void run() {
+            userInput = TinyFileDialogs.tinyfd_inputBox(title, message, "");
+            userInputMade = true;
+        }
     }
 }

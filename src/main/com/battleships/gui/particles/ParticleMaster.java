@@ -1,11 +1,8 @@
 package com.battleships.gui.particles;
 
 import com.battleships.gui.entities.Camera;
-import com.battleships.gui.models.ModelTexture;
 import com.battleships.gui.renderingEngine.Loader;
 import org.joml.Matrix4f;
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL13;
 
 import java.util.*;
 
@@ -28,10 +25,11 @@ public class ParticleMaster {
 
     /**
      * Initialize particle system.
-     * @param loader loader to pass to ParticleRenderer
+     *
+     * @param loader           loader to pass to ParticleRenderer
      * @param projectionMatrix projectionMatrix to pass to ParticleRenderer
      */
-    public static void init(Loader loader, Matrix4f projectionMatrix){
+    public static void init(Loader loader, Matrix4f projectionMatrix) {
         renderer = new ParticleRenderer(loader, projectionMatrix);
     }
 
@@ -45,33 +43,34 @@ public class ParticleMaster {
      * Uses insertionSort because the list will be almost sorted most of the time, so insertion sort
      * is the most efficient.
      */
-    public static void update(Camera camera){
+    public static void update(Camera camera) {
         Iterator<Map.Entry<ParticleTexture, List<Particle>>> mapIterator = particles.entrySet().iterator();
-        while (mapIterator.hasNext()){
+        while (mapIterator.hasNext()) {
             Map.Entry<ParticleTexture, List<Particle>> entry = mapIterator.next();
             List<Particle> list = entry.getValue();
             Iterator<Particle> iterator = list.iterator();
-            while (iterator.hasNext()){
+            while (iterator.hasNext()) {
                 Particle p = iterator.next();
                 boolean stillAlive = p.update(camera);
-                if(!stillAlive){
+                if (!stillAlive) {
                     iterator.remove();
-                    if(list.isEmpty()){
+                    if (list.isEmpty()) {
                         mapIterator.remove();
                     }
                 }
             }
-            if(!entry.getKey().isAdditive())
+            if (!entry.getKey().isAdditive())
                 InsertionSort.sortHighToLow(list);
         }
     }
 
     /**
      * Render all particles in particles List using renderer.
+     *
      * @param camera Camera that should display particles
-     * @param mode mode to use for rendering 1 = add color of particles, 771 = render particles over each other
+     * @param mode   mode to use for rendering 1 = add color of particles, 771 = render particles over each other
      */
-    public static void renderParticles(Camera camera, int mode){
+    public static void renderParticles(Camera camera, int mode) {
         renderer.render(particles, camera);
     }
 
@@ -79,7 +78,7 @@ public class ParticleMaster {
      * Clean up all particle related stuff.
      * Needs to be called on program exit.
      */
-    public static void cleanUp(){
+    public static void cleanUp() {
         renderer.cleanUp();
     }
 
@@ -87,9 +86,10 @@ public class ParticleMaster {
      * Add particle to particles that should be rendered.
      * If list for particles with that textures already exists add particle to that list.
      * Else create new entry in hashMap with that texture and a new list of particles.
+     *
      * @param particle Particle to add
      */
-    public static void addParticle(Particle particle){
+    public static void addParticle(Particle particle) {
         List<Particle> list = particles.computeIfAbsent(particle.getTexture(), k -> new ArrayList<>());
         list.add(particle);
     }

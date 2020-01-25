@@ -32,8 +32,8 @@ public class Line {
      * Create an empty line
      *
      * @param spaceWidth width of a space character
-     * @param fontSize size of the font
-     * @param maxLength the maximum length of a line before a line break
+     * @param fontSize   size of the font
+     * @param maxLength  the maximum length of a line before a line break
      */
     protected Line(double spaceWidth, double fontSize, double maxLength) {
         this.spaceSize = spaceWidth * fontSize;
@@ -45,7 +45,6 @@ public class Line {
      * gets longer than the max length add the word and increase currentLineLength.
      *
      * @param word what word to try adding
-     *
      * @return {@code true} if the word has been successfully added to the line
      */
     protected boolean attemptToAddWord(Word word) {

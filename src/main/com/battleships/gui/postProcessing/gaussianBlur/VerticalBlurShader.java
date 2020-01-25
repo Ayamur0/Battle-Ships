@@ -32,9 +32,10 @@ public class VerticalBlurShader extends ShaderProgram {
 
     /**
      * Load the height of the fbo that this effect is used for to the shader.
+     *
      * @param height width of the fbo
      */
-    protected void loadTargetHeight(float height){
+    protected void loadTargetHeight(float height) {
         super.loadFloat(location_targetHeight, height);
     }
 

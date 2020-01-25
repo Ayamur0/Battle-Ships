@@ -27,15 +27,16 @@ public class Word {
      * @param fontSize size of the text the word is in
      */
 
-    protected Word(double fontSize){
+    protected Word(double fontSize) {
         this.fontSize = fontSize;
     }
 
     /**
      * add character at the end of this word and increase width of the word
+     *
      * @param character the character to be added
      */
-    protected void addCharacter(Character character){
+    protected void addCharacter(Character character) {
         characters.add(character);
         width += character.getxAdvance() * fontSize;
     }
@@ -43,14 +44,14 @@ public class Word {
     /**
      * @return list of all characters in the word
      */
-    protected List<Character> getCharacters(){
+    protected List<Character> getCharacters() {
         return characters;
     }
 
     /**
      * @return width of the word on the screen
      */
-    protected double getWordWidth(){
+    protected double getWordWidth() {
         return width;
     }
 

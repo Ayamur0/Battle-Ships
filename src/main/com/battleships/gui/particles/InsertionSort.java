@@ -27,8 +27,9 @@ public class InsertionSort {
 
     /**
      * Sort item at index i of the list to the right position.
+     *
      * @param list List to sort.
-     * @param i Index of item to sort into right position.
+     * @param i    Index of item to sort into right position.
      */
     private static void sortUpHighToLow(List<Particle> list, int i) {
         Particle item = list.get(i);

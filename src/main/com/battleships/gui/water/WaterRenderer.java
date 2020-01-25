@@ -65,10 +65,11 @@ public class WaterRenderer {
 
     /**
      * Create a new WaterRenderer
-     * @param loader Loader to load model water is rendered on.
-     * @param shader Shader this rendered should use.
+     *
+     * @param loader           Loader to load model water is rendered on.
+     * @param shader           Shader this rendered should use.
      * @param projectionMatrix Current projectionMatrix of the window.
-     * @param fbos WaterFrameBuffers this renderer should use.
+     * @param fbos             WaterFrameBuffers this renderer should use.
      */
     public WaterRenderer(Loader loader, WaterShader shader, Matrix4f projectionMatrix, WaterFrameBuffers fbos) {
         this.shader = shader;
@@ -84,9 +85,10 @@ public class WaterRenderer {
 
     /**
      * Render all {@link WaterTile}s in the List to the screen.
-     * @param water List containing all WaterTiles that should be rendered.
+     *
+     * @param water  List containing all WaterTiles that should be rendered.
      * @param camera Camera that is viewing the scene.
-     * @param sun Light that is lighting the scene.
+     * @param sun    Light that is lighting the scene.
      */
     public void render(List<WaterTile> water, Camera camera, Light sun) {
         prepareRender(camera, sun);
@@ -100,10 +102,11 @@ public class WaterRenderer {
 
     /**
      * Prepare the renderer for rendering with a specific camera and light.
+     *
      * @param camera The camera used for rendering.
-     * @param sun The light used for rendering.
+     * @param sun    The light used for rendering.
      */
-    private void prepareRender(Camera camera, Light sun){
+    private void prepareRender(Camera camera, Light sun) {
         shader.start();
         shader.loadViewMatrix(camera);
         shader.loadProjectionMatrix(MasterRenderer.getProjectionMatrix());
@@ -133,7 +136,7 @@ public class WaterRenderer {
      * Unbind the last rendered {@link WaterTile}.
      * Needs to be called after last WaterTile has been rendered.
      */
-    private void unbind(){
+    private void unbind() {
         GL11.glDisable(GL11.GL_BLEND);
         GL20.glDisableVertexAttribArray(0);
         GL30.glBindVertexArray(0);
@@ -142,11 +145,12 @@ public class WaterRenderer {
 
     /**
      * Load the quad a {@link WaterTile} is rendered on.
+     *
      * @param loader Loader that can load vaos.
      */
     private void setUpVAO(Loader loader) {
         // Just x and z vectex positions here, y is set to 0 in v.shader
-        float[] vertices = { -1, -1, -1, 1, 1, -1, 1, -1, -1, 1, 1, 1 };
+        float[] vertices = {-1, -1, -1, 1, 1, -1, 1, -1, -1, 1, 1, 1};
         quad = loader.loadToVAO(vertices, 2);
     }
 }

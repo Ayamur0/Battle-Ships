@@ -8,7 +8,7 @@ import org.joml.Vector3i;
 /**
  * Math functions needed for the grids.
  * Mainly to convert between indices of the cells and world coordinates.
- * 
+ *
  * @author Tim Staudenmaier
  */
 public class GridMaths {
@@ -17,6 +17,7 @@ public class GridMaths {
 
     /**
      * Converts the rotation of a ship from the direction to degrees.
+     *
      * @param rotation Direction the ship should be facing.
      * @return Degrees the entity of the ship needs to be rotated upon the y axis, so it faces the given direction.
      */
@@ -41,7 +42,8 @@ public class GridMaths {
 
     /**
      * Calculates the Coordinates the ship entity needs to have, to be placed on a given cell.
-     * @param grid The grid the ship should be placed on.
+     *
+     * @param grid     The grid the ship should be placed on.
      * @param indexInt The index of the cell the stern of the ship is on.
      * @param shipSize The size of the ship (2-5)
      * @param rotation The direction the ship should be facing (one of the constant values in {@link ShipManager} for the directions)
@@ -75,7 +77,8 @@ public class GridMaths {
 
     /**
      * Convert the index of a cell to world coordinates pointing to the center of that cell.
-     * @param i The index of the cell.
+     *
+     * @param i     The index of the cell.
      * @param field The field the cell is on.
      * @return The world coordinates pointing at the center of the cell.
      */
@@ -91,6 +94,7 @@ public class GridMaths {
 
     /**
      * Calculates which cell is at the given coordinates.
+     *
      * @param coords The coordinates at which it should be calculated what cell is at those coordinates. The
      *               y-value of the coordinates does not matter.
      * @return The index of the cell that is at the given coordinates, or {@code null} if there is no cell at the coordinates.
@@ -103,20 +107,20 @@ public class GridMaths {
         Vector3f result = new Vector3f();
         int field;
 
-        if (coords.x >  ownGrid.getPosition().x -  ownGrid.getScale() / 2 +  ownGrid.getScale() / (size + 1) &&
-                coords.x <  ownGrid.getPosition().x +  ownGrid.getScale() / 2 &&
-                coords.z >  ownGrid.getPosition().z -  ownGrid.getScale() / 2 +  ownGrid.getScale() / (size + 1) &&
-                coords.z <  ownGrid.getPosition().z +  ownGrid.getScale() / 2) {
-            field =  GridManager.OWNFIELD;
-            result.x = coords.x -  ownGrid.getPosition().x +  ownGrid.getScale() / 2f;
-            result.y = coords.z -  ownGrid.getPosition().z +  ownGrid.getScale() / 2f;
-        } else if (coords.x > opponentGrid.getPosition().x -  opponentGrid.getScale() / 2 +  opponentGrid.getScale() / (size + 1) &&
-                coords.x <  opponentGrid.getPosition().x +  opponentGrid.getScale() / 2 &&
-                coords.z >  opponentGrid.getPosition().z -  opponentGrid.getScale() / 2  +  opponentGrid.getScale() / (size + 1) &&
-                coords.z <  opponentGrid.getPosition().z +  opponentGrid.getScale() / 2) {
+        if (coords.x > ownGrid.getPosition().x - ownGrid.getScale() / 2 + ownGrid.getScale() / (size + 1) &&
+                coords.x < ownGrid.getPosition().x + ownGrid.getScale() / 2 &&
+                coords.z > ownGrid.getPosition().z - ownGrid.getScale() / 2 + ownGrid.getScale() / (size + 1) &&
+                coords.z < ownGrid.getPosition().z + ownGrid.getScale() / 2) {
+            field = GridManager.OWNFIELD;
+            result.x = coords.x - ownGrid.getPosition().x + ownGrid.getScale() / 2f;
+            result.y = coords.z - ownGrid.getPosition().z + ownGrid.getScale() / 2f;
+        } else if (coords.x > opponentGrid.getPosition().x - opponentGrid.getScale() / 2 + opponentGrid.getScale() / (size + 1) &&
+                coords.x < opponentGrid.getPosition().x + opponentGrid.getScale() / 2 &&
+                coords.z > opponentGrid.getPosition().z - opponentGrid.getScale() / 2 + opponentGrid.getScale() / (size + 1) &&
+                coords.z < opponentGrid.getPosition().z + opponentGrid.getScale() / 2) {
             field = GridManager.OPPONENTFIELD;
-            result.x = coords.x -  opponentGrid.getPosition().x +  opponentGrid.getScale() / 2f;
-            result.y = coords.z -  opponentGrid.getPosition().z +  opponentGrid.getScale() / 2f;
+            result.x = coords.x - opponentGrid.getPosition().x + opponentGrid.getScale() / 2f;
+            result.y = coords.z - opponentGrid.getPosition().z + opponentGrid.getScale() / 2f;
         } else
             return null;
 
@@ -128,6 +132,7 @@ public class GridMaths {
 
     /**
      * Set the GridManager these calculations are made for.
+     *
      * @param gridManager The GridManager that uses these calculations.
      */
     public static void setGridManager(GridManager gridManager) {

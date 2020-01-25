@@ -22,23 +22,6 @@ public class WaitingConnection extends Menu {
      * {@code true} when the opponent has connected
      */
     private boolean opponentConnected;
-
-    /**
-     * @return The boolean indicating if the opponent has connected
-     */
-    public boolean isOpponentConnected() {
-        return opponentConnected;
-    }
-
-    /**
-     * setts if the opponent is connect or not
-     *
-     * @param opponentConnected indicates if opponent is connected
-     */
-    public void setOpponentConnected(boolean opponentConnected) {
-        this.opponentConnected = opponentConnected;
-    }
-
     /**
      * Indicates if the game is loaded from a file
      */
@@ -57,6 +40,22 @@ public class WaitingConnection extends Menu {
         this.createMenu();
 
         super.CreateTextLabels();
+    }
+
+    /**
+     * @return The boolean indicating if the opponent has connected
+     */
+    public boolean isOpponentConnected() {
+        return opponentConnected;
+    }
+
+    /**
+     * setts if the opponent is connect or not
+     *
+     * @param opponentConnected indicates if opponent is connected
+     */
+    public void setOpponentConnected(boolean opponentConnected) {
+        this.opponentConnected = opponentConnected;
     }
 
     /**
@@ -89,6 +88,7 @@ public class WaitingConnection extends Menu {
         clearMenu();
         cleaBackgournd();
     }
+
     /**
      * Toggles state of clicked button.
      */

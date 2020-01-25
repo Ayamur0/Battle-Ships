@@ -12,7 +12,7 @@ import org.lwjgl.opengl.GL30;
 /**
  * Renderer capable of rendering a skybox.
  * Uses a {@link SkyboxShader}.
- * 
+ *
  * @author Tim Staudenmaier
  */
 public class SkyboxRenderer {
@@ -27,47 +27,47 @@ public class SkyboxRenderer {
      * be rendered on.
      */
     private static final float[] VERTICES = {
-            -SIZE,  SIZE, -SIZE,
+            -SIZE, SIZE, -SIZE,
             -SIZE, -SIZE, -SIZE,
             SIZE, -SIZE, -SIZE,
             SIZE, -SIZE, -SIZE,
-            SIZE,  SIZE, -SIZE,
-            -SIZE,  SIZE, -SIZE,
+            SIZE, SIZE, -SIZE,
+            -SIZE, SIZE, -SIZE,
 
-            -SIZE, -SIZE,  SIZE,
+            -SIZE, -SIZE, SIZE,
             -SIZE, -SIZE, -SIZE,
-            -SIZE,  SIZE, -SIZE,
-            -SIZE,  SIZE, -SIZE,
-            -SIZE,  SIZE,  SIZE,
-            -SIZE, -SIZE,  SIZE,
+            -SIZE, SIZE, -SIZE,
+            -SIZE, SIZE, -SIZE,
+            -SIZE, SIZE, SIZE,
+            -SIZE, -SIZE, SIZE,
 
             SIZE, -SIZE, -SIZE,
-            SIZE, -SIZE,  SIZE,
-            SIZE,  SIZE,  SIZE,
-            SIZE,  SIZE,  SIZE,
-            SIZE,  SIZE, -SIZE,
+            SIZE, -SIZE, SIZE,
+            SIZE, SIZE, SIZE,
+            SIZE, SIZE, SIZE,
+            SIZE, SIZE, -SIZE,
             SIZE, -SIZE, -SIZE,
 
-            -SIZE, -SIZE,  SIZE,
-            -SIZE,  SIZE,  SIZE,
-            SIZE,  SIZE,  SIZE,
-            SIZE,  SIZE,  SIZE,
-            SIZE, -SIZE,  SIZE,
-            -SIZE, -SIZE,  SIZE,
+            -SIZE, -SIZE, SIZE,
+            -SIZE, SIZE, SIZE,
+            SIZE, SIZE, SIZE,
+            SIZE, SIZE, SIZE,
+            SIZE, -SIZE, SIZE,
+            -SIZE, -SIZE, SIZE,
 
-            -SIZE,  SIZE, -SIZE,
-            SIZE,  SIZE, -SIZE,
-            SIZE,  SIZE,  SIZE,
-            SIZE,  SIZE,  SIZE,
-            -SIZE,  SIZE,  SIZE,
-            -SIZE,  SIZE, -SIZE,
+            -SIZE, SIZE, -SIZE,
+            SIZE, SIZE, -SIZE,
+            SIZE, SIZE, SIZE,
+            SIZE, SIZE, SIZE,
+            -SIZE, SIZE, SIZE,
+            -SIZE, SIZE, -SIZE,
 
             -SIZE, -SIZE, -SIZE,
-            -SIZE, -SIZE,  SIZE,
+            -SIZE, -SIZE, SIZE,
             SIZE, -SIZE, -SIZE,
             SIZE, -SIZE, -SIZE,
-            -SIZE, -SIZE,  SIZE,
-            SIZE, -SIZE,  SIZE
+            -SIZE, -SIZE, SIZE,
+            SIZE, -SIZE, SIZE
     };
 
     /**
@@ -90,10 +90,11 @@ public class SkyboxRenderer {
 
     /**
      * Create a new renderer.
-     * @param loader Loader to load model of skybox.
+     *
+     * @param loader           Loader to load model of skybox.
      * @param projectionMatrix Current projectionMatrix of the window.
      */
-    public SkyboxRenderer(Loader loader, Matrix4f projectionMatrix){
+    public SkyboxRenderer(Loader loader, Matrix4f projectionMatrix) {
         cube = loader.loadToVAO(VERTICES, 3);
         texture = loader.loadCubeMap(TEXTURE_FILES);
         shader = new SkyboxShader();
@@ -104,9 +105,10 @@ public class SkyboxRenderer {
 
     /**
      * Render the skybox of this renderer.
+     *
      * @param camera Camera that views the scene.
      */
-    public void render(Camera camera){
+    public void render(Camera camera) {
 //        GL11.glDepthMask(false);
 //        GL11.glDepthRange(1f, 1f);
         shader.start();
@@ -133,7 +135,7 @@ public class SkyboxRenderer {
      * Clean up all skybox related stuff.
      * Needs to be called on program exit.
      */
-    public void cleanUp(){
+    public void cleanUp() {
         shader.cleanUp();
     }
 }

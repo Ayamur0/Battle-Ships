@@ -4,7 +4,6 @@ import com.battleships.gui.gameAssets.GameManager;
 import com.battleships.gui.gameAssets.grids.GridManager;
 import com.battleships.logic.Grid;
 import com.battleships.logic.LogicManager;
-import com.battleships.logic.Ship;
 import org.joml.Vector2i;
 
 import java.util.ArrayList;
@@ -14,7 +13,7 @@ import java.util.List;
  * Implementation of an AI with medium difficulty.
  * This AI will first choose either a {@link PatternX}, {@link PatternChess} or {@link PatternLines} to shoot.
  * After that pattern is done it will shoot randomly.
- *
+ * <p>
  * If it hits a ship it will try to sink that ship before moving on.
  *
  * @author Tim Staudenmaier
@@ -105,7 +104,7 @@ public class AIMedium extends AI {
         }
         int result;
         while ((result = shootCell(lastShot)) == NA || result == ERROR) {
-            if(result == ERROR) {
+            if (result == ERROR) {
                 lastShot = pattern.nextIndex();
                 if (lastShot == null) {
                     updatePattern();
@@ -128,6 +127,7 @@ public class AIMedium extends AI {
     /**
      * AI tries to sink a ship. For this method the AI needs to already know the direction of the ship.
      * To sink a ship the AI tries to shoot the cells around the last shot in the direction the ship lies in.
+     *
      * @param lastShot Last Shot the AI has made.
      * @return {@code true} if the AI has made a shot (regardless if it hit a ship or not), {@code false} if the AI couldn't make a shot for the passed cell.
      */
@@ -184,6 +184,7 @@ public class AIMedium extends AI {
 
     /**
      * Executes shoot command and tells AI if it hit or couldn't make the shot.
+     *
      * @param cell Index of the cell to shoot.
      * @return {@value ERROR} if the cell is outside of the grid, {@value NA} if the cell was already shot,
      * {@value WATER} if the cell contained water or {@value SHIP} if the cell contained a ship.
@@ -192,7 +193,7 @@ public class AIMedium extends AI {
         if (cell.x < 1 || cell.y < 1 || cell.x > gridSize || cell.y > gridSize) {
             return ERROR;
         }
-        if (GameManager.getSettings().isOnline()){
+        if (GameManager.getSettings().isOnline()) {
             return GameManager.shoot(team, cell) ? WATER : NA;
         }
         if (opponentGrid.getCell(cell.x, cell.y).state == Grid.SHIP) {
@@ -215,7 +216,7 @@ public class AIMedium extends AI {
                 lastShot = toShoot;
                 return true;
             case WATER:
-                if(GameManager.getSettings().isOnline())
+                if (GameManager.getSettings().isOnline())
                     lastTried = HORIZONTAL;
                 return false;
             case NA:
@@ -229,7 +230,7 @@ public class AIMedium extends AI {
                 lastShot = toShoot;
                 return true;
             case WATER:
-                if(GameManager.getSettings().isOnline())
+                if (GameManager.getSettings().isOnline())
                     lastTried = HORIZONTAL;
                 return false;
             case NA:
@@ -244,7 +245,7 @@ public class AIMedium extends AI {
                 lastShot = toShoot;
                 return true;
             case WATER:
-                if(GameManager.getSettings().isOnline())
+                if (GameManager.getSettings().isOnline())
                     lastTried = VERTICAL;
                 return false;
             case NA:
@@ -258,7 +259,7 @@ public class AIMedium extends AI {
                 lastShot = toShoot;
                 return true;
             case WATER:
-                if(GameManager.getSettings().isOnline())
+                if (GameManager.getSettings().isOnline())
                     lastTried = VERTICAL;
                 return false;
             case NA:
@@ -278,12 +279,13 @@ public class AIMedium extends AI {
      * Processes the answer from the network after the AI made a shot.
      * Only needs to be called for answer = 1 or = 2.
      * Only used if game is online.
+     *
      * @param shot Index of the shot the answer is for.
      */
-    public void processAnswer(Vector2i shot){
+    public void processAnswer(Vector2i shot) {
         System.out.println("Added by AI");
         hitCells.add(shot);
-        if(lastTried != UNKNOWN) {
+        if (lastTried != UNKNOWN) {
             foundShipDir = lastTried;
             System.out.println("AI found ship dir " + foundShipDir + " Hit cells " + hitCells.size());
         }

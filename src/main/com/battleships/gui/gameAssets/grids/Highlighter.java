@@ -52,13 +52,14 @@ public class Highlighter extends Entity {
 
     /**
      * Create a highlighter.
-     * @param loader Loader to load texture.
-     * @param scale Scale of the highlighter.
+     *
+     * @param loader      Loader to load texture.
+     * @param scale       Scale of the highlighter.
      * @param gridManager GridManager this highlighter is on.
      */
     public Highlighter(Loader loader, float scale, GridManager gridManager) {
         super(new TexturedModel(loader.loadToVAO(VERTICES, TEXTURECOORDS, NORMALS, INDICES), new ModelTexture(loader.loadTexture(highlightTexturePath))),
-                 new Vector3f(), new Vector3f(-90,0,0), scale);
+                new Vector3f(), new Vector3f(-90, 0, 0), scale);
         this.gridManager = gridManager;
         remove();
     }
@@ -74,6 +75,7 @@ public class Highlighter extends Entity {
     /**
      * Highlights the cell at the intersection Point between the given Vector and the grid.
      * Used with mouse vector to highlight the cell the mouse is pointing at.
+     *
      * @param intersectionPoint Vector that should intersect with grid to determine pointed cell.
      */
     public void highligtCell(Vector3f intersectionPoint) {
@@ -87,7 +89,8 @@ public class Highlighter extends Entity {
 
     /**
      * Highlight the cell at the index, by setting the highlighter to the cells position.
-     * @param index index of the cell that should be highlighted.
+     *
+     * @param index  index of the cell that should be highlighted.
      * @param gridID the ID of the grid the cell that should be highlighted is on.
      */
     private void place(Vector2i index, int gridID) {

@@ -18,10 +18,10 @@ public class TextMeshData {
 
     /**
      * @param vertexPositions array with positions of all vertices (x,y)
-     * @param textureCoords array with all textureCoords for the vertices (x,y)
+     * @param textureCoords   array with all textureCoords for the vertices (x,y)
      */
 
-    protected TextMeshData(float[] vertexPositions, float[] textureCoords){
+    protected TextMeshData(float[] vertexPositions, float[] textureCoords) {
         this.vertexPositions = vertexPositions;
         this.textureCoords = textureCoords;
     }
@@ -47,7 +47,7 @@ public class TextMeshData {
      */
 
     public int getVertexCount() {
-        return vertexPositions.length/2;
+        return vertexPositions.length / 2;
     }
 
 }

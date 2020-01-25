@@ -18,7 +18,7 @@ import java.util.Map;
 /**
  * Renderer used for rendering {@link Entity}.
  * Uses a {@link StaticShader}.
- * 
+ *
  * @author Tim Staudenmaier
  */
 public class EntityRenderer {
@@ -30,10 +30,11 @@ public class EntityRenderer {
 
     /**
      * Create a new renderer-
-     * @param shader A StaticShader for this renderer.
+     *
+     * @param shader           A StaticShader for this renderer.
      * @param projectionMatrix The current projectionMatrix of the window.
      */
-    public EntityRenderer(StaticShader shader, Matrix4f projectionMatrix){
+    public EntityRenderer(StaticShader shader, Matrix4f projectionMatrix) {
         this.shader = shader;
 
         shader.start();
@@ -44,18 +45,19 @@ public class EntityRenderer {
     /**
      * Renders all Entities in the given has Map. Entities are grouped by their TexturedModel
      * for faster rendering, because models with the same texture get rendered together.
+     *
      * @param entities HashMap containing all Entities that should be rendered grouped by their TexturedModels.
      */
-    public void render(Map<TexturedModel, List<Entity>> entities){
+    public void render(Map<TexturedModel, List<Entity>> entities) {
         shader.loadProjectionMatrix(MasterRenderer.getProjectionMatrix());
         //prepare each textured model, then prepare each entity that uses this texturedModel and render that entity
         //only needs to load each model and texture once even if it's used multiple times
         //only entities need to be loaded one by one to get their transformationMatrix
         //after rendering all entities of one texturedModel unbind that model
-        for(TexturedModel model:entities.keySet()){
+        for (TexturedModel model : entities.keySet()) {
             prepareTexturedModel(model);
             List<Entity> batch = entities.get(model);
-            for(Entity entity:batch){
+            for (Entity entity : batch) {
                 prepareInstance(entity);
                 GL11.glDrawElements(GL11.GL_TRIANGLES, model.getRawModel().getVertexCount(), GL11.GL_UNSIGNED_INT, 0);
             }
@@ -66,9 +68,10 @@ public class EntityRenderer {
 
     /**
      * Prepare this renderer and shader to render {@link Entity} using a specific {@link TexturedModel}.
+     *
      * @param texturedModel TexturedModel the entities that get rendered next use.
      */
-    private void prepareTexturedModel(TexturedModel texturedModel){
+    private void prepareTexturedModel(TexturedModel texturedModel) {
         RawModel model = texturedModel.getRawModel();
         GL30.glBindVertexArray(model.getVaoID()); //bind vaos of model to be loaded
         GL20.glEnableVertexAttribArray(0); //enable vao at index 0 (positions)
@@ -76,7 +79,7 @@ public class EntityRenderer {
         GL20.glEnableVertexAttribArray(2);//enable vao at index 2 (normals)
         ModelTexture texture = texturedModel.getTexture();
         shader.loadNumberOfRows(texture.getNumberOfRows());
-        if(texture.isHasTransparency()){ //Render backside of faces for transparent models
+        if (texture.isHasTransparency()) { //Render backside of faces for transparent models
             MasterRenderer.disableCulling();
         }
         shader.loadFakeLightingVariable(texture.isUseFakeLighting());
@@ -86,11 +89,11 @@ public class EntityRenderer {
     }
 
     /**
-     * Unbind the last used TexturedModel. 
+     * Unbind the last used TexturedModel.
      * Needs to be used if no other texturedModel will be bound that would overwrite
      * the previously bound TexturedModel.
      */
-    private void unbindTexturedModel(){
+    private void unbindTexturedModel() {
         MasterRenderer.enableCulling(); //enable culling in case it has been disabled
         GL20.glDisableVertexAttribArray(0); //disable position vao
         GL20.glDisableVertexAttribArray(1); //disable textureCoords vao
@@ -100,9 +103,10 @@ public class EntityRenderer {
 
     /**
      * Prepare the shader to render a specific Entity.
+     *
      * @param entity The entity that should get rendered next.
      */
-    private void prepareInstance(Entity entity){
+    private void prepareInstance(Entity entity) {
         //create transfMatrix with current position rotation and scale of entity
         Matrix4f transformationMatrix = Maths.createTransformationMatrix(entity.getPosition(), entity.getRotation(), entity.getScale());
         shader.loadMixColor(entity.getAdditionalColor(), entity.getAdditionalColorPercentage());

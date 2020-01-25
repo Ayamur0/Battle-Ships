@@ -82,17 +82,17 @@ public class GUIText {
      * Creates a new text, loads the text's quads into a VAO, and adds the text
      * to the screen
      *
-     * @param text the string this text should read
-     * @param fontSize the font size of the text, 1 is default size
-     * @param font the font to use for this text
-     * @param position the position on the screen where the top left corner of the
-     *            text should be rendered. (top left corner (0,0) bottom right (1,1))
+     * @param text          the string this text should read
+     * @param fontSize      the font size of the text, 1 is default size
+     * @param font          the font to use for this text
+     * @param position      the position on the screen where the top left corner of the
+     *                      text should be rendered. (top left corner (0,0) bottom right (1,1))
      * @param maxLineLength max length of one line, relative to screen is (1 is full screen width).
-     *            If a word in a line exceeds this limit the word is put into a new line
-     * @param centered whether the text should be centered or not
-     * @param outlineWidth width of the outline of the text, 0 for no outline
-     * @param outlineEdge size of the smooth transition edge around the outline
-     * @param outlineColor color of the outline
+     *                      If a word in a line exceeds this limit the word is put into a new line
+     * @param centered      whether the text should be centered or not
+     * @param outlineWidth  width of the outline of the text, 0 for no outline
+     * @param outlineEdge   size of the smooth transition edge around the outline
+     * @param outlineColor  color of the outline
      * @param outlineOffset offset of the outline to create a shadow effect
      */
     public GUIText(String text, float fontSize, FontType font, Vector2f position, float maxLineLength,
@@ -154,6 +154,16 @@ public class GUIText {
     }
 
     /**
+     * Sets the number of lines that this text covers (method used only in
+     * loading)
+     *
+     * @param number number of lines
+     */
+    protected void setNumberOfLines(int number) {
+        this.numberOfLines = number;
+    }
+
+    /**
      * @return The position of the top-left corner of the text on the screen
      */
     public Vector2f getPosition() {
@@ -170,8 +180,8 @@ public class GUIText {
     /**
      * Set the VAO and vertex count for this text
      *
-     * @param vao the VAO containing all the vertex data for the quads the
-     *            text will be rendered on
+     * @param vao           the VAO containing all the vertex data for the quads the
+     *                      text will be rendered on
      * @param verticesCount total number of vertices in all of the quads
      */
     public void setMeshInfo(int vao, int verticesCount) {
@@ -191,16 +201,6 @@ public class GUIText {
      */
     protected float getFontSize() {
         return fontSize;
-    }
-
-    /**
-     * Sets the number of lines that this text covers (method used only in
-     * loading)
-     *
-     * @param number number of lines
-     */
-    protected void setNumberOfLines(int number) {
-        this.numberOfLines = number;
     }
 
     /**
@@ -225,7 +225,16 @@ public class GUIText {
     }
 
     /**
+     * Change the text, after changing the text, this GUIText needs to be
+     * removed from the TextMaster and then be loaded again to use the new text.
      *
+     * @param textString new text string
+     */
+    public void setTextString(String textString) {
+        this.textString = textString;
+    }
+
+    /**
      * @return The width of the outline
      */
     public float getOutlineWidth() {
@@ -233,7 +242,6 @@ public class GUIText {
     }
 
     /**
-     *
      * @return The size of the edge around the outline
      */
     public float getOutlineEdge() {
@@ -241,7 +249,6 @@ public class GUIText {
     }
 
     /**
-     *
      * @return The color of the outline as rgb values between 0 and 1
      */
     public Vector3f getOutlineColor() {
@@ -249,7 +256,6 @@ public class GUIText {
     }
 
     /**
-     *
      * @return The offset of the outline for this text
      */
     public Vector2f getOutlineOffset() {
@@ -257,19 +263,9 @@ public class GUIText {
     }
 
     /**
-     *
      * @return Max length of a line in this text.
      */
     public float getLineMaxSize() {
         return lineMaxSize;
-    }
-
-    /**
-     * Change the text, after changing the text, this GUIText needs to be
-     * removed from the TextMaster and then be loaded again to use the new text.
-     * @param textString new text string
-     */
-    public void setTextString(String textString) {
-        this.textString = textString;
     }
 }

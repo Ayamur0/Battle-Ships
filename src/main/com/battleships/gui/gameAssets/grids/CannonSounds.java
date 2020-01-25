@@ -40,11 +40,12 @@ public class CannonSounds {
 
     /**
      * Plays the specified sound at a position.
-     * @param pos Position the sound should be played at.
+     *
+     * @param pos  Position the sound should be played at.
      * @param type Type of sound (one of the constants in this class).
      */
-    public void playSound(Vector3f pos, int type){
-        switch (type){
+    public void playSound(Vector3f pos, int type) {
+        switch (type) {
             case CANNONSOUND:
                 cannon.setPosition(pos.x, pos.y, pos.z);
                 cannon.play(cannonSound);
@@ -63,7 +64,7 @@ public class CannonSounds {
     /**
      * Stops the sounds currently playing.
      */
-    public void stopSound(){
+    public void stopSound() {
         cannon.stop();
         waterSplash.stop();
     }

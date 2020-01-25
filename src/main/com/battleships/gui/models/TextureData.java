@@ -24,8 +24,9 @@ public class TextureData {
 
     /**
      * Create a new TextureData for an image.
+     *
      * @param buffer Data of the image.
-     * @param width Width of the image.
+     * @param width  Width of the image.
      * @param height Height of the image.
      */
     public TextureData(ByteBuffer buffer, int width, int height) {
@@ -40,6 +41,7 @@ public class TextureData {
     public int getWidth() {
         return width;
     }
+
     /**
      * @return Height of the image from this TextureData.
      */

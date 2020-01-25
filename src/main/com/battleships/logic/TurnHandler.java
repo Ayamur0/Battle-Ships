@@ -38,7 +38,7 @@ public class TurnHandler {
      * Advances the turn order and executes AI turns if the next
      * turn is an AI.
      */
-    public void advanceTurnOrder(){
+    public void advanceTurnOrder() {
         playerTurn = !playerTurn;
         makeAiTurns();
     }
@@ -46,12 +46,12 @@ public class TurnHandler {
     /**
      * All AI's used place their ships.
      */
-    public void placeAiShips(){
-        if(opponentAIUsed)
+    public void placeAiShips() {
+        if (opponentAIUsed)
             opponentAI.placeShips();
-        if(playerAIUsed)
+        if (playerAIUsed)
             playerAI.placeShips();
-        if(opponentAIUsed && playerAIUsed){
+        if (opponentAIUsed && playerAIUsed) {
             GameManager.getLogic().advanceGamePhase();
             makeAiTurns();
         }
@@ -61,19 +61,11 @@ public class TurnHandler {
      * The AI whose turn it currently is makes that turn.
      * If it isn't the turn of an AI nothing happens.
      */
-    public void makeAiTurns(){
-        if(opponentAIUsed && !playerTurn)
+    public void makeAiTurns() {
+        if (opponentAIUsed && !playerTurn)
             opponentAI.makeTurn();
-        if(playerAIUsed && playerTurn)
+        if (playerAIUsed && playerTurn)
             playerAI.makeTurn();
-    }
-
-    /**
-     * Set playerTurn, needed if player should act second.
-     * @param playerTurn {@code true} if next turn should be the player, {@code false} else.
-     */
-    public void setPlayerTurn(boolean playerTurn) {
-        this.playerTurn = playerTurn;
     }
 
     /**
@@ -84,19 +76,30 @@ public class TurnHandler {
     }
 
     /**
+     * Set playerTurn, needed if player should act second.
+     *
+     * @param playerTurn {@code true} if next turn should be the player, {@code false} else.
+     */
+    public void setPlayerTurn(boolean playerTurn) {
+        this.playerTurn = playerTurn;
+    }
+
+    /**
      * Set the AI the player should use if player uses an AI.
+     *
      * @param ai AI the player should use.
      */
-    public void setPlayerAI(AI ai){
+    public void setPlayerAI(AI ai) {
         playerAI = ai;
         playerAIUsed = true;
     }
 
     /**
      * Set the AI the opponent should use if opponent uses an AI.
+     *
      * @param ai AI the opponent should use.
      */
-    public void setOpponentAI(AI ai){
+    public void setOpponentAI(AI ai) {
         opponentAI = ai;
         opponentAIUsed = true;
     }
@@ -104,14 +107,14 @@ public class TurnHandler {
     /**
      * Removes the AI of the player, so the player isn't played by an AI.
      */
-    public void removePlayerAI(){
+    public void removePlayerAI() {
         playerAIUsed = false;
     }
 
     /**
      * Removes the AI of the player, so the opponent isn't played by an AI.
      */
-    public void removeOpponentAI(){
+    public void removeOpponentAI() {
         opponentAIUsed = false;
     }
 
@@ -119,8 +122,8 @@ public class TurnHandler {
      * @return The AI that plays for the player. Only returns that AI, if the game is currently played online and
      * the player is played by an AI. Else this method will return null.
      */
-    public AI getOnlineAI(){
-        if(GameManager.getSettings().isOnline() && playerAIUsed){
+    public AI getOnlineAI() {
+        if (GameManager.getSettings().isOnline() && playerAIUsed) {
             return this.playerAI;
         }
         return null;

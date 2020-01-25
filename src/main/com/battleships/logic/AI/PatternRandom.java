@@ -11,7 +11,7 @@ import java.util.Random;
  *
  * @author Tim Staudenmaier
  */
-public class PatternRandom implements Pattern{
+public class PatternRandom implements Pattern {
 
     /**
      * Size of the grid this pattern is used on.
@@ -28,6 +28,7 @@ public class PatternRandom implements Pattern{
 
     /**
      * Creates a new random pattern.
+     *
      * @param size Size of the grid this pattern is used on.
      * @param team Team this grid is used for.
      */
@@ -43,17 +44,17 @@ public class PatternRandom implements Pattern{
     public Vector2i nextIndex() {
         int x = random.nextInt(size) + 1;
         int y = random.nextInt(size) + 1;
-        while(GameManager.getLogic().hasBeenShot(x,y,team == GridManager.OWNFIELD ? GridManager.OPPONENTFIELD : GridManager.OWNFIELD)){
+        while (GameManager.getLogic().hasBeenShot(x, y, team == GridManager.OWNFIELD ? GridManager.OPPONENTFIELD : GridManager.OWNFIELD)) {
             y += x / size;
-            y %= size+1;
-            if(y==0)
-                y+=1;
+            y %= size + 1;
+            if (y == 0)
+                y += 1;
             x += 1;
-            x %= size+1;
-            if(x==0)
-                x+=1;
+            x %= size + 1;
+            if (x == 0)
+                x += 1;
         }
-        return new Vector2i(x,y);
+        return new Vector2i(x, y);
     }
 
     /**

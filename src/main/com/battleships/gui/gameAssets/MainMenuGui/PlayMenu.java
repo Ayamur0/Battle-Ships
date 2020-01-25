@@ -57,6 +57,7 @@ public class PlayMenu extends Menu {
 
         super.createClickable();
     }
+
     /**
      * Toggles state of clicked button.
      */

@@ -35,10 +35,11 @@ public class Ship {
 
     /**
      * Create a new logic ship.
-     * @param size Size of the ship (2-5).
-     * @param direction  Direction the ship is facing (see constants in {@link com.battleships.gui.gameAssets.grids.ShipManager})
+     *
+     * @param size          Size of the ship (2-5).
+     * @param direction     Direction the ship is facing (see constants in {@link com.battleships.gui.gameAssets.grids.ShipManager})
      * @param occupiedCells List containing all cells this ships parts are on.
-     * @param guiShip Entity of this ship in the gui. Or {@code null} if this ship isn't represented in the gui.
+     * @param guiShip       Entity of this ship in the gui. Or {@code null} if this ship isn't represented in the gui.
      */
     public Ship(int size, int direction, List<Cell> occupiedCells, Entity guiShip) {
         this.size = size;
@@ -50,14 +51,14 @@ public class Ship {
     /**
      * Damage this ship by increasing its hitsTaken.
      */
-    public void damage(){
+    public void damage() {
         hitsTaken++;
     }
 
     /**
      * @return {@code true} if this ship has been sunk, {@code false} if this ship is still alive.
      */
-    public boolean isSunk(){
+    public boolean isSunk() {
         return hitsTaken == size;
     }
 

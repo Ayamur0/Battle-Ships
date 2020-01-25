@@ -63,12 +63,13 @@ public class AiPlayerChooserMenu extends Menu {
         super.guiTexts.add(new GUIText("Back", 2.5f, font, new Vector2f(buttons.get(3).getPositions().x, buttons.get(3).getPositions().y), 0.12f, true, outlineColor, 0.0f, 0.1f, outlineColor, new Vector2f()));
 
     }
+
     /**
      * Toggles state of clicked button.
      */
     @Override
     protected void clickAction() {
-        if(buttonClicked == BACK){
+        if (buttonClicked == BACK) {
             clearMenu();
             MainMenuManager.setMenu(new ESCMenu(guiManager, loader));
             return;
@@ -79,19 +80,22 @@ public class AiPlayerChooserMenu extends Menu {
         clearMenu();
         cleaBackgournd();
         GameManager.getSettings().setAiLevelP(buttonClicked);
-        switch (buttonClicked){
-            case EASY: GameManager.getLogic().getTurnHandler().setPlayerAI(
-                    new AIEasy(GridManager.OWNFIELD, GameManager.getLogic().getPlayerGrid().getSize(), GameManager.getLogic()));
-            break;
-            case MEDIUM: GameManager.getLogic().getTurnHandler().setPlayerAI(
-                    new AIMedium(GridManager.OWNFIELD, GameManager.getLogic().getPlayerGrid().getSize(), GameManager.getLogic()));
-            break;
-            case HARD: GameManager.getLogic().getTurnHandler().setPlayerAI(
-                    new AIHard(GridManager.OWNFIELD, GameManager.getLogic().getPlayerGrid().getSize(), GameManager.getLogic()));
-            break;
+        switch (buttonClicked) {
+            case EASY:
+                GameManager.getLogic().getTurnHandler().setPlayerAI(
+                        new AIEasy(GridManager.OWNFIELD, GameManager.getLogic().getPlayerGrid().getSize(), GameManager.getLogic()));
+                break;
+            case MEDIUM:
+                GameManager.getLogic().getTurnHandler().setPlayerAI(
+                        new AIMedium(GridManager.OWNFIELD, GameManager.getLogic().getPlayerGrid().getSize(), GameManager.getLogic()));
+                break;
+            case HARD:
+                GameManager.getLogic().getTurnHandler().setPlayerAI(
+                        new AIHard(GridManager.OWNFIELD, GameManager.getLogic().getPlayerGrid().getSize(), GameManager.getLogic()));
+                break;
         }
         GameManager.getLogic().getTurnHandler().makeAiTurns();
-        if(GameManager.getShipCounter() != null)
+        if (GameManager.getShipCounter() != null)
             GameManager.getShipCounter().hide();
         if (GameManager.getShipSelector() != null)
             GameManager.getShipSelector().hide();

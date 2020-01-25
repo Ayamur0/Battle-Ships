@@ -4,12 +4,8 @@ import com.battleships.gui.audio.Source;
 import com.battleships.gui.entities.Entity;
 import com.battleships.gui.gameAssets.GameManager;
 import com.battleships.gui.gameAssets.grids.GridManager;
-import com.thoughtworks.xstream.XStream;
 import org.joml.Vector3f;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -35,7 +31,7 @@ public class SaveFile {
     private Stats stats;
     /**
      * TurnHandler this game used.
-      */
+     */
     private TurnHandler turnHandler;
     /**
      * GameState this game was in. (see constants in {@link GameManager}.

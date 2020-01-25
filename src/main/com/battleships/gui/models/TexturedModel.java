@@ -18,8 +18,9 @@ public class TexturedModel {
 
     /**
      * Create a new TexturedModel.
+     *
      * @param rawModel Model
-     * @param texture Texture
+     * @param texture  Texture
      */
     public TexturedModel(RawModel rawModel, ModelTexture texture) {
         this.rawModel = rawModel;
@@ -27,7 +28,6 @@ public class TexturedModel {
     }
 
     /**
-     *
      * @return The model of this texturedModel.
      */
     public RawModel getRawModel() {
@@ -35,7 +35,6 @@ public class TexturedModel {
     }
 
     /**
-     *
      * @return The textures of this texturedModel.
      */
     public ModelTexture getTexture() {

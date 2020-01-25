@@ -24,9 +24,10 @@ public class ParticleTexture {
 
     /**
      * Create a new ParticleTexture.
-     * @param textureID Texture ID for the texture this ParticleTexture should use.
+     *
+     * @param textureID    Texture ID for the texture this ParticleTexture should use.
      * @param numberOfRows Number of rows in the texture.
-     * @param additive {@code true} if the texture is additive.
+     * @param additive     {@code true} if the texture is additive.
      */
     public ParticleTexture(int textureID, int numberOfRows, boolean additive) {
         this.textureID = textureID;
@@ -35,7 +36,6 @@ public class ParticleTexture {
     }
 
     /**
-     *
      * @return TextureId of this ParticleTexture
      */
     public int getTextureID() {
@@ -43,7 +43,6 @@ public class ParticleTexture {
     }
 
     /**
-     *
      * @return Amount of rows in this textureAtlas.
      */
     public int getNumberOfRows() {
@@ -51,7 +50,6 @@ public class ParticleTexture {
     }
 
     /**
-     *
      * @return {@code true} if this texture is additive.
      */
     public boolean isAdditive() {

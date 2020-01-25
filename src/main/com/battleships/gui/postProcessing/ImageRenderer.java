@@ -17,14 +17,16 @@ public class ImageRenderer {
 
     /**
      * Create a ImageRenderer which is used to render fbos.
-     * @param width width of the image that should be rendered
+     *
+     * @param width  width of the image that should be rendered
      * @param height height of the image that should be rendered
      */
     public ImageRenderer(int width, int height) {
         this.fbo = new Fbo(width, height, Fbo.NONE);
     }
 
-    public ImageRenderer(){}
+    public ImageRenderer() {
+    }
 
     /**
      * Render a quad to the screen, on which the image texture can be rendered

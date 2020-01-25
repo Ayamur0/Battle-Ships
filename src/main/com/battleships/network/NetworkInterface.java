@@ -9,6 +9,7 @@ public interface NetworkInterface {
 
     /**
      * Sends a message to the opposing server.
+     *
      * @param s String to send.
      */
     void sendMessage(String s);
