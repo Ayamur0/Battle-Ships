@@ -245,7 +245,7 @@ public abstract class Menu extends GuiClickCallback {
             String filename = fileName.replace(".xml", "");
             SaveFile saveFile = SaveFileManager.loadFromFile(filename);
             if (saveFile == null) {
-                JOptionPane.showMessageDialog(null, "Error loading the file", "Loading Error", JOptionPane.ERROR_MESSAGE);
+                new Thread(new ErrorMessage("Error loading the file", "Loading Error")).start();
                 return false;
             } else {
                 clearMenu();

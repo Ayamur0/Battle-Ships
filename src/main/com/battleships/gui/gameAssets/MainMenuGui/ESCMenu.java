@@ -6,6 +6,7 @@ import com.battleships.gui.guis.GuiManager;
 import com.battleships.gui.guis.GuiTexture;
 import com.battleships.gui.renderingEngine.Loader;
 import com.battleships.logic.SaveFileManager;
+import com.sun.org.apache.xerces.internal.jaxp.validation.ErrorHandlerAdaptor;
 import org.joml.Vector2f;
 import org.lwjgl.util.tinyfd.TinyFileDialogs;
 
@@ -134,7 +135,7 @@ public class ESCMenu extends Menu {
                     GameManager.getNetwork().closeConnection();
                     GameManager.getMainMenuManager().backToMainMenu();
                 } else
-                    JOptionPane.showMessageDialog(null, "Error saving file", "Save Error", JOptionPane.ERROR_MESSAGE);
+                    new Thread(new ErrorMessage("Error saving file", "Save Error")).start();
             }
         }
         if (buttonClicked == RESUME) {
@@ -148,7 +149,7 @@ public class ESCMenu extends Menu {
         }
         if (super.buttonClicked == PLAYAI) {
             if (GameManager.getLogic().getGameState() == GameManager.SHIPLACING) {
-                JOptionPane.showMessageDialog(null, "AI not avaiable in ship placing phase.\nPlease place your ships first", "Playing as AI", JOptionPane.ERROR_MESSAGE);
+                new Thread(new ErrorMessage("AI not avaiable in ship placing phase.\nPlease place your ships first", "Playing as AI")).start();
             } else if (isIsPlayerAI()) {
                 active = false;
                 GameManager.getSettings().setAiLevelP(-1);
@@ -181,7 +182,8 @@ public class ESCMenu extends Menu {
         if (SaveFileManager.saveToFile(userInput))
             GameManager.getMainMenuManager().backToMainMenu();
         else
-            JOptionPane.showMessageDialog(null, "Error saving file", "Save Error", JOptionPane.ERROR_MESSAGE);
+            new Thread(new ErrorMessage("Error saving file", "Save Error")).start();
+
         userInputMade = false;
     }
 }
