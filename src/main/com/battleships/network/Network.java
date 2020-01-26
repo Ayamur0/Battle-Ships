@@ -105,7 +105,6 @@ public abstract class Network implements NetworkInterface {
                 break;
             case SAVE:
                 SaveFileManager.saveToFile(ID);
-                setStringFunction(null);
                 break;
             case LOAD:
                 SaveFile file = SaveFileManager.loadFromFile(ID);
