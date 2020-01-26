@@ -117,6 +117,8 @@ public abstract class Network implements NetworkInterface {
                     break;
                 }
                 SaveFileManager.loadSaveFile(file);
+                GameManager.getMainMenuManager().clearAll();
+                GameManager.resizeGrid();
                 GameManager.prepareGame();
                 break;
             case SIZE:
