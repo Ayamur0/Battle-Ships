@@ -69,30 +69,35 @@ public class NetworkServer extends Network implements Runnable {
      * @param message Message to send.
      */
     public void sendMessage(String message) {
-        if (waitingForMessage)
+        if (!message.contains("save") && waitingForMessage)
             return;
         toClient.println(message);
         System.out.println("\u001B[32m" + "Sent: " + message);
         System.out.println("\u001B[31m" + "now waiting");
         waitingForMessage = true;
-        Thread t = new Thread(this);
-        t.start();
     }
 
     /**
      * Waits for an answer from the client.
      */
     public void run() {
-        String answer = null;
-        try {
-            answer = fromClient.readLine();
-            System.out.println("\u001B[0m" + answer);
-        } catch (IOException e) {
-            System.err.println("Error receiving message from Client!");
+        while(true) {
+            String answer = null;
+            try {
+                answer = fromClient.readLine();
+                if(answer == null)
+                    break;
+                if(!answer.contains("save") && !waitingForMessage) {
+                    continue;
+                }
+                System.out.println("\u001B[0m" + answer);
+            } catch (IOException e) {
+                System.err.println("Error receiving message from Client!");
+            }
+            waitingForMessage = false;
+            System.out.println("\u001B[31m" + "stopped waiting");
+            setStringFunction(answer);
         }
-        waitingForMessage = false;
-        System.out.println("\u001B[31m" + "stopped waiting");
-        setStringFunction(answer);
     }
 
     /**
@@ -124,6 +129,8 @@ public class NetworkServer extends Network implements Runnable {
         if (MainMenuManager.getMenu() instanceof WaitingConnection) {
             ((WaitingConnection) MainMenuManager.getMenu()).setOpponentConnected(true);
         }
+        Thread t = new Thread(this);
+        t.start();
     }
 
     /**

@@ -51,30 +51,35 @@ public class NetworkClient extends Network implements Runnable {
      * @param message Message to send.
      */
     public void sendMessage(String message) {
-        if (waitingForMessage)
+        if (!message.contains("save") && waitingForMessage)
             return;
         toServer.println(message);
         System.out.println("\u001B[32m" + "Sent: " + message);
         System.out.println("\u001B[31m" + "now waiting");
         waitingForMessage = true;
-        Thread t = new Thread(this);
-        t.start();
     }
 
     /**
      * Waits for an answer from the server.
      */
     public void run() {
-        String answer = null;
-        try {
-            answer = fromServer.readLine();
-            System.out.println("\u001B[0m" + answer);
-        } catch (IOException e) {
-            System.err.println("Error receiving message from Server!");
+        while(true) {
+            String answer = null;
+            try {
+                answer = fromServer.readLine();
+                if (answer == null)
+                    break;
+                if (!answer.contains("save") && !waitingForMessage) {
+                    continue;
+                }
+                System.out.println("\u001B[0m" + answer);
+            } catch (IOException e) {
+                System.err.println("Error receiving message from Server!");
+            }
+            waitingForMessage = false;
+            System.out.println("\u001B[31m" + "stopped waiting");
+            setStringFunction(answer);
         }
-        waitingForMessage = false;
-        System.out.println("\u001B[31m" + "stopped waiting");
-        setStringFunction(answer);
     }
 
     /**
@@ -85,6 +90,7 @@ public class NetworkClient extends Network implements Runnable {
         clientSocket = new Socket(adress, PORT);
         toServer = new PrintWriter(clientSocket.getOutputStream(), true);
         fromServer = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+        waitingForMessage = true;
         Thread t = new Thread(this);
         t.start();
     }
