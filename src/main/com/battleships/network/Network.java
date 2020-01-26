@@ -108,6 +108,7 @@ public abstract class Network implements NetworkInterface {
             case SAVE:
                 SaveFileManager.saveToFile(ID);
                 action = CLOSE;
+                execute();
                 break;
             case LOAD:
                 action = NONE;
@@ -116,9 +117,8 @@ public abstract class Network implements NetworkInterface {
                     setStringFunction(null);
                     break;
                 }
-                SaveFileManager.loadSaveFile(file);
                 GameManager.getMainMenuManager().clearAll();
-                GameManager.resizeGrid();
+                SaveFileManager.loadSaveFile(file);
                 GameManager.prepareGame();
                 break;
             case SIZE:
