@@ -95,12 +95,14 @@ public abstract class Network implements NetworkInterface {
             case NONE:
                 break;
             case SHOOT:
+                action = NONE;
                 System.out.println("\u001B[34m" + "Processing Shot " + GameManager.getGridManager().getCannonball().isFlying());
                 if (GameManager.getGridManager().getCannonball().isFlying())
                     return;
                 GameManager.shoot(GridManager.OPPONENTFIELD, new Vector2i(row + 1, col + 1));
                 break;
             case CONFIRM:
+                action = NONE;
                 setOpponentConfirm();
                 break;
             case SAVE:
@@ -108,9 +110,9 @@ public abstract class Network implements NetworkInterface {
                 action = CLOSE;
                 break;
             case LOAD:
+                action = NONE;
                 SaveFile file = SaveFileManager.loadFromFile(ID);
                 if (file == null) {
-                    action = NONE;
                     setStringFunction(null);
                     break;
                 }
@@ -118,18 +120,19 @@ public abstract class Network implements NetworkInterface {
                 GameManager.prepareGame();
                 break;
             case SIZE:
+                action = NONE;
                 GameManager.getMainMenuManager().clearAll();
                 GameManager.resizeGrid();
                 GameManager.getLogic().advanceGamePhase();
                 break;
             case CLOSE:
+                action = NONE;
                 closeConnection();
                 GameManager.getLogic().setGameState(GameManager.MENU);
                 GameManager.getMainMenuManager().backToMainMenu();
                 GameManager.getSettings().setOnline(false);
                 break;
         }
-        action = NONE;
     }
 
 
@@ -191,6 +194,7 @@ public abstract class Network implements NetworkInterface {
             ID = text;
             action = SAVE;
         } else if (text.contains(load)) {
+            GameManager.getSettings().setOnline(true);
             text = text.replace(load, "");
             ID = text;
             action = LOAD;
