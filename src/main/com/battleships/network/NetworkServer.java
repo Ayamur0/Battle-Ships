@@ -82,7 +82,7 @@ public class NetworkServer extends Network implements Runnable {
      */
     public void run() {
         while(true) {
-            String answer = null;
+            String answer;
             try {
                 answer = fromClient.readLine();
                 if(answer == null) {
@@ -95,6 +95,7 @@ public class NetworkServer extends Network implements Runnable {
                 System.out.println("\u001B[0m" + answer);
             } catch (IOException e) {
                 System.err.println("Error receiving message from Client!");
+                break;
             }
             waitingForMessage = false;
             System.out.println("\u001B[31m" + "stopped waiting");
