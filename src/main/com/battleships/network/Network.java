@@ -138,6 +138,7 @@ public abstract class Network implements NetworkInterface {
      */
     public void setStringFunction(String text) {
         if (text == null) {
+            execute();
             action = CLOSE;
             return;
         }
