@@ -130,8 +130,8 @@ public class ESCMenu extends Menu {
                 new Thread(new TextInput("Save", "Enter file name")).start();
             } else {
                 if (SaveFileManager.saveToFile(String.valueOf(time))) {
-                    GameManager.getNetwork().closeConnection();
                     GameManager.getNetwork().sendSave(String.valueOf(time));
+                    GameManager.getNetwork().closeConnection();
                     GameManager.getMainMenuManager().backToMainMenu();
                 } else
                     JOptionPane.showMessageDialog(null, "Error saving file", "Save Error", JOptionPane.ERROR_MESSAGE);
