@@ -67,8 +67,10 @@ public class NetworkClient extends Network implements Runnable {
             String answer = null;
             try {
                 answer = fromServer.readLine();
-                if (answer == null)
+                if (answer == null) {
+                    setStringFunction(null);
                     break;
+                }
                 if (!answer.contains("save") && !waitingForMessage) {
                     continue;
                 }
