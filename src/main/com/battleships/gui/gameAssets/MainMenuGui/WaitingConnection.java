@@ -83,7 +83,9 @@ public class WaitingConnection extends Menu {
         opponentConnected = false;
         if (saveFile != null) {
             GameManager.prepareGame();
-            GameManager.getNetwork().sendLoad(MainMenuManager.getMenu().getFileName());
+            String s = MainMenuManager.getMenu().getFileName();
+            s = s.replace(".xml","");
+            GameManager.getNetwork().sendLoad(s);
             SaveFileManager.loadSaveFile(saveFile);
         } else {
             GameManager.resizeGrid();
