@@ -239,10 +239,6 @@ public class GameManager {
         public void invoke(long window, int key, int scanCode, int action, int mods) {
             if (key == GLFW.GLFW_KEY_F11 && action == GLFW.GLFW_PRESS)
                 WindowManager.setFullScreen(!WindowManager.isFullscreen());
-            if (key == GLFW.GLFW_KEY_F && action == GLFW.GLFW_PRESS)
-                logic.advanceGamePhase();
-            if (key == GLFW.GLFW_KEY_G && action == GLFW.GLFW_PRESS)
-                startPlayPhase();
             if (key == GLFW.GLFW_KEY_R && action == GLFW.GLFW_PRESS) {
                 shipManager.rotateShip();
             }
@@ -258,16 +254,6 @@ public class GameManager {
                     MainMenuManager.getMenu().clearAllMenuElements();
                     ESCMenu.setActive(false);
                 }
-            }
-            if (key == GLFW.GLFW_KEY_K && action == GLFW.GLFW_PRESS) {
-                FinishGame f = new FinishGame();
-                f.finishGame(loader, guiManager, false);
-            }
-            if (key == GLFW.GLFW_KEY_L && action == GLFW.GLFW_PRESS) {
-                logic.advanceTurn();
-            }
-            if (key == GLFW.GLFW_KEY_O && action == GLFW.GLFW_PRESS) {
-                logic.placeRandomShips(0);
             }
         }
     };
