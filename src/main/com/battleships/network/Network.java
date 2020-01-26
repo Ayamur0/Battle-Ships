@@ -105,10 +105,12 @@ public abstract class Network implements NetworkInterface {
                 break;
             case SAVE:
                 SaveFileManager.saveToFile(ID);
+                action = CLOSE;
                 break;
             case LOAD:
                 SaveFile file = SaveFileManager.loadFromFile(ID);
                 if (file == null) {
+                    action = NONE;
                     setStringFunction(null);
                     break;
                 }
@@ -137,8 +139,9 @@ public abstract class Network implements NetworkInterface {
      */
     public void setStringFunction(String text) {
         if (text == null) {
-            execute();
-            action = CLOSE;
+            if(action != SAVE) {
+                action = CLOSE;
+            }
             return;
         }
         if (text.contains(shoot)) {
