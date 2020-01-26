@@ -317,6 +317,9 @@ public abstract class Menu extends GuiClickCallback {
      * Class for handling file choosing in separate thread.
      */
     protected class SaveFilePicker implements Runnable {
+        /**
+         * Displays the file picker
+         */
         @Override
         public void run() {
             try {
@@ -328,6 +331,30 @@ public abstract class Menu extends GuiClickCallback {
 
             fileName = fc.getName(fc.getSelectedFile());
             filePicked = true;
+        }
+    }
+
+    /**
+     * Class to display an error message window in separate thread.
+     */
+    protected class ErrorMessage implements Runnable {
+        String message, title;
+
+        /**
+         * Create a new Error Message.
+         * @param title Title of the error window.
+         * @param message Message the window has.
+         */
+        public ErrorMessage(String title, String message) {
+            this.message = message;
+        }
+
+        /**
+         * Displays the window.
+         */
+        @Override
+        public void run() {
+            JOptionPane.showMessageDialog(null, message, title, JOptionPane.ERROR_MESSAGE);
         }
     }
 
