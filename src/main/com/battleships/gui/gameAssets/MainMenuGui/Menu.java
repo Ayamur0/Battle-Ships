@@ -98,7 +98,7 @@ public abstract class Menu extends GuiClickCallback {
     /**
      * Name of the file that needs to be loaded.
      */
-    protected String fileName;
+    protected static String fileName;
     /**
      * {@code true} if a file was picked that now needs to be loaded.
      * {@code false} else and after loading is done.
