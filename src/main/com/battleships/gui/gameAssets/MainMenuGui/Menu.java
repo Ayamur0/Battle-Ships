@@ -327,10 +327,14 @@ public abstract class Menu extends GuiClickCallback {
             } catch (Exception e) {
                 System.err.println("Error: " + e.getMessage());
             }
-            fc.showOpenDialog(null);
+            int result = fc.showOpenDialog(null);
+            if (result == JFileChooser.APPROVE_OPTION){
+                fileName = fc.getName(fc.getSelectedFile());
+                filePicked = true;
+            }
+            if (result == JFileChooser.CANCEL_OPTION)
+                filePicked=false;
 
-            fileName = fc.getName(fc.getSelectedFile());
-            filePicked = true;
         }
     }
 
@@ -345,8 +349,9 @@ public abstract class Menu extends GuiClickCallback {
          * @param title Title of the error window.
          * @param message Message the window has.
          */
-        public ErrorMessage(String title, String message) {
+        public ErrorMessage(String message, String title) {
             this.message = message;
+            this.title = title;
         }
 
         /**

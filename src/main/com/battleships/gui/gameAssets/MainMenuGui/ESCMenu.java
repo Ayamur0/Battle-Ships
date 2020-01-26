@@ -179,6 +179,10 @@ public class ESCMenu extends Menu {
      * Processes a entered filename by the user by using the last Input made through a {@link TinyFileDialogs}.
      */
     public void processInput() {
+        if (userInput==null){
+            userInputMade=false;
+            return;
+        }
         if (SaveFileManager.saveToFile(userInput))
             GameManager.getMainMenuManager().backToMainMenu();
         else
