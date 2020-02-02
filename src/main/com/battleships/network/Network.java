@@ -150,6 +150,7 @@ public abstract class Network implements NetworkInterface {
             }
             return;
         }
+        text = text.toLowerCase();
         if (text.contains(shoot)) {
             text = text.replace(shoot, "");
             String[] temp = text.split(" ");

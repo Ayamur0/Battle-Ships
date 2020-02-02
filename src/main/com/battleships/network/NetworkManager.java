@@ -37,11 +37,7 @@ public class NetworkManager {
         if (server) {
             player = new NetworkServer();
         } else {
-            try {
-                player = new NetworkClient(IP);
-            } catch (IOException e) {
-                return false;
-            }
+            player = new NetworkClient(IP);
         }
         return true;
     }
