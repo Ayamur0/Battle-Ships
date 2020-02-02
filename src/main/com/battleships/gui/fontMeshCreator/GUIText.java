@@ -90,6 +90,7 @@ public class GUIText {
      * @param maxLineLength max length of one line, relative to screen is (1 is full screen width).
      *                      If a word in a line exceeds this limit the word is put into a new line
      * @param centered      whether the text should be centered or not
+     * @param color         Color of the Text in RGB (0-1)
      * @param outlineWidth  width of the outline of the text, 0 for no outline
      * @param outlineEdge   size of the smooth transition edge around the outline
      * @param outlineColor  color of the outline

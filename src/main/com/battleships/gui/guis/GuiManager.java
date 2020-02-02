@@ -31,6 +31,7 @@ public class GuiManager {
      * @param action A class that extends {@link GuiClickCallback}, thus has a method to check whether it was clicked and
      *               one that needs to be executed when it was clicked, performing the desired action of the gui element.
      *               Class needs to be contained within a Supplier.
+     * @param <T>    Any class that extends the {@link GuiClickCallback} class
      */
     public <T extends GuiClickCallback> void createClickableGui(GuiTexture gui, Supplier<T> action) {
         clickableGuis.put(gui, action.get());
@@ -58,6 +59,8 @@ public class GuiManager {
      * Gets the cursor position and tests all guis with a click action if they were
      * clicked on and if one was clicked executes the click action of that gui.
      *
+     * @param x X pos of the click
+     * @param y Y pos of the click
      * @return {@code true} if any gui with click function was clicked, {@code false} else
      */
     public boolean testGuiClick(float x, float y) {

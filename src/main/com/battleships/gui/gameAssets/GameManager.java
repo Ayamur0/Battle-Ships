@@ -361,7 +361,7 @@ public class GameManager {
         WindowManager.updateLoadingScreen();
         disableSymbols = new DisableSymbols(loader, guiManager, guis);
         camera = new Camera();
-        mousePicker = new MousePicker(camera, MasterRenderer.getProjectionMatrix(), terrain);
+        mousePicker = new MousePicker(camera, MasterRenderer.getProjectionMatrix());
         TerrainTexture texture1 = new TerrainTexture(loader.loadTexture("Path.jpg"));
         WindowManager.updateLoadingScreen();
         TerrainTexture texture2 = new TerrainTexture(loader.loadTexture("Gravel.jpg"));
@@ -589,6 +589,7 @@ public class GameManager {
         guiRenderer.cleanUp();
         renderer.cleanUp();
         loader.cleanUp();
+        network.closeConnection();
     }
 
     /**

@@ -238,6 +238,8 @@ public class WaterFrameBuffers {
      *
      * @param width   width of the texture attachment.
      * @param height  height of the texture attachment.
+     *
+     * @return Id of the created texture
      */
     private int createTextureAttachment(int width, int height) {
         int texture = GL11.glGenTextures();
@@ -255,6 +257,8 @@ public class WaterFrameBuffers {
      *
      * @param width   width of the texture attachment.
      * @param height  height of the texture attachment.
+     *
+     * @return Id of the created texture
      */
     private int createDepthTextureAttachment(int width, int height) {
         int texture = GL11.glGenTextures();
@@ -272,6 +276,8 @@ public class WaterFrameBuffers {
      *
      * @param width   width of the buffer attachment.
      * @param height  height of the buffer attachment.
+     *
+     * @return ID of the created buffer
      */
     private int createDepthBufferAttachment(int width, int height) {
         int depthBuffer = GL30.glGenRenderbuffers();

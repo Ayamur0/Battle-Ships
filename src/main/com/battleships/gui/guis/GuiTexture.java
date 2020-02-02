@@ -90,7 +90,7 @@ public class GuiTexture {
      * Used for easier scaling of gui elements.
      * Sets the scale of the gui so it has the same sizen, compared to the game window,
      * like the full texture would have on the monitor.
-     * Texture has width of 960 Pixels and monitor is 1920 x 1080 -> 50% of monitor so scale is 0.5.
+     * Texture has width of 960 Pixels and monitor is 1920 x 1080 so 50% of monitor so scale is 0.5.
      */
     private void setScaleToTextureAspect() {
         IntBuffer x = BufferUtils.createIntBuffer(1);

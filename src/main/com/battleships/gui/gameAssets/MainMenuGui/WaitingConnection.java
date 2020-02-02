@@ -36,6 +36,7 @@ public class WaitingConnection extends Menu {
      *
      * @param guiManager GuiManager that should handle the click function of these guis.
      * @param loader     Loader needed to load textures
+     * @param saveFile   SaveFile to load the game from, if a game is being loaded
      */
     public WaitingConnection(GuiManager guiManager, Loader loader, SaveFile saveFile) {
         super(guiManager, loader);

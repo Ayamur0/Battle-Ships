@@ -37,8 +37,6 @@ public class MousePicker {
      */
     private Camera camera;
 
-    private Terrain terrain;
-    private Vector3f currentTerrainPoint;
     /**
      * Point at which the ray the mouse creates intersects with the y-level,
      * at which the water and grids are located.
@@ -50,18 +48,13 @@ public class MousePicker {
      *
      * @param cam        Camera viewing the scene.
      * @param projection Current projectionMatrix of the window.
-     * @param terrain
      */
-    public MousePicker(Camera cam, Matrix4f projection, Terrain terrain) {
+    public MousePicker(Camera cam, Matrix4f projection) {
         camera = cam;
         projectionMatrix = projection;
         viewMatrix = Maths.createViewMatrix(camera);
-        this.terrain = terrain;
     }
 
-    public Vector3f getCurrentTerrainPoint() {
-        return currentTerrainPoint;
-    }
 
     /**
      * @return Point at which the ray the mouse creates intersects with the y-level,
@@ -69,11 +62,6 @@ public class MousePicker {
      */
     public Vector3f getCurrentIntersectionPoint() {
         return currentIntersectionPoint;
-    }
-
-    public Vector3f getCurrentRay() {
-        return currentRay;
-
     }
 
     /**
@@ -86,11 +74,6 @@ public class MousePicker {
 //        System.out.println(camera.getPosition().x + " " + camera.getPosition().y + " " + camera.getPosition().z);
         currentRay = calculateMouseRay();
 //        System.out.println(currentRay.x + " " + currentRay.y + " " + currentRay.z);
-        if (intersectionInRange(0, RAY_RANGE, currentRay)) {
-            currentTerrainPoint = binarySearch(0, 0, RAY_RANGE, currentRay);
-        } else {
-            currentTerrainPoint = null;
-        }
         currentIntersectionPoint = getXZPlaneIntersectionPoint(camera.getPosition(), currentRay, -2.5f);
 
 //        if(currentTerrainPoint != null)
@@ -100,7 +83,7 @@ public class MousePicker {
     /**
      * Calculates the current ray the mouse is pointing along in the 3D world.
      *
-     * @return
+     * @return The current vector of the mouse ray
      */
     private Vector3f calculateMouseRay() {
         DoubleBuffer x = BufferUtils.createDoubleBuffer(1);
@@ -167,65 +150,17 @@ public class MousePicker {
         return new Vector2f(x, -y);
     }
 
-    private Vector3f test(Matrix4f proj, Matrix4f view, float x, float y) {
-        Vector3f worldCoords = new Vector3f();
-        new Matrix4f(proj).mul(view).translate(-camera.getPosition().x, -camera.getPosition().y, -camera.getPosition().z).unproject(x, y, -1.0f,
-                new int[]{0, 0, WindowManager.getWidth(), WindowManager.getHeight()}, worldCoords);
-        return worldCoords;
-    }
-
-    //**********************************************************
-
+    /**
+     * Calculates the coordinates at which the mouse ray intersects with the xz plane of the water.
+     * @param origin Origin point of the mouse ray.
+     * @param ray Vector of the mouse ray.
+     * @param height Height of the XZ Plane
+     * @return The point at which the mouse ray and XZ Plane intersect (world coordinates)
+     */
     private Vector3f getXZPlaneIntersectionPoint(Vector3f origin, Vector3f ray, float height) {
         float parameter = (float) Intersectiond.intersectRayPlane(origin.x, origin.y, origin.z, ray.x, ray.y, ray.z, 0, height, 0, 0, 1, 0, 0);
         Vector3f result = new Vector3f();
         origin.add(ray.mul(parameter), result);
         return result;
-    }
-
-
-    private Vector3f getPointOnRay(Vector3f ray, float distance) {
-        Vector3f camPos = camera.getPosition();
-        Vector3f start = new Vector3f(camPos.x, camPos.y, camPos.z);
-        Vector3f scaledRay = new Vector3f(ray.x * distance, ray.y * distance, ray.z * distance);
-        start.add(scaledRay, start);
-        return start;
-    }
-
-    private Vector3f binarySearch(int count, float start, float finish, Vector3f ray) {
-        float half = start + ((finish - start) / 2f);
-        if (count >= RECURSION_COUNT) {
-            Vector3f endPoint = getPointOnRay(ray, half);
-            Terrain terrain = getTerrain(endPoint.x, endPoint.z);
-            if (terrain != null) {
-                return endPoint;
-            } else {
-                return null;
-            }
-        }
-        if (intersectionInRange(start, half, ray)) {
-            return binarySearch(count + 1, start, half, ray);
-        } else {
-            return binarySearch(count + 1, half, finish, ray);
-        }
-    }
-
-    private boolean intersectionInRange(float start, float finish, Vector3f ray) {
-        Vector3f startPoint = getPointOnRay(ray, start);
-        Vector3f endPoint = getPointOnRay(ray, finish);
-        return !isUnderGround(startPoint) && isUnderGround(endPoint);
-    }
-
-    private boolean isUnderGround(Vector3f testPoint) {
-        Terrain terrain = getTerrain(testPoint.x, testPoint.z);
-        float height = 0;
-        if (terrain != null) {
-            height = terrain.getHeightOfTerrain(testPoint.x, testPoint.z);
-        }
-        return testPoint.y < height;
-    }
-
-    private Terrain getTerrain(float worldX, float worldZ) {
-        return terrain;
     }
 }

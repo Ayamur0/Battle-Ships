@@ -21,6 +21,8 @@ public class ResolutionChanger {
      * Create new Resolution Changer.
      * The Resolution changer uses the {@link ResolutionShader} to change the resolution of the rendered Image
      * and a {@link ImageRenderer} that renders the changed scene to the screen.
+     * @param width new width the window should use in pixels
+     * @param height new height the window should use in pixels
      */
     public ResolutionChanger(int width, int height) {
         renderer = new ImageRenderer(width, height);

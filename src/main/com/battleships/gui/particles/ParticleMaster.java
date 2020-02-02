@@ -42,6 +42,7 @@ public class ParticleMaster {
      * get rendered in the right order.
      * Uses insertionSort because the list will be almost sorted most of the time, so insertion sort
      * is the most efficient.
+     * @param camera Currently used camera
      */
     public static void update(Camera camera) {
         Iterator<Map.Entry<ParticleTexture, List<Particle>>> mapIterator = particles.entrySet().iterator();

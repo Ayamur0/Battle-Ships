@@ -214,6 +214,7 @@ public class ShipSelector extends GuiClickCallback {
      * Change the text under the button for that ship size, so it shows that you can place one
      * ship less or one more of that size than before.
      *
+     * @param shipSize ShipSize the count should be changed for
      * @param increment {@code true} if the count should be incremented, {@code false} if it should be decremented
      */
     public void changeCount(int shipSize, boolean increment) {

@@ -18,7 +18,7 @@ import java.util.Map;
 public class FontRenderer {
 
     /**
-     * @param shader shader to be used when rendering a text/font
+     * shader to be used when rendering a text/font
      */
     private FontShader shader;
 

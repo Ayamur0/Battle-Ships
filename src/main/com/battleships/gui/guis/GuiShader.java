@@ -44,7 +44,7 @@ public class GuiShader extends ShaderProgram {
     /**
      * Load the transformation Matrix of a gui element to the shader, to correctly render it.
      *
-     * @param matrix
+     * @param matrix transformation matrix for the currently rendered gui.
      */
     public void loadTransformation(Matrix4f matrix) {
         super.loadMatrix(location_transformationMatrix, matrix);

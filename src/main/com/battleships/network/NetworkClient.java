@@ -39,9 +39,14 @@ public class NetworkClient extends Network implements Runnable {
 
     /**
      * Start a client that tries to connect to the server with the passed IP.
+     * @param adress IP-Address of the server this client should connect to.
      */
-    public NetworkClient(String adress) throws IOException {
-        startClient(adress);
+    public NetworkClient(String adress) {
+        try {
+            startClient(adress);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
     }
 
@@ -87,6 +92,8 @@ public class NetworkClient extends Network implements Runnable {
 
     /**
      * Start client and initialize all needed readers.
+     * @param adress IP-Address of the server this client should connect to.
+     * @throws IOException If the readers couldn't write
      */
     private void startClient(String adress) throws IOException {
         //System.out.println("Starting Client...");

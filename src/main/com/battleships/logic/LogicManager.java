@@ -42,6 +42,7 @@ public class LogicManager {
 
     /**
      * Initialize this logic using the information from the given settings.
+     * @param settings Settings of the current game.
      */
     public void init(Settings settings) {
         playerGrid = new Grid(settings.getSize(), GridManager.OWNFIELD);
@@ -131,7 +132,7 @@ public class LogicManager {
      * @param entity    Entity of this ship in the GUI, if ship is on enemy grid and is not represented
      *                  visually this value should be {@code null}.
      * @param grid      ID of the grid the ship should be on (one of constants in {@link GridManager}.
-     * @return
+     * @return true if the ship could be placed false else
      */
     public boolean placeShip(int x, int y, int size, int direction, Entity entity, int grid) {
         if (grid == GridManager.OWNFIELD)
@@ -220,9 +221,9 @@ public class LogicManager {
 
     /**
      * Advances the game phase by one.
-     * Menu -> Ship placing
-     * Ship placing -> Shooting
-     * Shooting -> Menu
+     * Menu to Ship placing
+     * Ship placing to Shooting
+     * Shooting to Menu
      */
     public void advanceGamePhase() {
         switch (gameState) {
@@ -265,6 +266,7 @@ public class LogicManager {
      *
      * @param x x index of cell that should be tested (1-size)
      * @param y y index of cell that should be tested (1-size)
+     * @param grid Grid on which the cell that should be tested is.
      * @return {@code true} if the cell can't be shot, {@code false} if the cell can still be shot.
      */
     public boolean hasBeenShot(int x, int y, int grid) {

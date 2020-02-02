@@ -57,6 +57,7 @@ public class NetworkManager {
 
     /**
      * Send the size of the grid to the opposing network.
+     * @param size Grid Size to send to the opponent
      */
     public void sendSize(int size) {
         if (player != null)

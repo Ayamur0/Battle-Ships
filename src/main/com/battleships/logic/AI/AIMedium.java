@@ -205,6 +205,8 @@ public class AIMedium extends AI {
     /**
      * AI tries to find out which direction the ship is facing by shooting around the last hit on the ship.
      * If a direction was found the direction attribute gets set to that direction.
+     *
+     * @return true if the direction was found, false else
      */
     protected boolean findFoundShipDir() {
         Vector2i toShoot = new Vector2i(hitCells.get(0));

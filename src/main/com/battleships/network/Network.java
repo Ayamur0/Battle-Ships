@@ -11,9 +11,9 @@ import org.joml.Vector2i;
 
 /**
  * This class can handle the Strings the network receives from the opponent.
- * Both networks (client & server) extend this class to be able to process the Strings they receive.
+ * Both networks (client and server) extend this class to be able to process the Strings they receive.
  *
- * @Tim Staudenmaier
+ * @author Tim Staudenmaier
  */
 public abstract class Network implements NetworkInterface {
 
@@ -141,6 +141,7 @@ public abstract class Network implements NetworkInterface {
     /**
      * Reads a string the network has gotten from the opponent.
      * Sets the action depending on what this game needs to do, to execute the received command.
+     * @param text Text that was received through network
      */
     public void setStringFunction(String text) {
         if (text == null) {

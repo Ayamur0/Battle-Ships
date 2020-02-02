@@ -239,6 +239,7 @@ public class WindowManager {
      * Sets the Callbacks for user inputs in the MainMenu.
      *
      * @param mainMenuManager Manager that handles clicks in the main menu.
+     * @param wFbo            WaterFBOs that handle the reflection and refraction of water.
      */
     public static void setMainMenuCallbacks(MainMenuManager mainMenuManager, WaterFrameBuffers wFbo) {
         GLFW.glfwSetMouseButtonCallback(window, mainMenuManager.testClick);

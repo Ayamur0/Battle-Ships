@@ -158,6 +158,7 @@ public class Particle {
      * Also calculate how far away particle is from camera and safe to distance.
      * Save elapsedTime to keep track of how long particle is alive.
      *
+     * @param camera Currently used camera
      * @return {@code true} if the particle is still alive in this frame,
      * {@code false} if the particle is alive longer than his lifeLength so he needs to be removed
      */

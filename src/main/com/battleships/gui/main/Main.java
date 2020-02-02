@@ -6,7 +6,7 @@ import com.battleships.gui.gameAssets.grids.GridManager;
 import com.battleships.gui.window.WindowManager;
 import org.lwjgl.glfw.GLFW;
 
-public class MenuTest {
+public class Main {
 
     public static void main(String[] args) {
         GameManager.init();

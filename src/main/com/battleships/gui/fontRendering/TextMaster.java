@@ -20,10 +20,16 @@ import java.util.Map;
 public class TextMaster {
 
     /**
-     * @param texts Stores all texts corresponding to a FontType that are currently rendered
+     * Loader to load text vaos
      */
     private static Loader loader;
+    /**
+     * Map containing all texts grouped by their font
+     */
     private static Map<FontType, List<GUIText>> texts = new HashMap<>();
+    /**
+     * Renderer to render texts
+     */
     private static FontRenderer renderer;
 
     /**
